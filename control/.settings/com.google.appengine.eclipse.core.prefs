@@ -1,0 +1,15 @@
+eclipse.preferences.version=1
+filesCopiedToWebInfLib=appengine-api-1.0-sdk-1.8.1.jar|appengine-api-labs.jar|appengine-endpoints.jar|appengine-jsr107cache-1.8.1.jar|jsr107cache-1.1.jar
+gaeDatanucleusEnabled=false
+gaeDatanucleusVersion=v2
+gaeDeployDialogSettings=
+gaeHrdEnabled=false
+googleCloudSqlEnabled=false
+localDevMySqlEnabled=false
+mySqlDatabaseName=control
+mySqlDatabasePassword=password
+mySqlDatabaseUser=root
+mySqlHostName=localhost
+mySqlIsConfigured=true
+mySqlJdbcJar=C\:\\Bhanu\\jars\\mysql-connector-java-5.1.24.jar
+mySqlPort=3306
