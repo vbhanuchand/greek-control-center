@@ -259,8 +259,10 @@ define([ "dojo/_base/declare", "dijit/dijit", "dijit/registry", "dojo/dom", "doj
 				        				console.log('Update Success ');
 				        				dom.byId('messages').innerHTML = 'Add Successful';
 				        				try{grid.selection.getSelected()[0].store='';}catch(e){}
-				        				if(evt.grid.get('id') == 'employeesGrid') resetSelectedPaneToBlank();
-				        				else if(evt.grid.get('id') == 'mgrLeavesGrid'){
+				        				if(evt.grid.get('id') == 'employeesGrid'){
+				        					fetchEmployeesData(registry.byId('hiddenStoreId').get('value'));
+				        					resetSelectedPaneToBlank();
+				        				}else if(evt.grid.get('id') == 'mgrLeavesGrid'){
 				        					registry.byId(standByWidgetId).hide();
 				        					fetchMgrLeavesData(registry.byId('mgrList').get('value'));
 				        				} else refreshSelectedPane();//hideStandBy();
@@ -279,8 +281,10 @@ define([ "dojo/_base/declare", "dijit/dijit", "dijit/registry", "dojo/dom", "doj
 				        				console.log('Update Success ');
 				        				dom.byId('messages').innerHTML = 'Update Success';
 				        				try{grid.selection.getSelected()[0].store='';}catch(e){}
-				        				if(evt.grid.get('id') == 'employeesGrid') resetSelectedPaneToBlank();
-				        				else if(evt.grid.get('id') == 'mgrLeavesGrid'){
+				        				if(evt.grid.get('id') == 'employeesGrid'){
+				        					fetchEmployeesData(registry.byId('hiddenStoreId').get('value'));
+				        					resetSelectedPaneToBlank();
+				        				}else if(evt.grid.get('id') == 'mgrLeavesGrid'){
 				        					registry.byId(standByWidgetId).hide();
 				        				} else hideStandBy();
 				        			}
@@ -411,17 +415,17 @@ define([ "dojo/_base/declare", "dijit/dijit", "dijit/registry", "dojo/dom", "doj
 											            { name: "Increment Amount", field: "increment", width: "15%", noresize: true, editable: true, 
 											            	formatter: formatCurrency, constraint:{currency: 'USD', required: true, min:1, max:1000, fractional:true}, 
 											            	widgetProps: { promptMessage: 'Provide the increment Amount in USD', rangeMessage: 'Min 1$ and Max 1000$',
-											            	missingMessage: 'Please provide Increment', invalidMessage:"Invalid Amount.  Cents are MANDATORY." }, 
+											            	missingMessage: 'Please provide Increment', invalidMessage:"Invalid Amount. Cents are MANDATORY." }, 
 											            	widgetClass: CurrencyTextBox},
 											            { name: "Salary Before Increment", field: "salBefInc", width: "20%", noresize: true, editable: true, 
 											            	formatter: formatCurrency, constraint:{currency: 'USD', required: true, min:1, max:9999, fractional:true}, 
 											            	widgetProps: { promptMessage: 'Provide the Salary before increment in USD', rangeMessage: 'Min 1$ and Max 9999$',
-											            	missingMessage: 'Please provide Salary', invalidMessage:"Invalid Amount.  Cents are MANDATORY." }, 
+											            	missingMessage: 'Please provide Salary', invalidMessage:"Invalid Amount. Cents are MANDATORY." }, 
 											            	widgetClass: CurrencyTextBox},
 											            { name: "Salary After Increment", field: "salAftInc", width: "20%", noresize: true, editable: true, 
 											            	formatter: formatCurrency, constraint:{currency: 'USD', required: true, min:1, max:9999, fractional:true}, 
 											            	widgetProps: { promptMessage: 'Provide the Salary After Increment in USD', rangeMessage: 'Min 1$ and Max 9999$',
-											            	missingMessage: 'Please provide Salary', invalidMessage:"Invalid Amount.  Cents are MANDATORY." }, 
+											            	missingMessage: 'Please provide Salary', invalidMessage:"Invalid Amount. Cents are MANDATORY." }, 
 											            	widgetClass: CurrencyTextBox},
 											            { name: "Notes", field: "notes", width: "20%", noresize: true, editable: true, 
 											        	   		constraint:{required: true}, widgetProps: {maxLength: 100, 
