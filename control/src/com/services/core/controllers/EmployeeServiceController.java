@@ -87,6 +87,7 @@ public class EmployeeServiceController {
 		logger.info("Updating Employee Data For Emp Id --> " + empId);
 		empWrapper.setActive(true);
 		empWrapper.setStoreId(storeId);
+		empWrapper.setUsername(empWrapper.getFname()+"."+empWrapper.getLname());
 		boolean updateStatus = dataService.insertEmployee(empWrapper);
 		return new MultipleModelResponse<EmployeeWrapper>(updateStatus, null);
 	}
