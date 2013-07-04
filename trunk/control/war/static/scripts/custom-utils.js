@@ -12,6 +12,12 @@ function displayMessage(trId, msgSpan, msg, styleClassToApply) {
     });
 }
 
+function fetchMgrYearlyReview(year){
+	var empLayout = require('controls/EmployeeLayoutController');
+	empLayout.fetchReviewsForYear(year);
+}
+
+
 function saveFileRefToDB(tab, fileName, blobKey){
 	var registry = require('dijit/registry'), dom = require('dojo/dom'), otherFx = require('dojo/fx'), domStyle = require('dojo/dom-style'),
 	domConstruct = require('dojo/dom-construct'), ajaxRequest = require("dojo/request"), json = require('dojo/json'), 

@@ -3,7 +3,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dijit/registry", "dojo/dom", "doj
 		"dojo/date/locale",  "dojo/_base/fx", "dojox/layout/TableContainer", "dijit/form/TextBox", "dijit/layout/ContentPane", "dijit/form/SimpleTextarea", "dijit/form/Textarea",
 		"dijit/layout/BorderContainer", "dijit/layout/TabContainer", "dijit/Calendar", "dijit/TitlePane", "dijit/form/FilteringSelect",	"dijit/form/Form", 
 		"dijit/Dialog", "dijit/form/DropDownButton", "dijit/form/Button", "dijit/form/DateTextBox", "dojox/grid/DataGrid", "dojox/grid/EnhancedGrid", "dojo/store/Memory", 
-		"dojo/query", "dojo/_base/declare", "dojo/has", "dojo/data/ObjectStore", "dojo/request", "dojox/form/Manager", "dojox/math/random/Simple", 
+		"dojo/query", "dojo/_base/declare", "dojo/has", "dojo/data/ObjectStore", "dojo/request", "dojox/form/Manager", "dojox/math/random/Simple", "dojox/lang/functional",
 		"dojo/data/ItemFileWriteStore", "dojox/grid/cells/dijit", "dijit/form/TimeTextBox", "dijit/form/ValidationTextBox",	"dijit/form/CurrencyTextBox", "dojo/store/Observable",  
 		"dijit/TooltipDialog", "dijit/popup", "dojox/grid/enhanced/plugins/exporter/CSVWriter", "dojox/grid/enhanced/plugins/NestedSorting", "dojox/grid/enhanced/plugins/Pagination"],
 		function(declare, dijit, registry, dom, domStyle, domClass, domConstruct, domGeometry, string, on, 
@@ -11,7 +11,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dijit/registry", "dojo/dom", "doj
 				locale, baseFx, Table, TextBox, ContentPane, SimpleTextArea, TextArea, 
 				BorderContainer, TabContainer, Calendar, TitlePane, FilteringSelect, Form, 
 				Dialog, DropDownButton, Button, DateTextBox, DataGrid, EnhancedGrid, Memory, 
-				query, declare, has, ObjectStore, ajaxRequest, dojoxFormManager, randomNumber, 
+				query, declare, has, ObjectStore, ajaxRequest, dojoxFormManager, randomNumber, functional,
 				itemFileWriteStore, gridDijit, TimeTextBox, ValidationTextBox, CurrencyTextBox, Observable, Tooltip, popup) {
 			var employeesGrid = registry.byId('employeesGrid'), employeeSalaryDetailsGrid = registry.byId('employeeSalaryDetailsGrid'), 
 				employeeDisciplineGrid = registry.byId('employeeDisciplineGrid'), employeeDoingGoodGrid = registry.byId('employeeDoingGoodGrid'), 
@@ -817,6 +817,34 @@ define([ "dojo/_base/declare", "dijit/dijit", "dijit/registry", "dojo/dom", "doj
 		    		registry.byId('employeesGridStandBy').hide();
 		    	});
 		    },
+		    fetchYearlyReviews = function(empId){
+		    	registry.byId('mgrYearlyReviewsStandBy').show();
+		    	ajaxRequest.get("/service/employee/" + empId + "/yearlyReviews",{
+		    		handleAs: 'json'
+		    	}).then(function(yearlyReviewsResponse){
+		    		if(yearlyReviewsResponse.success){
+		    			populateYearlyReviews(yearlyReviewsResponse.customMessages);
+		    			registry.byId('mgrYearlyReviewsStandBy').hide();
+		    		}
+		    	}, function(error){
+		    		console.log('Error occurred while fetching store data ' + error);
+		    		registry.byId('mgrYearlyReviewsStandBy').hide();
+		    	});
+		    },
+		    populateYearlyReviews = function(yearlyReviewsModel){
+		    	var yearlyList = dom.byId('mgrYearlyReviewsTable');
+		    	domConstruct.empty(yearlyList);
+		    	var tableTR;
+		    	var keys = functional.keys(yearlyReviewsModel);
+		    	baseArray.forEach(keys, function(yearRecord){
+		    		tableTR = domConstruct.create("tr");
+		    		var td = domConstruct.create("td", { innerHTML: "<a href='javascript: fetchMgrYearlyReview(\"" + yearRecord + "\");'>" + yearRecord + "</a>"}, tableTR);
+		    		domStyle.set(td, 'text-align', 'center');
+		    		tableTR.appendChild(td);
+		    		yearlyList.appendChild(tableTR);
+		    	});
+		    	
+		    },
 		    getSelectedEmployeeId = function(){
 		    	try{
 			    	if(registry.byId('employeesGrid').rowCount > 0)
@@ -1003,7 +1031,14 @@ define([ "dojo/_base/declare", "dijit/dijit", "dijit/registry", "dojo/dom", "doj
 					domConstruct.place(fragment, mgrPaneDetailsNode);
 					
 					fragment = document.createDocumentFragment();
-					innerHTMLText = '<b>Work Cell: </b> ' + selectedItem.phone + ' <b>Personal: </b>' + selectedItem.personalPhone;
+					innerHTMLText = '<b>Work Cell: </b> ' + selectedItem.phone;
+					domConstruct.create("li", {
+	                    innerHTML: innerHTMLText
+	                }, fragment);
+					domConstruct.place(fragment, mgrPaneDetailsNode);
+					
+					fragment = document.createDocumentFragment();
+					innerHTMLText = '<b>Personal: </b>' + selectedItem.personalPhone;
 					domConstruct.create("li", {
 	                    innerHTML: innerHTMLText
 	                }, fragment);
@@ -1052,6 +1087,99 @@ define([ "dojo/_base/declare", "dijit/dijit", "dijit/registry", "dojo/dom", "doj
 			    },
 			    resetMgrLeavesGrid: function(){
 			    	updateMgrLeavesGrid([]);
+			    },
+			    updateMgrReview: function(formData, button){
+			    	registry.byId('mgrReviewStandBy').show();
+			    	formData['id'] = 0;
+			    	formData['empId'] = registry.byId('mgrList').get('value');
+			    	formData['storeId'] = registry.byId('hiddenStoreId').get('value');
+			    	formData['active'] = true;
+			    	formData['quarterlyNotes'] = registry.byId('quarterlyNotes').get('value');
+			    	formData['year'] = 2013;
+			    	formData['updatedBy'] = 0;
+			    	if(button == 'save'){
+			    		ajaxRequest.post("/service/employee/" + registry.byId('mgrList').get('value') + "/reviews", {
+			        		headers: { "Content-Type":"application/json"}, 
+			        		handleAs: 'json', data: json.stringify(formData), timeout: 10000 
+			        			}).then(function(reviewUpdateResponse){
+			        				if(reviewUpdateResponse.success){
+			        				console.log('Update Success -->' + reviewUpdateResponse.model.id);
+			        				dom.byId('messages').innerHTML = 'Add Successful';
+			        				dom.byId('hiddenReviewRecordId').value = reviewUpdateResponse.model.id;
+			        				registry.byId('reviewUpdateBtn').set('disabled', false);
+									registry.byId('reviewSaveBtn').set('disabled', true);
+			        			}
+			        		}, function(error){
+			        			console.log('Error while updating --> ' + error);
+			        			dom.byId('hiddenReviewRecordId').value = 0;
+			        			dom.byId('messages').innerHTML = 'Error while Adding --> ' + error;
+			        			registry.byId('reviewUpdateBtn').set('disabled', true);
+								registry.byId('reviewSaveBtn').set('disabled', false);
+			        		});
+			    	}else {
+			    		formData['id'] = dom.byId('hiddenReviewRecordId').value;
+			    		ajaxRequest.put("/service/employee/" + registry.byId('mgrList').get('value') + "/reviews", {
+			        		headers: { "Content-Type":"application/json"}, 
+			        		handleAs: 'json', data: json.stringify(formData), timeout: 10000 
+			        			}).then(function(reviewUpdateResponse){
+			        				if(reviewUpdateResponse.success){
+			        				console.log('Update Success -->' + reviewUpdateResponse);
+			        				dom.byId('messages').innerHTML = 'Update Successful';
+			        				registry.byId('reviewUpdateBtn').set('disabled', false);
+									registry.byId('reviewSaveBtn').set('disabled', true);
+			        			}
+			        		}, function(error){
+			        			console.log('Error while updating --> ' + error);
+			        			dom.byId('messages').innerHTML = 'Error while Updating --> ' + error;
+			        			registry.byId('reviewUpdateBtn').set('disabled', false);
+								registry.byId('reviewSaveBtn').set('disabled', true);
+			        		});
+			    	}
+			    	registry.byId('mgrReviewStandBy').hide();
+			    },
+			    resetMgrForm: function(){
+			    	registry.byId('quarterlyReviewForm').reset();
+					registry.byId('possibleBonus').set('value', 0);
+	    			registry.byId('bonusDate').set('value', new Date());
+	    			registry.byId('bonusAmt').set('value', 0);
+	    			registry.byId('quarterlyNotes').set('value', '');
+					registry.byId('reviewUpdateBtn').set('disabled', true);
+					registry.byId('reviewSaveBtn').set('disabled', true);
+			    },
+			    populateMgrReviewForm: function(quarterId){
+			    	registry.byId('mgrReviewStandBy').show();
+			    	var year=2013;
+			    	ajaxRequest.get("/service/employee/" + registry.byId('mgrList').get('value') + "/review/"+year+"/"+quarterId,{
+			    		handleAs: 'json'
+			    	}).then(function(reviewResponse){
+			    		if(reviewResponse.models.length > 0){
+			    			var data = reviewResponse.models[0];
+			    			registry.byId('possibleBonus').set('value', data.possibleBonus);
+			    			registry.byId('bonusDate').set('value', data.bonusDate);
+			    			registry.byId('bonusAmt').set('value', data.bonusAmt);
+			    			registry.byId('quarterlyNotes').set('value', data.quarterlyNotes);
+			    			registry.byId('reviewUpdateBtn').set('disabled', false);
+							registry.byId('reviewSaveBtn').set('disabled', true);
+							dom.byId('hiddenReviewRecordId').value = data.id;
+			    		}else {
+			    			registry.byId('reviewUpdateBtn').set('disabled', true);
+							registry.byId('reviewSaveBtn').set('disabled', false);
+							dom.byId('hiddenReviewRecordId').value = 0;
+							registry.byId('possibleBonus').set('value', 0);
+			    			registry.byId('bonusDate').set('value', new Date());
+			    			registry.byId('bonusAmt').set('value', 0);
+			    			registry.byId('quarterlyNotes').set('value', '');
+			    		}
+			    		registry.byId('mgrReviewStandBy').hide();
+			    	}, function(error){
+			    		registry.byId('mgrReviewStandBy').hide();
+			    	});
+			    },
+			    fetchCurrentYearReviews: function(empId){
+			    	fetchYearlyReviews(empId);
+			    },
+			    fetchReviewsForYear: function(year){
+			    	console.log('Fetch Data for --> ' + registry.byId('mgrList').get('value') + ' and Year --> ' + year);
 			    }
 		    };
 });

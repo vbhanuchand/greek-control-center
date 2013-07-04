@@ -16,6 +16,7 @@ import com.services.core.data.model.employee.Employee;
 import com.services.core.data.model.employee.EmployeeDiscipline;
 import com.services.core.data.model.employee.EmployeeLabor;
 import com.services.core.data.model.employee.EmployeeLeaves;
+import com.services.core.data.model.employee.EmployeeReview;
 import com.services.core.data.model.employee.EmployeeSalary;
 import com.services.core.view.utils.Utilities;
 
@@ -278,8 +279,60 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 	}
 	
 	
+	@Override
+	public List<EmployeeReview> getEmployeeReviews(int empId, int year){
+		Query query = sessionFactory.getCurrentSession().createQuery("from EmployeeReview where empId=:empId and year=:year order by quarter");
+		query.setParameter("empId", empId);
+		query.setParameter("year", year);
+		return query.list();
+	}
 	
+	@Override
+	public List getEmployeeReviews(int empId){
+		Query query = sessionFactory.getCurrentSession().createQuery("select distinct year as year from EmployeeReview where empId=:empId and active=true order by year desc");
+		query.setParameter("empId", empId);
+		query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+		return query.list();
+	}
 	
+	@Override
+	public List<EmployeeReview> getEmployeeReviewsByQuarter(int empId, int year, int quarter){
+		Query query = sessionFactory.getCurrentSession().createQuery("from EmployeeReview where empId=:empId and year=:year and quarter=:quarter order by quarter");
+		query.setParameter("empId", empId);
+		query.setParameter("year", year);
+		query.setParameter("quarter", quarter);
+		return query.list();
+	}
+	
+	@Override
+	public int createEmployeeReview(int empId, int storeId, int quarter, double possibleBonus, Date bonusDate, double bonusAmt, String quarterlyNotes, 
+			int year, Boolean active, int updatedBy){
+		EmployeeReview empReview = new EmployeeReview(empId, storeId, bonusDate, quarterlyNotes, quarter, year, bonusAmt, possibleBonus, true, updatedBy);
+		sessionFactory.getCurrentSession().save(empReview);
+		return empReview.getId();
+	}
+	
+	@Override
+	public boolean updateEmployeeReview(int id, int empId, int storeId, int quarter, double possibleBonus, Date bonusDate, double bonusAmt, String quarterlyNotes, 
+			int year, Boolean active, int updatedBy){
+		String hql = "UPDATE EmployeeReview er set er.empId = :empId, er.storeId = :storeId, "  
+				+	"er.quarter = :quarter, er.possibleBonus = :possibleBonus, er.date = :bonusDate, er.bonus=:bonusAmt, " 
+				+	"er.notes=:quarterlyNotes, er.year=:year,"
+				+	"er.updated_by=:updated_by WHERE er.id = :id and er.active=true";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setParameter("empId", empId);
+		query.setParameter("storeId", storeId);
+		query.setParameter("quarter", quarter);
+		query.setParameter("possibleBonus", possibleBonus);
+		query.setParameter("bonusDate", bonusDate);
+		query.setParameter("bonusAmt", bonusAmt);
+		query.setParameter("quarterlyNotes", quarterlyNotes);
+		query.setParameter("year", year);
+		query.setParameter("updated_by", updatedBy);
+		query.setParameter("id", id);
+		int result = query.executeUpdate();
+		return (result == 1);
+	}
 	
 	
 	

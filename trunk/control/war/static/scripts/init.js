@@ -99,6 +99,10 @@ require(["dojo/parser", "dijit/dijit", "dojo/dom-style", "dojo/date", "dojo/date
 						empLayout.populateManagerTabDetails(registry.byId('hiddenStoreId').get('value'));
 						if(domStyle.get(dom.byId('calendarEntryTitlePane'), 'display') != 'none')
 							otherFx.wipeOut({node: dom.byId('calendarEntryTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+						registry.byId('reviewUpdateBtn').set('disabled', true);
+						registry.byId('reviewSaveBtn').set('disabled', true);
+						registry.byId('quartersList').set('disabled', true);
+						registry.byId('quartersList').set('value', 0);
 						break;
 				}
 				empLayout.hidePhoto('employeePaneInfo');
@@ -195,13 +199,19 @@ require(["dojo/parser", "dijit/dijit", "dojo/dom-style", "dojo/date", "dojo/date
 			      empLayout.showPhotoByEmpId(this.get('value'), 'managerPhoto', 'mgrPhotoPane', 'mgrPhotoPaneStandBy');
 			      empLayout.fetchManagerContractBlobs(this.get('value'));
 			      empLayout.fetchMgrLeavesDetails(empId);
+			      empLayout.fetchCurrentYearReviews(empId);
+			      registry.byId('quartersList').set('disabled', false);
 				}else {
 					domConstruct.empty(dom.byId('mgrPaneInfoUl'));
+					domConstruct.empty(dom.byId('mgrYearlyReviewsTable'));
 					domStyle.set(dom.byId('mgrContract'), 'display','none');
 					empLayout.hidePhoto('mgrPhotoPane');
 					domStyle.set(dom.byId('mgrAddLeavesIcon'), 'display','none');
 					empLayout.resetMgrLeavesGrid();
+					registry.byId('quartersList').set('disabled', true);
+					registry.byId('quartersList').set('value', 0);
 				}
+				empLayout.resetMgrForm();
 			});
 			// Manager Tab Details ends
 			
@@ -429,20 +439,27 @@ require(["dojo/parser", "dijit/dijit", "dojo/dom-style", "dojo/date", "dojo/date
 			updateItemButton.set('disabled', true);
 			deleteItemButton.set('disabled', true);
 			
-			var quartersStore = new Memory({data: [{id: 1, name:"Quarter 1", label:"Quarter 1"}, 
+			var quartersStore = new Memory({data: [{id: 0, name:"--Select--", label:"--Select--"},
+			                                       {id: 1, name:"Quarter 1", label:"Quarter 1"}, 
 			                                       {id: 2, name:"Quarter 2", label:"Quarter 2"}, 
 			                                       {id: 3, name:"Quarter 3", label:"Quarter 3"},
 			                                       {id: 4, name:"Quarter 4", label:"Quarter 4"}]});
 			                                   
 			var quartersList = new FilteringSelect({
 	             id: "quartersList",
-	             value: 1,
+	             value: 0,
 	             store: quartersStore,
 	             searchAttr: "name",
 	             name: "quartersList",
 	             labelAttr: "label",
 	             style: "width: 90px;"
 	       }, dom.byId("quartersList"));
+		
+			quartersList.on('change', function(newValue){
+				if(Number(newValue) > 0)
+					empLayout.populateMgrReviewForm(newValue);
+				else empLayout.resetMgrForm();
+			});
 			
 			
 	  });

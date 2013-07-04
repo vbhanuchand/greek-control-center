@@ -693,7 +693,7 @@ table.dateTable th {
 }
 table.dateTable td {
 	border-width: 1px;
-	padding: 8px;
+	padding: 2px;
 	border-style: solid;
 	border-color: #ddd;
 	background-color: #ffffff;
@@ -712,6 +712,33 @@ table.dateTable th.noBorder{
 	background-color: #ffffff;
 	border: none;
 }
+
+
+/*Store INfo Table*/
+
+table.storeInfoTable {
+	font-family: inherit;
+	font-size: 96%;
+	color: inherit;
+	border: none;
+	/*border-width: 0px;
+	border-color: #ddd;*/
+	border-collapse: collapse;
+}
+table.storeInfoTable td {
+	padding: 1px;
+	/* border-style: solid;
+	border-color: #ddd;
+	background-color: #ffffff;*/
+	text-align:left;
+	vertical-align: top;
+}
+
+/*Store Info Tabe ENds*/
+
+
+
+
 
 /* Labor Table Styles*/
 
