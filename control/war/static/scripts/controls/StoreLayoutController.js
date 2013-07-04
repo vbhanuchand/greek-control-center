@@ -296,6 +296,8 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 		    		tableTR = domConstruct.create("tr");
 		    		var td1 = domConstruct.create("td", { innerHTML: dateRecord.impDate }, tableTR);
 		    		var td2 = domConstruct.create("td", { innerHTML: dateRecord.notes }, tableTR);
+		    		domStyle.set(td1, {style: "width: 30%"});
+		    		domStyle.set(td2, {style: "width: 70%"});
 		    		tableTR.appendChild(td1);
 		    		tableTR.appendChild(td2);
 		    		impDatesList.appendChild(tableTR);
@@ -308,9 +310,7 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 			    		dijit.byId('store-info-mailing-address').set('value', storeInfoDataModel.store_address);
 				    	dijit.byId('store-info-phone-numbers').set('value', storeInfoDataModel.store_contact_details);
 				    	dijit.byId('store-info-operating-hrs').set('value', storeInfoDataModel.operating_hrs);
-				    	//dojo.byId('store-info-important-dates-content').innerHTML = impDatesList.innerHTML;
 				    	dijit.byId('store-info-notes').set('value', storeInfoDataModel.store_notes);
-				    	//dojo.byId('store-info-lease-documents-content').innerHTML = '<a href="#">' + storeInfoDataModel.lease_copy_loc + '</a>';
 			    	}
 		    	}catch(e){console.log('Error Occurred during populateStoreParticulars() method ' + e);}
 		    },

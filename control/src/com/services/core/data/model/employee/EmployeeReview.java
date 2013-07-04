@@ -15,61 +15,68 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.Type;
 
 @Entity
-@Table(name = "employee_leaves")
-public class EmployeeLeaves implements Serializable{
-	
-	private static final long serialVersionUID = 2383042186518264545L;
+@Table(name = "employee_review")
+public class EmployeeReview implements Serializable {
+
+	private static final long serialVersionUID = -939502970582437512L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id", nullable = false)
 	private Integer id;
-	
+
 	@Column(name = "employee_id", nullable = false)
 	private Integer empId;
-	
+
 	@Column(name = "store_id", nullable = false)
 	private Integer storeId;
-	
+
 	@Column(name = "on_date")
 	@Temporal(TemporalType.DATE)
 	private Date date;
-	
-	@Column(name = "reason")
-	private String reason;
-	
-	@Column(name = "excused")
-	@Type(type="yes_no")
-	private Boolean excused;
-	
-	@Column(name = "hrs_active")
-	private Integer activeHrs;
-	
+
+	@Column(name = "notes")
+	private String notes;
+
+	@Column(name = "quarter")
+	private Integer quarter;
+
+	@Column(name = "yyyy")
+	private Integer year;
+
+	@Column(name = "bonus")
+	private Double bonus;
+
+	@Column(name = "possible_bonus")
+	private Double possibleBonus;
+
 	@Column(name = "active")
-	@Type(type="yes_no")
+	@Type(type = "yes_no")
 	private Boolean active;
-	
+
 	@Column(name = "updated_by")
 	private Integer updated_by;
-	
+
 	@Column(name = "updated_date", nullable = true, insertable = false, updatable = false)
 	@Temporal(TemporalType.DATE)
 	private Date updated_date;
 
-	public EmployeeLeaves() {
+	public EmployeeReview() {
 		super();
 	}
 
-	public EmployeeLeaves(Integer empId, Integer storeId, Date date, String reason,
-			Boolean excused, Integer activeHrs, Boolean active,
-			Integer updated_by) {
+	public EmployeeReview(Integer empId, Integer storeId, Date date,
+			String notes, Integer quarter, Integer year, Double bonus,
+			Double possibleBonus, Boolean active, Integer updated_by) {
 		super();
 		this.empId = empId;
 		this.storeId = storeId;
 		this.date = date;
-		this.reason = reason;
-		this.excused = excused;
-		this.activeHrs = activeHrs;
+		this.notes = notes;
+		this.quarter = quarter;
+		this.year = year;
+		this.bonus = bonus;
+		this.possibleBonus = possibleBonus;
 		this.active = active;
 		this.updated_by = updated_by;
 	}
@@ -106,28 +113,44 @@ public class EmployeeLeaves implements Serializable{
 		this.date = date;
 	}
 
-	public String getReason() {
-		return reason;
+	public String getNotes() {
+		return notes;
 	}
 
-	public void setReason(String reason) {
-		this.reason = reason;
+	public void setNotes(String notes) {
+		this.notes = notes;
 	}
 
-	public Boolean getExcused() {
-		return excused;
+	public Integer getQuarter() {
+		return quarter;
 	}
 
-	public void setExcused(Boolean excused) {
-		this.excused = excused;
+	public void setQuarter(Integer quarter) {
+		this.quarter = quarter;
 	}
 
-	public Integer getActiveHrs() {
-		return activeHrs;
+	public Integer getYear() {
+		return year;
 	}
 
-	public void setActiveHrs(Integer activeHrs) {
-		this.activeHrs = activeHrs;
+	public void setYear(Integer year) {
+		this.year = year;
+	}
+
+	public Double getBonus() {
+		return bonus;
+	}
+
+	public void setBonus(Double bonus) {
+		this.bonus = bonus;
+	}
+
+	public Double getPossibleBonus() {
+		return possibleBonus;
+	}
+
+	public void setPossibleBonus(Double possibleBonus) {
+		this.possibleBonus = possibleBonus;
 	}
 
 	public Boolean getActive() {

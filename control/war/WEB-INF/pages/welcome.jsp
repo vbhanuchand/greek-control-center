@@ -279,22 +279,44 @@
 							<div data-dojo-type="dojox/layout/TableContainer" data-dojo-props="showLabels:true, orientation:'vert', spacing:2, cols:3, 
 								customClass:'leaseInfo-labelsAndValues', style:'width:100%;'" id="storeInfoTable">
 								<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'Contact Info'" style="border: .1em solid #ddd; width: 100%">
-									<div style="padding-top: 2px; padding-bottom: 2px;"><span style="padding: 3px;"><b>Address:</b></span><span id="store-info-mailing-address" data-dojo-type="dijit/InlineEditBox" data-dojo-props="editor: dijit.form.Textarea, rows:2, cols:30, maxLength: 100" 
-										widgetid="store-info-mailing-address" width="300px"></span></div>
-									<div style="padding-top: 2px; padding-bottom: 2px;"><span style="padding: 3px;"><b>Phone Numbers:</b></span><span id="store-info-phone-numbers" data-dojo-type="dijit/InlineEditBox" data-dojo-props="editor: dijit.form.Textarea, rows:2, cols:30, maxLength: 100" 
-											widgetid="store-info-phone-numbers" width="300px"></span></div>
-									<div style="padding-top: 2px; padding-bottom: 2px;"><span style="padding: 3px;"><b>Operating Hours:</b></span><span id="store-info-operating-hrs" data-dojo-type="dijit/InlineEditBox" data-dojo-props="editor: dijit.form.Textarea, rows:2, cols:30, maxLength: 100" 
-											widgetid="store-info-operating-hrs" width="300px"></span></div>
+									<table class="storeInfoTable">
+										<tr>
+											<td width="30%"><b>Address:</b></td>
+											<td width="70%">
+												<span id="store-info-mailing-address" data-dojo-type="dijit/InlineEditBox" 
+													data-dojo-props="editor: dijit.form.Textarea, rows:2, cols:20, maxLength: 100" 
+													widgetid="store-info-mailing-address" width="250px"></span>
+											</td>
+										</tr>
+										<tr>
+											<td width="30%"><b>Phone Numbers:</b></td>
+											<td width="70%">
+												<span id="store-info-phone-numbers" data-dojo-type="dijit/InlineEditBox" 
+													data-dojo-props="editor: dijit.form.Textarea, rows:2, cols:20, maxLength: 100" 
+													widgetid="store-info-phone-numbers" width="250px"></span>
+											</td>
+										</tr>
+										<tr>
+											<td width="30%"><b>Operating Hours:</b></td>
+											<td width="70%">
+												<span id="store-info-operating-hrs" data-dojo-type="dijit/InlineEditBox" 
+												data-dojo-props="editor: dijit.form.Textarea, rows:2, cols:20, maxLength: 100" 
+												widgetid="store-info-operating-hrs" width="250px"></span>
+											</td>
+										</tr>
+									</table>
 								</div>
-								<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'Property Info'" style="border: .1em solid #ddd; width: 100%">
-									<div style="padding-top: 2px; padding-bottom: 2px;"><span style="padding: 3px;"><b>Property Manager Info:</b></span><span id="store-info-property-mgr-info" data-dojo-type="dijit/InlineEditBox" data-dojo-props="editor: dijit.form.Textarea, rows:2, cols:30, maxLength: 100" 
+								<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'Property Manager Info'" style="border: .1em solid #ddd; width: 100%; font-size: 96%;">
+									<div style="padding-top: 2px; padding-bottom: 2px;"><span id="store-info-property-mgr-info" data-dojo-type="dijit/InlineEditBox" 
+										data-dojo-props="editor: dijit.form.Textarea, rows:2, cols:30, maxLength: 100" 
 										widgetid="store-info-property-mgr-info" width="300px"></span></div>
 								</div>
-								<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'Store Notes'" style="border: .1em solid #ddd; width: 100%">
-									<div style="padding-top: 2px; padding-bottom: 2px;"><span id="store-info-notes" data-dojo-type="dijit/InlineEditBox" data-dojo-props="editor: dijit.form.Textarea" 
+								<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'Store Notes'" style="border: .1em solid #ddd; width: 100%; font-size: 96%;">
+									<div style="padding-top: 2px; padding-bottom: 2px;"><span id="store-info-notes" data-dojo-type="dijit/InlineEditBox" 
+										data-dojo-props="editor: dijit.form.Textarea" 
 										widgetid="store-info-notes" width="300px"></span></div>
 								</div>
-								<div id="store-info-important-dates" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'Important Dates'" style="border: .1em none #ddd; width: 100%">
+								<div id="store-info-important-dates" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'Important Dates'" style="border: .1em none #ddd; width: 100%; font-size: 96%;">
 	  								<!--  <div id="store_info-add-date-link" style="text-align: right;"></div> -->
 	  								<div id="store-info-important-dates-content-new" style="display: none;">
 	  									<div style="padding-top: 1px; padding-bottom: 4px;">
@@ -304,21 +326,23 @@
 	  									</div>
 	  								</div>
 	  								<div id="store-info-important-dates-content" align="left">
-	  									<table id="storeInfoImpDatesTable" style="width: 80%; height: 100%;" class='dateTable'>
+	  									<table id="storeInfoImpDatesTable" style="width: 80%; height: 100%;" class='storeInfoTable'>
 	  										<tr><td width="30%"></td><td width="70%"></td></tr>
 	  										<tr><td width="30%"></td><td width="70%"></td></tr>
 	  										<tr><td width="30%"></td><td width="70%"></td></tr>
 	  									</table>
+	  									<button data-dojo-type="dijit/form/Button" type="submit" style="padding: 3px;">Save Changes</button>
 	  								</div>
 	  								<div id="storeInfoImpDatesStandBy" data-dojo-id="storeInfoImpDatesStandBy" 
 											data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'store-info-important-dates', color:'white'">
 									</div>
 	  							</div>
-								<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'Lease/ Mortgage/ Loan Info'" style="border: .1em solid #ddd; width: 100%">
+								<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'Lease/ Mortgage/ Loan Info'" style="border: .1em solid #ddd; width: 100%; font-size: 96%;">
 									<div style="padding-top: 2px; padding-bottom: 2px;"><span id="store-mortgage-info" data-dojo-type="dijit/InlineEditBox" data-dojo-props="editor: dijit.form.Textarea" 
 										widgetid="store-mortgage-info" width="300px"></span></div>
 								</div>
-	  							<div id="store-info-lease-documents" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'Documents'" style="border: .1em solid #ddd; width: 100%">
+	  							<div id="store-info-lease-documents" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'Documents'" 
+	  								style="border: .1em solid #ddd; width: 100%; font-size: 96%;">
 	  								<div id="fileUploadWidgetsDiv" style="display: none;">
    										<span id="fileUploadWidgets"></span>
 	  									<span id="fileUploadProgressMsgs"></span>
@@ -337,11 +361,6 @@
 									</div>
 	  							</div>
 	  						</div>
-	  						<span id="store-info-save-section" data-dojo-type="dijit/layout/ContentPane">
-	  								<span id="store-info-save-section-content">
-	  									<button data-dojo-type="dijit/form/Button" type="submit">Save Changes</button>
-	  								</span>
-	  						</span>
 	  						<script type="dojo/on" data-dojo-event="submit" data-dojo-args="evt">
 								evt.preventDefault();
 								evt.stopPropagation();
@@ -351,7 +370,7 @@
 							</script>
 						</form>
 						<div id="storeInfoTitlePaneStandBy" data-dojo-id="storeInfoTitlePaneStandBy" 
-											data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'storeInfoForm', color:'white'">
+							data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'storeInfoForm', color:'white'">
 						</div>
 					</div>
 					
@@ -393,7 +412,7 @@
 				</div>
 				<div id="managerPane" data-dojo-type="dijit/layout/ContentPane" title="Manager" data-dojo-props="selected:false" style="width: 99%; height: 99%">
 					<div id="managerDetails" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'Manager Details'" style="border: .1em solid #ddd;" align="center">
-						<table style="position: relative; width: 99%; height: 30%; margin-top: 2px" class='dateTable' align="center">
+						<table style="position: relative; width: 99%; height: 30%; margin-top: 2px" class='dateTable' align="center" id="mgrDetailsWipeRegion">
 							<tr style="width: 100%; height: 100%">
 								<td style="width: 15%" align="center">
 									<div id="mgrPhotoPane" style="width: 100%; height: 100%" align="center">
@@ -431,13 +450,24 @@
 										</div>
 									</div>
 								</td>
-								<td style="width: 25%" valign="top">
+								<td style="width: 25%" valign="top" id="mgrYearlyReviews">
 									<div align="center" style="font-weight: bold;font-style: inherit;">
 										<u>Yearly Reviews</u>
+									</div>
+									<div align="center" style="padding-top: 5px;">
+										<table id="mgrYearlyReviewsTable" style="width: 40%; height: 100%;" class='storeInfoTable' align="center">
+	  										<tr><td>No Data Available !!!</td></tr>
+	  									</table>
+									</div>
+									<div id="mgrYearlyReviewsStandBy" data-dojo-id="mgrYearlyReviewsStandBy" 
+												data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'mgrYearlyReviews', color:'white'">
 									</div>
 								</td>
 							</tr>
 						</table>
+						<div class="dijitHidden" id="mgrDetailsWipeOutRegion">
+							Grid to display the Yearly Reviews !!!
+						</div>
 						<table style="position: relative; width: 99%; height: 66%; margin-top: 2px" class='dateTable' align="center">
 							<tr style="width: 100%; height: 100%">
 								<td style="width: 50%; height: 99%" align="center" valign="top">
@@ -451,7 +481,9 @@
 									</div>
 								</td>
 								<td style="width: 50%;height:100%" align="center" valign="top">
-									<div align="center" style="font-weight: normal; width: 100%; font-style: normal;">
+								<div data-dojo-type="dijit/form/Form" id="quarterlyReviewForm" data-dojo-id="quarterlyReviewForm" 
+									encType="multipart/form-data" action="" method="">
+									<div id="mgrReviewFormDiv" align="center" style="font-weight: normal; width: 100%; font-style: normal;">
 										<u style="font-weight: bolder; font-style: italic;">Quarterly Reviews</u>
 										<div style="padding-top: 5px; width: 100%" align="center">
 											<table class="dataTable" style="width: 100%" align="center">
@@ -486,18 +518,41 @@
 															data-dojo-props="constraints:{fractional:false}, currency:'USD', invalidMessage:'Invalid Amount.'" />
 													</td>
 												</tr>
+												<tr><td colspan="3" class="noBorder"></td></tr>
 												<tr>
-													<td colspan="3" style="background-color: #eee; text-align: center;font-weight: bold;">Notes</td>
+													<td colspan="3" style="background-color: #eee; text-align: center;font-weight: bold;" height="5px;">Notes</td>
 												</tr>
 												<tr>
-													<td colspan="3" style="text-align: left;">
-														<textarea id="quarterlyNotes" name=""quarterlyNotes"" data-dojo-type="dijit/form/Textarea" 
-														style="width:99%;"></textarea>
+													<td colspan="3" style="text-align: center;">
+														<span id="quarterlyNotes" data-dojo-type="dijit/InlineEditBox" 
+															data-dojo-props="editor: dijit.form.Textarea, rows:2, cols:20, maxLength: 100" 
+															widgetid="quarterlyNotes" width="99%"></span>
 													</td>
 												</tr>
+												<tr><td colspan="3" class="noBorder">
+														<button id="reviewUpdateBtn" data-dojo-type="dijit/form/Button" disabled="disabled" type="submit" style="padding: 3px;" value="update">Update</button>
+														<button id="reviewSaveBtn" data-dojo-type="dijit/form/Button" disabled="disabled" type="submit" style="padding: 3px;" value="save">Save</button>
+												</td></tr>
 											</table>
 										</div>
 									</div>
+									<div id="mgrReviewStandBy" data-dojo-id="mgrReviewStandBy" 
+												data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'mgrReviewFormDiv', color:'white'">
+									</div>
+									<input type="hidden" name="hiddenReviewRecordId" id="hiddenReviewRecordId" value="0" />
+									<script type="dojo/on" data-dojo-event="submit" data-dojo-args="evt">
+										evt.preventDefault();
+										evt.stopPropagation();
+										var json = require('dojo/json');
+										var registry = require('dijit/registry');
+										var empLayout = require('controls/EmployeeLayoutController');
+										var buttonValue = registry.byId('reviewSaveBtn').get('disabled') ? 'update' : 'save';
+										if(this.validate() && (Number(registry.byId('quartersList').get('value')) > 0)){
+											empLayout.updateMgrReview(this.getValues(), buttonValue);
+										}
+										return false;
+									</script>
+								</div>
 								</td>
 							</tr>
 						</table>
@@ -571,7 +626,7 @@
 					</div>
 				</div>
 				
-				<div id="laborPane" data-dojo-type="dijit/layout/ContentPane" title="Labor" data-dojo-props="selected: false, style:'width:99%; height:99%;'" style="font-size: 85%; font-style: normal;">
+				<div id="laborPane" data-dojo-type="dijit/layout/ContentPane" title="Current Schedule" data-dojo-props="selected: false, style:'width:99%; height:99%;'" style="font-size: 85%; font-style: normal;">
 					<div id="labor-calendar" class="claro" data-dojo-type="dojox/calendar/Calendar" data-dojo-props="style: 'position:relative;width:100%;height:99%;'"></div>
 					<!-- <div id="laborPaneStandBy" data-dojo-id="laborPaneStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'laborPane', color:'white'"></div> -->
 				</div>

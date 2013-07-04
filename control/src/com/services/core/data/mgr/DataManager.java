@@ -9,6 +9,7 @@ import com.services.core.view.wrappers.BlobsWrapper;
 import com.services.core.view.wrappers.EmployeeDisciplineWrapper;
 import com.services.core.view.wrappers.EmployeeLaborWrapper;
 import com.services.core.view.wrappers.EmployeeLeavesWrapper;
+import com.services.core.view.wrappers.EmployeeReviewWrapper;
 import com.services.core.view.wrappers.EmployeeSalaryWrapper;
 import com.services.core.view.wrappers.EmployeeWrapper;
 import com.services.core.view.wrappers.StoreAlarmWrapper;
@@ -103,5 +104,15 @@ public interface DataManager {
 	boolean insertBlob(BlobsWrapper blob);
 	
 	List<BlobsWrapper> getBlobs(Integer linkedId, String tab);
+	
+	List<EmployeeReviewWrapper> getEmployeeReviewsByQuarter(int empId, int year, int quarter);
+	
+	List<EmployeeReviewWrapper> getEmployeeReviews(int empId, int year);
+	
+	Map<String, String> getEmployeeReviews(int empId);
+	
+	int insertEmployeeReview(EmployeeReviewWrapper empReview);
+	
+	boolean updateEmployeeReview(EmployeeReviewWrapper empReview);
 		
 }

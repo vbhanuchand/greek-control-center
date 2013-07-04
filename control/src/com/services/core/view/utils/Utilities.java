@@ -43,6 +43,12 @@ public class Utilities {
 		return (String.valueOf(cal.get(Calendar.YEAR)) + "-" + String.valueOf(cal.get(Calendar.WEEK_OF_YEAR)));
 	}
 	
+	public static String getCurrentYear(){
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		return String.valueOf(cal.get(Calendar.YEAR));
+	}
+	
 	public static Map<String, Date> getStartDateEndDate(String yearWeek){
 		Map<String, Date> returnMap = new HashMap<String, Date>();
 		String[] yearWeekArray= yearWeek.split("-");

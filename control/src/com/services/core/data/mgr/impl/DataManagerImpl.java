@@ -29,6 +29,7 @@ import com.services.core.data.model.employee.Employee;
 import com.services.core.data.model.employee.EmployeeDiscipline;
 import com.services.core.data.model.employee.EmployeeLabor;
 import com.services.core.data.model.employee.EmployeeLeaves;
+import com.services.core.data.model.employee.EmployeeReview;
 import com.services.core.data.model.employee.EmployeeSalary;
 import com.services.core.data.model.store.Store;
 import com.services.core.data.model.store.StoreAlarm;
@@ -40,6 +41,7 @@ import com.services.core.view.wrappers.BlobsWrapper;
 import com.services.core.view.wrappers.EmployeeDisciplineWrapper;
 import com.services.core.view.wrappers.EmployeeLaborWrapper;
 import com.services.core.view.wrappers.EmployeeLeavesWrapper;
+import com.services.core.view.wrappers.EmployeeReviewWrapper;
 import com.services.core.view.wrappers.EmployeeSalaryWrapper;
 import com.services.core.view.wrappers.EmployeeWrapper;
 import com.services.core.view.wrappers.StoreAlarmWrapper;
@@ -616,5 +618,57 @@ public class DataManagerImpl implements DataManager{
 			blobList.add(new BlobsWrapper(blobs.getId(), blobs.getLinkedId(), blobs.getFileName(), blobs.getBlobKey(), blobs.getTab(), blobs.getActive(), blobs.getUpdatedBy()));
 		}
 		return blobList;
+	}
+	
+	@Override
+	public List<EmployeeReviewWrapper> getEmployeeReviews(int empId, int year){
+		List<EmployeeReviewWrapper> empReviewList = new ArrayList<EmployeeReviewWrapper>();
+		EmployeeReviewWrapper empReviewWrapper = null;
+		for(EmployeeReview empReview: employeeDAO.getEmployeeReviews(empId, year)){
+			empReviewWrapper = new EmployeeReviewWrapper(empReview.getId(), empReview.getEmpId(), empReview.getStoreId(), empReview.getQuarter(), empReview.getPossibleBonus(), 
+					empReview.getDate(), empReview.getBonus(),empReview.getNotes(), empReview.getYear(), empReview.getActive(), empReview.getUpdated_by(), empReview.getUpdated_date());
+			empReviewList.add(empReviewWrapper);
+		}
+		return empReviewList;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@Override
+	public Map<String, String> getEmployeeReviews(int empId){
+		Map mapObject = new HashMap();
+		Map<String, String> dbItem = new HashMap<String, String>();
+		List empReviewList = employeeDAO.getEmployeeReviews(empId);
+		Iterator iter = empReviewList.iterator();
+		while(iter.hasNext()){
+			mapObject = (Map)iter.next();
+			dbItem.put(mapObject.get("year").toString(), mapObject.get("year").toString());
+		}
+		return dbItem;
+	}
+	
+	@Override
+	public List<EmployeeReviewWrapper> getEmployeeReviewsByQuarter(int empId, int year, int quarter){
+		List<EmployeeReviewWrapper> empReviewList = new ArrayList<EmployeeReviewWrapper>();
+		EmployeeReviewWrapper empReviewWrapper = null;
+		for(EmployeeReview empReview: employeeDAO.getEmployeeReviewsByQuarter(empId, year, quarter)){
+			empReviewWrapper = new EmployeeReviewWrapper(empReview.getId(), empReview.getEmpId(), empReview.getStoreId(), empReview.getQuarter(), empReview.getPossibleBonus(), 
+					empReview.getDate(), empReview.getBonus(),empReview.getNotes(), empReview.getYear(), empReview.getActive(), empReview.getUpdated_by(), empReview.getUpdated_date());
+			empReviewList.add(empReviewWrapper);
+		}
+		return empReviewList;
+	}
+	
+	@Override
+	@Transactional
+	public int insertEmployeeReview(EmployeeReviewWrapper empReview){
+		return employeeDAO.createEmployeeReview(empReview.getEmpId(), empReview.getStoreId(), empReview.getQuartersList(), empReview.getPossibleBonus(), 
+				empReview.getBonusDate(), empReview.getBonusAmt(), empReview.getQuarterlyNotes(), empReview.getYear(), empReview.getActive(), empReview.getUpdatedBy());
+	}
+	
+	@Override
+	@Transactional
+	public boolean updateEmployeeReview(EmployeeReviewWrapper empReview){
+		return employeeDAO.updateEmployeeReview(empReview.getId(), empReview.getEmpId(), empReview.getStoreId(), empReview.getQuartersList(), empReview.getPossibleBonus(), 
+				empReview.getBonusDate(), empReview.getBonusAmt(), empReview.getQuarterlyNotes(), empReview.getYear(), empReview.getActive(), empReview.getUpdatedBy());
 	}
 }

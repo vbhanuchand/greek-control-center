@@ -7,6 +7,7 @@ import com.services.core.data.model.employee.Employee;
 import com.services.core.data.model.employee.EmployeeDiscipline;
 import com.services.core.data.model.employee.EmployeeLabor;
 import com.services.core.data.model.employee.EmployeeLeaves;
+import com.services.core.data.model.employee.EmployeeReview;
 import com.services.core.data.model.employee.EmployeeSalary;
 
 public interface EmployeeDAO {
@@ -56,5 +57,17 @@ public interface EmployeeDAO {
 	boolean updateEmployeeLabor(int id, int empId, int storeId, Date date, int from, int to, String position, boolean active, int updated_by);
 	
 	boolean deleteEmployeeLabor(int laborId);
+	
+	List<EmployeeReview> getEmployeeReviews(int empId, int year);
+	
+	List getEmployeeReviews(int empId);
+	
+	List<EmployeeReview> getEmployeeReviewsByQuarter(int empId, int year, int quarter);
+	
+	int createEmployeeReview(int empId, int storeId, int quarter, double possibleBonus, Date bonusDate, double bonusAmt, String quarterlyNotes, 
+			int year, Boolean active, int updatedBy);
+	
+	boolean updateEmployeeReview(int id, int empId, int storeId, int quarter, double possibleBonus, Date bonusDate, double bonusAmt, String quarterlyNotes, 
+			int year, Boolean active, int updatedBy);
 
 }
