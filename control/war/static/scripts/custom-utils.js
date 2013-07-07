@@ -17,6 +17,27 @@ function fetchMgrYearlyReview(year){
 	empLayout.fetchReviewsForYear(year);
 }
 
+function returnToManagerPane(){
+	var otherFx = require('dojo/fx');
+	var dom = require('dojo/dom');
+	var domStyle = require('dojo/dom-style');
+	
+	var wipeOut = otherFx.wipeOut({node: dom.byId('mgrYearlyDetailsRegion'), duration: 1000, delay: 250, 
+		onEnd: function(node){
+				domStyle.set(this.node, {display: "none", width: "99%", height: "99%"});
+				domStyle.set(dom.byId('mgrUnusedPersonalDaysDetailsDiv'), "display","none");
+			}
+	});
+	
+	var wipeIn = otherFx.wipeIn({node: dom.byId('managerDetailsPane'), duration: 1000, delay: 250, 
+		onBegin: function(node){
+				domStyle.set(this.node, {display: "", width: "99%", height: "99%"});
+				domStyle.set(dom.byId('mgrReviewFormDiv'), "display","");
+			}
+	});
+	otherFx.chain([wipeOut, wipeIn]).play();
+}
+
 
 function saveFileRefToDB(tab, fileName, blobKey){
 	var registry = require('dijit/registry'), dom = require('dojo/dom'), otherFx = require('dojo/fx'), domStyle = require('dojo/dom-style'),

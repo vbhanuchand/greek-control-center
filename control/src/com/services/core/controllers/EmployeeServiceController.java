@@ -180,6 +180,19 @@ public class EmployeeServiceController {
 		return new MultipleModelResponse<EmployeeLeavesWrapper>(true, empLeaveWrappers);
 	}
 	
+	@RequestMapping(value = "/employee/{empId}/leaves/{year}", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public MultipleModelResponse<EmployeeLeavesWrapper> getEmployeeLeaves(@PathVariable int empId, @PathVariable int year)
+			throws IOException {
+		logger.info("Getting Employees Salary Data For Employee Id --> " + empId + " --> Year --> " + year);
+		List<EmployeeLeavesWrapper> empLeaveWrappers = dataService.getEmployeeLeaves(empId, year);
+		for(EmployeeLeavesWrapper emp: empLeaveWrappers){
+			emp.set_self("/service/employee/" + empId + "/leaves");
+			emp.setPost(false);
+		}
+		return new MultipleModelResponse<EmployeeLeavesWrapper>(true, empLeaveWrappers);
+	}
+	
 	@RequestMapping(value = "/employee/{empId}/leaves", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public SingleModelResponse<EmployeeWrapper> insertEmployeeLeaves(@PathVariable int empId, @RequestBody EmployeeLeavesWrapper empLeaves)
@@ -269,6 +282,19 @@ public class EmployeeServiceController {
 			throws IOException {
 		logger.info("Getting Employee Reviews Data For Employee Id --> " + empId);
 		List<EmployeeReviewWrapper> empReviewWrapperList = dataService.getEmployeeReviewsByQuarter(empId, year, quarter);
+		for(EmployeeReviewWrapper empReviewWrapper: empReviewWrapperList){
+			empReviewWrapper.set_self("/service/employee/" + empId + "/reviews");
+			empReviewWrapper.setPost(false);
+		}
+		return new MultipleModelResponse<EmployeeReviewWrapper>(true, empReviewWrapperList);
+	}
+	
+	@RequestMapping(value = "/employee/{empId}/review/{year}", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public MultipleModelResponse<EmployeeReviewWrapper> getEmployeeReviewsForYear(@PathVariable int empId, @PathVariable int year)
+			throws IOException {
+		logger.info("Getting Employee Reviews Data For Employee Id --> " + empId);
+		List<EmployeeReviewWrapper> empReviewWrapperList = dataService.getEmployeeReviews(empId, year);
 		for(EmployeeReviewWrapper empReviewWrapper: empReviewWrapperList){
 			empReviewWrapper.set_self("/service/employee/" + empId + "/reviews");
 			empReviewWrapper.setPost(false);

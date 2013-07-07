@@ -42,6 +42,8 @@ public interface EmployeeDAO {
 	
 	List<EmployeeLeaves> getEmployeeLeaves(int empId);
 	
+	List<EmployeeLeaves> getEmployeeLeaves(int empId, int year);
+	
 	boolean createEmployeeLeaves(int empId, int storeId, Date date, String reason, boolean excused, int activeHrs, boolean active, int updated_by);
 	
 	boolean updateEmployeeLeaves(int id, int empId, int storeId, Date date, String reason, boolean excused, int activeHrs, boolean active, int updated_by);

@@ -162,7 +162,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dijit/registry", "dojo/dom", "doj
 		    },
 		    validateCell = function(cellWidget){
 		    	var returnValue = false;
-		    	try{returnValue = cellWidget.validate();}catch(e){returnValue=true;}
+		    	try{cellWidget.focus(); returnValue = cellWidget.validate();}catch(e){console.log('Error while Validating Cell --> ' + e);returnValue=true;}
 		    	return returnValue;
 		    },
 		    showPhotoByEmpId = function(empId, photoImgNode, photoPane, standByDomWidget){
@@ -789,7 +789,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dijit/registry", "dojo/dom", "doj
 		    },
 		    fetchMgrLeavesData = function(empId) {
 		    	registry.byId('mgrLeavesGridStandBy').show();
-		    	ajaxRequest.get("/service/employee/" + empId + "/leaves",{
+		    	ajaxRequest.get("/service/employee/" + empId + "/leaves/"+registry.byId('hiddenSelectedYear').get('value'),{
 		    		handleAs: 'json'
 		    	}).then(function(mgrLeavesResponse){
 		    		if(mgrLeavesResponse.success){
@@ -1145,6 +1145,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dijit/registry", "dojo/dom", "doj
 	    			registry.byId('quarterlyNotes').set('value', '');
 					registry.byId('reviewUpdateBtn').set('disabled', true);
 					registry.byId('reviewSaveBtn').set('disabled', true);
+					registry.byId('hiddenSelectedYear').set('value', '2013');
 			    },
 			    populateMgrReviewForm: function(quarterId){
 			    	registry.byId('mgrReviewStandBy').show();
@@ -1180,6 +1181,141 @@ define([ "dojo/_base/declare", "dijit/dijit", "dijit/registry", "dojo/dom", "doj
 			    },
 			    fetchReviewsForYear: function(year){
 			    	console.log('Fetch Data for --> ' + registry.byId('mgrList').get('value') + ' and Year --> ' + year);
+			    	
+			    	var wipeOut = otherFx.wipeOut({node: dom.byId('managerDetailsPane'), duration: 1000, delay: 250, 
+			    		onEnd: function(node){
+			    				domStyle.set(this.node, {display: "none", width: "99%", height: "99%"});
+			    				domStyle.set(dom.byId('mgrReviewFormDiv'), "display","none");
+			    			}
+			    	});
+			    	var wipeIn = otherFx.wipeIn({node: dom.byId('mgrYearlyDetailsRegion'), duration: 1000, delay: 250, 
+			    		onBegin: function(node){
+			    				domStyle.set(this.node, {display: "", width: "99%", height: "99%"});
+			    			},
+			    		onEnd: function(node){
+			    			
+			    		}
+			    	});
+			    	otherFx.chain([wipeOut, wipeIn]).play();
+			    	registry.byId('hiddenSelectedYear').set('value', year);
+			    	fetchMgrLeavesData(registry.byId('mgrList').get('value'));
+			    	
+			    	var standByNode = "mgrYearlyDetailsRegionStandBy";
+			    	registry.byId(standByNode).show();
+			    	ajaxRequest.get("/service/employee/" + registry.byId('mgrList').get('value') + "/review/"+year,{
+			    		handleAs: 'json'
+			    	}).then(function(yearlyReviewsResponse){
+			    		var modelsLength = yearlyReviewsResponse.models.length;
+			    		if(yearlyReviewsResponse.success){
+			    			var quarterlyList = dom.byId('mgrYearlyReviewsQuarterTable');
+					    	domConstruct.empty(quarterlyList);
+					    	var tableTR, td;
+					    	tableTR = domConstruct.create("tr");
+					    	td = domConstruct.create("th", { 
+				    			innerHTML: "Quarter #"
+				    			}, tableTR);
+					    	domStyle.set(td, 'width', '10%');
+				    		tableTR.appendChild(td);
+				    		
+				    		td = domConstruct.create("th", { 
+				    			innerHTML: "Notes"
+				    			}, tableTR);
+					    	domStyle.set(td, 'width', '45%');
+				    		tableTR.appendChild(td);
+				    		
+				    		td = domConstruct.create("th", { 
+				    			innerHTML: "Bonus"
+				    			}, tableTR);
+					    	domStyle.set(td, 'width', '10%');
+				    		tableTR.appendChild(td);
+				    		
+				    		td = domConstruct.create("th", { 
+				    			innerHTML: "End Year Payout"
+				    			}, tableTR);
+					    	domStyle.set(td, 'width', '35%');
+				    		tableTR.appendChild(td);
+				    		quarterlyList.appendChild(tableTR);
+				    		if(modelsLength == 0){
+				    			tableTR = domConstruct.create("tr");
+					    		td = domConstruct.create("td", { 
+					    			innerHTML: "<i>No Data Available !!!</i>",
+					    			colspan: 4
+					    			}, tableTR);
+					    		domStyle.set(td, 'text-align', 'center');
+					    		quarterlyList.appendChild(tableTR);
+					    		tableTR.appendChild(td);
+					    	} else baseArray.forEach(yearlyReviewsResponse.models, function(model, index){
+					    		tableTR = domConstruct.create("tr");
+					    		td = domConstruct.create("td", { 
+					    			innerHTML: model.quartersList
+					    			}, tableTR);
+					    		domStyle.set(td, 'width', '10%');
+					    		domStyle.set(td, 'text-align', 'center');
+					    		tableTR.appendChild(td);
+					    		
+					    		td = domConstruct.create("td", { 
+					    			innerHTML: model.quarterlyNotes
+					    			}, tableTR);
+					    		domStyle.set(td, 'width', '45%');
+					    		domStyle.set(td, 'text-align', 'center');
+					    		tableTR.appendChild(td);
+					    		
+					    		td = domConstruct.create("td", { 
+					    			innerHTML: '$ ' + model.bonusAmt
+					    			}, tableTR);
+					    		domStyle.set(td, 'width', '10%');
+					    		domStyle.set(td, 'text-align', 'center');
+					    		tableTR.appendChild(td);
+					    		
+					    		td = domConstruct.create("td", { 
+					    			innerHTML: '$ ' + model.possibleBonus + ' on ' + model.bonusDate
+					    			}, tableTR);
+					    		domStyle.set(td, 'width', '35%');
+					    		domStyle.set(td, 'text-align', 'center');
+					    		tableTR.appendChild(td);
+					    		
+					    		quarterlyList.appendChild(tableTR);
+					    	});
+			    		}
+			    		var unusedList = dom.byId("mgrUnusedPersonalDaysDetailsTable");
+				    	domConstruct.empty(unusedList);
+				    	var tr, th, td;
+				    	tr = domConstruct.create("tr");
+				    	th = domConstruct.create("th", { 
+			    			innerHTML: "Unused Personal Days",
+			    			colspan: 3
+		    			}, tr);
+				    	domStyle.set(th, 'text-align', 'center');
+				    	domStyle.set(th, 'height', '1%');
+				    	tr.appendChild(th);
+				    	unusedList.appendChild(tr);
+				    	
+				    	tr = domConstruct.create("tr");
+				    	td = domConstruct.create("td", { 
+			    			innerHTML: (10-modelsLength) + " Unused Days"
+		    			}, tr);
+				    	domStyle.set(td, 'text-align', 'center');
+				    	tr.appendChild(td);
+				    	
+				    	td = domConstruct.create("td", { 
+			    			innerHTML: "Unused Day Pay = $50"
+		    			}, tr);
+				    	domStyle.set(td, 'text-align', 'center');
+				    	tr.appendChild(td);
+				    	
+				    	td = domConstruct.create("td", { 
+			    			innerHTML: "Total = $" + ((10-modelsLength)*50)
+		    			}, tr);
+				    	domStyle.set(td, 'text-align', 'center');
+				    	tr.appendChild(td);
+				    	unusedList.appendChild(tr);
+				    	
+				    	domStyle.set(dom.byId('mgrUnusedPersonalDaysDetailsDiv'), "display","");
+			    		registry.byId(standByNode).hide();
+			    	}, function(error){
+			    		console.log('Error occurred while fetching store data ' + error);
+			    		registry.byId(standByNode).hide();
+			    	});
 			    }
 		    };
 });

@@ -1,5 +1,7 @@
 package com.services.core.data.dao.impl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -152,6 +154,27 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 	public List<EmployeeLeaves> getEmployeeLeaves(int empId){
 		Query query = sessionFactory.getCurrentSession().createQuery("from EmployeeLeaves where empId=:empId order by date desc");
 		query.setParameter("empId", empId);
+		return query.list();
+	}
+	
+	@Override
+	public List<EmployeeLeaves> getEmployeeLeaves(int empId, int year){
+		Query query = sessionFactory.getCurrentSession().createQuery("from EmployeeLeaves where empId=:empId and date >= :dateFrom and date <= :dateTo order by date desc");
+		query.setParameter("empId", empId);
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		sdf.setLenient(false);
+		Date dateFrom = new Date();
+		Date dateTo = new Date();
+		try {
+			dateFrom = sdf.parse("01/01/"+year);
+			dateTo = sdf.parse("31/12/"+year);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		query.setParameter("dateFrom", dateFrom);
+		query.setParameter("dateTo", dateTo);
 		return query.list();
 	}
 	
