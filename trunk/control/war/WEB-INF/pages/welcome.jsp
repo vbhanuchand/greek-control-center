@@ -91,8 +91,9 @@
 	<noscript><style type="text/css">#loadingOverlay { display: none !important; }</style></noscript>
 	<div id="loadingOverlay" class="loadingPanel" align="center"><div align="left"
 		style="background: #DBEB8F; padding: 2px">Loading...</div></div>
-	<div class="dijitHidden" data-dojo-type="dijit/form/TextBox" data-dojo-id="hiddenStoreId" id="hiddenStoreId"> </div>
-	<div class="dijitHidden" data-dojo-type="dijit/form/DateTextBox" data-dojo-id="hiddenItemDate" id="hiddenItemDate" value="now"> </div>
+	<div class="dijitHidden" data-dojo-type="dijit/form/TextBox" data-dojo-id="hiddenStoreId" id="hiddenStoreId"></div>
+	<div class="dijitHidden" data-dojo-type="dijit/form/TextBox" data-dojo-id="hiddenSelectedYear" id="hiddenSelectedYear"></div>
+	<div class="dijitHidden" data-dojo-type="dijit/form/DateTextBox" data-dojo-id="hiddenItemDate" id="hiddenItemDate" value="now"></div>
 	<!-- <div id="messagesTooltip" data-dojo-id="messagesTooltip" data-dojo-type="dijit/TooltipDialog"></div> -->
 	<div class="dijitHidden">  
 		<div data-dojo-type="dijit/Dialog"
@@ -411,73 +412,95 @@
 					</div>
 				</div>
 				<div id="managerPane" data-dojo-type="dijit/layout/ContentPane" title="Manager" data-dojo-props="selected:false" style="width: 99%; height: 99%">
-					<div id="managerDetails" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'Manager Details'" style="border: .1em solid #ddd;" align="center">
-						<table style="position: relative; width: 99%; height: 30%; margin-top: 2px" class='dateTable' align="center" id="mgrDetailsWipeRegion">
-							<tr style="width: 100%; height: 100%">
-								<td style="width: 15%" align="center">
-									<div id="mgrPhotoPane" style="width: 100%; height: 100%" align="center">
-										<img id="managerPhoto" align='top' src='resources/images/no-photo.png' width="100%" height="170px"/>
-										<div id="mgrPhotoPaneStandBy" data-dojo-id="mgrPhotoPaneStandBy" data-dojo-type="dojox/widget/Standby" 
-											data-dojo-props="target:'mgrPhotoPane', color:'white'">
-										</div>
-									</div>
-								</td>
-								<td id="managerPersonalInfo" style="width: 35%" valign="top">
-									<div align="center" style="font-weight: bold;font-style: inherit;"><u>Manager Details</u></div>
-									<div id="mgrList"></div>
-									<ul id="mgrPaneInfoUl" style="list-style: none;"></ul>
-								</td>
-								<td style="width: 25%" valign="top">
-									<div align="center" style="font-weight: bold;font-style: inherit;">
-										<u>Contract Documents</u>
-										<div id="mgrContract" data-dojo-type="dijit/layout/ContentPane" style="margin-top: 2px;font-weight: normal;width: 100%" align="left">
-											<div id="mgrContractWidgetsDiv" style="display: none;">
-												<span id="mgrContractWidgets"></span>
-											  	<span id="mgrContractWidgetsProgressMsgs"></span>
-											  	<a href="javascript: hideFileUploadDialog('mgrContract');">Hide</a>
-											</div>
-										   	<div id="mgrContractUpload">
-											  	<img align='top' src='resources/images/file-upload.png'/>
-											  	<a href="javascript: showFileUploadDialog('mgrContract');">Upload Contract</a>
-											</div>
-											<div>
-												<ul id="mgrContractUploaded"></ul>
-											  	<ol id="mgrContractExisting"></ol>
-											</div>
-											<div id="mgrContractStandBy" data-dojo-id="mgrContractStandBy" 
-												data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'mgrContract', color:'lightgrey'">
-											</div>
-										</div>
-									</div>
-								</td>
-								<td style="width: 25%" valign="top" id="mgrYearlyReviews">
-									<div align="center" style="font-weight: bold;font-style: inherit;">
-										<u>Yearly Reviews</u>
-									</div>
-									<div align="center" style="padding-top: 5px;">
-										<table id="mgrYearlyReviewsTable" style="width: 40%; height: 100%;" class='storeInfoTable' align="center">
-	  										<tr><td>No Data Available !!!</td></tr>
-	  									</table>
-									</div>
-									<div id="mgrYearlyReviewsStandBy" data-dojo-id="mgrYearlyReviewsStandBy" 
-												data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'mgrYearlyReviews', color:'white'">
-									</div>
-								</td>
-							</tr>
-						</table>
-						<div class="dijitHidden" id="mgrDetailsWipeOutRegion">
-							Grid to display the Yearly Reviews !!!
+					<div id="managerDetails" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'Manager Details'" style="width: 99%; height: 99%; border: .1em solid #ddd;" align="center">
+						<div id="mgrYearlyDetailsRegion" data-dojo-type="dijit/layout/ContentPane" style="display: none; width: 99%; height: 99%; border: .1em solid #ddd;" align="center">
+							<div id="mgrYearlyDetailsRegionContent" align="left">
+								<span style="text-align: left;"><a href="javascript: returnToManagerPane();">&lt;&lt;&nbsp;&nbsp;Return</a></span>
+								<div align="center" style="padding: 2px;">
+									<table style="width: 99%; height: 99%;" class='dateTable' id="mgrYearlyReviewsQuarterTable">
+										<tr>
+											<th width="10%">Quarter #</th>
+											<th width="45%">Notes</th>
+											<th width="10%">Bonus</th>
+											<th width="35%">End Year Payout</th>
+										</tr>
+									</table>
+								</div>
+							</div>
+							<div id="mgrYearlyDetailsRegionStandBy" data-dojo-id="mgrYearlyDetailsRegionStandBy" 
+									data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'mgrYearlyDetailsRegion', color:'lightgrey'">
+							</div>
 						</div>
-						<table style="position: relative; width: 99%; height: 66%; margin-top: 2px" class='dateTable' align="center">
+						<div id="managerDetailsPane" style="width: 99%; height: 30%; margin-top: 2px" align="center">
+							<table style="width: 99%; height: 99%;" class='dateTable'>
+								<tr style="width: 100%; height: 100%">
+									<td style="width: 15%" align="center">
+										<div id="mgrPhotoPane" style="width: 100%; height: 100%" align="center">
+											<img id="managerPhoto" align='top' src='resources/images/no-photo.png' width="100%" height="170px"/>
+											<div id="mgrPhotoPaneStandBy" data-dojo-id="mgrPhotoPaneStandBy" data-dojo-type="dojox/widget/Standby" 
+												data-dojo-props="target:'mgrPhotoPane', color:'white'">
+											</div>
+										</div>
+									</td>
+									<td id="managerPersonalInfo" style="width: 35%" valign="top">
+										<div align="center" style="font-weight: bold;font-style: inherit;"><u>Manager Details</u></div>
+										<div id="mgrList"></div>
+										<ul id="mgrPaneInfoUl" style="list-style: none;"></ul>
+									</td>
+									<td style="width: 25%" valign="top">
+										<div align="center" style="font-weight: bold;font-style: inherit;">
+											<u>Contract Documents</u>
+											<div id="mgrContract" data-dojo-type="dijit/layout/ContentPane" style="margin-top: 2px;font-weight: normal;width: 100%" align="left">
+												<div id="mgrContractWidgetsDiv" style="display: none;">
+													<span id="mgrContractWidgets"></span>
+												  	<span id="mgrContractWidgetsProgressMsgs"></span>
+												  	<a href="javascript: hideFileUploadDialog('mgrContract');">Hide</a>
+												</div>
+											   	<div id="mgrContractUpload">
+												  	<img align='top' src='resources/images/file-upload.png'/>
+												  	<a href="javascript: showFileUploadDialog('mgrContract');">Upload Contract</a>
+												</div>
+												<div>
+													<ul id="mgrContractUploaded"></ul>
+												  	<ol id="mgrContractExisting"></ol>
+												</div>
+												<div id="mgrContractStandBy" data-dojo-id="mgrContractStandBy" 
+													data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'mgrContract', color:'lightgrey'">
+												</div>
+											</div>
+										</div>
+									</td>
+									<td style="width: 25%" valign="top" id="mgrYearlyReviews">
+										<div align="center" style="font-weight: bold;font-style: inherit;">
+											<u>Yearly Reviews</u>
+										</div>
+										<div align="center" style="padding-top: 5px;">
+											<table id="mgrYearlyReviewsTable" style="width: 40%; height: 100%;" class='storeInfoTable' align="center">
+		  										<tr><td>No Data Available !!!</td></tr>
+		  									</table>
+										</div>
+										<div id="mgrYearlyReviewsStandBy" data-dojo-id="mgrYearlyReviewsStandBy" 
+													data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'mgrYearlyReviews', color:'white'">
+										</div>
+									</td>
+								</tr>
+							</table>
+						</div>
+						<table style="width: 99%; height: 66%; margin-top: 1px;" class='dateTable' align="center">
 							<tr style="width: 100%; height: 100%">
 								<td style="width: 50%; height: 99%" align="center" valign="top">
-									<div align="center" style="width: 99%; height: 99%; font-weight: bold;font-style: inherit;">
+									<div align="center" style="width: 99%; height: 98%; font-weight: bold;font-style: inherit; vertical-align: bottom;">
 										<u>Personal / Sick Days</u> <span id="mgrAddLeavesIcon" style="display: none;">&nbsp; <img align='top' src='resources/images/add-icon.png' onclick='javascript: addManagerLeavesTabRecord(event);'/> &nbsp;</span>
 										<div id="mgrLeavesGrid" align="center"
-											style="height:95%; padding-top:5px; width:98%;"></div>
-											<div id="mgrLeavesGridStandBy" data-dojo-id="mgrLeavesGridStandBy" 
-												data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'mgrLeavesGrid', color:'white'">
-											</div>
+											style="height:70%; padding:2px; width:98%;">
+										</div>
+										<div align="center" id="mgrUnusedPersonalDaysDetailsDiv" style="display: none; height:20%; padding:2px; vertical-align: bottom;">
+											<table style="width: 99%; height: 99%;" class='dateTable' id="mgrUnusedPersonalDaysDetailsTable">
+											</table>
+										</div>
+										<div id="mgrLeavesGridStandBy" data-dojo-id="mgrLeavesGridStandBy" 
+											data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'mgrLeavesGrid', color:'white'">
+										</div>
 									</div>
 								</td>
 								<td style="width: 50%;height:100%" align="center" valign="top">

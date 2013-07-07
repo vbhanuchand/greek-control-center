@@ -203,6 +203,17 @@ public class DataManagerImpl implements DataManager{
 	}
 	
 	@Override
+	public List<EmployeeLeavesWrapper> getEmployeeLeaves(int empId, int year) {
+		List<EmployeeLeavesWrapper> empLeavesList = new ArrayList<EmployeeLeavesWrapper>();
+		EmployeeLeavesWrapper empLeavesWrapper = null;
+		for(EmployeeLeaves empLeaves: employeeDAO.getEmployeeLeaves(empId, year)){
+			empLeavesWrapper = new EmployeeLeavesWrapper(empLeaves.getId(), empLeaves.getEmpId(), empLeaves.getStoreId(), empLeaves.getDate(), empLeaves.getReason(), empLeaves.getExcused(), empLeaves.getActiveHrs(), empLeaves.getActive(), empLeaves.getUpdated_by());
+			empLeavesList.add(empLeavesWrapper);
+		}
+		return empLeavesList;
+	}
+	
+	@Override
 	@Transactional
 	public boolean insertEmployeeLeaves(EmployeeLeavesWrapper empLeave){
 		return employeeDAO.createEmployeeLeaves(empLeave.getEmpId(), empLeave.getStoreId(), empLeave.getDate(), empLeave.getReason(), empLeave.getExcused(), empLeave.getActiveHrs(), true, empLeave.getUpdatedBy());
@@ -643,6 +654,9 @@ public class DataManagerImpl implements DataManager{
 			mapObject = (Map)iter.next();
 			dbItem.put(mapObject.get("year").toString(), mapObject.get("year").toString());
 		}
+		dbItem.put("2012", "2012");
+		dbItem.put("2011", "2011");
+		dbItem.put("2010", "2010");
 		return dbItem;
 	}
 	

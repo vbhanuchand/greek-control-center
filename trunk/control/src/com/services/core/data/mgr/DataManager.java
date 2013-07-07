@@ -47,6 +47,8 @@ public interface DataManager {
 	
 	List<EmployeeLeavesWrapper> getEmployeeLeaves(int empId);
 	
+	List<EmployeeLeavesWrapper> getEmployeeLeaves(int empId, int year);
+	
 	boolean insertEmployeeLeaves(EmployeeLeavesWrapper empSalary);
 	
 	boolean updateEmployeeLeaves(EmployeeLeavesWrapper empSalary);
