@@ -840,6 +840,12 @@ define([ "dojo/_base/declare", "dijit/dijit", "dijit/registry", "dojo/dom", "doj
 		    		tableTR = domConstruct.create("tr");
 		    		var td = domConstruct.create("td", { innerHTML: "<a href='javascript: fetchMgrYearlyReview(\"" + yearRecord + "\");'>" + yearRecord + "</a>"}, tableTR);
 		    		domStyle.set(td, 'text-align', 'center');
+		    		if(registry.byId('hiddenSelectedYear').get('value') == yearRecord){
+		    			domStyle.set(td, 'background-color', '#a00');
+		    		}
+		    		else {
+		    			domStyle.set(td, 'background-color', '#fff');
+		    		}
 		    		tableTR.appendChild(td);
 		    		yearlyList.appendChild(tableTR);
 		    	});
@@ -1095,7 +1101,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dijit/registry", "dojo/dom", "doj
 			    	formData['storeId'] = registry.byId('hiddenStoreId').get('value');
 			    	formData['active'] = true;
 			    	formData['quarterlyNotes'] = registry.byId('quarterlyNotes').get('value');
-			    	formData['year'] = 2013;
+			    	formData['year'] = registry.byId('hiddenSelectedYear').get('value');
 			    	formData['updatedBy'] = 0;
 			    	if(button == 'save'){
 			    		ajaxRequest.post("/service/employee/" + registry.byId('mgrList').get('value') + "/reviews", {
@@ -1149,7 +1155,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dijit/registry", "dojo/dom", "doj
 			    },
 			    populateMgrReviewForm: function(quarterId){
 			    	registry.byId('mgrReviewStandBy').show();
-			    	var year=2013;
+			    	var year=registry.byId('hiddenSelectedYear').get('value');
 			    	ajaxRequest.get("/service/employee/" + registry.byId('mgrList').get('value') + "/review/"+year+"/"+quarterId,{
 			    		handleAs: 'json'
 			    	}).then(function(reviewResponse){

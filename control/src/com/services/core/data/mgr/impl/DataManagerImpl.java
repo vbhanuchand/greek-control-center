@@ -654,9 +654,9 @@ public class DataManagerImpl implements DataManager{
 			mapObject = (Map)iter.next();
 			dbItem.put(mapObject.get("year").toString(), mapObject.get("year").toString());
 		}
-		dbItem.put("2012", "2012");
-		dbItem.put("2011", "2011");
-		dbItem.put("2010", "2010");
+		//dbItem.put("2012", "2012");
+		//dbItem.put("2011", "2011");
+		//dbItem.put("2010", "2010");
 		return dbItem;
 	}
 	

@@ -114,13 +114,13 @@
 						<td colspan="2" align="left"><label for="username">Username:</label>&nbsp;&nbsp;&nbsp;&nbsp;<input
 							data-dojo-type="dijit/form/ValidationTextBox"
 							data-dojo-props="required: 'true', trim: 'true', ucfirst:'true', invalidMessage : 'Username is invalid', placeHolder:'(Assigned by Administrator)'"
-							id="username" name="username" /></td>
+							id="j_username" name="j_username" /></td>
 					</tr>
 					<tr>
 						<td colspan="2" align="left"><label for="password">Password:</label>&nbsp;&nbsp;&nbsp;&nbsp;<input
-							data-dojo-type="dijit/form/ValidationTextBox" id="password"
+							data-dojo-type="dijit/form/ValidationTextBox" id="j_password"
 							data-dojo-props="required: 'true', trim: 'true', ucfirst:'true'"
-							name="password" type="password" /> &nbsp;&nbsp;&nbsp;
+							name="j_password" type="password" /> &nbsp;&nbsp;&nbsp;
 							<button data-dojo-type="dijit/form/Button" type="submit">Login</button>
 						</td>
 					</tr>
@@ -131,20 +131,22 @@
 						displayMessage("loginTrId", "loginMessage", "Invalid Username and Password. Please check.. ", "warning");
 						return; 
 					};
-						// xhr.post( {
-            			//      url: 'foo.com/handler',
-            			//      content: { field: 'go here' },
-            			//      handleAs: 'json'
-            			//      load: function(data){ .. },
-            			//      error: function(data){ .. }
-            			//  });
+					
+					var ajaxRequest = require('dojo/request');
+					ajaxRequest.post({
+            				url: '/j_spring_security_check',
+            				content:  loginForm.get('value'),
+            				handleAs: 'json',
+            				load: function(data){ console.log('Data returned is --> ' + data); },
+            				error: function(data){ console.log('Error Occurred --> ' + data); }
+            		});
+					console.log('Posted!!');
 					displayMessage("loginTrId", "loginMessage", "Login to the Portal is successful.", "success");
 					var otherFx = require("dojo/fx");
 					var dom = require("dojo/dom");
 					var registry = require("dijit/registry");
 					var domStyle = require('dojo/dom-style');
 					otherFx.wipeOut({node: dom.byId('loginDialog'),duration: 1000, delay: 250, onEnd: function(){
-						//domStyle.set(this.node, {display: "none"});
 						registry.byId('loginDialog').hide();
 					}}).play();
 					checkSelectedPane('locationTabletr3', 'rightAccordion', 3);
@@ -436,7 +438,7 @@
 								<tr style="width: 100%; height: 100%">
 									<td style="width: 15%" align="center">
 										<div id="mgrPhotoPane" style="width: 100%; height: 100%" align="center">
-											<img id="managerPhoto" align='top' src='resources/images/no-photo.png' width="100%" height="170px"/>
+											<img id="managerPhoto" align="top" src='resources/images/no-photo.png' width="150px" height="170px"/>
 											<div id="mgrPhotoPaneStandBy" data-dojo-id="mgrPhotoPaneStandBy" data-dojo-type="dojox/widget/Standby" 
 												data-dojo-props="target:'mgrPhotoPane', color:'white'">
 											</div>

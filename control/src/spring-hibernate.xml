@@ -11,8 +11,9 @@
 
 	<tx:annotation-driven />
 
-	<context:component-scan base-package="com.services.core.data.dao.impl" />
-	<context:component-scan base-package="com.services.core.data.mgr.impl" />
+	<context:component-scan base-package="com.services.core.data.dao" />
+	<context:component-scan base-package="com.services.core.data.mgr" />
+	<context:component-scan base-package="com.services.core.security" />
 
 	<!-- class="org.apache.commons.dbcp.BasicDataSource" <bean id="dataSource" 
 		class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close"> 
