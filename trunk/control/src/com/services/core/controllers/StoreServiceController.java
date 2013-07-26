@@ -37,14 +37,15 @@ public class StoreServiceController {
 	private static Logger logger = Logger.getAnonymousLogger();
 	
 	
+	//@RequestMapping(value = "/start", method = RequestMethod.GET)
 	@RequestMapping(value = "/start", method = RequestMethod.GET)
-	public String redirect(ModelMap model) {
+	public String startPage() {
 		  return "welcome";
 	}
 	
-	@RequestMapping(value = "/editor", method = RequestMethod.GET)
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String redirect2(ModelMap model) {
-		  return "editor";
+		  return "welcome";
 	}
 	
 	@RequestMapping(value = "/stores", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)

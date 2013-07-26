@@ -131,7 +131,7 @@ define(["dijit/dijit", "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/fx", "do
 		calendar.columnView.set('columnHeaderDatePattern', 'MMM dd (EEEE)');
 		calendar.columnView.set('rowHeaderTimePattern', '');
 		calendar.columnView.set('minHours', 8);
-		calendar.columnView.set('maxHours', 18);
+		calendar.columnView.set('maxHours', 23);
 		calendar.columnView.set('hourSize', 51);
 		calendar.columnView.set('timeSlotDuration', 60);
 		calendar.columnView.set('columnCount', 10);

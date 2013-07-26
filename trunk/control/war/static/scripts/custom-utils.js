@@ -21,6 +21,11 @@ function returnToManagerPane(){
 	var otherFx = require('dojo/fx');
 	var dom = require('dojo/dom');
 	var domStyle = require('dojo/dom-style');
+	var query = require('dojo/query');
+	var registry = require('dijit/registry');
+	var empLayout = require('controls/EmployeeLayoutController');
+	empLayout.resetMgrForm();
+	empLayout.fetchMgrLeavesDetails(registry.byId('mgrList').get('value'));
 	
 	var wipeOut = otherFx.wipeOut({node: dom.byId('mgrYearlyDetailsRegion'), duration: 1000, delay: 250, 
 		onEnd: function(node){
@@ -36,6 +41,18 @@ function returnToManagerPane(){
 			}
 	});
 	otherFx.chain([wipeOut, wipeIn]).play();
+	query('#mgrYearlyReviewsTable td a').forEach(function(node){
+		if(registry.byId('hiddenSelectedYear').get('value') == node.innerHTML){
+			domStyle.set(node, 'color', '#fff');
+			domStyle.set(node, 'font-weight', 'bold');
+			domStyle.set(node.parentNode, 'background-color', '#a00');
+		}
+		else {
+			domStyle.set(node, 'color', '');
+			domStyle.set(node, 'font-weight', '');
+			domStyle.set(node.parentNode, 'background-color', '#fff');
+		}
+	});
 }
 
 
@@ -219,8 +236,8 @@ function modifyContentPaneTitles() {
         var widget = registry.byId('storeInfo');
         widget.set('title', "<img align='top' src='resources/images/store.png'/> &nbsp;" + widget.get('title'));
 
-        //widget = registry.byId('manage');
-        //widget.set('title', "<img align='top' src='resources/images/manage.png'/> &nbsp;" + widget.get('title'));
+        widget = registry.byId('managerPane');
+        widget.set('title', "<img align='top' src='resources/images/manager-icon.png'/> &nbsp;" + widget.get('title'));
 
         widget = registry.byId('employeePane');
         widget.set('title', "<img align='top' src='resources/images/admin.png'/> &nbsp;" + widget.get('title'));
