@@ -30,4 +30,14 @@ public class MultipleModelResponse<E extends BaseModel> {
 		this.customMessages = customMessages;
 	}
 	
+	private Map<String, Map<String, String>> empRoles;
+
+	public Map<String, Map<String, String>> getEmpRoles() {
+		return empRoles;
+	}
+
+	public void setEmpRoles(Map<String, Map<String, String>> empRoles) {
+		this.empRoles = empRoles;
+	}
+	
 }

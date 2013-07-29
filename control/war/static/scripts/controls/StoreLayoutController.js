@@ -3,13 +3,13 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 		"dojo/date/locale",  "dojo/_base/fx", "dojox/layout/TableContainer", "dijit/form/TextBox", "dijit/layout/ContentPane", "dijit/form/SimpleTextarea", "dijit/form/Textarea",
 		"dijit/layout/BorderContainer", "dijit/layout/TabContainer", "dijit/Calendar", "dijit/TitlePane", "dijit/form/FilteringSelect",	"dijit/form/Form", "dijit/form/ValidationTextBox",	
 		"dojox/layout/ScrollPane", "dijit/Dialog", "dijit/form/DropDownButton", "dijit/form/Button", "dojox/grid/DataGrid", "dojox/grid/EnhancedGrid", "dojo/store/Memory", 
-		"dojo/data/ObjectStore", "dojo/request", "dojox/form/Manager", "dojox/math/random/Simple", "dojo/data/ItemFileWriteStore", "controls/LaborLayoutController",
+		"dojo/data/ObjectStore", "dojo/request", "dojox/lang/functional", "dijit/form/CheckBox", "dojox/form/Manager", "dojox/math/random/Simple", "dojo/data/ItemFileWriteStore", "controls/LaborLayoutController",
 		"dojox/grid/enhanced/plugins/exporter/CSVWriter", "dojox/grid/enhanced/plugins/NestedSorting", "dojox/grid/enhanced/plugins/Pagination"],
 		function(dijit, registry, query, dom, domStyle, domClass, domConstruct, domGeometry, string, on, 
 				keys, lang, baseArray, event, json, djConfig, ioQuery, win, aspect, 
 				locale, baseFx, Table, TextBox, ContentPane, SimpleTextArea, TextArea, 
 				BorderContainer, TabContainer, Calendar, TitlePane, FilteringSelect, Form, ValidationTextBox, scrollPane,
-				Dialog, DropDownButton, Button, DataGrid, EnhancedGrid, Memory, ObjectStore, ajaxRequest, dojoxFormManager, randomNumber, itemFileWriteStore, laborLayout) {
+				Dialog, DropDownButton, Button, DataGrid, EnhancedGrid, Memory, ObjectStore, ajaxRequest, dojoFunctional, dojoCheckBox, dojoxFormManager, randomNumber, itemFileWriteStore, laborLayout) {
 			
 			var storeInfoTable = null, storeAlarmCodesGrid = null, storeKeysGrid = null, storeMaintenanceGrid = null, storeLaborGrid = null,
 			randomGen = new randomNumber(), loginQuery = djConfig.loginRequest || {}, blankArray=[],
@@ -610,6 +610,80 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 		        },
 		        refreshStoreDates: function(storeId){
 		        	fetchStoreDates(storeId);
+		        },
+		        populateUsersToManage: function(){
+		        	console.log('Pupulating Users to Manage');
+		        	ajaxRequest.get("/service/managers",{
+			    		handleAs: 'json'
+			    	}).then(function(mgrResponse){
+			    		if(mgrResponse.success){
+			    			var employeeList = dom.byId('manageUsersRegionTable');
+					    	domConstruct.empty(employeeList);
+					    	var tableTR, td;
+					    	tableTR = domConstruct.create("tr");
+					    	td = domConstruct.create("th", { 
+				    			innerHTML: "Employee"
+				    			});
+					    	domStyle.set(td, 'width', '20%');
+				    		tableTR.appendChild(td);
+		    				
+				    		td = domConstruct.create("th", { 
+				    			innerHTML: "Downtown"
+				    			});
+					    	domStyle.set(td, 'width', '20%');
+				    		tableTR.appendChild(td);
+		    				
+				    		td = domConstruct.create("th", { 
+				    			innerHTML: "West Valley"
+				    			});
+					    	domStyle.set(td, 'width', '20%');
+				    		tableTR.appendChild(td);
+		    				
+				    		td = domConstruct.create("th", { 
+				    			innerHTML: "Murray"
+				    			});
+					    	domStyle.set(td, 'width', '20%');
+				    		tableTR.appendChild(td);
+		    				
+				    		td = domConstruct.create("th", { 
+				    			innerHTML: "South Jordan"
+				    			});
+					    	domStyle.set(td, 'width', '20%');
+				    		tableTR.appendChild(td);
+				    		employeeList.appendChild(tableTR);
+				    		
+			    			baseArray.forEach(dojoFunctional.values(mgrResponse.empRoles), function(employee){
+			    				tableTR = domConstruct.create("tr");
+			    				td = domConstruct.create("td", { 
+					    			innerHTML: employee.empFname + ' ' + employee.empLname
+					    			});
+						    	domStyle.set(td, 'width', '20%');
+						    	domStyle.set(td, 'text-align', 'center');
+						    	tableTR.appendChild(td);
+			    				var stores = [1,2,3,4];
+			    				var employeeStores = employee.stores.split(',');
+			    				baseArray.forEach(stores, function(store){
+			    					td = domConstruct.create("td", {});
+			    					var cbChecked = false;
+			    					for(var i=0; i<employeeStores.length; i++){
+			    						if(employeeStores[i] == store)
+			    							cbChecked = true;
+			    					}
+			    					var cb = new dojoCheckBox({
+			    						checked: cbChecked,
+			    						onChange: function(){
+			    							console.log(store + ' --> ' + employee.empId + ' --> ' + this.get('value'));
+			    						}
+			    					});
+			    					td.appendChild(cb.domNode);
+			    					domStyle.set(td, 'width', '20%');
+							    	domStyle.set(td, 'text-align', 'center');
+							    	tableTR.appendChild(td);
+			    				});
+			    				employeeList.appendChild(tableTR);
+				    		});
+			    		}
+			    	});
 		        }
 		    };
 });

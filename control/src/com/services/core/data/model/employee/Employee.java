@@ -247,5 +247,13 @@ public class Employee implements Serializable {
 	public void setHired_date(Date hired_date) {
 		this.hired_date = hired_date;
 	}
+
+	@Override
+	public String toString() {
+		return "Employee [id=" + id + ", username=" + username + ", password="
+				+ password + "]";
+	}
+	
+	
 	
 }

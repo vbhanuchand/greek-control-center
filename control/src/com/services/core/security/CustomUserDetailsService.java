@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import com.services.core.data.mgr.DataManager;
 import com.services.core.data.model.employee.Employee;
 
-@Service
+@Service("customUserDetailsService")
 public class CustomUserDetailsService implements UserDetailsService{
 
 	@Autowired
@@ -30,18 +30,21 @@ public class CustomUserDetailsService implements UserDetailsService{
 	 */
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException {
+		System.out.println("Testing user --> " + username);
 		try {
 			//org.sab.invsys.persistence.model.user.User domainUser = userRepository
 			//		.findByUsername(username);
  
 			Employee user = dmgr.getEmployeeByUserName(username);
-			
+			System.out.println("User returned from DB Is --> " + user);
 			boolean enabled = true;
 			boolean accountNonExpired = true;
 			boolean credentialsNonExpired = true;
 			boolean accountNonLocked = true;
-			
-			User signedUser = new User(user.getUsername(), user.getPassword(), enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, getAuthorities(1));
+			User signedUser;
+			if((user.getUsername() !=null) && user.getUsername().trim().length() > 0)
+				signedUser = new User(user.getUsername(), user.getPassword(), enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, getAuthorities(1));
+			else signedUser = new User("%#$#invalid$#(*&", "%$#invalid&$%", false, false, false, false, getAuthorities(1));
  
 			return signedUser;
  

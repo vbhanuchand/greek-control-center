@@ -132,30 +132,39 @@
 						return; 
 					};
 					
-					var ajaxRequest = require('dojo/request');
-					ajaxRequest.post({
-            				url: '/j_spring_security_check',
-            				content:  loginForm.get('value'),
-            				handleAs: 'json',
-            				load: function(data){ console.log('Data returned is --> ' + data); },
-            				error: function(data){ console.log('Error Occurred --> ' + data); }
-            		});
-					console.log('Posted!!');
-					displayMessage("loginTrId", "loginMessage", "Login to the Portal is successful.", "success");
-					var otherFx = require("dojo/fx");
-					var dom = require("dojo/dom");
-					var registry = require("dijit/registry");
-					var domStyle = require('dojo/dom-style');
-					otherFx.wipeOut({node: dom.byId('loginDialog'),duration: 1000, delay: 250, onEnd: function(){
-						registry.byId('loginDialog').hide();
-					}}).play();
-					checkSelectedPane('locationTabletr3', 'rightAccordion', 3);
-					modifyContentPaneTitles();
-					modifyStoreDateLabel('store-info-important-dates');
-					var storeLayout = require("controls/StoreLayoutController");
-					var empLayout = require("controls/EmployeeLayoutController");
-					storeLayout.postCreate();
-					empLayout.postCreate();
+					var ajaxRequest = require("dojo/request");
+					var json = require('dojo/json');
+					var domForm = require('dojo/dom-form');
+					var promise = ajaxRequest.post('/service/j_spring_security_check', {data: domForm.toObject('loginForm'),
+						timeout: 10000});
+					promise.response.then(function(response){
+						var message = dojo.fromJson(response.data);
+						if(message.success){
+							displayMessage("loginTrId", "loginMessage", "Login to the Portal is successful.", "success");
+							var otherFx = require("dojo/fx");
+							var dom = require("dojo/dom");
+							var registry = require("dijit/registry");
+							var domStyle = require('dojo/dom-style');
+							otherFx.wipeOut({node: dom.byId('loginDialog'),duration: 1000, delay: 250, onEnd: function(){
+								registry.byId('loginDialog').hide();
+							}}).play();
+							checkSelectedPane('locationTabletr3', 'rightAccordion', 3);
+							modifyContentPaneTitles();
+							modifyStoreDateLabel('store-info-important-dates');
+							var storeLayout = require("controls/StoreLayoutController");
+							var empLayout = require("controls/EmployeeLayoutController");
+							storeLayout.postCreate();
+							empLayout.postCreate();
+						}else {
+							displayMessage("loginTrId", "loginMessage", "Invalid Username and Password. Please check.. ", "error");
+							return false; 
+						}					
+					});
+					//, function(failedResponse){
+					//	displayMessage("loginTrId", "loginMessage", "Invalid Username and Password. Please check.. ", "error");
+					//	return; 
+					//});
+					
         		</script>
 			</form>
 		</div>
@@ -195,7 +204,6 @@
 						onclick="javascript: checkSelectedPane('locationTabletr4', 'rightAccordion', 4);">
 						<td>South Jordan</td>
 					</tr>
-					
 				</table>
 			</div>
 			<div id="employeePaneInfo" data-dojo-type="dijit/layout/ContentPane" align="center" style="display: none;"
@@ -265,9 +273,28 @@
 				data-dojo-type="dijit/layout/TabContainer"
 				data-dojo-props="tabPosition: 'top'"
 				style="font-style: italic; width: 100%; height: 95%">
-				<!-- <div id="manage" data-dojo-type="dijit/layout/ContentPane"
+				<div id="managePane" data-dojo-type="dijit/layout/ContentPane"
 					title="Manage" data-dojo-props="selected:false"
-					style="width: 99%; height: 99%"></div> -->
+					style="width: 99%; height: 99%">
+					<div id="manageUsersRegion" data-dojo-type="dijit/layout/ContentPane" style="width: 99%; height: 99%; border: .1em solid #ddd;" align="center">
+							<div id="manageUsersRegionContent" align="left">
+								<div align="center" style="padding: 2px;">
+									<table style="width: 99%; height: 99%;" class='dateTable' id="manageUsersRegionTable">
+										<tr>
+											<th width="20%">User</th>
+											<th width="20%">Downtown</th>
+											<th width="20%">West Valley</th>
+											<th width="20%">Murray</th>
+											<th width="20%">South Jordan</th>
+										</tr>
+									</table>
+								</div>
+							</div>
+							<div id="manageUsersRegionStandBy" data-dojo-id="manageUsersRegionStandBy" 
+									data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'manageUsersRegionContent', color:'lightgrey'">
+							</div>
+						</div>
+				</div>
 				<div id="storeInfo" data-dojo-type="dijit/layout/ContentPane"
 					title="Store Info" data-dojo-props="selected:true"
 					style="width: 100%; height: 100%">
@@ -654,6 +681,94 @@
 				<div id="laborPane" data-dojo-type="dijit/layout/ContentPane" title="Current Schedule" data-dojo-props="selected: false, style:'width:99%; height:99%;'" style="font-size: 85%; font-style: normal;">
 					<div id="labor-calendar" class="claro" data-dojo-type="dojox/calendar/Calendar" data-dojo-props="style: 'position:relative;width:100%;height:99%;'"></div>
 					<!-- <div id="laborPaneStandBy" data-dojo-id="laborPaneStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'laborPane', color:'white'"></div> -->
+				</div>
+				<div id="accountingPane" data-dojo-type="dijit/layout/ContentPane" title="Accounting" data-dojo-props="selected:false" style="width: 99%; height: 99%">
+					<div id="accountingDetailsRegion" data-dojo-type="dijit/layout/ContentPane" style="width: 99%; height: 99%; border: .1em solid #ddd;" align="center">
+						<table style="width: 100%; height: 100%" class="dateTable">
+						<tr style="width: 100%; height: 100%">
+							<td style="width: 33%; height: 100%" align="center" valign="top">
+								<table style="width: 100%; height: 50%" class="dateTable">
+									<tr height="5%"><td colspan="3" align="left">Quarter: </td></tr>
+									<tr height="5%">
+										<th style="width: 33%;">Distribution</th>
+										<th style="width: 34%;">Amount</th>
+										<th style="width: 33%;">%</th>
+									</tr>
+									<tr height="5%">
+										<td style="width: 33%;">Labor</td>
+										<td style="width: 34%;" align="center">
+											<input style="width: 90%;" type="text" name="accountingLbrAmt" id="accountingLbrAmt" value="0" required="true" data-dojo-type="dijit/form/CurrencyTextBox" 
+												data-dojo-props="constraints:{fractional:false}, currency:'USD', invalidMessage:'Invalid Amount.'" />
+										</td>
+										<td style="width: 33%;" id="accountingLbrAmtPercent"></td>
+									</tr>
+									<tr height="5%">
+										<td style="width: 33%;">Food Cost</td>
+										<td style="width: 34%;" align="center">
+											<input style="width: 90%;" type="text" name="accountingFdAmt" id="accountingFdAmt" value="0" required="true" data-dojo-type="dijit/form/CurrencyTextBox" 
+												data-dojo-props="constraints:{fractional:false}, currency:'USD', invalidMessage:'Invalid Amount.'" />
+										</td>
+										<td style="width: 33%;" id="accountingFdAmtPercent"></td>
+									</tr>
+									<tr height="5%">
+										<td style="width: 33%;">Advertisement</td>
+										<td style="width: 34%;" align="center">
+											<input style="width: 90%;" type="text" name="accountingAdvtAmt" id="accountingAdvtAmt" value="0" required="true" data-dojo-type="dijit/form/CurrencyTextBox" 
+												data-dojo-props="constraints:{fractional:false}, currency:'USD', invalidMessage:'Invalid Amount.'" />
+										</td>
+										<td style="width: 33%;" id="accountingAdvtAmtPercent"></td>
+									</tr>
+									<tr height="5%">
+										<td style="width: 33%;">Misc.</td>
+										<td style="width: 34%;" align="center">
+											<input style="width: 90%;" type="text" name="accountingMiscAmt" id="accountingMiscAmt" value="0" required="true" data-dojo-type="dijit/form/CurrencyTextBox" 
+												data-dojo-props="constraints:{fractional:false}, currency:'USD', invalidMessage:'Invalid Amount.'" />
+										</td>
+										<td style="width: 33%;" id="accountingMiscAmtPercent"></td>
+									</tr>
+									<tr height="5%">
+										<td style="width: 33%;">Profit</td>
+										<td style="width: 34%;" align="center">
+											<input style="width: 90%;" type="text" name="accountingProftiAmt" id="accountingProftiAmt" value="0" required="true" data-dojo-type="dijit/form/CurrencyTextBox" 
+												data-dojo-props="constraints:{fractional:false}, currency:'USD', invalidMessage:'Invalid Amount.'" />
+										</td>
+										<td style="width: 33%;" id="accountingProftiAmtPercent"></td>
+									</tr>
+									<tr height="5%">
+										<td colspan="3" class="noBorder">
+											<button id="accountingUpdateBtn" data-dojo-type="dijit/form/Button" disabled="disabled" type="submit" style="padding: 3px;" value="update">Update</button>
+											<button id="accountingSaveBtn" data-dojo-type="dijit/form/Button" disabled="disabled" type="submit" style="padding: 3px;" value="save">Save</button>
+										</td>
+									</tr>
+								</table>
+								<table style="width: 100%; height: 20%">
+									<tr height="5%">
+										<td style="width: 33%;">Total Sales</td>
+										<td style="width: 67%;" align="center" colspan="2"></td>
+									</tr>
+									<tr height="5%">
+										<td style="width: 33%;">Total Operating Expenses</td>
+										<td style="width: 67%;" align="center" colspan="2"></td>
+									</tr>
+									<tr height="5%">
+										<td style="width: 33%;">Total Profits</td>
+										<td style="width: 67%;" align="center" colspan="2"></td>
+									</tr>
+								</table>
+							</td>
+							<td style="width: 34%; height: 100%" align="center" valign="top">
+								
+							</td>
+							<td style="width: 33%; height: 100%" align="center">
+							</td>
+						</tr>
+						
+						</table>
+						
+						
+					</div>
+					<div id="accountingDetailsStandBy" data-dojo-id="accountingDetailsStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'accountingDetailsRegion', color:'white'">
+					</div>
 				</div>
 			</div>
 		</div>

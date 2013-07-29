@@ -29,6 +29,8 @@ public interface DataManager {
 
 	List<EmployeeWrapper> getEmployees();
 	
+	Map<String, Map<String, String>> getAllStoreManagers();
+	
 	boolean insertEmployee(EmployeeWrapper emp);
 	
 	boolean updateEmployee(EmployeeWrapper empWrapper);

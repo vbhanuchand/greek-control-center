@@ -104,6 +104,19 @@ require(["dojo/parser", "dijit/dijit", "dojo/dom-style", "dojo/date", "dojo/date
 						registry.byId('quartersList').set('disabled', true);
 						registry.byId('quartersList').set('value', 0);
 						break;
+					case 'managePane':
+						if(domStyle.get(dom.byId('laborPaneInfo'), 'display') != 'none')
+							otherFx.wipeOut({node: dom.byId('laborPaneInfo'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+						if(domStyle.get(dom.byId('calendarEntryTitlePane'), 'display') != 'none')
+							otherFx.wipeOut({node: dom.byId('calendarEntryTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+						storeLayout.populateUsersToManage();
+						break;
+					case 'accountingPane':
+						if(domStyle.get(dom.byId('laborPaneInfo'), 'display') != 'none')
+							otherFx.wipeOut({node: dom.byId('laborPaneInfo'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+						if(domStyle.get(dom.byId('calendarEntryTitlePane'), 'display') != 'none')
+							otherFx.wipeOut({node: dom.byId('calendarEntryTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+						break;
 				}
 				empLayout.hidePhoto('employeePaneInfo');
 			});
