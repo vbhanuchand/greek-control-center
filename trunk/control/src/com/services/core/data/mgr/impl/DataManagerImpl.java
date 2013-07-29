@@ -105,6 +105,37 @@ public class DataManagerImpl implements DataManager{
 		return employeeWrappers;
 	}
 	
+	@Override
+	public Map<String, Map<String, String>> getAllStoreManagers() {
+		List mgrList = employeeDAO.getAllStoreManagers();
+		Iterator iter = mgrList.iterator();
+		Map mapObject;
+		Map<String, String> empObject;
+		Map<String, Map<String, String>> finalObject = new HashMap<String, Map<String, String>>();
+		while(iter.hasNext()){
+			mapObject = (Map)iter.next();
+			if(finalObject.containsKey(mapObject.get("empId").toString())){
+				empObject = finalObject.get(mapObject.get("empId").toString());
+			}
+			else {
+				empObject = new HashMap<String, String>();
+				empObject.put("empFname", mapObject.get("empFname").toString());
+				empObject.put("empLname", mapObject.get("empLname").toString());
+				empObject.put("empId", mapObject.get("empId").toString());
+			}
+			
+			if(empObject.containsKey("stores"))
+				empObject.put("stores", empObject.get("stores") + "," + mapObject.get("storeId").toString());
+			else
+				empObject.put("stores", mapObject.get("storeId").toString());
+			
+			finalObject.put(mapObject.get("empId").toString(), empObject);
+		}
+		
+		
+		return finalObject;
+	}
+	
 	@Transactional(readOnly = false)
     public void deleteEmployee(String username) {
         Employee employee = employeeDAO.getEmployeeByUserName(username);
@@ -654,9 +685,6 @@ public class DataManagerImpl implements DataManager{
 			mapObject = (Map)iter.next();
 			dbItem.put(mapObject.get("year").toString(), mapObject.get("year").toString());
 		}
-		//dbItem.put("2012", "2012");
-		//dbItem.put("2011", "2011");
-		//dbItem.put("2010", "2010");
 		return dbItem;
 	}
 	

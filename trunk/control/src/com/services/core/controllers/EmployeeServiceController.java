@@ -29,6 +29,7 @@ import com.services.core.view.wrappers.SimpleModel;
 import com.services.core.view.wrappers.SingleModelResponse;
 
 @Controller
+//@RequestMapping("/service")
 public class EmployeeServiceController {
 
 	@Autowired
@@ -45,7 +46,7 @@ public class EmployeeServiceController {
 		return empWrappers;
 	}
 	
-	@RequestMapping(value = "/employees", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/employees", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public MultipleModelResponse<EmployeeWrapper> getEmployees() throws IOException {
 		logger.info("Getting Employees Data --> " + "ALL");
@@ -57,7 +58,15 @@ public class EmployeeServiceController {
 		return new MultipleModelResponse<EmployeeWrapper>(true, employeeWrappers);
 	}
 	
-	@RequestMapping(value = "/store/{storeId}/employees", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/managers", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public MultipleModelResponse<BaseModel> getManagers() throws IOException {
+		MultipleModelResponse<BaseModel> temp = new MultipleModelResponse<BaseModel>(true, null);
+		temp.setEmpRoles(dataService.getAllStoreManagers());
+		return temp;
+	}
+	
+	@RequestMapping(value = "/service/store/{storeId}/employees", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public MultipleModelResponse<EmployeeWrapper> getEmployeesByStore(@PathVariable int storeId)
 			throws IOException {
@@ -71,7 +80,7 @@ public class EmployeeServiceController {
 		return new MultipleModelResponse<EmployeeWrapper>(true, employeeWrappers);
 	}
 	
-	@RequestMapping(value = "/store/{storeId}/managers", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/store/{storeId}/managers", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public MultipleModelResponse<EmployeeWrapper> getManagersByStore(@PathVariable int storeId)
 			throws IOException {
@@ -85,7 +94,7 @@ public class EmployeeServiceController {
 		return new MultipleModelResponse<EmployeeWrapper>(true, employeeWrappers);
 	}
 	
-	@RequestMapping(value = "/store/{storeId}/employees/{empId}", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/store/{storeId}/employees/{empId}", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public MultipleModelResponse<EmployeeWrapper> insertEmployee(@PathVariable int storeId, @PathVariable int empId, @RequestBody EmployeeWrapper empWrapper)
 			throws IOException {
@@ -97,7 +106,7 @@ public class EmployeeServiceController {
 		return new MultipleModelResponse<EmployeeWrapper>(updateStatus, null);
 	}
 	
-	@RequestMapping(value = "/store/{storeId}/employees/{empId}", method = RequestMethod.PUT, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/store/{storeId}/employees/{empId}", method = RequestMethod.PUT, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public MultipleModelResponse<EmployeeWrapper> updateEmployee(@PathVariable int storeId, @PathVariable int empId, @RequestBody EmployeeWrapper empWrapper)
 			throws IOException {
@@ -107,7 +116,7 @@ public class EmployeeServiceController {
 		return new MultipleModelResponse<EmployeeWrapper>(updateStatus, null);
 	}
 	
-	@RequestMapping(value = "/employee/{empId}/salary", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/employee/{empId}/salary", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public MultipleModelResponse<EmployeeSalaryWrapper> getEmployeeSalary(@PathVariable int empId)
 			throws IOException {
@@ -120,7 +129,7 @@ public class EmployeeServiceController {
 		return new MultipleModelResponse<EmployeeSalaryWrapper>(true, empSalWrappers);
 	}
 	
-	@RequestMapping(value = "/employee/{empId}/salary", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/employee/{empId}/salary", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public SingleModelResponse<EmployeeWrapper> insertEmployeeSalary(@PathVariable int empId, @RequestBody EmployeeSalaryWrapper empSalary)
 			throws IOException {
@@ -128,7 +137,7 @@ public class EmployeeServiceController {
 		return new SingleModelResponse<EmployeeWrapper>(updateStatus, null);
 	}
 	
-	@RequestMapping(value = "/employee/{empId}/salary", method = RequestMethod.PUT, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/employee/{empId}/salary", method = RequestMethod.PUT, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public SingleModelResponse<EmployeeWrapper> updateEmployeeSalary(@PathVariable int empId, @RequestBody EmployeeSalaryWrapper empSalary)
 			throws IOException {
@@ -136,7 +145,7 @@ public class EmployeeServiceController {
 		return new SingleModelResponse<EmployeeWrapper>(updateStatus, null);
 	}
 	
-	@RequestMapping(value = "/employee/{empId}/discipline", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/employee/{empId}/discipline", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public MultipleModelResponse<EmployeeDisciplineWrapper> getEmployeeDiscipline(@PathVariable int empId)
 			throws IOException {
@@ -149,7 +158,7 @@ public class EmployeeServiceController {
 		return new MultipleModelResponse<EmployeeDisciplineWrapper>(true, empDiscWrappers);
 	}
 	
-	@RequestMapping(value = "/employee/{empId}/discipline", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/employee/{empId}/discipline", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public SingleModelResponse<EmployeeWrapper> insertEmployeeDiscipline(@PathVariable int empId, @RequestBody EmployeeDisciplineWrapper empDiscipline)
 			throws IOException {
@@ -158,7 +167,7 @@ public class EmployeeServiceController {
 		return new SingleModelResponse<EmployeeWrapper>(updateStatus, null);
 	}
 	
-	@RequestMapping(value = "/employee/{empId}/discipline", method = RequestMethod.PUT, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/employee/{empId}/discipline", method = RequestMethod.PUT, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public SingleModelResponse<EmployeeWrapper> updateEmployeeDiscipline(@PathVariable int empId, @RequestBody EmployeeDisciplineWrapper empDiscipline)
 			throws IOException {
@@ -167,7 +176,7 @@ public class EmployeeServiceController {
 		return new SingleModelResponse<EmployeeWrapper>(updateStatus, null);
 	}
 	
-	@RequestMapping(value = "/employee/{empId}/leaves", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/employee/{empId}/leaves", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public MultipleModelResponse<EmployeeLeavesWrapper> getEmployeeLeaves(@PathVariable int empId)
 			throws IOException {
@@ -180,7 +189,7 @@ public class EmployeeServiceController {
 		return new MultipleModelResponse<EmployeeLeavesWrapper>(true, empLeaveWrappers);
 	}
 	
-	@RequestMapping(value = "/employee/{empId}/leaves/{year}", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/employee/{empId}/leaves/{year}", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public MultipleModelResponse<EmployeeLeavesWrapper> getEmployeeLeaves(@PathVariable int empId, @PathVariable int year)
 			throws IOException {
@@ -193,7 +202,7 @@ public class EmployeeServiceController {
 		return new MultipleModelResponse<EmployeeLeavesWrapper>(true, empLeaveWrappers);
 	}
 	
-	@RequestMapping(value = "/employee/{empId}/leaves", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/employee/{empId}/leaves", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public SingleModelResponse<EmployeeWrapper> insertEmployeeLeaves(@PathVariable int empId, @RequestBody EmployeeLeavesWrapper empLeaves)
 			throws IOException {
@@ -202,7 +211,7 @@ public class EmployeeServiceController {
 		return new SingleModelResponse<EmployeeWrapper>(updateStatus, null);
 	}
 	
-	@RequestMapping(value = "/employee/{empId}/leaves", method = RequestMethod.PUT, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/employee/{empId}/leaves", method = RequestMethod.PUT, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public SingleModelResponse<EmployeeWrapper> updateEmployeeLeaves(@PathVariable int empId, @RequestBody EmployeeLeavesWrapper empLeaves)
 			throws IOException {
@@ -211,7 +220,7 @@ public class EmployeeServiceController {
 		return new SingleModelResponse<EmployeeWrapper>(updateStatus, null);
 	}
 	
-	@RequestMapping(value = "/store/{storeId}/employee/{empId}/labor", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/store/{storeId}/employee/{empId}/labor", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public MultipleModelResponse<EmployeeLaborWrapper> getEmployeeLabor(@PathVariable int empId, @PathVariable int storeId)
 			throws IOException {
@@ -224,7 +233,7 @@ public class EmployeeServiceController {
 		return new MultipleModelResponse<EmployeeLaborWrapper>(true, empLaborWrappers);
 	}
 	
-	@RequestMapping(value = "/store/{storeId}/employee/{empId}/labor", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/store/{storeId}/employee/{empId}/labor", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public SingleModelResponse<EmployeeLaborWrapper> insertEmployeeLabor(@PathVariable int storeId, @PathVariable int empId, @RequestBody EmployeeLaborWrapper empLabor)
 			throws IOException {
@@ -233,7 +242,7 @@ public class EmployeeServiceController {
 		return new SingleModelResponse<EmployeeLaborWrapper>(true, updatedRecord);
 	}
 	
-	@RequestMapping(value = "/store/{storeId}/employee/{empId}/labor", method = RequestMethod.PUT, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/store/{storeId}/employee/{empId}/labor", method = RequestMethod.PUT, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public SingleModelResponse<EmployeeWrapper> updateEmployeeLabor(@PathVariable int storeId, @PathVariable int empId, @RequestBody EmployeeLaborWrapper empLabor)
 			throws IOException {
@@ -242,7 +251,7 @@ public class EmployeeServiceController {
 		return new SingleModelResponse<EmployeeWrapper>(updateStatus, null);
 	}
 	
-	@RequestMapping(value = "/labor/{laborId}", method = RequestMethod.PUT, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/labor/{laborId}", method = RequestMethod.PUT, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public SingleModelResponse<EmployeeWrapper> deleteEmployeeLabor(@PathVariable int laborId)
 			throws IOException {
@@ -251,7 +260,7 @@ public class EmployeeServiceController {
 	}
 	
 	
-	@RequestMapping(value = "/employee/{empId}/reviews", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/employee/{empId}/reviews", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public MultipleModelResponse<EmployeeReviewWrapper> getEmployeeReviews(@PathVariable int empId)
 			throws IOException {
@@ -265,7 +274,7 @@ public class EmployeeServiceController {
 		return new MultipleModelResponse<EmployeeReviewWrapper>(true, empReviewWrappers);
 	}
 	
-	@RequestMapping(value = "/employee/{empId}/yearlyReviews", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/employee/{empId}/yearlyReviews", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public SingleModelResponse<BaseModel> getEmployeeReviewsYearly(@PathVariable int empId)
 			throws IOException {
@@ -276,7 +285,7 @@ public class EmployeeServiceController {
 		return returnModel;
 	}
 	
-	@RequestMapping(value = "/employee/{empId}/review/{year}/{quarter}", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/employee/{empId}/review/{year}/{quarter}", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public MultipleModelResponse<EmployeeReviewWrapper> getEmployeeReviewByQuarter(@PathVariable int empId, @PathVariable int year, @PathVariable int quarter)
 			throws IOException {
@@ -289,7 +298,7 @@ public class EmployeeServiceController {
 		return new MultipleModelResponse<EmployeeReviewWrapper>(true, empReviewWrapperList);
 	}
 	
-	@RequestMapping(value = "/employee/{empId}/review/{year}", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/employee/{empId}/review/{year}", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public MultipleModelResponse<EmployeeReviewWrapper> getEmployeeReviewsForYear(@PathVariable int empId, @PathVariable int year)
 			throws IOException {
@@ -302,7 +311,7 @@ public class EmployeeServiceController {
 		return new MultipleModelResponse<EmployeeReviewWrapper>(true, empReviewWrapperList);
 	}
 	
-	@RequestMapping(value = "/employee/{empId}/reviews", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/employee/{empId}/reviews", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public SingleModelResponse<EmployeeReviewWrapper> insertEmployeeReview(@PathVariable int empId, @RequestBody EmployeeReviewWrapper empReview)
 			throws IOException {
@@ -312,7 +321,7 @@ public class EmployeeServiceController {
 		return new SingleModelResponse<EmployeeReviewWrapper>(true, empReview);
 	}
 	
-	@RequestMapping(value = "/employee/{empId}/reviews", method = RequestMethod.PUT, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/employee/{empId}/reviews", method = RequestMethod.PUT, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public SingleModelResponse<EmployeeReviewWrapper> updateEmployeeReview(@PathVariable int empId, @RequestBody EmployeeReviewWrapper empReview)
 			throws IOException {

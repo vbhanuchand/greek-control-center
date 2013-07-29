@@ -244,6 +244,9 @@ function modifyContentPaneTitles() {
 
         widget = registry.byId('laborPane');
         widget.set('title', "<img align='top' src='resources/images/labor.png'/> &nbsp;" + widget.get('title'));
+        
+        widget = registry.byId('managePane');
+        widget.set('title', "<img align='top' src='resources/images/manage.png'/> &nbsp;" + widget.get('title'));
     });
 }
 

@@ -24,6 +24,8 @@ public interface EmployeeDAO {
 
 	List<Employee> getEmployees();
 	
+	List getAllStoreManagers();
+	
 	boolean insertEmployee(int storeId, String username, String fname, String lname, String phone, String personalPhone, String emergencyContact, String address, boolean active, int manager, String position, Date hired_date, int updated_by);
 	
 	boolean updateEmployee(int id, String username, String fname, String lname, String phone,  String personalPhone, String emergencyContact, String address, boolean active, int manager, String position, Date hired_date, int updated_by);

@@ -286,12 +286,14 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 				Employee.class, id);
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Employee getEmployeeByUserName(String username) {
 		Query query = sessionFactory.getCurrentSession().createQuery(
 				"from Employee where username = :username");
 		query.setParameter("username", username);
-		return (Employee) query.list().get(0);
+		List empList = query.list();
+		return empList.size() > 0 ? (Employee) empList.get(0) : new Employee();
 	}
 
 	@Override
@@ -299,6 +301,15 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(
 				Employee.class);
 		return criteria.list();
+	}
+	
+	@Override
+	public List getAllStoreManagers() {
+		Query query = sessionFactory.getCurrentSession().createQuery("select e.id as empId, r.roleTab as role, e.fname as empFname, e.lname as empLname, r.storeId as storeId from Employee e, Role r " +
+				"where e.id = r.employeeId and e.position=:position order by e.id, r.storeId, r.roleTab");
+		query.setParameter("position", "Manager");
+		query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+		return query.list();
 	}
 	
 	

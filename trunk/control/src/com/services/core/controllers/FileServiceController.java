@@ -33,6 +33,7 @@ import com.services.core.view.wrappers.SimpleModel;
 import com.services.core.view.wrappers.SingleModelResponse;
 
 @Controller
+//@RequestMapping("/service")
 public class FileServiceController {
 
 	private BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
@@ -42,7 +43,7 @@ public class FileServiceController {
 	@Autowired
 	private DataManager dataService;
 	
-	@RequestMapping(value = "/getUploadUrl", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/getUploadUrl", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public SingleModelResponse<SimpleModel> getUploadURL(){
 		BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
@@ -52,7 +53,7 @@ public class FileServiceController {
 		return new SingleModelResponse<SimpleModel>(true, returnModel);
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, value = "/upload")
+	@RequestMapping(value = "/service/upload", method = RequestMethod.POST)
     public void uploadBlob(final HttpServletRequest request, final HttpServletResponse response)
         throws Exception 
     { 
@@ -96,7 +97,7 @@ public class FileServiceController {
         responseStream.close();
     }
 	
-	@RequestMapping(value = "/blobs/{tab}/{linkedId}", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/blobs/{tab}/{linkedId}", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public MultipleModelResponse<BlobsWrapper> getBlobs(@PathVariable String tab, @PathVariable int linkedId) throws IOException {
 		logger.info("Getting Blobs Data --> ");
@@ -104,7 +105,7 @@ public class FileServiceController {
 		return new MultipleModelResponse<BlobsWrapper>(true, blobsList);
 	}
 	
-	@RequestMapping(value = "/getBlob/{blobKey}", method = RequestMethod.GET)
+	@RequestMapping(value = "/service/getBlob/{blobKey}", method = RequestMethod.GET)
 	@ResponseBody
 	public void getBlob(@PathVariable String blobKey, final HttpServletResponse response) throws IOException {
 		logger.info("Getting Blob --> " + blobKey);
@@ -112,7 +113,7 @@ public class FileServiceController {
 	    blobstoreService.serve(blobStoreKey, response);
 	}
 	
-	@RequestMapping(value = "/getImage/{empId}", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/getImage/{empId}", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public SingleModelResponse<SimpleModel> getImage(@PathVariable int empId, final HttpServletResponse response) throws IOException {
 		logger.info("Getting Blob --> " + empId);
@@ -129,7 +130,7 @@ public class FileServiceController {
 	}
 	
 	
-	@RequestMapping(value = "/blobs", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/blobs", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public MultipleModelResponse<BlobsWrapper> insertBlob(@RequestBody BlobsWrapper blobWrapper)
 			throws IOException {

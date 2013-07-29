@@ -29,6 +29,7 @@ import com.services.core.view.wrappers.StoreMaintenanceWrapper;
 import com.services.core.view.wrappers.StoreWrapper;
 
 @Controller
+//@RequestMapping("/service")
 public class StoreServiceController {
 
 	@Autowired
@@ -48,7 +49,7 @@ public class StoreServiceController {
 		  return "welcome";
 	}
 	
-	@RequestMapping(value = "/stores", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/stores", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public MultipleModelResponse<StoreWrapper> getStores() throws IOException {
 		logger.info("Getting Stores Data --> " + "ALL");
@@ -56,7 +57,7 @@ public class StoreServiceController {
 		return new MultipleModelResponse<StoreWrapper>(true, storeWrappers);
 	}
 	
-	@RequestMapping(value = "/store/storeId={storeId}", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/store/storeId={storeId}", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public SingleModelResponse<StoreWrapper> getStoreInformation(@PathVariable int storeId) throws IOException {
 		logger.info("Getting Store Data --> " + storeId);
@@ -65,7 +66,7 @@ public class StoreServiceController {
 	}
 	
 	
-	@RequestMapping(value = "/store/{storeId}", method = RequestMethod.PUT, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/store/{storeId}", method = RequestMethod.PUT, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public SingleModelResponse<StoreWrapper> updateStore(@PathVariable int storeId,
 			@RequestBody StoreWrapper storeWrapper) throws IOException {
@@ -76,7 +77,7 @@ public class StoreServiceController {
 
 	
 	
-	@RequestMapping(value = "/store/{storeId}/alarms", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/store/{storeId}/alarms", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public MultipleModelResponse<StoreAlarmWrapper> getStoreAlarms(@PathVariable int storeId) throws IOException {
 		logger.info("Getting Store Alarm Data --> " + storeId);
@@ -88,7 +89,7 @@ public class StoreServiceController {
 		return new MultipleModelResponse<StoreAlarmWrapper>(true, storeAlarms);
 	}
 	
-	@RequestMapping(value = "/store/{storeId}/dates", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/store/{storeId}/dates", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public MultipleModelResponse<StoreDateWrapper> getStoreDates(@PathVariable int storeId) throws IOException {
 		logger.info("Getting Store Alarm Data --> " + storeId);
@@ -100,7 +101,7 @@ public class StoreServiceController {
 		return new MultipleModelResponse<StoreDateWrapper>(true, storeDates);
 	}
 	
-	@RequestMapping(value = "/store/{storeId}/dates", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/store/{storeId}/dates", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public SingleModelResponse<StoreWrapper> insertStoreDate(@PathVariable int storeId,
 			@RequestBody StoreDateWrapper storeDateWrapper) throws IOException {
@@ -110,7 +111,7 @@ public class StoreServiceController {
 	}
 	
 	
-	@RequestMapping(value = "/store/{storeId}/alarms", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/store/{storeId}/alarms", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public SingleModelResponse<StoreWrapper> insertStoreAlarm(@PathVariable int storeId,
 			@RequestBody StoreAlarmWrapper storeAlarmWrapper) throws IOException {
@@ -119,7 +120,7 @@ public class StoreServiceController {
 		return new SingleModelResponse<StoreWrapper>(updateStatus, null);
 	}
 	
-	@RequestMapping(value = "/store/{storeId}/alarms", method = RequestMethod.PUT, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/store/{storeId}/alarms", method = RequestMethod.PUT, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public SingleModelResponse<StoreWrapper> updateStoreAlarm(@PathVariable int storeId,
 			@RequestBody StoreAlarmWrapper storeAlarmWrapper) throws IOException {
@@ -128,7 +129,7 @@ public class StoreServiceController {
 		return new SingleModelResponse<StoreWrapper>(updateStatus, null);
 	}
 	
-	@RequestMapping(value = "/store/{storeId}/keys", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/store/{storeId}/keys", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public MultipleModelResponse<StoreKeyWrapper> getStoreKeys(@PathVariable int storeId) throws IOException {
 		logger.info("Store Keys Get --> " + storeId);
@@ -141,7 +142,7 @@ public class StoreServiceController {
 	}
 	
 	
-	@RequestMapping(value = "/store/{storeId}/keys", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/store/{storeId}/keys", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public SingleModelResponse<StoreWrapper> insertStoreKey(@PathVariable int storeId,
 			@RequestBody StoreKeyWrapper storeKeyWrapper) throws IOException {
@@ -150,7 +151,7 @@ public class StoreServiceController {
 		return new SingleModelResponse<StoreWrapper>(updateStatus, null);
 	}
 	
-	@RequestMapping(value = "/store/{storeId}/keys", method = RequestMethod.PUT, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/store/{storeId}/keys", method = RequestMethod.PUT, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public SingleModelResponse<StoreWrapper> updateStoreKey(@PathVariable int storeId,
 			@RequestBody StoreKeyWrapper storeKeyWrapper) throws IOException {
@@ -159,7 +160,7 @@ public class StoreServiceController {
 		return new SingleModelResponse<StoreWrapper>(updateStatus, null);
 	}
 	
-	@RequestMapping(value = "/store/{storeId}/maintenance", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/store/{storeId}/maintenance", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public MultipleModelResponse<StoreMaintenanceWrapper> getStoreMaintenance(@PathVariable int storeId) throws IOException {
 		logger.info("Getting Store Data --> " + storeId);
@@ -171,7 +172,7 @@ public class StoreServiceController {
 		return new MultipleModelResponse<StoreMaintenanceWrapper>(true, storeMaintenanceRecords);
 	}
 	
-	@RequestMapping(value = "/store/{storeId}/maintenance", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/store/{storeId}/maintenance", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public SingleModelResponse<StoreWrapper> insertStoreMaintenance(@PathVariable int storeId,
 			@RequestBody StoreMaintenanceWrapper storeMaintenanceWrapper) throws IOException {
@@ -180,7 +181,7 @@ public class StoreServiceController {
 		return new SingleModelResponse<StoreWrapper>(updateStatus, null);
 	}
 	
-	@RequestMapping(value = "/store/{storeId}/maintenance", method = RequestMethod.PUT, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/store/{storeId}/maintenance", method = RequestMethod.PUT, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public SingleModelResponse<StoreWrapper> updateStoreMaintenance(@PathVariable int storeId,
 			@RequestBody StoreMaintenanceWrapper storeMaintenanceWrapper) throws IOException {
@@ -189,7 +190,7 @@ public class StoreServiceController {
 		return new SingleModelResponse<StoreWrapper>(updateStatus, null);
 	}
 	
-	@RequestMapping(value = "/store/{storeId}/labor/schedule", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/store/{storeId}/labor/schedule", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public List<Map<String, String>> getEmployeeLabor(@PathVariable int storeId)
 			throws IOException {
@@ -197,7 +198,7 @@ public class StoreServiceController {
 		return dataService.getLaborByStore(storeId);
 	}
 	
-	@RequestMapping(value = "/store/{storeId}/labor/{yearWeek}/schedule", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/store/{storeId}/labor/{yearWeek}/schedule", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public MultipleModelResponse<StoreLaborDetailsWrapper> getEmployeeLaborDetails(@PathVariable int storeId, @PathVariable String yearWeek)
 			throws IOException {
