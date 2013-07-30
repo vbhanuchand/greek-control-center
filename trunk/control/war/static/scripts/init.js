@@ -116,6 +116,7 @@ require(["dojo/parser", "dijit/dijit", "dojo/dom-style", "dojo/date", "dojo/date
 							otherFx.wipeOut({node: dom.byId('laborPaneInfo'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
 						if(domStyle.get(dom.byId('calendarEntryTitlePane'), 'display') != 'none')
 							otherFx.wipeOut({node: dom.byId('calendarEntryTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+						createPieChart('accountingChartDiv');
 						break;
 				}
 				empLayout.hidePhoto('employeePaneInfo');
@@ -477,6 +478,24 @@ require(["dojo/parser", "dijit/dijit", "dojo/dom-style", "dojo/date", "dojo/date
 			
 	  });
 });
+
+function createPieChart(divId){
+	  var data = google.visualization.arrayToDataTable([
+        ['Sales', 'Amount'],
+        ['Labor',     28],
+        ['Food Cost',      32],
+        ['Advertisement',  3],
+        ['Misc', 22],
+        ['Profit',    15]
+      ]);
+
+      var options = {title: 'Sales Distribution', titleTextStyle: {}, chartArea:{left:2,top:20,width:"100%",height:"60%"}, is3D: true,
+    		  legend: {position: 'bottom', textStyle: {color: 'black', fontSize: 11}, alignment: 'center'}
+      };
+
+      var chart = new google.visualization.PieChart(document.getElementById('accountingChartDiv'));
+      chart.draw(data, options);
+}
 
 /*var fileUploadIdAppender = 0;
 function addNewUpload(){
