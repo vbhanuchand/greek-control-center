@@ -19,8 +19,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.services.core.data.mgr.DataManager;
 import com.services.core.view.utils.Utilities;
+import com.services.core.view.wrappers.BaseModel;
+import com.services.core.view.wrappers.EmployeeReviewWrapper;
 import com.services.core.view.wrappers.MultipleModelResponse;
 import com.services.core.view.wrappers.SingleModelResponse;
+import com.services.core.view.wrappers.StoreAccountWrapper;
 import com.services.core.view.wrappers.StoreAlarmWrapper;
 import com.services.core.view.wrappers.StoreDateWrapper;
 import com.services.core.view.wrappers.StoreKeyWrapper;
@@ -214,6 +217,49 @@ public class StoreServiceController {
 		}
 		
 		return returnModel;
+	}
+	
+	@RequestMapping(value = "/service/store/{storeId}/accounting/years", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public SingleModelResponse<BaseModel> getStoreAccountingYears(@PathVariable int storeId)
+			throws IOException {
+		SingleModelResponse<BaseModel> model = new SingleModelResponse<BaseModel>(true, null);
+		Map<String, String> map = new HashMap<String, String>();
+		for(String year: dataService.getStoreAccountYears(storeId))
+			map.put(year, year);
+		model.setCustomMessages(map);
+		return model;
+	}
+	
+	@RequestMapping(value = "/service/store/{storeId}/accounting/year/{year}", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public MultipleModelResponse<StoreAccountWrapper> getStoreAccountsByYear(@PathVariable int storeId, @PathVariable int year)
+			throws IOException {
+		return new MultipleModelResponse<StoreAccountWrapper>(true, dataService.getStoreAccountsByYear(storeId, year));
+	}
+	
+	@RequestMapping(value = "/service/store/{storeId}/accounting/year/{year}/quarter/{quarter}", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public MultipleModelResponse<StoreAccountWrapper> getStoreAccountByQuarter(@PathVariable int storeId, @PathVariable int year, @PathVariable int quarter)
+			throws IOException {
+		return new MultipleModelResponse<StoreAccountWrapper>(true, dataService.getStoreAccountByQuarter(storeId, year, quarter));
+	}
+	
+	@RequestMapping(value = "/service/store/{storeId}/accounting/year/{year}/quarter/{quarter}", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public SingleModelResponse<StoreAccountWrapper> saveStoreAccount(@PathVariable int storeId, @PathVariable int year, @PathVariable int quarter, @RequestBody StoreAccountWrapper accData)
+			throws IOException {
+		int id = dataService.insertStoreAccount(accData);
+		accData.setId(id);
+		return new SingleModelResponse<StoreAccountWrapper>(true, accData);
+	}
+	
+	@RequestMapping(value = "/service/store/{storeId}/accounting/year/{year}/quarter/{quarter}", method = RequestMethod.PUT, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public SingleModelResponse<StoreAccountWrapper> updateStoreAccount(@PathVariable int storeId, @PathVariable int year, @PathVariable int quarter, @RequestBody StoreAccountWrapper accData)
+			throws IOException {
+		boolean status = dataService.updateStoreAccount(accData);
+		return new SingleModelResponse<StoreAccountWrapper>(status, null);
 	}
 	
 }

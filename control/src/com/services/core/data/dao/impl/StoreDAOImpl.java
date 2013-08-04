@@ -1,16 +1,21 @@
 package com.services.core.data.dao.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.services.core.data.dao.StoreDAO;
+import com.services.core.data.model.employee.EmployeeReview;
 import com.services.core.data.model.store.Store;
+import com.services.core.data.model.store.StoreAccount;
 import com.services.core.data.model.store.StoreAlarm;
 import com.services.core.data.model.store.StoreDate;
 import com.services.core.data.model.store.StoreKey;
@@ -186,31 +191,62 @@ public class StoreDAOImpl implements StoreDAO {
 		return query.list();
 	}
 	
-	
-	/*@Override
-	public List<StoreMaintenance> getStoreMaintenanceRecords(int storeId) {
-		Query query = sessionFactory.getCurrentSession().createQuery(
-				"from Store where storeId = :storeId");
+	@Override
+	public List<StoreAccount> getStoreAccountByQuarter(int storeId, int year, int quarter){
+		Query query = sessionFactory.getCurrentSession().createQuery("from StoreAccount where storeId=:storeId and quarter=:quarter and year=:year");
 		query.setParameter("storeId", storeId);
-		List<Store> list = (List<StoreMaintenance>) query.list();
-		return list;
+		query.setParameter("quarter", quarter);
+		query.setParameter("year", year);
+		return query.list();
 	}
-
+	
 	@Override
-	public List<StoreAlarm> getStoreAlarmRecords(int storeId) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<String> getStoreAccountYears(int storeId){
+		Query query = sessionFactory.getCurrentSession().createQuery("select year as year from StoreAccount where storeId=:storeId");
+		query.setParameter("storeId", storeId);
+		query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+		List<String> returnList = new ArrayList<String>();
+		for(Object yearItem: query.list()){
+			Map mapYrItem = (Map) yearItem;
+			returnList.add(mapYrItem.get("year").toString());
+		}
+		return returnList;
 	}
-
+	
 	@Override
-	public List<StoreDate> getStoreDateRecords(int storeId) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<StoreAccount> getStoreAccountsByYear(int storeId, int year){
+		Query query = sessionFactory.getCurrentSession().createQuery("from StoreAccount where storeId=:storeId and year=:year");
+		query.setParameter("storeId", storeId);
+		query.setParameter("year", year);
+		return query.list();
 	}
-
+	
 	@Override
-	public List<StoreKey> getStoreKeyRecords(int storeId) {
-		// TODO Auto-generated method stub
-		return null;
-	}*/
+	public int createStoreAccount(int storeId, int quarter, int year, double labor, double foodCost, double advertisement, double misc, double profit, Boolean active, int updatedBy){
+		StoreAccount storeAcc = new StoreAccount(storeId, quarter, year, labor, foodCost, advertisement, misc, profit, true, 1);
+		sessionFactory.getCurrentSession().save(storeAcc);
+		return storeAcc.getId();
+	}
+	
+	@Override
+	public boolean updateStoreAccount(int id, int storeId, int quarter, int year, double labor, double foodCost, double advertisement, double misc, double profit, Boolean active, int updatedBy){
+		String hql = "UPDATE StoreAccount sa set sa.storeId = :storeId, sa.quarter = :quarter, sa.year = :year, sa.labor = :labor, " 
+				+ "sa.foodCost=:foodCost, sa.advertisement = :advertisement, sa.misc=:misc, sa.profit = :profit, sa.active=:active," 
+				+ "sa.updated_by=:updatedBy WHERE sa.id = :id";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setParameter("storeId", storeId);
+		query.setParameter("quarter", quarter);
+		query.setParameter("year", year);
+		query.setParameter("labor", labor);
+		query.setParameter("foodCost", foodCost);
+		query.setParameter("advertisement", advertisement);
+		query.setParameter("misc", misc);
+		query.setParameter("profit", profit);
+		query.setParameter("active", active);
+		query.setParameter("updatedBy", updatedBy);
+		query.setParameter("id", id);
+		int result = query.executeUpdate();
+		return (result == 1);
+	}
+	
 }

@@ -17,6 +17,38 @@ function fetchMgrYearlyReview(year){
 	empLayout.fetchReviewsForYear(year);
 }
 
+function fetchAccountingYearlyDetails(year){
+	var accLayout = require('controls/AccountingLayoutController');
+	accLayout.fetchAccDetailsForYear(year);
+}
+
+function returnToAccountsPane(){
+	var otherFx = require('dojo/fx');
+	var dom = require('dojo/dom');
+	var domStyle = require('dojo/dom-style');
+	var query = require('dojo/query');
+	var wipeOut = otherFx.wipeOut({node: dom.byId('accountingDetailsPane'), duration: 1000, delay: 250, 
+		onEnd: function(node){
+				domStyle.set(this.node, {display: "none", width: "99%", height: "99%"});
+				dom.byId('accountsQuarterDetails').style.display = '';
+				dom.byId('accountsYearlyDetails').style.display = 'none';
+			}
+	});
+	var wipeIn = otherFx.wipeIn({node: dom.byId('accountingDetailsPane'), duration: 1000, delay: 250, 
+		onBegin: function(node){
+				domStyle.set(this.node, {display: "", width: "99%", height: "99%"});
+				dom.byId('accountsQuarterDetails').style.display = '';
+				dom.byId('accountsYearlyDetails').style.display = 'none';
+			},
+		onEnd: function(node){
+			
+		}
+	});
+	otherFx.chain([wipeOut, wipeIn]).play();
+	var accLayout = require('controls/AccountingLayoutController');
+	accLayout.reset();
+}
+
 function returnToManagerPane(){
 	var otherFx = require('dojo/fx');
 	var dom = require('dojo/dom');
@@ -192,6 +224,7 @@ function checkSelectedPane(trId, rightPane, storeId) {
     var storeLayout = require("controls/StoreLayoutController");
     var empLayout = require("controls/EmployeeLayoutController");
     var laborLayout = require("controls/LaborLayoutController");
+    var accLayout = require("controls/AccountingLayoutController");
     var domStyle = require('dojo/dom-style');
     var otherFx = require('dojo/fx');
     var dom = require('dojo/dom');
@@ -226,6 +259,13 @@ function checkSelectedPane(trId, rightPane, storeId) {
         	empLayout.populateManagerTabDetails(registry.byId('hiddenStoreId').get('value'));
 			if(domStyle.get(dom.byId('calendarEntryTitlePane'), 'display') != 'none')
 				otherFx.wipeOut({node: dom.byId('calendarEntryTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+			break;
+        case 'accountingPane':
+			if(domStyle.get(dom.byId('laborPaneInfo'), 'display') != 'none')
+				otherFx.wipeOut({node: dom.byId('laborPaneInfo'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+			if(domStyle.get(dom.byId('calendarEntryTitlePane'), 'display') != 'none')
+				otherFx.wipeOut({node: dom.byId('calendarEntryTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+			accLayout.reset();
 			break;
     }
 }

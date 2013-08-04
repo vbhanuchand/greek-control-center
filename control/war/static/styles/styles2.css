@@ -627,9 +627,9 @@ table {
 /*CSS for Tab Container Labels*/
 .customTabClass .tabLabel {
       /*color: blue !important;*/
-      width: 150px;
+      width: 130px;
       text-align: center;
-      font-size: 90%;
+      font-size: 85%;
       font-weight: bold;
     }
 /*CSS for Tab Container Labels Ends here*/
@@ -735,6 +735,45 @@ table.storeInfoTable td {
 }
 
 /*Store Info Tabe ENds*/
+
+
+/*Accounting Table*/
+
+table.accountingTable {
+	font-family: inherit;
+	font-size: inherit;
+	color: inherit;
+	border: none !important;
+	border-collapse: collapse;
+}
+table.accountingTable th {
+	border-width: 1px;
+	border-style: solid;
+	border-color: #ddd;
+	background-color: #eee;
+	text-align: center;
+	font-weight: bold;
+}
+table.accountingTable td {
+	background-color: #ffffff;
+	text-align:left;
+	padding-left: 10px;
+	
+}
+
+table.accountingTable td.divLeft{
+	text-align:left;
+}
+
+table.accountingTable td.noBorder{
+	border: none;
+}
+
+table.accountingTable th.noBorder{
+	background-color: #ffffff;
+	border: none;
+}
+
 
 
 

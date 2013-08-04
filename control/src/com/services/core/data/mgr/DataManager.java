@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.services.core.data.model.employee.Employee;
 import com.services.core.data.model.store.Store;
+import com.services.core.data.model.store.StoreAccount;
 import com.services.core.view.wrappers.BlobsWrapper;
 import com.services.core.view.wrappers.EmployeeDisciplineWrapper;
 import com.services.core.view.wrappers.EmployeeLaborWrapper;
@@ -12,6 +13,7 @@ import com.services.core.view.wrappers.EmployeeLeavesWrapper;
 import com.services.core.view.wrappers.EmployeeReviewWrapper;
 import com.services.core.view.wrappers.EmployeeSalaryWrapper;
 import com.services.core.view.wrappers.EmployeeWrapper;
+import com.services.core.view.wrappers.StoreAccountWrapper;
 import com.services.core.view.wrappers.StoreAlarmWrapper;
 import com.services.core.view.wrappers.StoreDateWrapper;
 import com.services.core.view.wrappers.StoreKeyWrapper;
@@ -118,5 +120,15 @@ public interface DataManager {
 	int insertEmployeeReview(EmployeeReviewWrapper empReview);
 	
 	boolean updateEmployeeReview(EmployeeReviewWrapper empReview);
+	
+	List<StoreAccountWrapper> getStoreAccountByQuarter(int storeId, int year, int quarter);
+	
+	List<String> getStoreAccountYears(int storeId);
+	
+	List<StoreAccountWrapper> getStoreAccountsByYear(int storeId, int year);
+	
+	int insertStoreAccount(StoreAccountWrapper accDetails);
+	
+	boolean updateStoreAccount(StoreAccountWrapper accDetails);
 		
 }

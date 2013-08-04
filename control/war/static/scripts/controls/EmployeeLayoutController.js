@@ -836,9 +836,12 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 		    	domConstruct.empty(yearlyList);
 		    	var tableTR;
 		    	var keys = functional.keys(yearlyReviewsModel);
+		    	var xtraStyle='';
 		    	baseArray.forEach(keys, function(yearRecord){
+		    		if(registry.byId('hiddenSelectedYear').get('value') == yearRecord)
+		    			xtraStyle = "style='color: #fff'";
 		    		tableTR = domConstruct.create("tr");
-		    		var td = domConstruct.create("td", { innerHTML: "<a href='javascript: fetchMgrYearlyReview(\"" + yearRecord + "\");'>" + yearRecord + "</a>"}, tableTR);
+		    		var td = domConstruct.create("td", { innerHTML: "<a " + xtraStyle + " href='javascript: fetchMgrYearlyReview(\"" + yearRecord + "\");'>" + yearRecord + "</a>"}, tableTR);
 		    		domStyle.set(td, 'text-align', 'center');
 		    		if(registry.byId('hiddenSelectedYear').get('value') == yearRecord){
 		    			domStyle.set(td, 'background-color', '#a00');
