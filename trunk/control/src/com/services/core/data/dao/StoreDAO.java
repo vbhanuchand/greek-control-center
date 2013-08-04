@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.services.core.data.model.store.Store;
+import com.services.core.data.model.store.StoreAccount;
 import com.services.core.data.model.store.StoreAlarm;
 import com.services.core.data.model.store.StoreDate;
 import com.services.core.data.model.store.StoreKey;
@@ -46,6 +47,12 @@ public interface StoreDAO {
 	
 	List<StoreKey> getStoreKeyRecords(int storeId);
 	
+	List<StoreAccount> getStoreAccountByQuarter(int storeId, int year, int quarter);
+	
+	List<String> getStoreAccountYears(int storeId);
+	
+	List<StoreAccount> getStoreAccountsByYear(int storeId, int year);
+	
 	/*List<StoreMaintenance> getStoreMaintenanceRecords(int storeId);
 	
 	List<StoreAlarm> getStoreAlarmRecords(int storeId);
@@ -53,5 +60,9 @@ public interface StoreDAO {
 	List<StoreDate> getStoreDateRecords(int storeId);
 	
 	List<StoreKey> getStoreKeyRecords(int storeId);*/
+	
+	int createStoreAccount(int storeId, int quarter, int year, double labor, double foodCost, double advertisement, double misc, double profit, Boolean active, int updatedBy);
+	
+	boolean updateStoreAccount(int id, int storeId, int quarter, int year, double labor, double foodCost, double advertisement, double misc, double profit, Boolean active, int updatedBy);
 	
 }

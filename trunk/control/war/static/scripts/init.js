@@ -6,12 +6,27 @@ require(["dojox/form/Uploader", "dojox/embed/Flash", "dojox/form/uploader/plugin
 		}
 });
 
+var INVENTORY_DISTRIBUTORS = [
+                              {id: '1', name: 'NICHOLAS', color: '#0040FF', items: [{code: '101', name: 'PITA BREAD', par: '10', units: {singular: 'Box', plural: 'Boxes'}},
+                                                                  {code: '102', name: 'YEERO CONE', par: '10', units: {singular: 'Cone', plural: 'Cones'}},
+                                                                  {code: '103', name: 'BREADED ZUCCHINI', par: '4', units: {singular: 'Bag', plural: 'Bags'}},
+                                                                  {code: '104', name: 'BREADED MUSHROOM', par: '4', units: {singular: 'Bag', plural: 'Bags'}}]},
+                              {id: '2', name: 'US FOODS', color: '#FF00FF', items: [{code: '201', name: 'WHITE SAUCE', par: '3', units: {singular: 'Pan', plural: 'Pans'}},
+                                                                  {code: '202', name: 'RED SAUCE', par: '3', units: {singular: 'Pan', plural: 'Pans'}},
+                                                                  {code: '203', name: 'CHICKEN SOULVAKI', par: '4', units: {singular: 'Tray', plural: 'Trays'}}]},
+                              {id: '3', name: 'SAMS CLUB', color: '#FF0040', items: [{code: '301', name: 'LOUKOUMADE SYRUP', par: '1', units: {singular: 'Bottle', plural: 'Bottles'}},
+                                                                   {code: '302', name: 'LOUKOUMADE SPICE', par: '1', units: {singular: 'Bottle', plural: 'Bottles'}}]},
+                              {id: '4', name: 'GS KITCHEN', color: '#2EFE2E', items: [{code: '401', name: 'WINDEX', par: '2', units: {singular: 'Unit', plural: 'Units'}},
+                                                                    {code: '402', name: 'HAND ROLLS', par: '2', units: {singular: 'Unit', plural: 'Units'}},
+                                                                    {code: '403', name: 'BREADED ZUCCHINI', par: '4', units: {singular: 'Bag', plural: 'Bags'}},
+                                                                    {code: '404', name: 'BREADED MUSHROOM', par: '4', units: {singular: 'Bag', plural: 'Bags'}}]}
+							];
 
 require(["dojo/parser", "dijit/dijit", "dojo/dom-style", "dojo/date", "dojo/date/locale", "dojo/dom-construct", "dojo/_base/fx", "dojo/fx", "dojo/_base/declare", "dojo/dom", "dojo/on", "dijit/form/Select",
-         "controls/StoreLayoutController", "controls/EmployeeLayoutController", "controls/LaborLayoutController", "dijit/form/DateTextBox", "dojo/store/Memory",
+         "controls/StoreLayoutController", "controls/EmployeeLayoutController", "controls/LaborLayoutController", "controls/AccountingLayoutController", "dijit/form/DateTextBox", "dojo/store/Memory",
          "dojo/_base/lang", "dojo/request", "dojo/dom-form", "dojo/json", "dojo/query", "dijit/registry", "dojo/_base/array", "dojox/widget/Dialog", "dijit/form/FilteringSelect",
          "dijit/TooltipDialog", "dijit/popup", 'dojox/form/Uploader', 'dojox/form/uploader/FileList', 'dojox/layout/ScrollPane', "dojox/form/TimeSpinner", "dijit/form/Button", 'dojo/ready'], 
-         function(parser, dijit, domStyle, date, locale, domConstruct, fx, otherFx, declare, dom, on, formSelect, storeLayout, empLayout, laborLayout, DateTextBox, Memory, lang, 
+         function(parser, dijit, domStyle, date, locale, domConstruct, fx, otherFx, declare, dom, on, formSelect, storeLayout, empLayout, laborLayout, accLayout, DateTextBox, Memory, lang, 
         		 ajaxRequest, domForm, json, query, registry, baseArray, dojoxDialog, FilteringSelect, TooltipDialog, popup, uploader, fileList, scrollPane, TimeSpinner, Button, ready){
 		  ready(function(){
 		    parser.parse();
@@ -39,6 +54,7 @@ require(["dojo/parser", "dijit/dijit", "dojo/dom-style", "dojo/date", "dojo/date
 			storeLayout.init();
 			empLayout.init();
 			laborLayout.init();
+			accLayout.init();
 			loadingObj.endLoading();
 			//setTimeout(lang.hitch(loadingObj, "setSelectedLocation"), 500);
 			console.log('Layout Require() Completed');
@@ -116,7 +132,8 @@ require(["dojo/parser", "dijit/dijit", "dojo/dom-style", "dojo/date", "dojo/date
 							otherFx.wipeOut({node: dom.byId('laborPaneInfo'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
 						if(domStyle.get(dom.byId('calendarEntryTitlePane'), 'display') != 'none')
 							otherFx.wipeOut({node: dom.byId('calendarEntryTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
-						createPieChart('accountingChartDiv');
+						//createPieChart('accountingChartDiv');
+						accLayout.reset();
 						break;
 				}
 				empLayout.hidePhoto('employeePaneInfo');

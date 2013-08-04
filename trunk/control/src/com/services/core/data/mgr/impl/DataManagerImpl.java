@@ -32,6 +32,7 @@ import com.services.core.data.model.employee.EmployeeLeaves;
 import com.services.core.data.model.employee.EmployeeReview;
 import com.services.core.data.model.employee.EmployeeSalary;
 import com.services.core.data.model.store.Store;
+import com.services.core.data.model.store.StoreAccount;
 import com.services.core.data.model.store.StoreAlarm;
 import com.services.core.data.model.store.StoreDate;
 import com.services.core.data.model.store.StoreKey;
@@ -44,6 +45,7 @@ import com.services.core.view.wrappers.EmployeeLeavesWrapper;
 import com.services.core.view.wrappers.EmployeeReviewWrapper;
 import com.services.core.view.wrappers.EmployeeSalaryWrapper;
 import com.services.core.view.wrappers.EmployeeWrapper;
+import com.services.core.view.wrappers.StoreAccountWrapper;
 import com.services.core.view.wrappers.StoreAlarmWrapper;
 import com.services.core.view.wrappers.StoreDateWrapper;
 import com.services.core.view.wrappers.StoreKeyWrapper;
@@ -713,4 +715,51 @@ public class DataManagerImpl implements DataManager{
 		return employeeDAO.updateEmployeeReview(empReview.getId(), empReview.getEmpId(), empReview.getStoreId(), empReview.getQuartersList(), empReview.getPossibleBonus(), 
 				empReview.getBonusDate(), empReview.getBonusAmt(), empReview.getQuarterlyNotes(), empReview.getYear(), empReview.getActive(), empReview.getUpdatedBy());
 	}
+	
+	@Override
+	public List<String> getStoreAccountYears(int storeId){
+		return storeDAO.getStoreAccountYears(storeId);
+	}
+	
+	@Override
+	public List<StoreAccountWrapper> getStoreAccountsByYear(int storeId, int year){
+		List<StoreAccountWrapper> storeAccountList = new ArrayList<StoreAccountWrapper>();
+		StoreAccountWrapper storeAccWrapper = null;
+		for(StoreAccount storeAccount: storeDAO.getStoreAccountsByYear(storeId, year)){
+			storeAccWrapper = new StoreAccountWrapper(storeAccount.getId(), storeAccount.getStoreId(), storeAccount.getQuarter(), storeAccount.getYear(), storeAccount.getLabor(), 
+					storeAccount.getFoodCost(), storeAccount.getAdvertisement(), storeAccount.getMisc(), storeAccount.getProfit(), storeAccount.getActive(), 
+					storeAccount.getUpdated_by(), storeAccount.getUpdated_date());
+			storeAccountList.add(storeAccWrapper);
+		}
+		return storeAccountList;
+	}
+	
+	@Override
+	public List<StoreAccountWrapper> getStoreAccountByQuarter(int storeId, int year, int quarter){
+		List<StoreAccountWrapper> storeAccountList = new ArrayList<StoreAccountWrapper>();
+		StoreAccountWrapper storeAccWrapper = null;
+		for(StoreAccount storeAccount: storeDAO.getStoreAccountByQuarter(storeId, year, quarter)){
+			storeAccWrapper = new StoreAccountWrapper(storeAccount.getId(), storeAccount.getStoreId(), storeAccount.getQuarter(), storeAccount.getYear(), storeAccount.getLabor(), 
+					storeAccount.getFoodCost(), storeAccount.getAdvertisement(), storeAccount.getMisc(), storeAccount.getProfit(), storeAccount.getActive(), 
+					storeAccount.getUpdated_by(), storeAccount.getUpdated_date());
+			storeAccountList.add(storeAccWrapper);
+		}
+		return storeAccountList;
+	}
+	
+	@Override
+	@Transactional
+	public int insertStoreAccount(StoreAccountWrapper accDetails){
+		return storeDAO.createStoreAccount(accDetails.getStoreId(), accDetails.getQuarter(), accDetails.getYear(), accDetails.getLabor(), 
+				accDetails.getFoodCost(), accDetails.getAdvertisement(), accDetails.getMisc(), accDetails.getProfit(), true, 0);
+	}
+	
+	@Override
+	@Transactional
+	public boolean updateStoreAccount(StoreAccountWrapper accDetails){
+		return storeDAO.updateStoreAccount(accDetails.getId(), accDetails.getStoreId(), accDetails.getQuarter(), accDetails.getYear(), accDetails.getLabor(), 
+				accDetails.getFoodCost(), accDetails.getAdvertisement(), accDetails.getMisc(), accDetails.getProfit(), true, 0);
+	}
+	
+	
 }

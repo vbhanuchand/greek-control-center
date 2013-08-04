@@ -612,7 +612,7 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 		        	fetchStoreDates(storeId);
 		        },
 		        populateUsersToManage: function(){
-		        	console.log('Pupulating Users to Manage');
+		        	console.log('Populating Users to Manage');
 		        	ajaxRequest.get("/service/managers",{
 			    		handleAs: 'json'
 			    	}).then(function(mgrResponse){
