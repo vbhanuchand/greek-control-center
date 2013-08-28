@@ -4,6 +4,8 @@ import java.util.Date;
 
 public class StoreAccountWrapper extends BaseModel{
 	
+	private static final long serialVersionUID = 1113313185413815342L;
+
 	private Integer id;
 	
 	private Integer storeId;

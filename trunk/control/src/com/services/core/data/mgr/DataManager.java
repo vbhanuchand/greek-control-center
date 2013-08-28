@@ -16,9 +16,12 @@ import com.services.core.view.wrappers.EmployeeWrapper;
 import com.services.core.view.wrappers.StoreAccountWrapper;
 import com.services.core.view.wrappers.StoreAlarmWrapper;
 import com.services.core.view.wrappers.StoreDateWrapper;
+import com.services.core.view.wrappers.StoreInvoiceDetailsWrapper;
+import com.services.core.view.wrappers.StoreInvoiceWrapper;
 import com.services.core.view.wrappers.StoreKeyWrapper;
 import com.services.core.view.wrappers.StoreLaborDetailsWrapper;
 import com.services.core.view.wrappers.StoreMaintenanceWrapper;
+import com.services.core.view.wrappers.StoreStockWrapper;
 import com.services.core.view.wrappers.StoreWrapper;
 
 public interface DataManager {
@@ -130,5 +133,19 @@ public interface DataManager {
 	int insertStoreAccount(StoreAccountWrapper accDetails);
 	
 	boolean updateStoreAccount(StoreAccountWrapper accDetails);
+	
+	int insertStoreInvoice(StoreInvoiceWrapper storeInv);
+	
+	boolean updateStoreInvoice(StoreInvoiceWrapper storeInv);
+	
+	int insertStoreInvoiceDetails(StoreInvoiceDetailsWrapper storeInvDetails);
+	
+	boolean updateStoreInvoiceDetails(StoreInvoiceDetailsWrapper storeInvDetails);
+	
+	List<StoreStockWrapper> getStoreStock(int storeId);
+	
+	int insertStoreStock(StoreStockWrapper storeStock);
+	
+	boolean updateStoreStock(StoreStockWrapper storeStock);
 		
 }

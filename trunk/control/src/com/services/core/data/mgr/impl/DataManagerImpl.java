@@ -8,11 +8,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +35,7 @@ import com.services.core.data.model.store.StoreAlarm;
 import com.services.core.data.model.store.StoreDate;
 import com.services.core.data.model.store.StoreKey;
 import com.services.core.data.model.store.StoreMaintenance;
+import com.services.core.data.model.store.StoreStock;
 import com.services.core.view.utils.Utilities;
 import com.services.core.view.wrappers.BlobsWrapper;
 import com.services.core.view.wrappers.EmployeeDisciplineWrapper;
@@ -48,9 +47,12 @@ import com.services.core.view.wrappers.EmployeeWrapper;
 import com.services.core.view.wrappers.StoreAccountWrapper;
 import com.services.core.view.wrappers.StoreAlarmWrapper;
 import com.services.core.view.wrappers.StoreDateWrapper;
+import com.services.core.view.wrappers.StoreInvoiceDetailsWrapper;
+import com.services.core.view.wrappers.StoreInvoiceWrapper;
 import com.services.core.view.wrappers.StoreKeyWrapper;
 import com.services.core.view.wrappers.StoreLaborDetailsWrapper;
 import com.services.core.view.wrappers.StoreMaintenanceWrapper;
+import com.services.core.view.wrappers.StoreStockWrapper;
 import com.services.core.view.wrappers.StoreWrapper;
 
 @Service
@@ -107,6 +109,7 @@ public class DataManagerImpl implements DataManager{
 		return employeeWrappers;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Map<String, Map<String, String>> getAllStoreManagers() {
 		List mgrList = employeeDAO.getAllStoreManagers();
@@ -761,5 +764,57 @@ public class DataManagerImpl implements DataManager{
 				accDetails.getFoodCost(), accDetails.getAdvertisement(), accDetails.getMisc(), accDetails.getProfit(), true, 0);
 	}
 	
+	@Override
+	@Transactional
+	public int insertStoreInvoice(StoreInvoiceWrapper storeInv){
+		return storeDAO.insertStoreInvoice(storeInv.getStoreId(), storeInv.getInvoiceDate(),
+				false, true, 0);
+	}
+	
+	@Override
+	@Transactional
+	public boolean updateStoreInvoice(StoreInvoiceWrapper storeInv){
+		return storeDAO.updateStoreInvoice(storeInv.getId(), storeInv.getStoreId(), storeInv.getInvoiceDate(),
+				false, true, 0);
+	}
+	
+	@Override
+	@Transactional
+	public int insertStoreInvoiceDetails(StoreInvoiceDetailsWrapper storeInvDetails){
+		return storeDAO.insertStoreInvoiceDetails(storeInvDetails.getInvoiceId(), storeInvDetails.getItemId(), storeInvDetails.getItemCategory(), storeInvDetails.getItemStock(), 
+				storeInvDetails.getItemOrder(), storeInvDetails.getItemPricePerUnit(), storeInvDetails.getItemGSPercent(), 0);
+	}
+	
+	@Override
+	@Transactional
+	public boolean updateStoreInvoiceDetails(StoreInvoiceDetailsWrapper storeInvDetails){
+		return storeDAO.updateStoreInvoiceDetails(storeInvDetails.getId(), storeInvDetails.getInvoiceId(), storeInvDetails.getItemId(), storeInvDetails.getItemCategory(), storeInvDetails.getItemStock(), 
+				storeInvDetails.getItemOrder(), storeInvDetails.getItemPricePerUnit(), storeInvDetails.getItemGSPercent(), 0);
+	}
+	
+	@Override
+	public List<StoreStockWrapper> getStoreStock(int storeId){
+		List<StoreStockWrapper> returnList = new ArrayList<StoreStockWrapper>();
+		for(StoreStock tempStock: storeDAO.getStoreStock(storeId)){
+			returnList.add(new StoreStockWrapper(tempStock.getId(), tempStock.getStoreId(), tempStock.getItemId(), tempStock.getItemCategory(), tempStock.getItemStock(), 
+					tempStock.getItemOrder(), tempStock.getItemPricePerUnit(), tempStock.getItemGSPercent(), tempStock.getUpdatedBy(), tempStock.getUpdatedDate()));
+		}
+		return returnList;
+	}
+	
+	
+	@Override
+	@Transactional
+	public int insertStoreStock(StoreStockWrapper storeInvDetails){
+		return storeDAO.insertStoreStock(storeInvDetails.getStoreId(), storeInvDetails.getItemId(), storeInvDetails.getItemCategory(), storeInvDetails.getItemStock(), 
+				storeInvDetails.getItemOrder(), storeInvDetails.getItemPricePerUnit(), storeInvDetails.getItemGSPercent(), 0);
+	}
+	
+	@Override
+	@Transactional
+	public boolean updateStoreStock(StoreStockWrapper storeInvDetails){
+		return storeDAO.updateStoreInvoiceDetails(storeInvDetails.getId(), storeInvDetails.getStoreId(), storeInvDetails.getItemId(), storeInvDetails.getItemCategory(), storeInvDetails.getItemStock(), 
+				storeInvDetails.getItemOrder(), storeInvDetails.getItemPricePerUnit(), storeInvDetails.getItemGSPercent(), 0);
+	}
 	
 }
