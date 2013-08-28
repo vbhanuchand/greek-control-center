@@ -26,9 +26,11 @@ import com.services.core.view.wrappers.SingleModelResponse;
 import com.services.core.view.wrappers.StoreAccountWrapper;
 import com.services.core.view.wrappers.StoreAlarmWrapper;
 import com.services.core.view.wrappers.StoreDateWrapper;
+import com.services.core.view.wrappers.StoreInvoiceWrapper;
 import com.services.core.view.wrappers.StoreKeyWrapper;
 import com.services.core.view.wrappers.StoreLaborDetailsWrapper;
 import com.services.core.view.wrappers.StoreMaintenanceWrapper;
+import com.services.core.view.wrappers.StoreStockWrapper;
 import com.services.core.view.wrappers.StoreWrapper;
 
 @Controller
@@ -260,6 +262,30 @@ public class StoreServiceController {
 			throws IOException {
 		boolean status = dataService.updateStoreAccount(accData);
 		return new SingleModelResponse<StoreAccountWrapper>(status, null);
+	}
+	
+	
+	@RequestMapping(value = "/service/store/{storeId}/stock", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public MultipleModelResponse<StoreStockWrapper> getStoreStock(@PathVariable int storeId)
+			throws IOException {
+		return new MultipleModelResponse<StoreStockWrapper>(true, dataService.getStoreStock(storeId));
+	}
+	
+	@RequestMapping(value = "/service/store/{storeId}/stock", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public SingleModelResponse<StoreStockWrapper> saveStoreStock(@PathVariable int storeId, @RequestBody StoreStockWrapper storeStock)
+			throws IOException {
+		int id = dataService.insertStoreStock(storeStock);
+		storeStock.setId(id);
+		return new SingleModelResponse<StoreStockWrapper>(true, storeStock);
+	}
+	
+	@RequestMapping(value = "/service/store/{storeId}/stock", method = RequestMethod.PUT, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public SingleModelResponse<StoreStockWrapper> updateStoreStock(@PathVariable int storeId, @RequestBody StoreStockWrapper storeStock)
+			throws IOException {
+		return new SingleModelResponse<StoreStockWrapper>(dataService.updateStoreStock(storeStock), null);
 	}
 	
 }

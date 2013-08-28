@@ -13,13 +13,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.services.core.data.dao.StoreDAO;
-import com.services.core.data.model.employee.EmployeeReview;
 import com.services.core.data.model.store.Store;
 import com.services.core.data.model.store.StoreAccount;
 import com.services.core.data.model.store.StoreAlarm;
 import com.services.core.data.model.store.StoreDate;
+import com.services.core.data.model.store.StoreInvoice;
+import com.services.core.data.model.store.StoreInvoiceDetails;
 import com.services.core.data.model.store.StoreKey;
 import com.services.core.data.model.store.StoreMaintenance;
+import com.services.core.data.model.store.StoreStock;
 
 @Service
 @SuppressWarnings("unchecked")
@@ -200,6 +202,7 @@ public class StoreDAOImpl implements StoreDAO {
 		return query.list();
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@Override
 	public List<String> getStoreAccountYears(int storeId){
 		Query query = sessionFactory.getCurrentSession().createQuery("select year as year from StoreAccount where storeId=:storeId");
@@ -249,4 +252,88 @@ public class StoreDAOImpl implements StoreDAO {
 		return (result == 1);
 	}
 	
+	@Override
+	public int insertStoreInvoice(int storeId, Date invoiceDate, boolean locked, boolean active, int updatedBy){
+		StoreInvoice storeInv = new StoreInvoice(storeId, invoiceDate, locked, active, updatedBy);
+		sessionFactory.getCurrentSession().save(storeInv);
+		return storeInv.getId();
+	}
+	
+	@Override
+	public boolean updateStoreInvoice(int id, int storeId, Date invoiceDate, boolean locked, boolean active, int updatedBy){
+		String hql = "UPDATE StoreInvoice si set si.storeId = :storeId, si.invoiceDate = :invoiceDate, si.locked = :locked, si.active=:active," 
+				+ "si.updatedBy=:updatedBy WHERE si.id = :id";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setParameter("storeId", storeId);
+		query.setParameter("invoiceDate", invoiceDate);
+		query.setParameter("locked", locked);
+		query.setParameter("active", active);
+		query.setParameter("updatedBy", updatedBy);
+		query.setParameter("id", id);
+		int result = query.executeUpdate();
+		return (result == 1);
+	}
+	
+	@Override
+	public int insertStoreInvoiceDetails(int invoiceId, int itemId, int itemCategory, int itemStock, int itemOrder, double itemPricePerUnit, 
+			double itemGSPercent, int updatedBy){
+		StoreInvoiceDetails storeInv = new StoreInvoiceDetails(invoiceId, itemId, itemCategory, itemStock, itemOrder, itemPricePerUnit, itemGSPercent, updatedBy);
+		sessionFactory.getCurrentSession().save(storeInv);
+		return storeInv.getId();
+	}
+	
+	@Override
+	public boolean updateStoreInvoiceDetails(int id, int invoiceId, int itemId, int itemCategory, int itemStock, int itemOrder, 
+			double itemPricePerUnit, double itemGSPercent, int updatedBy){
+		String hql = "UPDATE StoreInvoiceDetails si set si.itemId=:itemId, si.itemCategory=:itemCategory, si.itemStock=:itemStock, " 
+				+ "si.itemOrder=:itemOrder, si.itemPricePerUnit=:itemPricePerUnit, si.itemGSPercent=:itemGSPercent, "
+				+ "si.updatedBy=:updatedBy WHERE si.id=:id";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setParameter("id", id);
+		query.setParameter("itemId", itemId);
+		query.setParameter("itemCategory", itemCategory);
+		query.setParameter("itemStock", itemStock);
+		query.setParameter("itemOrder", itemOrder);
+		query.setParameter("itemPricePerUnit", itemPricePerUnit);
+		query.setParameter("itemGSPercent", itemGSPercent);
+		query.setParameter("updatedBy", updatedBy);
+		int result = query.executeUpdate();
+		return (result == 1);
+	}
+	
+	@Override
+	public List<StoreStock> getStoreStock(int storeId){
+		Query query = sessionFactory.getCurrentSession().createQuery(
+				"from StoreStock where storeId = :storeId");
+		query.setParameter("storeId", storeId);
+		return query.list();
+	}
+	
+	@Override
+	public int insertStoreStock(int storeId, int itemId, int itemCategory, int itemStock, int itemOrder, double itemPricePerUnit, 
+			double itemGSPercent, int updatedBy){
+		StoreStock storeStock = new StoreStock(storeId, itemId, itemCategory, itemStock, itemOrder, itemPricePerUnit, itemGSPercent, updatedBy);
+		sessionFactory.getCurrentSession().save(storeStock);
+		return storeStock.getId();
+	}
+	
+	@Override
+	public boolean updateStoreStock(int id, int storeId, int itemId, int itemCategory, int itemStock, int itemOrder, double itemPricePerUnit, 
+			double itemGSPercent, int updatedBy){
+		String hql = "UPDATE StoreInvoiceDetails si set si.itemId=:itemId, si.storeId=:storeId, si.itemCategory=:itemCategory, si.itemStock=:itemStock, " 
+				+ "si.itemOrder=:itemOrder, si.itemPricePerUnit=:itemPricePerUnit, si.itemGSPercent=:itemGSPercent, "
+				+ "si.updatedBy=:updatedBy WHERE si.id=:id";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setParameter("id", id);
+		query.setParameter("storeId", storeId);
+		query.setParameter("itemId", itemId);
+		query.setParameter("itemCategory", itemCategory);
+		query.setParameter("itemStock", itemStock);
+		query.setParameter("itemOrder", itemOrder);
+		query.setParameter("itemPricePerUnit", itemPricePerUnit);
+		query.setParameter("itemGSPercent", itemGSPercent);
+		query.setParameter("updatedBy", updatedBy);
+		int result = query.executeUpdate();
+		return (result == 1);
+	}
 }

@@ -895,3 +895,10 @@ table.bordered td.itemTime{
 .propertyTitle {
 	font-weight: bold;
 }
+
+
+.soria .dijitSelectMenu td{
+padding: 0;
+/*background-color: grey;*/
+font-size: 85%;
+}

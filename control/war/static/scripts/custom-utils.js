@@ -225,6 +225,7 @@ function checkSelectedPane(trId, rightPane, storeId) {
     var empLayout = require("controls/EmployeeLayoutController");
     var laborLayout = require("controls/LaborLayoutController");
     var accLayout = require("controls/AccountingLayoutController");
+    var inventoryLayout = require("controls/InventoryLayoutController");
     var domStyle = require('dojo/dom-style');
     var otherFx = require('dojo/fx');
     var dom = require('dojo/dom');
@@ -266,6 +267,13 @@ function checkSelectedPane(trId, rightPane, storeId) {
 			if(domStyle.get(dom.byId('calendarEntryTitlePane'), 'display') != 'none')
 				otherFx.wipeOut({node: dom.byId('calendarEntryTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
 			accLayout.reset();
+			break;
+        case 'inventoryPane':
+			if(domStyle.get(dom.byId('laborPaneInfo'), 'display') != 'none')
+				otherFx.wipeOut({node: dom.byId('laborPaneInfo'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+			if(domStyle.get(dom.byId('calendarEntryTitlePane'), 'display') != 'none')
+				otherFx.wipeOut({node: dom.byId('calendarEntryTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+			inventoryLayout.reset();
 			break;
     }
 }
@@ -538,4 +546,9 @@ function selectLaborPane(yearWeek){
 	console.log('Year Week is --> ' + yearWeek);
 	var registry = require("dijit/registry");
 	setTimeout(registry.byId("tabContainer").selectChild(registry.byId("laborPane")), 1000);
+}
+
+function addItemToStock(){
+	var inventoryLayout = require('controls/InventoryLayoutController');
+	inventoryLayout.showAddItemDialog();
 }

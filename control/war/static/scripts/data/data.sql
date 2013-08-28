@@ -13,6 +13,8 @@ select * from employee_labor;
 desc employee_salary; 
 desc store;
 select * from store_accounting;
+delete from store_invoice_details;
+commit;
 drop table store;
 select * from blobs where linked_to_id=1 and tab='photo' order by updated_date desc;
 select * from employee_role;
