@@ -3,6 +3,7 @@ package com.services.core.security;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,14 +16,15 @@ import org.springframework.stereotype.Service;
 
 import com.services.core.data.mgr.DataManager;
 import com.services.core.data.model.employee.Employee;
+import com.services.core.view.wrappers.EmployeeWrapper;
+import com.services.core.view.wrappers.RoleWrapper;
 
 @Service("customUserDetailsService")
-public class CustomUserDetailsService implements UserDetailsService{
+public class CustomUserDetailsService implements UserDetailsService {
 
 	@Autowired
 	DataManager dmgr;
-	//private UserRepository userRepository;
- 
+
 	/**
 	 * Returns a populated {@link UserDetails} object. The username is first
 	 * retrieved from the database and then mapped to a {@link UserDetails}
@@ -30,44 +32,51 @@ public class CustomUserDetailsService implements UserDetailsService{
 	 */
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException {
-		System.out.println("Testing user --> " + username);
 		try {
-			//org.sab.invsys.persistence.model.user.User domainUser = userRepository
-			//		.findByUsername(username);
- 
-			Employee user = dmgr.getEmployeeByUserName(username);
-			System.out.println("User returned from DB Is --> " + user);
+
+			EmployeeWrapper user = dmgr.getEmployeeByUserName(username);
 			boolean enabled = true;
 			boolean accountNonExpired = true;
 			boolean credentialsNonExpired = true;
 			boolean accountNonLocked = true;
 			User signedUser;
-			if((user.getUsername() !=null) && user.getUsername().trim().length() > 0)
-				signedUser = new User(user.getUsername(), user.getPassword(), enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, getAuthorities(1));
-			else signedUser = new User("%#$#invalid$#(*&", "%$#invalid&$%", false, false, false, false, getAuthorities(1));
- 
+			if ((user.getUsername() != null)
+					&& user.getUsername().trim().length() > 0){
+				List<String> roles = new ArrayList<String>();
+				for(RoleWrapper role: user.getEmployeeRoles()){
+					roles.add(role.getRoleTab());
+				}
+				//store-ownr
+				//store-mgr
+				signedUser = new User(user.getUsername(), user.getPassword(),
+						enabled, accountNonExpired, credentialsNonExpired,
+						accountNonLocked, getAuthorities(1));
+			}
+			else
+				signedUser = new User("%#$#invalid$#(*&", "%$#invalid&$%",
+						false, false, false, false, getAuthorities(1));
+
 			return signedUser;
- 
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 	}
- 
+
 	/**
 	 * Retrieves a collection of {@link GrantedAuthority} based on a numerical
 	 * role
 	 * 
 	 * @param role
 	 *            the numerical role
-	 * @return a collection of {@link GrantedAuthority
- 
+	 * @return a collection of {@link GrantedAuthority
 	 */
 	public Collection<? extends GrantedAuthority> getAuthorities(Integer role) {
 		List<GrantedAuthority> authList = getGrantedAuthorities(getRoles(role));
 		return authList;
 	}
- 
+
 	/**
 	 * Converts a numerical role to an equivalent list of roles
 	 * 
@@ -77,18 +86,18 @@ public class CustomUserDetailsService implements UserDetailsService{
 	 */
 	public List<String> getRoles(Integer role) {
 		List<String> roles = new ArrayList<String>();
- 
+
 		if (role.intValue() == 1) {
 			roles.add("ROLE_USER");
 			roles.add("ROLE_ADMIN");
- 
+
 		} else if (role.intValue() == 2) {
 			roles.add("ROLE_USER");
 		}
- 
+
 		return roles;
 	}
- 
+
 	/**
 	 * Wraps {@link String} roles to {@link SimpleGrantedAuthority} objects
 	 * 
@@ -104,5 +113,5 @@ public class CustomUserDetailsService implements UserDetailsService{
 		}
 		return authorities;
 	}
-	
+
 }

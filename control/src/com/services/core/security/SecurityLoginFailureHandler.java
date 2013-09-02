@@ -18,7 +18,6 @@ public class SecurityLoginFailureHandler extends
 	public void onAuthenticationFailure(HttpServletRequest request,
 			HttpServletResponse response, AuthenticationException exception)
 			throws IOException, ServletException {
-		System.out.println("Testing onAuthenticationFailure() --> ");
 		if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
 			response.getWriter()
 					.print("{success:false, message: 'Username/Password are invalid'}");

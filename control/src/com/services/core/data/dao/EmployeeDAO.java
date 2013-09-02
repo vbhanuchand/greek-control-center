@@ -20,7 +20,7 @@ public interface EmployeeDAO {
 	
 	List<Employee> getEmployeesByStoreId(int storeId, boolean getMrgOnly);
 
-	Employee getEmployeeByUserName(String username);
+	List getEmployeeByUserName(String username);
 
 	List<Employee> getEmployees();
 	

@@ -128,5 +128,12 @@ public class Role implements Serializable {
 	public Integer getId() {
 		return id;
 	}
+
+	@Override
+	public String toString() {
+		return "Role [id=" + id + ", active=" + active + ", employeeId="
+				+ employeeId + ", storeId=" + storeId + ", roleTab=" + roleTab
+				+ "]";
+	}
 	
 }

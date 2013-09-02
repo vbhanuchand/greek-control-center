@@ -145,6 +145,7 @@
 					var promise = ajaxRequest.post('/service/j_spring_security_check', {data: domForm.toObject('loginForm'),
 						timeout: 10000});
 					promise.response.then(function(response){
+						console.log('Login Response ', response);
 						var message = dojo.fromJson(response.data);
 						if(message.success){
 							displayMessage("loginTrId", "loginMessage", "Login to the Portal is successful.", "success");
@@ -881,15 +882,26 @@
 				<div id="inventoryPane" data-dojo-type="dijit/layout/ContentPane" title="Inventory" data-dojo-props="selected:false" style="width: 99%; height: 99%">
 					<table style="width: 99%; height: 99%;" id="inventoryPaneTable">
 						<tr valign="top" style="width: 100%; height: 5%;">
-							<td align="left" colspan="2">
-								<a href='javascript:checkStock("D");'>Check Stock</a>
-								&nbsp;&nbsp;<img src='resources/images/add-icon.png' onclick='javascript: addItemToStock();'/>
-							</td> 
+							<td colspan="2">
+								<span style="float: left" id="checkStockLink">
+									<a href='javascript:checkStock("D");'>Check Stock</a>
+										&nbsp;&nbsp;
+									<img src='resources/images/add-icon.png' onclick='javascript: addItemToStock();'/>
+								</span>
+								<span style="position: relative; left: 30%; color: orange; font-weight: bolder; font-size: 120%;" id="inventoryTabTitle">
+									Invoices / Stock
+								</span>
+								<span style="float: right" id="createInvoiceLink">
+									<a href='javascript:createInvoice();'>Create Invoice</a>
+								</span>
+							</td>
+							<!-- 
+								<td align="left">
+								</td>
+								<td align="right">
+								</td>
+							 -->
 						</tr>
-						<!-- <tr valign="top" style="width: 100%; height: 5%;">
-							<td align="left" style="width: 30%;"><a href='javascript:populateInventory("D");'>Distributor (Invoices)</a></td> 
-							<td align="right" style="width: 70%;"><a href='javascript:populateInventory("GS");'>GS Kitchen (Invoices)</a></td>
-						</tr> -->
 						<tr valign="top" style="width: 100%; height: 90%;">
 							<td align="left" style="height: 95%; width: 50%;">
 								<div id="inventoryInvoicesGrid" align="center"
@@ -910,9 +922,12 @@
 						</tr>
 						<tr valign="top" style="width: 100%; height: 5%;">
 							<td align="left" style="width: 30%;">&nbsp;</td> 
-							<td align="right" style="width: 70%;"><a href='javascript:createInvoice();'>Create Invoice</a></td>
+							<td align="right" style="width: 70%;"></td>
 						</tr>
 					</table>
+					<div id="inventoryPaneStandBy" data-dojo-id="inventoryPaneStandBy" data-dojo-type="dojox/widget/Standby" 
+						data-dojo-props="target:'inventoryPane', color:'white'">
+					</div>
 				</div>
 			</div>
 		</div>
@@ -921,7 +936,7 @@
 <!-- Dialogs are defined here !!! -->
 <div class="dijitHidden">
 	<div data-dojo-type="dijit/Dialog"
-		data-dojo-props="title:'Add Item to Stock', loadingMessage:'Loading ...', style: 'font-size: 100%;'"
+		data-dojo-props="title:'Add/ Update Stock Item', loadingMessage:'Loading ...', style: 'font-size: 100%;'"
 		draggable="true" data-dojo-id="inventoryItemDialog"
 		id="inventoryItemDialog">
 			<form data-dojo-type="dijit/form/Form"
@@ -941,7 +956,13 @@
 							<script type="dojo/on" data-dojo-event="change" data-dojo-args="newVal">
 								this.get('store').fetch({query: {'code': newVal}, onComplete: function(items){
 									dijit.byId('inventoryStockPar').reset();
-									dijit.byId('inventoryStockParUnits').set('value', items[0].units.plural);
+									dijit.byId('inventoryStockPar').set('value', items[0].par);
+									var newPar = Number(items[0].par);
+									if((newPar == 0) || newPar > 1)
+										dijit.byId('inventoryStockParUnits').set('value', items[0].units.plural);
+									else 
+										dijit.byId('inventoryStockParUnits').set('value', items[0].units.singular);
+									dijit.byId('inventoryStockParCategory').set('value', items[0].category);
 							}});
 							</script>
 							</div>
@@ -951,24 +972,18 @@
 						<td align="left" valign="middle"><u>Par (Units):</u></td>
 						<td align="left" valign="middle">
 							<div data-dojo-type="dijit/form/NumberTextBox"
-							data-dojo-props="style: 'float: left; width: 30px;', required: 'true', trim: 'true', invalidMessage : 'Item is Invalid', value: 0"
+							data-dojo-props="style: 'float: left; width: 30px;', readOnly: true, required: 'true', trim: 'true', invalidMessage : 'Item is Invalid', value: 0"
 							id="inventoryStockPar" name="inventoryStockPar">
-							<script type="dojo/on" data-dojo-event="change" data-dojo-args="newVal">
-								dijit.byId('inventoryStockItem').get('store').fetch({query: {'code': dijit.byId('inventoryStockItem').get('value')}, onComplete: function(items){
-									if((newVal == 0) || newVal > 1)
-										dijit.byId('inventoryStockParUnits').set('value', items[0].units.plural);
-									else 
-										dijit.byId('inventoryStockParUnits').set('value', items[0].units.singular);
-									dijit.byId('inventoryStockParCategory').set('value', items[0].category);
-								}});
-							</script>
 							</div>&nbsp;
 							<input data-dojo-type="dijit/form/TextBox"
 								data-dojo-props="style: 'width: 60px;', disabled: 'true', readOnly: 'true', trim: 'true'"
 								id="inventoryStockParUnits" name="inventoryStockParUnits"/>&nbsp;
 							<input data-dojo-type="dijit/form/TextBox" type="hidden"
 								data-dojo-props="style: 'width: 30px;', readOnly: 'true', trim: 'true'"
-								id="inventoryStockParCategory" name="inventoryStockParCategory"/>	
+								id="inventoryStockParCategory" name="inventoryStockParCategory"/>
+							<input data-dojo-type="dijit/form/TextBox" type="hidden"
+								data-dojo-props="style: 'width: 30px;', readOnly: 'true', trim: 'true'"
+								id="inventoryInvoiceItemId" name="inventoryInvoiceItemId"/>	
 						</td>
 					</tr>
 									
@@ -989,14 +1004,14 @@
 					<tr>
 						<td align="left" valign="middle"><u>Price Per Unit:</u></td>
 						<td align="left" valign="middle"><input data-dojo-type="dijit/form/CurrencyTextBox"
-							data-dojo-props="style: 'width: 100px; font-size: 90%;', required: 'true', trim: 'true', invalidMessage : 'Item is Invalid'"
+							data-dojo-props="style: 'width: 100px; font-size: 90%;', required: 'true', trim: 'true', invalidMessage : 'Item is Invalid', value: 0"
 							id="inventoryStockPPU" name="inventoryStockPPU"/></td>
 					</tr>
 									
 					<tr>
 						<td align="left" valign="middle"><u>GS Charge %:</u></td>
 						<td align="left" valign="middle"><input data-dojo-type="dijit/form/CurrencyTextBox"
-							data-dojo-props="style: 'width: 100px; font-size: 90%;', required: 'true', trim: 'true', invalidMessage : 'Item is Invalid'"
+							data-dojo-props="style: 'width: 100px; font-size: 90%;', required: 'true', trim: 'true', invalidMessage : 'Item is Invalid', value: 0"
 							id="inventoryStockGSCharge" name="inventoryStockGSCharge"/></td>
 					</tr>
 									
@@ -1026,12 +1041,34 @@
 					data-dojo-props="target:'inventoryItemDialogForm', color:'white'">
 			</div>
 	</div>
+	<div data-dojo-type="dijit/Dialog"
+		data-dojo-props="title:'Select Items for Invoice', loadingMessage:'Loading ...', style: 'font-size: 100%;'"
+		draggable="true" data-dojo-id="invoiceItemsDialog" id="invoiceItemsDialog" style="position: absolute; top: 80px; height: 400px; width: 600px;">
+		<div id="invoiceItemsGrid" align="center"
+			style="height: 300px; margin: 2px; width: 540px;">
+		</div>
+		<div style="position: absolute; bottom: 10px; right: 30px;">
+			<button data-dojo-type="dijit/form/Button" type="button" value="Confirm"
+				id="invoiceItemsConfirmButton">Confirm and Submit Invoice
+				<script type="dojo/on" data-dojo-event="click" data-dojo-args="e">
+						e.preventDefault(); // prevent the default submit
+						e.stopPropagation();
+						var inventoryLayout = require("controls/InventoryLayoutController");
+				</script>
+			</button>
+			<button data-dojo-type="dijit/form/Button" type="button" value="Back"
+				id="invoiceItemsBackButton">Back
+				<script type="dojo/on" data-dojo-event="click" data-dojo-args="e">
+						e.preventDefault(); // prevent the default submit
+						e.stopPropagation();
+						invoiceItemsDialog.hide();
+				</script>
+			</button>
+		</div>
+		<div id="invoiceItemsGridStandBy" data-dojo-id="invoiceItemsGridStandBy" data-dojo-type="dojox/widget/Standby" 
+			data-dojo-props="target:'invoiceItemsGrid', color:'white'">
+		</div>
+	</div>
 </div>
-
-
-
-
-
-
 </body>
 </html>

@@ -552,3 +552,15 @@ function addItemToStock(){
 	var inventoryLayout = require('controls/InventoryLayoutController');
 	inventoryLayout.showAddItemDialog();
 }
+
+function createInvoice(){
+	require('controls/InventoryLayoutController').createInvoiceAction();
+}
+
+function checkStock(){
+	require('controls/InventoryLayoutController').reset();
+}
+
+function editInvoiceItem(invoiceItemId, rowIndex){
+	require('controls/InventoryLayoutController').editInvoiceItem(invoiceItemId, rowIndex);
+}

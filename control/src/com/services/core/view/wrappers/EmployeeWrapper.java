@@ -18,6 +18,7 @@ public class EmployeeWrapper extends BaseModel {
 	private String fname;
 	private String lname;
 	private String phone;
+	private String password;
 	
 	private String personalPhone;
 	private String emergencyContact;
@@ -97,6 +98,14 @@ public class EmployeeWrapper extends BaseModel {
 		this.phone = phone;
 	}
 	
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 	public String getPersonalPhone() {
 		return personalPhone;
 	}
