@@ -53,7 +53,7 @@ require(["dojo/parser", "dijit/dijit", "dojo/dom-style", "dojo/date", "dojo/date
 					}
 			};
 			loginDialog.closeButtonNode.style.display = "none";
-			otherFx.wipeIn({node: dom.byId('loginDialog'),duration: 1000, delay: 350, onBegin: function(node){registry.byId('loginDialog').show();domStyle.set(this.node, {top:'80px', position: "absolute"});}}).play();
+			otherFx.wipeIn({node: dom.byId('loginDialog'),duration: 1000, delay: 350, onBegin: function(node){registry.byId('loginDialog').show();domStyle.set(this.node, {top:'40px', position: "absolute"});}}).play();
 			//loginDialog.show();
 			
 			var checkAndAddMainTabPlus = function(paneId, paneTitle){

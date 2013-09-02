@@ -16,13 +16,11 @@ public class SecurityLoginSuccessHandler extends
 
 	public SecurityLoginSuccessHandler() {
 		super();
-		System.out.println("Testing SecurityLoginSuccessHandler() --> ");
 	}
 
 	public void onAuthenticationSuccess(HttpServletRequest request,
 			HttpServletResponse response, Authentication auth)
 			throws IOException, ServletException {
-		System.out.println("Testing SecurityLoginSuccessHandler() --> onAuthenticationSuccess() ");
 		if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
 			response.getWriter().print(
 					"{success:true, targetUrl : \'"

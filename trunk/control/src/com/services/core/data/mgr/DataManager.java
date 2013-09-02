@@ -30,7 +30,7 @@ public interface DataManager {
 
 	Employee getEmployeeById(int id);
 	
-	Employee getEmployeeByUserName(String username);
+	EmployeeWrapper getEmployeeByUserName(String username);
 
 	List<EmployeeWrapper> getEmployees();
 	
@@ -134,9 +134,13 @@ public interface DataManager {
 	
 	boolean updateStoreAccount(StoreAccountWrapper accDetails);
 	
+	List<StoreInvoiceWrapper> getStoreInvoices(int storeId);
+	
 	int insertStoreInvoice(StoreInvoiceWrapper storeInv);
 	
 	boolean updateStoreInvoice(StoreInvoiceWrapper storeInv);
+	
+	List<StoreInvoiceDetailsWrapper> getInvoiceDetails(int invoiceId);
 	
 	int insertStoreInvoiceDetails(StoreInvoiceDetailsWrapper storeInvDetails);
 	
@@ -147,5 +151,5 @@ public interface DataManager {
 	int insertStoreStock(StoreStockWrapper storeStock);
 	
 	boolean updateStoreStock(StoreStockWrapper storeStock);
-		
+	
 }

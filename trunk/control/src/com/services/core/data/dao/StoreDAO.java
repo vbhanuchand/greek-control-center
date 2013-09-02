@@ -7,6 +7,8 @@ import com.services.core.data.model.store.Store;
 import com.services.core.data.model.store.StoreAccount;
 import com.services.core.data.model.store.StoreAlarm;
 import com.services.core.data.model.store.StoreDate;
+import com.services.core.data.model.store.StoreInvoice;
+import com.services.core.data.model.store.StoreInvoiceDetails;
 import com.services.core.data.model.store.StoreKey;
 import com.services.core.data.model.store.StoreMaintenance;
 import com.services.core.data.model.store.StoreStock;
@@ -66,8 +68,8 @@ public interface StoreDAO {
 	
 	boolean updateStoreAccount(int id, int storeId, int quarter, int year, double labor, double foodCost, double advertisement, double misc, double profit, Boolean active, int updatedBy);
 	
-	
 	//Store Inventory-tab related operations
+	List<StoreInvoice> getStoreInvoices(int storeId);
 	
 	int insertStoreInvoice(int storeId, Date invoiceDate, boolean locked, boolean active, int updatedBy);
 	
@@ -76,6 +78,8 @@ public interface StoreDAO {
 	int insertStoreInvoiceDetails(int invoiceId, int itemId, int itemCategory, int itemStock, int itemOrder, double itemPricePerUnit, double itemGSPercent, int updatedBy);
 	
 	boolean updateStoreInvoiceDetails(int id, int invoiceId, int itemId, int itemCategory, int itemStock, int itemOrder, double itemPricePerUnit, double itemGSPercent, int updatedBy);
+	
+	List<StoreInvoiceDetails> getInvoiceDetails(int invoiceId);
 	
 	List<StoreStock> getStoreStock(int storeId);
 	

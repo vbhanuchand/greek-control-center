@@ -26,6 +26,7 @@ import com.services.core.view.wrappers.SingleModelResponse;
 import com.services.core.view.wrappers.StoreAccountWrapper;
 import com.services.core.view.wrappers.StoreAlarmWrapper;
 import com.services.core.view.wrappers.StoreDateWrapper;
+import com.services.core.view.wrappers.StoreInvoiceDetailsWrapper;
 import com.services.core.view.wrappers.StoreInvoiceWrapper;
 import com.services.core.view.wrappers.StoreKeyWrapper;
 import com.services.core.view.wrappers.StoreLaborDetailsWrapper;
@@ -286,6 +287,36 @@ public class StoreServiceController {
 	public SingleModelResponse<StoreStockWrapper> updateStoreStock(@PathVariable int storeId, @RequestBody StoreStockWrapper storeStock)
 			throws IOException {
 		return new SingleModelResponse<StoreStockWrapper>(dataService.updateStoreStock(storeStock), null);
+	}
+	
+	@RequestMapping(value = "/service/store/{storeId}/invoice", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public SingleModelResponse<StoreInvoiceWrapper> saveStoreInvoice(@PathVariable int storeId, @RequestBody StoreInvoiceWrapper storeInvoice)
+			throws IOException {
+		int id = dataService.insertStoreInvoice(storeInvoice);
+		storeInvoice.setId(id);
+		return new SingleModelResponse<StoreInvoiceWrapper>(true, null);
+	}
+	
+	@RequestMapping(value = "/service/store/{storeId}/invoice", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public MultipleModelResponse<StoreInvoiceWrapper> getStoreInvoices(@PathVariable int storeId)
+			throws IOException {
+		return new MultipleModelResponse<StoreInvoiceWrapper>(true, dataService.getStoreInvoices(storeId));
+	}
+	
+	@RequestMapping(value = "/service/store/invoice/{invoiceId}", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public MultipleModelResponse<StoreInvoiceDetailsWrapper> getInvoiceDetails(@PathVariable int invoiceId)
+			throws IOException {
+		return new MultipleModelResponse<StoreInvoiceDetailsWrapper>(true, dataService.getInvoiceDetails(invoiceId));
+	}
+	
+	@RequestMapping(value = "/service/store/invoiceDetail/{invoiceItemId}", method = RequestMethod.PUT, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public SingleModelResponse<StoreInvoiceDetailsWrapper> updateInvoiceItem(@PathVariable int invoiceItemId, @RequestBody StoreInvoiceDetailsWrapper storeInvDetail)
+			throws IOException {
+		return new SingleModelResponse<StoreInvoiceDetailsWrapper>(dataService.updateStoreInvoiceDetails(storeInvDetail), null);
 	}
 	
 }

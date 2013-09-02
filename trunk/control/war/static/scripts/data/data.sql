@@ -13,12 +13,13 @@ select * from employee_labor;
 desc employee_salary; 
 desc store;
 select * from store_accounting;
-delete from store_invoice_details;
+delete from store_stock;
 commit;
 drop table store;
 select * from blobs where linked_to_id=1 and tab='photo' order by updated_date desc;
 select * from employee_role;
 describe employee_role;
+select * from store_stock;
 
 select employee0_.id as col_0_0_, role1_.role_tab as col_1_0_, employee0_.fname as col_2_0_, employee0_.lname as col_3_0_, role1_.store_id as col_4_0_ from employee employee0_ cross join employee_role role1_ where employee0_.id=role1_.employee_id and employee0_.position='Manager' order by employee0_.id, role1_.store_id, role1_.role_tab;
 select * from employee where position='Manager';
@@ -143,13 +144,13 @@ update employee set active="Y";
 select * from store;
 
 insert into employee_role(employee_id, store_id, updated_by)
-values (1, 1, 0);
+values (6, 1, 0);
 insert into employee_role(employee_id, store_id, updated_by)
-values (1, 2, 0);
+values (6, 2, 0);
 insert into employee_role(employee_id, store_id, updated_by)
-values (1, 3, 0);
+values (6, 3, 0);
 insert into employee_role(employee_id, store_id, updated_by)
-values (1, 4, 0);
+values (6, 4, 0);
 insert into employee_role(employee_id, store_id, updated_by)
 values (2, 1, 0);
 insert into employee_role(employee_id, store_id, updated_by)
@@ -195,9 +196,31 @@ PRIMARY KEY(id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
+select si.id, si.invoice_date, sum(sid.item_ppu * ),  
+from store_invoice si, store_invoice_details sid 
+where si.invoice_id = sid.id and si.invoice_id = 1;
+
+select si.id, si.invoice_date, s1.inv_total, s1.inv_gs_charges
+from store_invoice si, 
+(select s1.id as inv_id, sum(s1.total) as inv_total, sum(gs_total) as inv_gs_charges 
+from (select invoice_id as id, ((item_order * item_ppu) + ((item_gs_charge * (item_order * item_ppu))/100)) as total, ((item_gs_charge * (item_order * item_ppu))/100) as gs_total
+from store_invoice_details) s1
+group by s1.id) s1
+where si.id = s1.inv_id and si.store_id = 3;
+
+select si.id, si.invoice_date, sum(sid.item_ppu * sid.item_order), sum((sid.item_gs_charge * (sid.item_order * sid.item_ppu))/100) 
+from store_invoice si, store_invoice_details sid
+where si.id = sid.invoice_id and si.store_id=3
+group by si.id, invoice_date;
 
 
 
+select * from store_invoice;
+select * from store_invoice_details;
+delete from store_invoice_details where invoice_id = 3;
+commit;
 
 
-
+select * from employee where username='owner';
+select * from employee_role where employee_id=6;
+desc employee_role;

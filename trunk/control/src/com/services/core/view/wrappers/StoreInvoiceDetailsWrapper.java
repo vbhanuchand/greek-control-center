@@ -117,5 +117,15 @@ public class StoreInvoiceDetailsWrapper extends BaseModel{
 	public void setUpdatedDate(Date updatedDate) {
 		this.updatedDate = updatedDate;
 	}
+
+	@Override
+	public String toString() {
+		return "StoreInvoiceDetailsWrapper [invoiceId=" + invoiceId
+				+ ", itemId=" + itemId + ", itemCategory=" + itemCategory
+				+ ", itemStock=" + itemStock + ", itemOrder=" + itemOrder
+				+ ", itemPricePerUnit=" + itemPricePerUnit + ", itemGSPercent="
+				+ itemGSPercent + ", updatedBy=" + updatedBy + ", updatedDate="
+				+ updatedDate + "]";
+	}
 	
 }

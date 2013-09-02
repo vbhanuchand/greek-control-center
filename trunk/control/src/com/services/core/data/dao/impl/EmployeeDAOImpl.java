@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -221,6 +222,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 		return query.list();
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public List getStoreLaborDetails(int storeId, Date dateFrom, Date dateTo){
 		String hql = "select el.id as id, e.id as empId, e.fname as fname, el.date as date, el.position as position, el.from as from, el.to as to, el.totalTime as totalTime from EmployeeLabor el, Employee e where el.active=true and e.active=true and e.id=el.empId and el.storeId=:storeId and el.date >= :dateFrom and el.date<= :dateTo order by el.date";
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
@@ -288,12 +290,12 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 	
 	@SuppressWarnings("rawtypes")
 	@Override
-	public Employee getEmployeeByUserName(String username) {
-		Query query = sessionFactory.getCurrentSession().createQuery(
-				"from Employee where username = :username");
+	public List getEmployeeByUserName(String username) {
+		Query query = sessionFactory.getCurrentSession().createQuery("select e.id as empId, e.password as password, r.roleTab as role, r.storeId as storeId from Employee e, Role r " +
+				"where e.id = r.employeeId and username = :username order by e.id, r.storeId, r.roleTab");
 		query.setParameter("username", username);
-		List empList = query.list();
-		return empList.size() > 0 ? (Employee) empList.get(0) : new Employee();
+		query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+		return query.list();
 	}
 
 	@Override
@@ -303,6 +305,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 		return criteria.list();
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@Override
 	public List getAllStoreManagers() {
 		Query query = sessionFactory.getCurrentSession().createQuery("select e.id as empId, r.roleTab as role, e.fname as empFname, e.lname as empLname, r.storeId as storeId from Employee e, Role r " +
@@ -321,6 +324,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 		return query.list();
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@Override
 	public List getEmployeeReviews(int empId){
 		Query query = sessionFactory.getCurrentSession().createQuery("select distinct year as year from EmployeeReview where empId=:empId and active=true order by year desc");
@@ -367,15 +371,5 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 		int result = query.executeUpdate();
 		return (result == 1);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 }

@@ -254,6 +254,4 @@ public class Employee implements Serializable {
 				+ password + "]";
 	}
 	
-	
-	
 }

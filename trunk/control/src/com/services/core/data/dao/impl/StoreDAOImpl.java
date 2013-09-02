@@ -253,6 +253,19 @@ public class StoreDAOImpl implements StoreDAO {
 	}
 	
 	@Override
+	public List getStoreInvoices(int storeId){
+		String hql = "select si.id as invoiceId, si.invoiceDate as invoiceDate, sum(sid.itemPricePerUnit * sid.itemOrder) as invTotal, " +
+				"sum((sid.itemGSPercent * (sid.itemOrder * sid.itemPricePerUnit))/100) as invGSCharges from StoreInvoice si, StoreInvoiceDetails sid " +
+				"where si.id = sid.invoiceId and si.storeId = :storeId " +
+				"group by si.id, si.invoiceDate " +
+				"order by si.id desc";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setParameter("storeId", storeId);
+		query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+		return query.list();
+	}
+	
+	@Override
 	public int insertStoreInvoice(int storeId, Date invoiceDate, boolean locked, boolean active, int updatedBy){
 		StoreInvoice storeInv = new StoreInvoice(storeId, invoiceDate, locked, active, updatedBy);
 		sessionFactory.getCurrentSession().save(storeInv);
@@ -285,13 +298,11 @@ public class StoreDAOImpl implements StoreDAO {
 	@Override
 	public boolean updateStoreInvoiceDetails(int id, int invoiceId, int itemId, int itemCategory, int itemStock, int itemOrder, 
 			double itemPricePerUnit, double itemGSPercent, int updatedBy){
-		String hql = "UPDATE StoreInvoiceDetails si set si.itemId=:itemId, si.itemCategory=:itemCategory, si.itemStock=:itemStock, " 
+		String hql = "UPDATE StoreInvoiceDetails si set si.itemStock=:itemStock, " 
 				+ "si.itemOrder=:itemOrder, si.itemPricePerUnit=:itemPricePerUnit, si.itemGSPercent=:itemGSPercent, "
 				+ "si.updatedBy=:updatedBy WHERE si.id=:id";
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
 		query.setParameter("id", id);
-		query.setParameter("itemId", itemId);
-		query.setParameter("itemCategory", itemCategory);
 		query.setParameter("itemStock", itemStock);
 		query.setParameter("itemOrder", itemOrder);
 		query.setParameter("itemPricePerUnit", itemPricePerUnit);
@@ -299,6 +310,14 @@ public class StoreDAOImpl implements StoreDAO {
 		query.setParameter("updatedBy", updatedBy);
 		int result = query.executeUpdate();
 		return (result == 1);
+	}
+	
+	@Override
+	public List<StoreInvoiceDetails> getInvoiceDetails(int invoiceId){
+		Query query = sessionFactory.getCurrentSession().createQuery(
+				"from StoreInvoiceDetails where invoiceId = :invoiceId");
+		query.setParameter("invoiceId", invoiceId);
+		return query.list();
 	}
 	
 	@Override
@@ -312,8 +331,25 @@ public class StoreDAOImpl implements StoreDAO {
 	@Override
 	public int insertStoreStock(int storeId, int itemId, int itemCategory, int itemStock, int itemOrder, double itemPricePerUnit, 
 			double itemGSPercent, int updatedBy){
-		StoreStock storeStock = new StoreStock(storeId, itemId, itemCategory, itemStock, itemOrder, itemPricePerUnit, itemGSPercent, updatedBy);
-		sessionFactory.getCurrentSession().save(storeStock);
+		Query query = sessionFactory.getCurrentSession().createQuery(
+				"from StoreStock where storeId = :storeId and itemId = :itemId");
+		query.setParameter("storeId", storeId);
+		query.setParameter("itemId", itemId);
+		List<StoreStock> existingItemList = query.list();
+		StoreStock existingItem, storeStock;
+		if(existingItemList.size() > 0){
+			existingItem = existingItemList.get(0);
+			existingItem.setItemStock(itemStock);
+			existingItem.setItemOrder(itemOrder);
+			existingItem.setItemPricePerUnit(itemPricePerUnit);
+			existingItem.setItemGSPercent(itemGSPercent);
+			existingItem.setUpdatedBy(updatedBy);
+			sessionFactory.getCurrentSession().saveOrUpdate(existingItem);
+			storeStock = existingItem;
+		} else {
+			storeStock = new StoreStock(storeId, itemId, itemCategory, itemStock, itemOrder, itemPricePerUnit, itemGSPercent, updatedBy);
+			sessionFactory.getCurrentSession().save(storeStock);
+		}
 		return storeStock.getId();
 	}
 	

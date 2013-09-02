@@ -8,9 +8,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,8 @@ import com.services.core.data.model.store.Store;
 import com.services.core.data.model.store.StoreAccount;
 import com.services.core.data.model.store.StoreAlarm;
 import com.services.core.data.model.store.StoreDate;
+import com.services.core.data.model.store.StoreInvoice;
+import com.services.core.data.model.store.StoreInvoiceDetails;
 import com.services.core.data.model.store.StoreKey;
 import com.services.core.data.model.store.StoreMaintenance;
 import com.services.core.data.model.store.StoreStock;
@@ -44,6 +48,7 @@ import com.services.core.view.wrappers.EmployeeLeavesWrapper;
 import com.services.core.view.wrappers.EmployeeReviewWrapper;
 import com.services.core.view.wrappers.EmployeeSalaryWrapper;
 import com.services.core.view.wrappers.EmployeeWrapper;
+import com.services.core.view.wrappers.RoleWrapper;
 import com.services.core.view.wrappers.StoreAccountWrapper;
 import com.services.core.view.wrappers.StoreAlarmWrapper;
 import com.services.core.view.wrappers.StoreDateWrapper;
@@ -81,9 +86,25 @@ public class DataManagerImpl implements DataManager{
 		return employeeDAO.getEmployeeById(id);
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@Override
-	public Employee getEmployeeByUserName(String username) {
-		return employeeDAO.getEmployeeByUserName(username);
+	public EmployeeWrapper getEmployeeByUserName(String username) {
+		List empList = employeeDAO.getEmployeeByUserName(username);
+		EmployeeWrapper returnEmp = new EmployeeWrapper();
+		Set<RoleWrapper> employeeRoles = new HashSet<RoleWrapper>();
+		RoleWrapper role;
+		for(Object row: empList){
+			Map mapRow = (Map) row;
+			returnEmp.setId((Integer)mapRow.get("empId"));
+			returnEmp.setPassword((String)mapRow.get("password"));
+			role = new RoleWrapper();
+			role.setRoleTab((String)mapRow.get("role"));
+			role.setStoreId((Integer)mapRow.get("storeId"));
+			employeeRoles.add(role);
+		}
+		returnEmp.setUsername(username);
+		returnEmp.setEmployeeRoles(employeeRoles);
+		return returnEmp;
 	}
 
 	@Override
@@ -143,8 +164,8 @@ public class DataManagerImpl implements DataManager{
 	
 	@Transactional(readOnly = false)
     public void deleteEmployee(String username) {
-        Employee employee = employeeDAO.getEmployeeByUserName(username);
-        employeeDAO.deleteEmployee(employee);
+        //Employee employee = employeeDAO.getEmployeeByUserName(username);
+        //employeeDAO.deleteEmployee(employee);
     }
 	
 	@Override
@@ -765,10 +786,36 @@ public class DataManagerImpl implements DataManager{
 	}
 	
 	@Override
+	public List<StoreInvoiceWrapper> getStoreInvoices(int storeId){
+		List invoiceList = storeDAO.getStoreInvoices(storeId);
+		Map rowObject;
+		List<StoreInvoiceWrapper> returnList = new ArrayList<StoreInvoiceWrapper>();
+		StoreInvoiceWrapper returnObject;
+		for(Object listItem: invoiceList){
+			rowObject = (Map) listItem;
+			returnObject = new StoreInvoiceWrapper();
+			returnObject.setId((int)rowObject.get("invoiceId"));
+			returnObject.setInvoiceDate((Date)rowObject.get("invoiceDate"));
+			returnObject.setTotalCharges((double)rowObject.get("invTotal") + (double)rowObject.get("invGSCharges"));
+			returnObject.setGsCharges((double)rowObject.get("invGSCharges"));
+			returnList.add(returnObject);
+		}
+		return returnList;
+	}
+	
+	@Override
 	@Transactional
 	public int insertStoreInvoice(StoreInvoiceWrapper storeInv){
-		return storeDAO.insertStoreInvoice(storeInv.getStoreId(), storeInv.getInvoiceDate(),
+		
+		int invoiceId = storeDAO.insertStoreInvoice(storeInv.getStoreId(), new Date(),
 				false, true, 0);
+		for(StoreInvoiceDetailsWrapper storeInvDetails: storeInv.getInvoiceDetails())
+		{
+			storeInvDetails.setInvoiceId(invoiceId);
+			storeDAO.insertStoreInvoiceDetails(storeInvDetails.getInvoiceId(), storeInvDetails.getItemId(), storeInvDetails.getItemCategory(), storeInvDetails.getItemStock(), 
+					storeInvDetails.getItemOrder(), storeInvDetails.getItemPricePerUnit(), storeInvDetails.getItemGSPercent(), 0);
+		}
+		return invoiceId;
 	}
 	
 	@Override
@@ -776,6 +823,16 @@ public class DataManagerImpl implements DataManager{
 	public boolean updateStoreInvoice(StoreInvoiceWrapper storeInv){
 		return storeDAO.updateStoreInvoice(storeInv.getId(), storeInv.getStoreId(), storeInv.getInvoiceDate(),
 				false, true, 0);
+	}
+	
+	@Override
+	public List<StoreInvoiceDetailsWrapper> getInvoiceDetails(int invoiceId){
+		List<StoreInvoiceDetailsWrapper> returnList = new ArrayList<StoreInvoiceDetailsWrapper>();
+		for(StoreInvoiceDetails tempStock: storeDAO.getInvoiceDetails(invoiceId)){
+			returnList.add(new StoreInvoiceDetailsWrapper(tempStock.getId(), tempStock.getInvoiceId(), tempStock.getItemId(), tempStock.getItemCategory(), tempStock.getItemStock(), 
+					tempStock.getItemOrder(), tempStock.getItemPricePerUnit(), tempStock.getItemGSPercent(), tempStock.getUpdatedBy(), tempStock.getUpdatedDate()));
+		}
+		return returnList;
 	}
 	
 	@Override
