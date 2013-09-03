@@ -36,7 +36,14 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 		sessionFactory.getCurrentSession().save(emp);
 		Role empRole = new Role(emp.getId(), storeId, updated_by);
 		empRole.setActive(true);
-		empRole.setRoleTab("store-tab");
+		switch(position){
+			case "Manager":
+				empRole.setRoleTab("store-mgr");
+				break;
+			default: 
+				empRole.setRoleTab("store-tab");
+				break;
+		}
 		sessionFactory.getCurrentSession().save(empRole);
 		return true;
 	}

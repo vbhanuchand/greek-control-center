@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +24,16 @@ public class SecurityLoginSuccessHandler extends
 			HttpServletResponse response, Authentication auth)
 			throws IOException, ServletException {
 		if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
+			String roles = "", stores = "";
+			for(GrantedAuthority authority: auth.getAuthorities()){
+				if(authority.getAuthority().contains("ROLE"))
+					roles = authority.getAuthority();
+				else 
+					stores += authority.getAuthority() + ",";
+			}
+			stores = stores.length() > 0 ? stores.substring(0, stores.length()-1): stores;
 			response.getWriter().print(
-					"{success:true, targetUrl : \'"
+					"{success:true, roles: '" + roles + "', stores: '" + stores + "', targetUrl : \'"
 							+ this.getTargetUrlParameter() + "\'}");
 			response.getWriter().flush();
 		} else {

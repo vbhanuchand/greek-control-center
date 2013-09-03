@@ -564,3 +564,96 @@ function checkStock(){
 function editInvoiceItem(invoiceItemId, rowIndex){
 	require('controls/InventoryLayoutController').editInvoiceItem(invoiceItemId, rowIndex);
 }
+
+function applySecurityRoles(authoritiesData){
+	console.log('Applying Security using ', authoritiesData);
+	var registry = require('dijit/registry');
+	var domConstruct = require('dojo/dom-construct');
+	
+	var stores = authoritiesData.stores;
+	var storeToSelect = 0;
+	if(stores.indexOf('store-1') < 0)
+		domConstruct.destroy("locationTabletr1");
+	else storeToSelect = 1;
+	
+	if(stores.indexOf('store-2') < 0) 
+		domConstruct.destroy("locationTabletr2");
+	else 
+		storeToSelect = storeToSelect > 0 ? storeToSelect : 2;
+	
+	if(stores.indexOf('store-3') < 0)
+		domConstruct.destroy("locationTabletr3");
+	else 
+		storeToSelect = storeToSelect > 0 ? storeToSelect : 3;
+	
+	if(stores.indexOf('store-4') < 0)
+		domConstruct.destroy("locationTabletr4");
+	else 
+		storeToSelect = storeToSelect > 0 ? storeToSelect : 4;
+	
+	if(stores.indexOf('store-5') < 0)
+		domConstruct.destroy("locationTabletr5");
+	else 
+		storeToSelect = storeToSelect > 0 ? storeToSelect : 5;
+	
+	var role = authoritiesData.roles;
+	switch(role){
+		case 'ROLE_OWNER':
+			checkSelectedPane('locationTabletr'+storeToSelect, 'rightAccordion', storeToSelect);
+			break;
+		case 'ROLE_EMP':
+			
+			//Remove the Manage Tab Starts here
+			registry.byId('tabContainer').removeChild(registry.byId('managePane'));
+			registry.byId('managePane').destroy();
+			//Remove the Manage Tab Ends here
+			
+			//Remove the View Schedule Column in Store Info --> Labor Summary Grid Start here
+			registry.byId('storeLaborGrid').layout.setColumnVisibility(0,false);
+			//Remove the View Schedule Column in Store Info --> Labor Summary Grid Ends here
+			
+			//Remove the Manager Tab in the Main Tab Container Starts here
+			registry.byId('tabContainer').removeChild(registry.byId('managerPane'));
+			registry.byId('managerPane').destroy();
+			//Remove the Manager Tab in the Main Tab Container Ends here
+			
+			//Remove the Update Column in Employees Grid, Salary Particulars Tab in the Employee Tabs, Labor Entry Tab
+			registry.byId('employeesGrid').layout.setColumnVisibility(0,false);
+			
+			registry.byId('employeeInfoTabContainer').removeChild(registry.byId('empSalaryDetails'));
+			registry.byId('empSalaryDetails').destroy();
+			
+			registry.byId('employeeInfoTabContainer').removeChild(registry.byId('empLaborDetails'));
+			registry.byId('empLaborDetails').destroy();
+			//All of the above Ends here
+			
+			//Remove the Accounting Tab Starts here
+			registry.byId('tabContainer').removeChild(registry.byId('accountingPane'));
+			registry.byId('accountingPane').destroy();
+			//Remove the Accounting Tab Ends here
+			
+			//Adjusting the Inventory Tab Starts here
+			registry.byId('inventoryInvoicesGrid').layout.setColumnVisibility(2,false);
+			registry.byId('inventoryInvoicesGrid').layout.setColumnVisibility(3,false);
+			
+			registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(4,false);
+			registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(5,false);
+			registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(6,false);
+			registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(7,false);
+			//registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(8,false);
+			//Ends here
+			
+			checkSelectedPane('locationTabletr'+storeToSelect, 'rightAccordion', storeToSelect);
+			break;
+		case 'ROLE_EMP1':
+			break;
+	}
+	
+	//grid.layout.setColumnVisibility(columnIndex,booleanValue);
+	//pane.set("disabled", true);
+	
+	/*For Removing a child of Tab Container*/
+		//dijit.byId("myTabContainer").removeChild(dijit.byId("myContentPane"));
+		//dijit.byId("myContentPane").destroy();
+	/*For Removing a child of Tab Container*/
+}

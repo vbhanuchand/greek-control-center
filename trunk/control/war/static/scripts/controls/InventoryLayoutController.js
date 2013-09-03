@@ -15,16 +15,16 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
  				itemFileWriteStore, gridDijit, TimeTextBox, ValidationTextBox, CurrencyTextBox, Observable, Tooltip, popup, DNumber){
 
 	var INVENTORY_DISTRIBUTORS = [
-	                              {id: '1', name: 'NICHOLAS', color: '#0040FF', items: [{code: '101', name: 'PITA BREAD', par: 10, units: {singular: 'Box', plural: 'Boxes'}},
+	                              {id: '1', name: 'NICHOLAS', color: '#2E2EFE', items: [{code: '101', name: 'PITA BREAD', par: 10, units: {singular: 'Box', plural: 'Boxes'}},
 	                                                                  {code: '102', name: 'YEERO CONE', par: 10, units: {singular: 'Cone', plural: 'Cones'}},
 	                                                                  {code: '103', name: 'BREADED ZUCCHINI', par: 4, units: {singular: 'Bag', plural: 'Bags'}},
 	                                                                  {code: '104', name: 'BREADED MUSHROOM', par: 4, units: {singular: 'Bag', plural: 'Bags'}}]},
-	                              {id: '2', name: 'US FOODS', color: '#FF00FF', items: [{code: '201', name: 'WHITE SAUCE', par: 3, units: {singular: 'Pan', plural: 'Pans'}},
+	                              {id: '2', name: 'US FOODS', color: '#8904B1', items: [{code: '201', name: 'WHITE SAUCE', par: 3, units: {singular: 'Pan', plural: 'Pans'}},
 	                                                                  {code: '202', name: 'RED SAUCE', par: 3, units: {singular: 'Pan', plural: 'Pans'}},
 	                                                                  {code: '203', name: 'CHICKEN SOULVAKI', par: 4, units: {singular: 'Tray', plural: 'Trays'}}]},
-	                              {id: '3', name: 'SAMS CLUB', color: '#FF0040', items: [{code: '301', name: 'LOUKOUMADE SYRUP', par: 1, units: {singular: 'Bottle', plural: 'Bottles'}},
+	                              {id: '3', name: 'SAMS CLUB', color: '#B40431', items: [{code: '301', name: 'LOUKOUMADE SYRUP', par: 1, units: {singular: 'Bottle', plural: 'Bottles'}},
 	                                                                   {code: '302', name: 'LOUKOUMADE SPICE', par: 1, units: {singular: 'Bottle', plural: 'Bottles'}}]},
-	                              {id: '4', name: 'GS KITCHEN', color: '#2EFE2E', items: [{code: '401', name: 'WINDEX', par: 2, units: {singular: 'Unit', plural: 'Units'}},
+	                              {id: '4', name: 'GS KITCHEN', color: '#21610B', items: [{code: '401', name: 'WINDEX', par: 2, units: {singular: 'Unit', plural: 'Units'}},
 	                                                                    {code: '402', name: 'HAND ROLLS', par: 2, units: {singular: 'Unit', plural: 'Units'}},
 	                                                                    {code: '403', name: 'BREADED ZUCCHINI', par: 4, units: {singular: 'Bag', plural: 'Bags'}},
 	                                                                    {code: '404', name: 'BREADED MUSHROOM', par: 4, units: {singular: 'Bag', plural: 'Bags'}}]}
@@ -170,13 +170,13 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 									store: gridDataStore,
 									query: { id: "*" },
 									structure: [{defaultCell: { width: "20%", type: dojox.grid.cells._Widget, styles: 'padding-left: 2px; text-align: left;', noresize: true, editable: false },
-										cells: [{ name: "Stock Item", fields: ['id', "itemId"], width: "20%", noresize: true, formatter: formatItem},
-									            { name: "Par (Units)", field: "itemId", width: "15%", noresize: true, formatter: formatParUnits},
-												{ name: "In Stock", field: "itemStock", width: "12%", noresize: true},
-												{ name: "Order", field: "itemOrder", width: "10%", noresize: true},
-												{ name: "Per Unit", field: "itemPricePerUnit", width: "15%", noresize: true, formatter: formatToCurrency},
-												{ name: "GS Charge", field: "itemGSPercent", width: "16%", noresize: true, formatter: formatToPercent},
-												{ name: "Total", fields: ['itemOrder', 'itemPricePerUnit', 'itemGSPercent'], width: "12%", noresize: true, formatter: formatTotal}
+										cells: [{ name: "Stock Item", fields: ['id', "itemId"], width: "20%", noresize: true, formatter: formatItem },
+									            { name: "Par (Units)", field: "itemId", width: "15%", noresize: true, formatter: formatParUnits },
+												{ name: "In Stock", field: "itemStock", width: "12%", noresize: true },
+												{ name: "Order", field: "itemOrder", width: "10%", noresize: true },
+												{ name: "Per Unit", field: "itemPricePerUnit", width: "15%", noresize: true, formatter: formatToCurrency },
+												{ name: "GS Charge", field: "itemGSPercent", width: "16%", noresize: true, formatter: formatToPercent },
+												{ name: "Total", fields: ['itemOrder', 'itemPricePerUnit', 'itemGSPercent'], width: "12%", noresize: true, formatter: formatTotal }
 												]}],
 									singleClickEdit: false,
 									editable: false,
@@ -329,6 +329,9 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 			init: function(){
 				initInventory();
 			},
+			applySecurity: function(){
+				
+			},
 			reset: function(){
 				resetScreen();
 			},
@@ -370,6 +373,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 			},
 			showAddItemDialog: function(){
 				registry.byId('inventoryInvoiceItemId').set('value', 0);
+				registry.byId('inventoryStockItem').set('readOnly', false);
 				showDialogToAddItem();
 			},
 			editInvoiceItem: function(itemId, rowIndex){
@@ -424,7 +428,8 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 			    		handleAs: 'json', data: json.stringify(jsonRowObject), timeout: 10000
 			    			}).then(function(stockUpdateResponse){
 			    				if(stockUpdateResponse.success){
-			    					fetchStockGridData(registry.byId('hiddenStoreId').get('value'));
+			    					//fetchStockGridData(registry.byId('hiddenStoreId').get('value'));
+			    					resetScreen();
 			    					inventoryItemDialog.hide();
 			    				}
 			    				registry.byId('inventoryItemDialogFormStandBy').hide();
