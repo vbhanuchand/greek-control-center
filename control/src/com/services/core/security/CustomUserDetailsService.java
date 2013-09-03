@@ -23,7 +23,16 @@ import com.services.core.view.wrappers.RoleWrapper;
 public class CustomUserDetailsService implements UserDetailsService {
 
 	@Autowired
-	DataManager dmgr;
+	DataManager dataMgr;
+	List<String> stores;
+
+	public List<String> getStores() {
+		return stores;
+	}
+
+	public void setStores(List<String> stores) {
+		this.stores = stores;
+	}
 
 	/**
 	 * Returns a populated {@link UserDetails} object. The username is first
@@ -34,25 +43,32 @@ public class CustomUserDetailsService implements UserDetailsService {
 			throws UsernameNotFoundException {
 		try {
 
-			EmployeeWrapper user = dmgr.getEmployeeByUserName(username);
+			EmployeeWrapper user = dataMgr.getEmployeeByUserName(username);
 			boolean enabled = true;
 			boolean accountNonExpired = true;
 			boolean credentialsNonExpired = true;
 			boolean accountNonLocked = true;
 			User signedUser;
 			if ((user.getUsername() != null)
-					&& user.getUsername().trim().length() > 0){
+					&& user.getUsername().trim().length() > 0) {
 				List<String> roles = new ArrayList<String>();
-				for(RoleWrapper role: user.getEmployeeRoles()){
+				List<String> stores = new ArrayList<String>();
+				for (RoleWrapper role : user.getEmployeeRoles()) {
 					roles.add(role.getRoleTab());
+					stores.add("store-" + String.valueOf(role.getStoreId()));
 				}
-				//store-ownr
-				//store-mgr
+				this.setStores(stores);
+				int roleCode = 0;
+				if (roles.contains("store-ownr"))
+					roleCode = 99;
+				else if (roles.contains("store-mgr"))
+					roleCode = 98;
+				else
+					roleCode = 97;
 				signedUser = new User(user.getUsername(), user.getPassword(),
 						enabled, accountNonExpired, credentialsNonExpired,
-						accountNonLocked, getAuthorities(1));
-			}
-			else
+						accountNonLocked, getAuthorities(roleCode));
+			} else
 				signedUser = new User("%#$#invalid$#(*&", "%$#invalid&$%",
 						false, false, false, false, getAuthorities(1));
 
@@ -87,14 +103,15 @@ public class CustomUserDetailsService implements UserDetailsService {
 	public List<String> getRoles(Integer role) {
 		List<String> roles = new ArrayList<String>();
 
-		if (role.intValue() == 1) {
-			roles.add("ROLE_USER");
-			roles.add("ROLE_ADMIN");
+		if (role.intValue() == 99) {
+			roles.add("ROLE_OWNER");
 
-		} else if (role.intValue() == 2) {
-			roles.add("ROLE_USER");
-		}
-
+		} else if (role.intValue() == 98) {
+			roles.add("ROLE_MGR");
+		} else
+			roles.add("ROLE_EMP");
+		for(String store: this.getStores())
+			roles.add(store);
 		return roles;
 	}
 

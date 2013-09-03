@@ -142,20 +142,21 @@
 					var ajaxRequest = require("dojo/request");
 					var json = require('dojo/json');
 					var domForm = require('dojo/dom-form');
-					var promise = ajaxRequest.post('/service/j_spring_security_check', {data: domForm.toObject('loginForm'),
-						timeout: 10000});
+					var promise = ajaxRequest.post('/service/j_spring_security_check', {data: domForm.toObject('loginForm'), sync: true});
 					promise.response.then(function(response){
-						console.log('Login Response ', response);
 						var message = dojo.fromJson(response.data);
 						if(message.success){
 							displayMessage("loginTrId", "loginMessage", "Login to the Portal is successful.", "success");
+							
+							applySecurityRoles(message);
 							var otherFx = require("dojo/fx");
 							var dom = require("dojo/dom");
 							var domStyle = require('dojo/dom-style');
+							
 							otherFx.wipeOut({node: dom.byId('loginDialog'),duration: 1000, delay: 250, onEnd: function(){
 								registry.byId('loginDialog').hide();
 							}}).play();
-							checkSelectedPane('locationTabletr3', 'rightAccordion', 3);
+							//checkSelectedPane('locationTabletr1', 'rightAccordion', 1);
 							modifyContentPaneTitles();
 							modifyStoreDateLabel('store-info-important-dates');
 							var storeLayout = require("controls/StoreLayoutController");
@@ -208,6 +209,10 @@
 					<tr id="locationTabletr4"
 						onclick="javascript: checkSelectedPane('locationTabletr4', 'rightAccordion', 4);">
 						<td>South Jordan</td>
+					</tr>
+					<tr id="locationTabletr5"
+						onclick="javascript: checkSelectedPane('locationTabletr5', 'rightAccordion', 5);">
+						<td>Salt Lake City</td>
 					</tr>
 				</table>
 			</div>
@@ -888,7 +893,7 @@
 										&nbsp;&nbsp;
 									<img src='resources/images/add-icon.png' onclick='javascript: addItemToStock();'/>
 								</span>
-								<span style="position: relative; left: 30%; color: orange; font-weight: bolder; font-size: 120%;" id="inventoryTabTitle">
+								<span style="position: relative; left: 30%; color: orange; font-weight: bolder; font-size: 100%;" id="inventoryTabTitle">
 									Invoices / Stock
 								</span>
 								<span style="float: right" id="createInvoiceLink">

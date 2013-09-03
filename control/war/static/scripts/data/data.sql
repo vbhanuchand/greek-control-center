@@ -224,3 +224,4 @@ commit;
 select * from employee where username='owner';
 select * from employee_role where employee_id=6;
 desc employee_role;
+select * from store;
