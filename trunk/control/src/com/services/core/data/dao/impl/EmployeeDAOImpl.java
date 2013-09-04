@@ -33,6 +33,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 	public boolean insertEmployee(int storeId, String username, String fname, String lname, String phone, String personalPhone, String emergencyContact, String address, boolean active, int manager, String position, Date hired_date, int updated_by){
 		
 		Employee emp = new Employee(username, fname, lname, phone, personalPhone, emergencyContact, address, active, manager, position, hired_date, updated_by);
+		emp.setPassword("5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8");
 		sessionFactory.getCurrentSession().save(emp);
 		Role empRole = new Role(emp.getId(), storeId, updated_by);
 		empRole.setActive(true);
@@ -71,6 +72,24 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 		query.setParameter("hired_date", hired_date);
 		query.setParameter("updated_by", updated_by);
 		int result = query.executeUpdate();
+		
+		
+		Query rolesQuery = sessionFactory.getCurrentSession().createQuery("from Role where employeeId=:employeeId and roleTab <> :roleTab");
+		rolesQuery.setParameter("roleTab", "store-ownr");
+		rolesQuery.setParameter("employeeId", id);
+		List<Role> existingRoles = rolesQuery.list(); 
+		for(Role role: existingRoles){
+			switch(position){
+				case "Manager":
+					role.setRoleTab("store-mgr");
+				break;
+				default :
+					role.setRoleTab("store-tab");
+				break;
+			}
+			sessionFactory.getCurrentSession().saveOrUpdate(role);
+		}
+		
 		return (result == 1);
 	}
 	
@@ -79,14 +98,16 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 	public List<Employee> getEmployeesByStoreId(int storeId, boolean getMgrOnly){
 		Query query;
 		if(getMgrOnly){
-			query = sessionFactory.getCurrentSession().createQuery("from Employee e where e.id in (select employeeId from Role where storeId=:storeId) and e.position=:position" +
+			query = sessionFactory.getCurrentSession().createQuery("from Employee e where e.id in (select employeeId from Role where storeId=:storeId and roleTab <> :roleTab) and e.position=:position" +
 					" order by e.position desc, e.hired_date");
 			query.setParameter("position", "Manager");
 		}
 		else{
-			query = sessionFactory.getCurrentSession().createQuery("from Employee e where e.id in (select employeeId from Role where storeId=:storeId)" +
+			query = sessionFactory.getCurrentSession().createQuery("from Employee e where e.id in (select employeeId from Role where storeId=:storeId and roleTab <> :roleTab) and e.position in :positions" +
 					" order by e.position desc, e.hired_date");
+			query.setParameterList("positions", new Object[]{"Manager", "Front", "Cook"});
 		}
+		query.setParameter("roleTab", "store-ownr");
 		query.setParameter("storeId", storeId);
 		return query.list();
 	}

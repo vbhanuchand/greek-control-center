@@ -225,3 +225,12 @@ select * from employee where username='owner';
 select * from employee_role where employee_id=6;
 desc employee_role;
 select * from store;
+
+/*Insert / Update employee_role*/
+select * from employee_role;
+update employee_role set role_tab='store-ownr' where employee_id = 6;
+insert into employee_role(employee_id, store_id, active, role_tab, updated_by)
+values (6, 5, 'Y', 'store-ownr', 0)
+
+
+
