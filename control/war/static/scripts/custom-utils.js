@@ -570,7 +570,13 @@ function applySecurityRoles(authoritiesData){
 	var registry = require('dijit/registry');
 	var domConstruct = require('dojo/dom-construct');
 	
+	var role = authoritiesData.roles;
 	var stores = authoritiesData.stores;
+	
+	if(role == 'ROLE_OWNER')
+		stores = 'store-1, store-2, store-3, store-4, store-5';
+	
+	
 	var storeToSelect = 0;
 	if(stores.indexOf('store-1') < 0)
 		domConstruct.destroy("locationTabletr1");
@@ -596,13 +602,12 @@ function applySecurityRoles(authoritiesData){
 	else 
 		storeToSelect = storeToSelect > 0 ? storeToSelect : 5;
 	
-	var role = authoritiesData.roles;
+	
 	switch(role){
 		case 'ROLE_OWNER':
 			checkSelectedPane('locationTabletr'+storeToSelect, 'rightAccordion', storeToSelect);
 			break;
-		case 'ROLE_EMP':
-			
+		case 'ROLE_MGR':
 			//Remove the Manage Tab Starts here
 			registry.byId('tabContainer').removeChild(registry.byId('managePane'));
 			registry.byId('managePane').destroy();
@@ -645,7 +650,7 @@ function applySecurityRoles(authoritiesData){
 			
 			checkSelectedPane('locationTabletr'+storeToSelect, 'rightAccordion', storeToSelect);
 			break;
-		case 'ROLE_EMP1':
+		case 'ROLE_EMP':
 			break;
 	}
 	

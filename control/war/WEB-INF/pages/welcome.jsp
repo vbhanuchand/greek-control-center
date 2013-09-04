@@ -145,7 +145,7 @@
 					var promise = ajaxRequest.post('/service/j_spring_security_check', {data: domForm.toObject('loginForm'), sync: true});
 					promise.response.then(function(response){
 						var message = dojo.fromJson(response.data);
-						if(message.success){
+						if(message.success && (message.roles != 'ROLE_EMP')){
 							displayMessage("loginTrId", "loginMessage", "Login to the Portal is successful.", "success");
 							
 							applySecurityRoles(message);
@@ -165,7 +165,7 @@
 							storeLayout.postCreate();
 							empLayout.postCreate();
 							accLayout.postCreate();
-						}else {
+						} else {
 							registry.byId('loginButton').set('disabled', false);
 							displayMessage("loginTrId", "loginMessage", "Invalid Username and Password. Please check.. ", "error");
 							return false; 
@@ -314,7 +314,7 @@
 						</div>
 					</div> -->
 					<div data-dojo-type="dijit/TitlePane" id="storeInfoTitlePane"
-							data-dojo-props="title:'Store Information', style:'margin-top:2px;width:100%;vertical-align:top;', open:true">
+							data-dojo-props="title:'Store Information', style:'margin-top:2px;width:100%;vertical-align:top;', open: true">
 						<form data-dojo-type="dijit/form/Form" data-dojo-id="storeInfoForm" id="storeInfoForm">	
 							<div data-dojo-type="dojox/layout/TableContainer" data-dojo-props="showLabels:true, orientation:'vert', spacing:2, cols:3, 
 								customClass:'leaseInfo-labelsAndValues', style:'width:100%;'" id="storeInfoTable">
@@ -415,7 +415,7 @@
 					</div>
 					
 					<div id="storeInfoTabContainer" data-dojo-id="storeInfoTabContainer" data-dojo-type="dijit/layout/TabContainer" 
-						data-dojo-props="tabPosition: 'top'" style="margin:2px;font-style: italic; width:100%;height:56%; vertical-align: bottom;">
+						data-dojo-props="tabPosition: 'top'" style="margin:2px;font-style: italic; width:100%;height:52%; vertical-align: bottom;">
 						<div data-dojo-type="dijit/layout/ContentPane" id="storeMaintenance"
 								data-dojo-props="title:'Maintenance', style:'margin-top:1px;height:99%;width:100%;', selected:false">
 							<div id="storeMaintenanceGrid" align="center"
@@ -624,7 +624,7 @@
 					</div>
 				</div>
 				<div id="employeePane" data-dojo-type="dijit/layout/ContentPane" title="Employees" data-dojo-props="selected:false" style="width: 100%; height: 100%">
-					<div id="employeesGridContentPane" data-dojo-type="dijit/layout/ContentPane" style="margin:2px;width:99%;height:40%; vertical-align:top;">
+					<div id="employeesGridContentPane" data-dojo-type="dijit/layout/ContentPane" style="margin:2px;width:99%;height:50%; vertical-align:top;">
 						<div id="employeesGrid" align="center"
 							style="margin:2px;width:99%;height:99%; vertical-align:top;">
 						</div>
@@ -633,7 +633,7 @@
 									data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'employeesGridContentPane', color:'white'">
 					</div>
 					<div id="employeeInfoTabContainer" data-dojo-id="employeeInfoTabContainer" data-dojo-type="dijit/layout/TabContainer" 
-						data-dojo-props="tabPosition: 'top'" style="margin:2px;font-style: italic; width:100%;height:59%;vertical-align:bottom;">
+						data-dojo-props="tabPosition: 'top'" style="margin:2px;font-style: italic; width:100%;height:49%;vertical-align:bottom;">
 						<div id="empSalaryDetails" data-dojo-type="dijit/layout/ContentPane"
 								data-dojo-props="title:'Salary Particulars', style:'margin-top:1px;height:99%;width:100%;vertical-align:top;'">
 							<div id="employeeSalaryDetailsGrid" align="center"
@@ -893,9 +893,13 @@
 										&nbsp;&nbsp;
 									<img src='resources/images/add-icon.png' onclick='javascript: addItemToStock();'/>
 								</span>
-								<span style="position: relative; left: 30%; color: orange; font-weight: bolder; font-size: 100%;" id="inventoryTabTitle">
+								<span style="position: relative; left: 10%; color: whitesmoke; background-color: #2E2EFE; border: 1px solid black;">&nbsp;NICHOLAS&nbsp;</span>&nbsp;&nbsp;
+								<span style="position: relative; left: 11%; color: whitesmoke; background-color: #8904B1; border: 1px solid black;">&nbsp;US FOODS&nbsp;</span>&nbsp;&nbsp;
+								<span style="position: relative; left: 14%; color: orange; font-weight: bolder; font-size: 100%;" id="inventoryTabTitle">
 									Invoices / Stock
-								</span>
+								</span>&nbsp;&nbsp;
+								<span style="position: relative; left: 17%; color: whitesmoke; background-color: #B40431; border: 1px solid black;">&nbsp;SAMS CLUB&nbsp;</span>&nbsp;&nbsp;
+								<span style="position: relative; left: 18%; color: whitesmoke; background-color: #21610B; border: 1px solid black;">&nbsp;GS KITCHEN&nbsp;</span>&nbsp;&nbsp;
 								<span style="float: right" id="createInvoiceLink">
 									<a href='javascript:createInvoice();'>Create Invoice</a>
 								</span>

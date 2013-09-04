@@ -483,6 +483,15 @@ require(["dojo/parser", "dijit/dijit", "dojo/dom-style", "dojo/date", "dojo/date
 				else empLayout.resetMgrForm();
 			});
 			
+			dojo.connect(registry.byId('storeInfoTitlePane'),"toggle",function(){
+				console.log('Open Value is ', this.open);
+				if(!this.open){
+					dom.byId('storeInfoTabContainer').style.height = '94%';
+				} else{
+					dom.byId('storeInfoTabContainer').style.height = '52%';
+				}
+				registry.byId('storeInfoTabContainer').resize();
+			});
 			
 	  });
 });

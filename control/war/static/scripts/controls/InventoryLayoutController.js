@@ -307,6 +307,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 		dijit.byId('inventoryStockItem').startup();
 		registry.byId('inventoryItemDialogForm').reset();
 		inventoryItemDialog.show();
+		domStyle.set(dom.byId('inventoryItemDialog'), {top:'40px', position: "absolute"});
 	},
 	resetScreen = function(){
 		dom.byId('inventoryTabTitle').innerHTML = 'Invoices / Stock';
