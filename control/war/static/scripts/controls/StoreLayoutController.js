@@ -11,7 +11,7 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 				BorderContainer, TabContainer, Calendar, TitlePane, FilteringSelect, Form, ValidationTextBox, scrollPane,
 				Dialog, DropDownButton, Button, DataGrid, EnhancedGrid, Memory, ObjectStore, ajaxRequest, dojoFunctional, dojoCheckBox, dojoxFormManager, randomNumber, itemFileWriteStore, laborLayout) {
 			
-			var storeInfoTable = null, storeAlarmCodesGrid = null, storeKeysGrid = null, storeMaintenanceGrid = null, storeLaborGrid = null,
+			var storeInfoTable = null, storeAlarmCodesGrid = null, storeKeysGrid = null, storeMaintenanceGrid = null, storeLaborGrid = null, storeHealthInspectionGrid=null,
 			randomGen = new randomNumber(), loginQuery = djConfig.loginRequest || {}, blankArray=[],
 			
 			startup = function() {
@@ -19,6 +19,7 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 				updateStoreKeysGrid(blankArray);
 				updateStoreMaintenanceGrid(blankArray);
 				updateStoreLaborGrid(blankArray);
+				updateStoreHealthInspectionGrid(blankArray);
 				attachGridEvents('storeAlarmCodesGrid');
 				attachGridEvents('storeKeysGrid');
 				attachGridEvents('storeMaintenanceGrid');
@@ -61,6 +62,9 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 		    			break;
 		    		case 'storeLabor': 
 		    			fetchStoreLaborData(registry.byId('hiddenStoreId').get('value'));
+		    			break;
+		    		case 'storeHealthInspection': 
+		    			fetchStoreHealthInspectionData(registry.byId('hiddenStoreId').get('value'));
 		    			break;
 		    	}
 		    	checkTitles(child);
@@ -181,7 +185,10 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 		    showScheduleLink = function(value){
 		    	//return "<div class='tab-heading'><div class='hold'><span>Schedule</span></div></div>";
 		    	return '<span style="text-align: center;"><a href="#">View Schedule</a></span>';
-		    }
+		    },
+		    showEditLink = function(value, rowIndex){
+		    	return '<span style="text-align: center;"><a href="javascript: editRecordByDialog(' + "'healthInspection', " + value + "," + rowIndex + ');">Edit</a></span>';
+		    },
 		    fetchStoreData = function(storeId) {
 		    	registry.byId('storeInfoTitlePaneStandBy').show();
 		    	ajaxRequest.get("/service/store/storeId=" + storeId,{
@@ -250,6 +257,18 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 		    		registry.byId('storeLaborGridStandBy').hide();
 		    	});
 		    },
+		    fetchStoreHealthInspectionData = function(storeId) {
+		    	registry.byId('storeHealthInspectionGridStandBy').show();
+		    	ajaxRequest.get("/service/store/" + storeId + "/health",{
+		    		handleAs: 'json'
+		    	}).then(function(healthInspectionDetailsResponse){
+		    		updateStoreHealthInspectionGrid(healthInspectionDetailsResponse.models);
+	    			registry.byId('storeHealthInspectionGridStandBy').hide();
+		    	}, function(error){
+		    		console.log('Error occurred while fetching Health Inspection data ' + error);
+		    		registry.byId('storeHealthInspectionGridStandBy').hide();
+		    	});
+		    },
 		    fetchStoreLeaseBlobs = function(storeId){
 		    	registry.byId('storeInfoLeaseDocumentsStandBy').show();
 		    	ajaxRequest.get("/service/blobs/store-lease/" + storeId,{
@@ -261,8 +280,12 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 		    		var innerHTMLText = '';
 		    		baseArray.forEach(storeBlobsResponse.models, function(blob){
 		    			fragment = document.createDocumentFragment();
-		    			innerHTMLText = '&nbsp;&nbsp;&nbsp;<img src="resources/images/icon-pdf.png"/> &nbsp;' + ((blob.fileName.length > 20) ? (blob.fileName.substr(0, 20)+'...') : blob.fileName) + 
-		    					'&nbsp;<a target="_new" href="/service/getBlob/' + blob.blobKey + '">Download</a>';
+		    			innerHTMLText = '&nbsp;&nbsp;&nbsp;<img src="resources/images/icon-pdf.png"/> &nbsp;'
+		    				+ '<a target="_new" href="/service/getBlob/' + blob.blobKey + '">' 
+		    				//+ ((blob.fileName.length > 20) ? (blob.fileName.substr(0, 20)+'...') : blob.fileName) 
+		    				+  blob.fileName
+		    				+ '</a>';
+		    				//+ '&nbsp;<a target="_new" href="/service/getBlob/' + blob.blobKey + '">View/Download</a>';
 		    			domConstruct.create("li", {
 	                        innerHTML: innerHTMLText
 	                    }, fragment);
@@ -551,6 +574,47 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 					console.log('Start the Store Labor Grid !!');
 					storeLaborGrid.startup();
 				} else dijit.byId('storeLaborGrid').setStore(gridDataStore);
+		    },
+		    updateStoreHealthInspectionGrid = function(inspectionData){
+		    	var tempStore = {
+		    			"identifier" : "id",
+		    			"items" : []
+		    	};
+		    	tempStore.items = inspectionData;
+		    	var gridDataStore = new itemFileWriteStore({data: tempStore});
+				if(!dijit.byId('storeHealthInspectionGrid')){
+					storeHealthInspectionGrid = new EnhancedGrid({
+											store: gridDataStore,
+											query: { id: "*" },
+											structure: [{ name: "Edit", field: "id", editable: false, width: "5%", noresize: true, formatter: showEditLink, styles: 'text-align: center;'}, 
+											            { name: "Date", field: "purposeDate", editable: false, width: "10%", noresize: true, styles: 'text-align: center;'},
+											            { name: "Document", fields: ["fileName", "blobKey"], editable: false, width: "35%", noresize: true, styles: 'padding-left: 5px;'},
+											            { name: "Notes", field: "purposeNotes", editable: false, width: "40%", noresize: true, styles: 'padding-left: 5px'}],
+											singleClickEdit: false,
+											editable: false,
+											selectable: true,
+											rowsPerPage: 10,
+											loadingMessage: 'loadingMessage: Loading data from server..',
+									        errorMessage:   'Oops we could not retrive the requested data!',
+									        noDataMessage:	"<span class=\"dojoxGridNoData\"><font color='grey'><b>No Data to Display !!!<b></font></span>",
+									        onFetchError: function(error,ioargs){console.log('Error ocured: '+error+' ioargs: '+ioargs); return true;},
+									        selectionMode: "none",
+											plugins: {
+												nestedSorting: false,
+								                pagination: {
+													pageSizes: ["10", "50", "100", "All"],
+													description: true,
+													sizeSwitch: false,
+													pageStepper: true,
+													gotoButton: false,
+													maxPageStep: 4,
+													position: "bottom",
+													defaultPage: 1,
+						                            defaultPageSize: 10
+												}
+								        }}, "storeHealthInspectionGrid");
+					storeHealthInspectionGrid.startup();
+				} else dijit.byId('storeHealthInspectionGrid').setStore(gridDataStore);
 		    };
 		    
 		    return {
@@ -612,6 +676,9 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 						}
 						refreshSelectedPane();
 					});
+		        },
+		        refreshPane: function(){
+		        	refreshSelectedPane();
 		        },
 		        fetchStoreLeaseBlobs: function(storeId){
 		        	fetchStoreLeaseBlobs(storeId);
