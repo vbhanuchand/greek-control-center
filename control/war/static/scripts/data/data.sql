@@ -31,10 +31,12 @@ alter table employee add personalPhone VARCHAR(20) after phone;
 alter table employee add emergencyContact VARCHAR(30) after personalPhone;
 alter table employee add address VARCHAR(40) after emergencyContact;
 
-alter table blobs modify tab ENUM('store-lease', 'maintenance','photo') DEFAULT 'store-lease';
+alter table blobs modify tab ENUM('store-lease', 'photo', 'mgrContract', 'healthInspection', 'employee-docs') DEFAULT 'store-lease';
 commit;
 select * from blobs;
 select * from store_date;
+select * from upload_docs_notes;
+select * from blobs;
 commit;
 update store_date set notes = 'Sample Notes for this date';
 alter table store_date add notes VARCHAR(100) after imp_date;
@@ -232,5 +234,31 @@ update employee_role set role_tab='store-ownr' where employee_id = 6;
 insert into employee_role(employee_id, store_id, active, role_tab, updated_by)
 values (6, 5, 'Y', 'store-ownr', 0)
 
+create table upload_docs_notes(
+id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+purpose ENUM('healthInspection','employee-docs'),
+purpose_date DATE,
+purpose_notes VARCHAR(100),
+updated_by INT UNSIGNED NOT NULL,
+updated_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY(id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+commit;
 
+select * from blobs;
+
+create table upload_docs_notes(
+id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+linked_id INT UNSIGNED NOT NULL,
+purpose ENUM('healthInspection','employee-docs'),
+purpose_date DATE,
+purpose_notes VARCHAR(100),
+updated_by INT UNSIGNED NOT NULL,
+updated_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY(id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+drop table upload_docs_notes;
+
+select uploadnote0_.id as col_0_0_, uploadnote0_.purpose_date as col_1_0_, uploadnote0_.purpose_notes as col_2_0_, blobs1_.fileName as col_3_0_, blobs1_.blobKey as col_4_0_ from upload_docs_notes uploadnote0_ cross join blobs blobs1_ where blobs1_.linked_to_id=uploadnote0_.id and uploadnote0_.linked_id=1 and uploadnote0_.purpose='healthInspection' and blobs1_.tab='healthInspection'
