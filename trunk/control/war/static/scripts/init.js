@@ -278,6 +278,50 @@ require(["dojo/parser", "dijit/dijit", "dojo/dom-style", "dojo/date", "dojo/date
 			//Mgr Contract File Upload Ends
 			
 			
+			//Health Inspection File Upload
+			var fileUploadCompletehealthInspection = function(dataArray){
+				var progressMsgsNode = 'healthInspectionWidgetsProgressMsgs';
+				var widgetNode = 'healthInspectionWidgetsDiv';
+				var docUploadedNode = 'healthInspectionUploaded';
+					if(dataArray){
+						if(dataArray.status && dataArray.status == "success"){
+							dom.byId(progressMsgsNode).innerHTML = 'Upload Successful..';
+							otherFx.wipeOut({node: dom.byId(widgetNode), duration: 1000, delay: 250, 
+								onEnd: function(node){
+									domStyle.set(this.node, {display: "none"});
+								}
+							}).play();
+							var uploadFilesNode = dom.byId(docUploadedNode);
+							domConstruct.empty(uploadFilesNode);
+							var fragment = document.createDocumentFragment();
+							var innerHTMLText = '&nbsp;&nbsp;<img src="resources/images/icon-pdf.png"/>&nbsp;' + dataArray.fileName ;
+							domConstruct.create("li", {
+		                        innerHTML: innerHTMLText
+		                    }, fragment);
+							domConstruct.place(fragment, uploadFilesNode);
+							registry.byId('hiddenUploadedDocId').set('value', dataArray['blob-key']);
+						}else{
+							console.log('error',data,ioArgs);
+						}
+					}else{
+						console.log('ugh?',arguments);
+					}
+				}, fileUploadStarthealthInspection = function(dataArray){
+					var progressMsgsNode = 'healthInspectionWidgetsProgressMsgs';
+					this.set('url', window.blobStoreURL);
+					dom.byId(progressMsgsNode).innerHTML = 'Uploading ...';
+					registry.byId('hiddenUploadedDocId').set('value', '0');
+				};
+				
+			var myUploaderhealthInspection = new dojox.form.Uploader({ name: "uploadedFile", multiple:false, showProgress:true, label: "Select File",
+					uploadOnSelect:true, url: blobStoreURL, onBegin: fileUploadStarthealthInspection, onComplete: fileUploadCompletehealthInspection});
+			dojo.byId("healthInspectionWidgets").appendChild(myUploaderhealthInspection.domNode);
+			//Health Inspection File Upload Ends
+			
+			
+			
+			
+			
 			var empSelectWidget = new formSelect({style: {width: '75%'}}, dom.byId('itemSummaryEditor'));
 			empSelectWidget.startup();
 			empSelectWidget.on('change', function(){

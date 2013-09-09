@@ -171,6 +171,11 @@ function showFileUploadDialog(domNode){
 			fileUploadWidget = 'mgrContractWidgetsDiv';
 			progressMsg = 'mgrContractWidgetsProgressMsgs';
 			break;
+		case 'healthInspection':
+			standByWidget = 'healthInspectionStandBy';
+			fileUploadWidget = 'healthInspectionWidgetsDiv';
+			progressMsg = 'healthInspectionWidgetsProgressMsgs';
+			break;
 	}
 	
 	registry.byId(standByWidget).show();
@@ -208,6 +213,9 @@ function hideFileUploadDialog(domNode){
 			break;
 		case 'mgrContract':
 			fileUploadWidget = 'mgrContractWidgetsDiv';
+			break;
+		case 'healthInspection':
+			fileUploadWidget = 'healthInspectionWidgetsDiv';
 			break;
 	}
 	otherFx.wipeOut({node: dom.byId(fileUploadWidget), duration: 1000, delay: 250, 
@@ -330,6 +338,14 @@ function addStoreKeyTabRecord(evt) {
 }
 
 function addStoreMaintenanceTabRecord(evt) {
+	try{if (!evt) var evt = window.event;
+	evt.preventDefault();
+	evt.stopPropagation();}catch(e){console.log('Error is --> ' + e);}
+	var storeLayout = require("controls/StoreLayoutController");
+	storeLayout.addRowInGrid('storeMaintenanceGrid');
+}
+
+function addStoreHealthInspectionRecord(evt){
 	try{if (!evt) var evt = window.event;
 	evt.preventDefault();
 	evt.stopPropagation();}catch(e){console.log('Error is --> ' + e);}
@@ -474,7 +490,7 @@ function saveImpDate(){
 		handleAs: 'json'
 	}).then(function(datesResponse){
 		if(datesResponse.success){
-			//registry.byId(standByWidget).hide();
+			hideImportantDate();
 			storeLayout.refreshStoreDates(registry.byId('hiddenStoreId').get('value'));
 		}
 	}, function(error){
@@ -661,4 +677,30 @@ function applySecurityRoles(authoritiesData){
 		//dijit.byId("myTabContainer").removeChild(dijit.byId("myContentPane"));
 		//dijit.byId("myContentPane").destroy();
 	/*For Removing a child of Tab Container*/
+}
+
+
+function addRecordDialog(dialogName){
+	var domStyle = require('dojo/dom-style');
+	var dom = require('dojo/dom');
+	var registry = require('dijit/registry');
+	switch(dialogName){
+	case 'healthInspection':
+		if(domStyle.getComputedStyle(dom.byId('healthInspectionWidgetsDiv')).display != 'none')
+			hideFileUploadDialog('healthInspection');
+		healthInspectionDialog.reset();
+		registry.byId('hiddenHealthId').set('value', 0);
+		//healthInspectionDialog.titleBar.style.display = 'none';
+		healthInspectionDialog.show();
+		domStyle.set(dom.byId('healthInspectionDialog'), {top:'40px', position: "absolute"});
+		break;
+	default:
+		break;
+	}
+}
+
+function editRecordByDialog(tab, id, rowIndex){
+	var registry = require('dijit/registry');
+	console.log('Edit '+ tab + ' Id ' + id + ' rowIndex ', rowIndex);
+	registry.byId('hiddenHealthId').set('value', id);
 }
