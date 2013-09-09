@@ -12,6 +12,7 @@ import com.services.core.data.model.store.StoreInvoiceDetails;
 import com.services.core.data.model.store.StoreKey;
 import com.services.core.data.model.store.StoreMaintenance;
 import com.services.core.data.model.store.StoreStock;
+import com.services.core.view.wrappers.UploadNotesWrapper;
 
 
 public interface StoreDAO {
@@ -87,4 +88,10 @@ public interface StoreDAO {
 	
 	boolean updateStoreStock(int id, int storeId, int itemId, int itemCategory, int itemStock, int itemOrder, double itemPricePerUnit, double itemGSPercent, int updatedBy);
 	
+	@SuppressWarnings("rawtypes")
+	List getStoreHealthInspectionDetails(int storeId, String tab); 
+	
+	int insertHealthInspectionDetails(int storeId, String purpose, Date purposeDate, String purposeNotes, int updatedBy, String blobKey, String fileName);
+	
+	boolean updateHealthInspectionDetails(int id, int storeId, String purpose, Date purposeDate, String purposeNotes, int updatedBy, String blobKey, String fileName);
 }

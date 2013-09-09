@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.services.core.data.dao.StoreDAO;
+import com.services.core.data.model.Blobs;
 import com.services.core.data.model.store.Store;
 import com.services.core.data.model.store.StoreAccount;
 import com.services.core.data.model.store.StoreAlarm;
@@ -22,6 +23,8 @@ import com.services.core.data.model.store.StoreInvoiceDetails;
 import com.services.core.data.model.store.StoreKey;
 import com.services.core.data.model.store.StoreMaintenance;
 import com.services.core.data.model.store.StoreStock;
+import com.services.core.data.model.store.UploadNotes;
+import com.services.core.view.wrappers.UploadNotesWrapper;
 
 @Service
 @SuppressWarnings("unchecked")
@@ -371,5 +374,48 @@ public class StoreDAOImpl implements StoreDAO {
 		query.setParameter("updatedBy", updatedBy);
 		int result = query.executeUpdate();
 		return (result == 1);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List getStoreHealthInspectionDetails(int storeId, String tab){
+		String hql = "select un.id as id, un.purposeDate as purposeDate, un.purposeNotes as purposeNotes, b.fileName as fileName, b.blobKey as blobKey " +
+				"from UploadNotes un, Blobs b where b.linkedId = un.id and un.linkedId = :storeId and un.purpose = :tab and b.tab = :blobTab";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setParameter("storeId", storeId);
+		query.setParameter("tab", tab);
+		query.setParameter("blobTab", tab);
+		query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+		return query.list();
+	}
+	
+	@Override
+	public int insertHealthInspectionDetails(int storeId, String purpose, Date purposeDate, String purposeNotes, int updatedBy, String blobKey, String fileName){
+		UploadNotes notes = new UploadNotes();
+		notes.setLinkedId(storeId);
+		notes.setPurpose(purpose);
+		notes.setPurposeDate(purposeDate);
+		notes.setPurposeNotes(purposeNotes);
+		notes.setUpdatedBy(updatedBy);
+		sessionFactory.getCurrentSession().save(notes);
+		if(fileName == null || fileName.equalsIgnoreCase("&#/#&")){
+			fileName = "&#/#&";
+			blobKey = "&#/#&";
+		}
+		Blobs blob = new Blobs();
+		blob.setActive(true);
+		blob.setBlobKey(blobKey);
+		blob.setFileName(fileName);
+		blob.setLinkedId(notes.getId());
+		blob.setTab(purpose);
+		blob.setUpdatedBy(updatedBy);
+		sessionFactory.getCurrentSession().save(blob);
+		return notes.getId();
+	}
+	
+	@Override
+	public boolean updateHealthInspectionDetails(int id, int storeId, String purpose, Date purposeDate, String purposeNotes, int updatedBy, String blobKey, String fileName){
+		String hql = "update UploadNotes un set purposeDate=:purposeDate, purposeNotes = :purposeNotes where un.id=:id"; 
+		return true;
 	}
 }

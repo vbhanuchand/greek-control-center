@@ -23,6 +23,7 @@ import com.services.core.view.wrappers.StoreLaborDetailsWrapper;
 import com.services.core.view.wrappers.StoreMaintenanceWrapper;
 import com.services.core.view.wrappers.StoreStockWrapper;
 import com.services.core.view.wrappers.StoreWrapper;
+import com.services.core.view.wrappers.UploadNotesWrapper;
 
 public interface DataManager {
 
@@ -151,5 +152,13 @@ public interface DataManager {
 	int insertStoreStock(StoreStockWrapper storeStock);
 	
 	boolean updateStoreStock(StoreStockWrapper storeStock);
+	
+	
+	
+	List<UploadNotesWrapper> getHealthInspectionDetails(int linkedId, String tab);
+	
+	int insertHealthInspectionDetails(UploadNotesWrapper notesWrapper);
+	
+	boolean updateHealthInspectionDetails(UploadNotesWrapper notesWrapper);
 	
 }
