@@ -1092,8 +1092,12 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 			    		var innerHTMLText = '';
 			    		baseArray.forEach(blobsResponse.models, function(blob){
 			    			fragment = document.createDocumentFragment();
-			    			innerHTMLText = '&nbsp;&nbsp;&nbsp;<img src="resources/images/icon-pdf.png"/> &nbsp;' + ((blob.fileName.length > 20) ? (blob.fileName.substr(0, 20)+'...') : blob.fileName) + 
-			    					'&nbsp;<a target="_new" href="/service/getBlob/' + blob.blobKey + '">Download</a>';
+			    			innerHTMLText = '&nbsp;&nbsp;&nbsp;<img src="resources/images/icon-pdf.png"/> &nbsp;'
+			    				+ '<a target="_new" href="/service/getBlob/' + blob.blobKey + '">' 
+			    				//+ ((blob.fileName.length > 20) ? (blob.fileName.substr(0, 20)+'...') : blob.fileName) 
+			    				+  blob.fileName 
+			    				+ '</a>';
+			    				//+ '&nbsp;<a target="_new" href="/service/getBlob/' + blob.blobKey + '">View/Download</a>';
 			    			domConstruct.create("li", {
 		                        innerHTML: innerHTMLText
 		                    }, fragment);

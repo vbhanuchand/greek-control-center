@@ -88,8 +88,8 @@ define(["dijit/dijit", "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/fx", "do
 		calStart = calStart.split('/');
 		calEnd = calEnd.split('/');
 		
-		calStart = new Date(calStart[2], calStart[1]-1, calStart[0]);
-		calEnd =  new Date(calEnd[2], calEnd[1]-1, calEnd[0]);
+		calStart = new Date(calStart[2], calStart[0]-1, calStart[1]);
+		calEnd =  new Date(calEnd[2], calEnd[0]-1, calEnd[1]);
 		
 		registry.byId('labor-calendar').set('store', new Observable(new Memory({data: calData})));
 		registry.byId('labor-calendar').set('date', calStart);
