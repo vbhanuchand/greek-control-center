@@ -60,3 +60,58 @@
 		</form>
 	</div>
 </div>
+
+
+
+<!-- Health Inspection Dialog Starts here -->
+<div class="dijitHidden">
+	<div data-dojo-type="dijit/Dialog"
+		data-dojo-props="title:'Add Info:'"
+		draggable="true" data-dojo-id="healthInspectionDialog"
+		id="healthInspectionDialog">
+		<fieldset style="border:1px dotted grey;">
+			<legend style="border:1px solid green; text-align: right; font-size:90%; color:green; ">Health Inspection Information:</legend>
+			<table class="storeInfoTable">
+				<tr>
+					<td width="30%"><b>Date:</b></td>
+					<td width="70%">
+						<input data-dojo-type="dijit/form/DateTextBox" type="text" name="healthInspectionDate" id="healthInspectionDate"/>
+					</td>
+				</tr>
+				<tr>
+					<td width="30%"><b>Document:</b></td>
+					<td width="70%">
+						<div id="healthInspection" data-dojo-type="dijit/layout/ContentPane" style="margin-top: 2px;font-weight: normal;width: 100%" align="left">
+							<div id="healthInspectionWidgetsDiv" style="display: none;">
+								<span id="healthInspectionWidgets"></span>
+								<span id="healthInspectionWidgetsProgressMsgs"></span>
+								<a href="javascript: hideFileUploadDialog('healthInspection');">Hide</a>
+							</div>
+							<div id="healthInspectionUpload">
+							  	<img align='top' src='resources/images/file-upload.png'/>
+							  	<a href="javascript: showFileUploadDialog('healthInspection');">Upload Contract</a>
+							</div>
+							<div>
+								<ul id="healthInspectionUploaded"></ul>
+							  	<ol id="healthInspectionExisting"></ol>
+							</div>
+							<div id="healthInspectionStandBy" data-dojo-id="healthInspectionStandBy" 
+								data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'healthInspection', color:'lightgrey'">
+							</div>
+						</div>						
+					</td>
+				</tr>
+				<tr>
+					<td width="30%"><b>Notes:</b></td>
+					<td width="70%">
+						<span id="healthInspectionNotes" data-dojo-type="dijit/InlineEditBox" 
+							data-dojo-props="editor: dijit.form.Textarea, rows:2, cols:20, maxLength: 100" 
+							widgetid="healthInspectionNotes" width="99%">
+						</span>
+					</td>
+				</tr>
+			</table>
+		</fieldset>
+	</div>
+</div>
+<!-- Health Inspection Dialog Ends here -->
