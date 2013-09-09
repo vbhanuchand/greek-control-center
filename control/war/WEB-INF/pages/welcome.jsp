@@ -37,10 +37,7 @@
 				descending : true
 			} ]
 		},
-		packages : [{name : "controls", location : location.pathname.replace(/\/[^/]+$/, '') + "/resources/scripts/controls", main : "layoutController"},
-		             {name: "dgrid", location: location.pathname.replace(/\/[^/]+$/, '') + "/resources/scripts/dgrid"},
-		             {name: "put-selector", location: location.pathname.replace(/\/[^/]+$/, '') + "/resources/scripts/put-selector"},
-		             {name: "xstyle", location: location.pathname.replace(/\/[^/]+$/, '') + "/resources/scripts/xstyle"}]
+		packages : [{name : "controls", location : location.pathname.replace(/\/[^/]+$/, '') + "/resources/scripts/controls", main : "StoreLayoutController"}]
 	};
 </script>
 
@@ -76,10 +73,10 @@
 	href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/form/resources/FileInput.css" />
 <!-- <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/widget/Dialog/Dialog.css" /> -->
 <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/layout/resources/ScrollPane.css" />
-<link rel="stylesheet" href="resources/styles/styles2.css" />
+<link rel="stylesheet" href="resources/styles/styles.css" />
 <script
 	data-dojo-config="has:{'dojo-firebug': true, 'dojo-debug-messages': true}, cacheBust: true, parseOnLoad:false, isDebug: true,
-	waitSeconds: 20, locale: location.search.match(/locale=([\w\-]+)/) ? RegExp.$1 : 'en-us'"
+	waitSeconds: 5, locale: location.search.match(/locale=([\w\-]+)/) ? RegExp.$1 : 'en-us'"
 	src="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/dojo.js">
 	
 </script>
@@ -96,6 +93,7 @@
 	<div id="loadingOverlay" class="loadingPanel" align="center"><div align="left"
 		style="background: #DBEB8F; padding: 2px">Loading...</div></div>
 	<div class="dijitHidden" data-dojo-type="dijit/form/TextBox" data-dojo-id="hiddenStoreId" id="hiddenStoreId"></div>
+	<div class="dijitHidden" data-dojo-type="dijit/form/TextBox" data-dojo-id="hiddenUploadedDocId" id="hiddenUploadedDocId"></div>
 	<div class="dijitHidden" data-dojo-type="dijit/form/TextBox" data-dojo-id="hiddenSelectedYear" id="hiddenSelectedYear" value="2013"></div>
 	<div class="dijitHidden" data-dojo-type="dijit/form/DateTextBox" data-dojo-id="hiddenItemDate" id="hiddenItemDate" value="now"></div>
 	<!-- <div id="messagesTooltip" data-dojo-id="messagesTooltip" data-dojo-type="dijit/TooltipDialog"></div> -->
@@ -422,6 +420,17 @@
 							style="height:99%;margin:2px; width:99%;"></div>
 							<div id="storeMaintenanceGridStandBy" data-dojo-id="storeMaintenanceGridStandBy" 
 											data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'storeMaintenanceGrid', color:'white'">
+							</div>
+						</div>
+						<div data-dojo-type="dijit/layout/ContentPane" id="storeHealthInspection"
+								data-dojo-props="title:'Health Inspection', style:'margin-top:1px;height:99%;width:100%;', selected:false">
+							<div style="width:99%; text-align: right; margin-right: 10px; vertical-align: top; padding: 3px;"><a href="javascript: addRecordDialog('healthInspection');">Add</a></div>
+							<div data-dojo-type="dijit/layout/ContentPane" style="height:93%; width:100%;">
+								<div id="storeHealthInspectionGrid" align="center"
+									style="height:100%; width:100%;"></div>
+								<div id="storeHealthInspectionGridStandBy" data-dojo-id="storeHealthInspectionGridStandBy" 
+										data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'storeHealthInspectionGrid', color:'white'">
+								</div>
 							</div>
 						</div>
 						<div data-dojo-type="dijit/layout/ContentPane" id="storeAlarms"
@@ -943,6 +952,7 @@
 	</div>
 
 <!-- Dialogs are defined here !!! -->
+<!-- Inventory Dialog Starts here  -->
 <div class="dijitHidden">
 	<div data-dojo-type="dijit/Dialog"
 		data-dojo-props="title:'Add/ Update Stock Item', loadingMessage:'Loading ...', style: 'font-size: 100%;'"
@@ -1079,5 +1089,135 @@
 		</div>
 	</div>
 </div>
+
+<!-- Inventory Dialog Ends here -->
+
+<!-- Health Inspection Dialog Starts here -->
+<div class="dijitHidden">
+	<div data-dojo-type="dijit/Dialog" data-dojo-props="title:'Health Inspection Details'" draggable="true" data-dojo-id="healthInspectionDialog" id="healthInspectionDialog">
+		<fieldset style="border:1px dotted ThreeDDarkShadow;">
+			<legend style="display: block; background: none; margin-left: 10px; padding: 0px 3px 0px 3px; border:1px dotted ThreeDDarkShadow; text-align: left; font-size:90%;"><b>Add/Modify Details:</b></legend>
+			<form data-dojo-type="dijit/form/Form" data-dojo-id="healthInspectionForm" id="healthInspectionForm">
+				<table class="addRecordTable" style="width: 98%; height: 90%; padding: 10px;">
+					<tr>
+						<td width="25%"><b>Date:</b></td>
+						<td width="75%">
+							<input required="true" data-dojo-type="dijit/form/DateTextBox" type="text" name="healthInspectionDate" id="healthInspectionDate" style="width: 150px;"/>
+						</td>
+					</tr>
+					<tr>
+						<td width="25%"><b>Document:</b></td>
+						<td width="75%">
+							<div id="healthInspection" data-dojo-type="dijit/layout/ContentPane" style="margin-top: 2px;font-weight: normal;width: 100%" align="left">
+								<div id="healthInspectionWidgetsDiv" style="display: none;">
+									<span id="healthInspectionWidgets"></span>
+									<span id="healthInspectionWidgetsProgressMsgs"></span>
+									<a href="javascript: hideFileUploadDialog('healthInspection');">Hide</a>
+								</div>
+								<div id="healthInspectionUpload">
+								  	<img align='top' src='resources/images/file-upload.png'/>
+								  	<a href="javascript: showFileUploadDialog('healthInspection');">Upload Document</a>
+								</div>
+								<div>
+									<ul id="healthInspectionUploaded"></ul>
+								  	<ol id="healthInspectionExisting"></ol>
+								</div>
+								<div id="healthInspectionStandBy" data-dojo-id="healthInspectionStandBy" 
+									data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'healthInspection', color:'lightgrey'">
+								</div>
+							</div>						
+						</td>
+					</tr>
+					<tr>
+						<td width="25%"><b>Notes:</b></td>
+						<td width="75%">
+							<textarea id="healthInspectionNotes" name="healthInspectionNotes" data-dojo-type="dijit/form/SimpleTextarea" maxLength='100' rows="4" cols="25"></textarea>
+						</td>
+					</tr>
+					<tr>
+						<td width="25%">&nbsp;<div class="dijitHidden" data-dojo-type="dijit/form/TextBox" data-dojo-id="hiddenHealthId" id="hiddenHealthId"></div></td>
+						<td width="75%" style="text-align: right;">
+							<button data-dojo-type="dijit/form/Button" type="button">Save
+								<script type="dojo/on" data-dojo-event="click" data-dojo-args="e">
+									e.preventDefault();
+									e.stopPropagation();
+									console.log('Form Validation ', healthInspectionForm.validate(), healthInspectionForm.get('value'));
+									var registry = require('dijit/registry');
+									var storeLayout = require('controls/StoreLayoutController');
+									if(healthInspectionForm.validate()){
+										var formValues = healthInspectionForm.get('value');
+										var uploadNotesWrapper = {};
+										uploadNotesWrapper['purposeDate'] = formValues['healthInspectionDate'];
+										uploadNotesWrapper['purposeNotes'] = formValues['healthInspectionNotes'];
+										if(formValues['uploadedFile'].length > 0){
+											uploadNotesWrapper['fileName'] = formValues['uploadedFile'][0]['name'];
+											uploadNotesWrapper['blobKey'] = registry.byId('hiddenUploadedDocId').get('value');
+										} else {
+											uploadNotesWrapper['fileName'] = '&#/#&';
+											uploadNotesWrapper['blobKey'] = '&#/#&';
+										} 
+										var ajaxRequest = require("dojo/request");
+										var json = require('dojo/json');
+										var dom = require('dojo/dom');
+										var standByWidgetId = 'healthInspectionFormStandBy';
+										registry.byId(standByWidgetId).show();
+																				
+										
+										if(Number(registry.byId('hiddenHealthId').get('value')) == 0){
+											ajaxRequest.post("/service/store/" + registry.byId('hiddenStoreId').get('value') + "/health", {
+				        							headers: { "Content-Type":"application/json"}, 
+				        							handleAs: 'json', data: json.stringify(uploadNotesWrapper), timeout: 10000 
+				        						}).then(function(healthDetailsResponse){
+				        								if(healthDetailsResponse.success){
+				        									dom.byId('messages').innerHTML = 'Add Successful';
+				        									storeLayout.refreshPane();
+				        								}
+														registry.byId(standByWidgetId).hide();
+														healthInspectionDialog.hide();
+				        						}, function(error){
+				        							console.log('Error while updating --> ' + error);
+				        							dom.byId('messages').innerHTML = 'Error while Adding --> ' + error;
+				        							registry.byId(standByWidgetId).hide();
+				        						});
+										} else {
+											ajaxRequest.put("/service/store/" + registry.byId('hiddenStoreId').get('value') + "/health/" + registry.byId('hiddenHealthId').get('value'), {
+				        							headers: { "Content-Type":"application/json"}, 
+				        							handleAs: 'json', data: json.stringify(uploadNotesWrapper), timeout: 10000 
+				        						}).then(function(healthDetailsResponse){
+				        								if(healthDetailsResponse.success){
+				        									dom.byId('messages').innerHTML = 'Add Successful';
+				        									storeLayout.refreshPane();
+				        								}
+														registry.byId(standByWidgetId).hide();
+														healthInspectionDialog.hide();
+				        						}, function(error){
+				        							console.log('Error while updating --> ' + error);
+				        							dom.byId('messages').innerHTML = 'Error while Adding --> ' + error;
+				        							registry.byId(standByWidgetId).hide();
+				        						});
+										}
+								}
+								</script>
+							</button>
+							&nbsp;&nbsp;
+							<button data-dojo-type="dijit/form/Button" type="button">Close
+								<script type="dojo/on" data-dojo-event="click" data-dojo-args="e">
+									e.preventDefault();
+									e.stopPropagation();
+									healthInspectionDialog.hide();
+							</script>
+							</button>
+						</td>
+					</tr>
+				</table>
+			</form>
+			<div id="healthInspectionFormStandBy" data-dojo-id="healthInspectionFormStandBy" 
+									data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'healthInspectionForm', color:'lightgrey'">
+			</div>
+		</fieldset>
+	</div>
+</div>
+<!-- Health Inspection Dialog Ends here -->
+
 </body>
 </html>
