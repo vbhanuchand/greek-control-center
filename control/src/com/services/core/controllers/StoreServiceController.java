@@ -33,6 +33,7 @@ import com.services.core.view.wrappers.StoreLaborDetailsWrapper;
 import com.services.core.view.wrappers.StoreMaintenanceWrapper;
 import com.services.core.view.wrappers.StoreStockWrapper;
 import com.services.core.view.wrappers.StoreWrapper;
+import com.services.core.view.wrappers.UploadNotesWrapper;
 
 @Controller
 //@RequestMapping("/service")
@@ -317,6 +318,32 @@ public class StoreServiceController {
 	public SingleModelResponse<StoreInvoiceDetailsWrapper> updateInvoiceItem(@PathVariable int invoiceItemId, @RequestBody StoreInvoiceDetailsWrapper storeInvDetail)
 			throws IOException {
 		return new SingleModelResponse<StoreInvoiceDetailsWrapper>(dataService.updateStoreInvoiceDetails(storeInvDetail), null);
+	}
+	
+	@RequestMapping(value = "/service/store/{storeId}/health", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public MultipleModelResponse<UploadNotesWrapper> getHealthInspectionDetails(@PathVariable int storeId)
+			throws IOException {
+		String tab = "healthInspection";
+		return new MultipleModelResponse<UploadNotesWrapper>(true, dataService.getHealthInspectionDetails(storeId, tab));
+	}
+	
+	@RequestMapping(value = "/service/store/{storeId}/health", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public SingleModelResponse<UploadNotesWrapper> insertHealthInspectionDetails(@PathVariable int storeId, @RequestBody UploadNotesWrapper uploadNotesDetails)
+			throws IOException {
+		String tab = "healthInspection";
+		uploadNotesDetails.setLinkedId(storeId);
+		uploadNotesDetails.setPurpose(tab);
+		int id = dataService.insertHealthInspectionDetails(uploadNotesDetails);
+		return new SingleModelResponse<UploadNotesWrapper>(true, null);
+	}
+	
+	@RequestMapping(value = "/service/store/{storeId}/health/{healthId}", method = RequestMethod.PUT, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public SingleModelResponse<StoreInvoiceDetailsWrapper> updateHealthInspectionDetails(@PathVariable int storeId, @PathVariable int healthId, @RequestBody UploadNotesWrapper uploadNotesDetails)
+			throws IOException {
+		return new SingleModelResponse<StoreInvoiceDetailsWrapper>(true, null);
 	}
 	
 }

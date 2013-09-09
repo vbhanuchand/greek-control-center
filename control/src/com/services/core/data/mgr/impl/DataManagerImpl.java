@@ -59,6 +59,7 @@ import com.services.core.view.wrappers.StoreLaborDetailsWrapper;
 import com.services.core.view.wrappers.StoreMaintenanceWrapper;
 import com.services.core.view.wrappers.StoreStockWrapper;
 import com.services.core.view.wrappers.StoreWrapper;
+import com.services.core.view.wrappers.UploadNotesWrapper;
 
 @Service
 @Transactional(readOnly = true, propagation=Propagation.REQUIRED)
@@ -872,6 +873,37 @@ public class DataManagerImpl implements DataManager{
 	public boolean updateStoreStock(StoreStockWrapper storeInvDetails){
 		return storeDAO.updateStoreInvoiceDetails(storeInvDetails.getId(), storeInvDetails.getStoreId(), storeInvDetails.getItemId(), storeInvDetails.getItemCategory(), storeInvDetails.getItemStock(), 
 				storeInvDetails.getItemOrder(), storeInvDetails.getItemPricePerUnit(), storeInvDetails.getItemGSPercent(), 0);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List<UploadNotesWrapper> getHealthInspectionDetails(int storeId, String tab){
+		List notesList = storeDAO.getStoreHealthInspectionDetails(storeId, tab);
+		List<UploadNotesWrapper> returnList = new ArrayList<UploadNotesWrapper>();
+		UploadNotesWrapper returnObj;
+		for(Object listObject: notesList){
+			Map mapObj = (Map) listObject;
+			returnObj = new UploadNotesWrapper();
+			returnObj.setId((Integer)mapObj.get("id"));
+			returnObj.setPurposeDate((Date)mapObj.get("purposeDate"));
+			returnObj.setPurposeNotes((String)mapObj.get("purposeNotes"));
+			returnObj.setFileName((String)mapObj.get("fileName"));
+			returnObj.setBlobKey((String)mapObj.get("blobKey"));
+			returnList.add(returnObj);
+		}
+		return returnList;
+	}
+	
+	@Override
+	@Transactional
+	public int insertHealthInspectionDetails(UploadNotesWrapper notesWrapper){
+		return storeDAO.insertHealthInspectionDetails(notesWrapper.getLinkedId(), notesWrapper.getPurpose(), notesWrapper.getPurposeDate(), notesWrapper.getPurposeNotes(), 0, notesWrapper.getBlobKey(), notesWrapper.getFileName());
+	}
+	
+	@Override
+	@Transactional
+	public boolean updateHealthInspectionDetails(UploadNotesWrapper notesWrapper){
+		return true;//storeDAO.updateHealthInspectionDetails(notesWrapper.getLinkedId(), notesWrapper.getPurpose(), notesWrapper.getPurposeDate(), notesWrapper.getPurposeNotes(), 0, notesWrapper.getBlobKey(), notesWrapper.getFileName());
 	}
 	
 }
