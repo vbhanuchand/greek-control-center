@@ -1,17 +1,121 @@
+/* From ECP
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address,  cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+strike, strong, sub, sup, tt, var,
+ u, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,caption, tbody, tfoot, thead, th, 
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+*{big :not() font-size:100.01%;}
+
+
+/* HTML5 display-role reset for older browsers *//*
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+* {font-size:100.01%;}
+html{font-size:62.5%;}
+body {
+    margin:0;
+    color:#333;
+    font:1.3em/1.231em Helvetica, Arial, sans-serif;
+    background:#444 url('../image/bg-page.gif');    
+    min-width:964px;
+    -webkit-text-size-adjust:100%;
+}
+ol, ul {
+    list-style: none;
+}
+blockquote, q {
+    quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: '';
+    content: none;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin: 0;
+    padding: 0;
+    font-size: auto;
+    font: auto;
+    vertical-align: baseline;
+}
+
+img{
+    border-style:none;
+    vertical-align:top;
+    margin:0 8px 0 0;
+}
+a{
+    text-decoration:none;
+    color:#0066cd;
+    border-bottom:1px dotted #0066cd;								
+    outline:none !important;
+}
+
+a:hover{
+    color:#09f;
+    text-decoration:none;
+    border-bottom-style:solid;
+    border-bottom-color:#09f;
+}
+
+*/
+
+
 /* Control Center specific styling goes here  */
 html,body {
 	height: 100%;
 	margin: 0;
 	overflow: hidden;
 	padding: 0;
+	font:1.3em/1.231em Helvetica, Arial, sans-serif;
+    -webkit-text-size-adjust:100%;
 }
 
+/* html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address,  cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+strike, strong, sub, sup, tt, var,
+ u, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,caption, tbody, tfoot, thead, th, 
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+} */
+
 #fmtCalendar {
-  width: 100%;
-  table-layout:fixed;
-  font-size: 65%;
+  table-layout:auto;
+  font-size: 12px;
+  padding: 3px;
   font-style: normal;
-  padding: 1px;
 }
 
 .loadingPanel {
@@ -32,21 +136,41 @@ html,body {
 	margin: 0;
 }
 
-img {
-	border-style: none;
+img{
+    border-style:none;
+    vertical-align:top;
+    margin:0 8px 0 0;
+}
+a{
+    text-decoration:none;
+    color:#E21111;
+    border-bottom:1px dotted #E21111;								
+    outline:none !important;
 }
 
-a {
-	text-decoration: none;
-	color: #000;
+a:hover{
+    color:#f90;
+    text-decoration:none;
+    border-bottom-style:solid;
+    border-bottom-color:#f90;
 }
+
+/* cursor :: hand */
+[onclick], a{ cursor:pointer; }
 
 body {
 	font-family: Times New Roman, Times, serif;
-	font-size: 16px;
-	font-style: italic;
-	margin: 0 auto;
-	/*text-align:center;*/
+	font-size: 14px;
+	margin: 2px auto;
+}
+
+.customBackground{
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#ebf3fc), to(#f9f9f9));
+	background-image: -webkit-linear-gradient(top, rgba(235, 137, 13, 0.31), #FD4802);
+	background-image: -moz-linear-gradient(top, rgba(235, 137, 13, 0.31), #FD4802);
+	background-image: -ms-linear-gradient(top, rgba(235, 137, 13, 0.31), #FD4802);
+	background-image: -o-linear-gradient(top, rgba(235, 137, 13, 0.31), #FD4802);
+	background-image: linear-gradient(top, rgba(235, 137, 13, 0.31), #FD4802);
 }
 
 #header {
@@ -54,12 +178,6 @@ body {
 	margin: 0px auto;
 	background: url(../images/page-bg-tile.jpg) repeat-x;
 	border: 0px;
-}
-
-#appLayout {
-	margin: 0 auto;
-	/*background: #db7913 url(../images/page-bg-tile.jpg) repeat-x;*/
-	height: 100%;
 }
 
 /* Class for Info or Error or Warning Msgs*/
@@ -95,14 +213,39 @@ body {
 	background-image: url('../images/warning.png');
 }
 
-/* CSS 3  table */
-table {
-	*border-collapse: collapse; /* IE7 and lower */
-	border-spacing: 0;
-	/*width: 100%;*/
+/* Dgrid Styles*/
+#empGrid{
+	font-style: normal;
 }
 
+#storeAlarmCodesGrid{
+	font-style: normal;
+}
+
+#storeLaborGrid {
+	text-align: center;
+	font-style: normal;
+}
+
+#storeKeysGrid{
+	text-align: center;
+	font-style: normal;
+}
+
+#storeMaintenanceGrid{
+	text-align: center;
+	font-style: normal;
+}
+
+/* CSS 3  table 
+table {
+	*border-collapse: collapse; 
+	border-spacing: 0;
+	width: 100%;
+}*/
+
 .bordered {
+	border-spacing: 0;
 	border: solid #ccc 1px;
 	-moz-border-radius: 6px;
 	-webkit-border-radius: 6px;
@@ -111,21 +254,29 @@ table {
 	-moz-box-shadow: 0 1px 1px #ccc;
 	box-shadow: 0 1px 1px #ccc;
 	margin-right: auto;
+	/* background-image: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#ffffff));
+	background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0), rgb(255, 255, 255));
+	background-image: -moz-linear-gradient(top, rgba(255, 255, 255, 0), rgb(255, 255, 255));
+	background-image: -ms-linear-gradient(top, rgba(255, 255, 255, 0), rgb(255, 255, 255));
+	background-image: -o-linear-gradient(top, rgba(255, 255, 255, 0), rgb(255, 255, 255));
+	background-image: linear-gradient(top, rgba(255, 255, 255, 0), rgb(255, 255, 255)); */
+	
 }
 
 .bordered tr:hover {
-	background: #fbf8e9;
-	-o-transition: all 0.1s ease-in-out;
+	cursor: pointer;
+	/* -o-transition: all 0.1s ease-in-out;
 	-webkit-transition: all 0.1s ease-in-out;
 	-moz-transition: all 0.1s ease-in-out;
 	-ms-transition: all 0.1s ease-in-out;
-	transition: all 0.1s ease-in-out;
+	transition: all 0.1s ease-in-out; */
 }
 
-.bordered td,.bordered th {
+.bordered td, .bordered th {
 	border-left: 1px solid #ccc;
 	border-top: 1px solid #ccc;
 	padding: 10px;
+	cursor: pointer;
 }
 
 .bordered td {
@@ -153,9 +304,12 @@ table {
 }
 
 .bordered tr.active {
-	background-color: #184CCF;
+	cursor: pointer;
 	font-weight: bolder;
-	color: #555555;
+	font-style: italic;
+	color: #243C5F;
+	/* 
+	background-color: grey;
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#ebf3fc),
 		to(#f9f9f9) );
 	background-image: -webkit-linear-gradient(top, rgba(235, 243, 252, 0.31),
@@ -167,16 +321,22 @@ table {
 	background-image: -o-linear-gradient(top, rgba(235, 243, 252, 0.31),
 		#f9f9f9 );
 	background-image: linear-gradient(top, rgba(235, 243, 252, 0.31),
-		#f9f9f9 );
+		#f9f9f9 ); 
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#ebf3fc),
+		to(#3B83F0) );
+	background-image: -webkit-linear-gradient(top, rgba(55, 176, 243, 0.31), #3B83F0);
+	background-image: -moz-linear-gradient(top, rgba(55, 176, 243, 0.31), #3B83F0);
+	background-image: -ms-linear-gradient(top, rgba(55, 176, 243, 0.31), #3B83F0);
+	background-image: -o-linear-gradient(top, rgba(55, 176, 243, 0.31), #3B83F0);
+	background-image: linear-gradient(top, rgba(55, 176, 243, 0.31), #3B83F0);
 	-webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, .8) inset;
 	-moz-box-shadow: 0 1px 0 rgba(255, 255, 255, .8) inset;
 	box-shadow: 0 1px 0 rgba(255, 255, 255, .8) inset;
 	border-top: none;
-	text-shadow: 0 1px 0 rgba(255, 255, 255, .5);
+	text-shadow: 0 1px 0 rgba(255, 255, 255, .5);*/
 }
 
 .bordered tr.hoveredClass:hover {
-	cursor: hand; 
 	cursor: pointer;
 }
 
@@ -214,108 +374,548 @@ table {
 	border-radius: 0 0 6px 0;
 }
 
-/* Dgrid Styles*/
-.empGrid {
-	width: 99%;
-	font-style: normal;
+.soria .dojoxCalendarEvent.Calendar1 .bg {
+  background-color: #00AA00;
+}
+.soria .dojoxCalendarEvent.Calendar1.Hovered .bg {
+  background-color: #00FF00;
+}
+.soria .dojoxCalendarEvent.Calendar1.Selected .bg {
+  background-color: #004400;
+}
+.soria .dojoxCalendarEvent.Calendar2 .bg {
+  background-color: #805817;
+}
+.soria .dojoxCalendarEvent.Calendar2.Hovered .bg {
+  background-color: #808F17;
+}
+.soria .dojoxCalendarEvent.Calendar2.Selected .bg {
+  background-color: #800217;
 }
 
-/* Default all cells to 80px width 
-.empGrid .dgrid-cell {
-	width: 12%;
+
+.soria .dojoxCalendarEvent.dojoxCalendarHorizontal.Calendar1 .bg {
+  background-color: #00AA00;
 }
-*/
-/* Make the columns for first/last name wider */
-.empGrid .field-first {
-	/*width: 1px;*/
+.soria .dojoxCalendarEvent.dojoxCalendarHorizontal.Calendar1.Hovered .bg {
+  background-color: #00FF00;
+}
+.soria .dojoxCalendarEvent.dojoxCalendarHorizontal.Calendar1.Selected .bg {
+  background-color: #004400;
 }
 
-.empGrid .field-last {
-	width: 25%;
+.soria .dojoxCalendarEvent.dojoxCalendarHorizontal.Calendar2 .bg {
+  background-color: #AA0000;
+}
+.soria .dojoxCalendarEvent.dojoxCalendarHorizontal.Calendar2.Hovered .bg {
+  background-color: #FF0000;
+}
+.soria .dojoxCalendarEvent.dojoxCalendarHorizontal.Calendar2.Selected .bg {
+  background-color: #440000;
 }
 
-.empGrid .dgrid-scroller {
-	/*position: relative;
-	overflow-y: hidden;
-	  max-height: 200px;
-      overflow: auto;
-	
-	overflow: auto;*/
+/* Nihilo Starts*/
+.nihilo .dojoxCalendarEvent.Calendar0 .bg.bg {
+	background: #2095B4;
 }
 
-.empGrid .dgrid-header-scroll {
-	/*display: none;*/
+.nihilo .dojoxCalendarEvent.Calendar0.Hovered .bg.bg {
+	background: #24A5C8;
 }
 
-.empGrid .dgrid-header {
-	/*right: 0;
-	text-align: center;*/
+.nihilo .dojoxCalendarEvent.Calendar0.Selected .bg.bg {
+	background: #166B81;
 }
 
-.empGrid .field-icon {
-	width: 30px;
+.nihilo .dojoxCalendarEvent.Edited.Invalid .bg.bg {
+	background: #FFF;
 }
 
-.empGrid .field-quarterlyReview {
-	/*width: 100px;*/
+.nihilo .dojoxCalendarEvent.Calendar1 .bg {
+  background-color: #00AA00;
+}
+.nihilo .dojoxCalendarEvent.Calendar1.Hovered .bg {
+  background-color: #00FF00;
+}
+.nihilo .dojoxCalendarEvent.Calendar1.Selected .bg {
+  background-color: #004400;
+}
+.nihilo .dojoxCalendarEvent.Calendar2 .bg {
+  background-color: #805817;
+}
+.nihilo .dojoxCalendarEvent.Calendar2.Hovered .bg {
+  background-color: #808F17;
+}
+.nihilo .dojoxCalendarEvent.Calendar2.Selected .bg {
+  background-color: #800217;
 }
 
-.empGrid .dgrid-row-odd {
-	background: #F2F5F9;
+
+.nihilo .dojoxCalendarEvent.dojoxCalendarHorizontal.Calendar1 .bg {
+  background-color: #00AA00;
+}
+.nihilo .dojoxCalendarEvent.dojoxCalendarHorizontal.Calendar1.Hovered .bg {
+  background-color: #00FF00;
+}
+.nihilo .dojoxCalendarEvent.dojoxCalendarHorizontal.Calendar1.Selected .bg {
+  background-color: #004400;
 }
 
-.empGrid .dgrid-cell {
-	text-overflow: ellipsis;
-	white-space: nowrap;
+.nihilo .dojoxCalendarEvent.dojoxCalendarHorizontal.Calendar2 .bg {
+  background-color: #AA0000;
+}
+.nihilo .dojoxCalendarEvent.dojoxCalendarHorizontal.Calendar2.Hovered .bg {
+  background-color: #FF0000;
+}
+.nihilo .dojoxCalendarEvent.dojoxCalendarHorizontal.Calendar2.Selected .bg {
+  background-color: #440000;
+}
+/* Nihilo Ends*/
+.claro .dojoxCalendarEvent.Edited.Invalid .bg.bg {
+	background: #FFF;
+}
+
+.claro .dojoxCalendarEvent.Calendar0 .bg.bg {
+	/*background: #2095B4;*/
+	background: #0000AA;
+}
+
+.claro .dojoxCalendarEvent.Calendar0.Hovered .bg.bg {
+	/*background: #24A5C8;*/
+	background: #0000FF;
+}
+
+.claro .dojoxCalendarEvent.Calendar0.Selected .bg.bg {
+	/*background: #166B81;*/
+	background: #000044;
+}
+
+.claro .dojoxCalendarEvent.Calendar1 .bg {
+  background-color: #00AA00;
+}
+
+.claro .dojoxCalendarEvent.Calendar1.Hovered .bg {
+  background-color: #00FF00;
+}
+.claro .dojoxCalendarEvent.Calendar1.Selected .bg {
+  background-color: #004400;
+}
+.claro .dojoxCalendarEvent.Calendar2 .bg {
+  background-color: #AA0000;
+}
+.claro .dojoxCalendarEvent.Calendar2.Hovered .bg {
+  background-color: #FF0000;
+}
+.claro .dojoxCalendarEvent.Calendar2.Selected .bg {
+  background-color: #440000;
+}
+
+
+.claro .dojoxCalendarEvent.dojoxCalendarHorizontal.Calendar1 .bg {
+  background-color: #00AA00;
+}
+.claro .dojoxCalendarEvent.dojoxCalendarHorizontal.Calendar1.Hovered .bg {
+  background-color: #00FF00;
+}
+.claro .dojoxCalendarEvent.dojoxCalendarHorizontal.Calendar1.Selected .bg {
+  background-color: #004400;
+}
+
+.claro .dojoxCalendarEvent.dojoxCalendarHorizontal.Calendar2 .bg {
+  background-color: #AA0000;
+}
+.claro .dojoxCalendarEvent.dojoxCalendarHorizontal.Calendar2.Hovered .bg {
+  background-color: #FF0000;
+}
+.claro .dojoxCalendarEvent.dojoxCalendarHorizontal.Calendar2.Selected .bg {
+  background-color: #440000;
+}
+
+/*Claro Ends*/
+
+
+#manager {
+	color: #004400;
+	font-weight: bold;
+}
+
+#cook {
+	color: #440000;
+	font-weight: bold;
+}
+
+#front {
+	color: #000044;
+	font-weight: bold;
+}
+
+/* CSS for dojox Tabe Container */
+
+.storeInfo-labelsAndValues-labelCell {
+  background-color: lightgrey;
+  padding-left: 5px;
+}
+
+.storeInfo-labelsAndValues-valueCell {
+
+  padding-left: 0px;
+  /*background-color: lightblue;*/
+}
+
+.leaseInfo-labelsAndValues-labelCell {
+	width: 33%;
+  	text-align: left;
+  	/*background-color: lightgrey;*/
+  	padding-left: 2px;
+  	font-style: oblique;
+  	font-weight: bold;
+  	color: #243C5F;
+}
+
+.leaseInfo-labelsAndValues-labelCell .noLabelHeader{
+  text-align: center;
+  padding-left: 2px;
+  font-style: oblique;
+  font-weight: bold;
+}
+
+.leaseInfo-labelsAndValues-valueCell {
+  width: 33%;
+  padding: 2px;
+  vertical-align: top;
+  font: normal;
+  font-style: normal;
+  /*background-color: lightblue;*/
+}
+
+/* CSS Ends here*/
+
+
+/* CSS for Headings */
+.tab-heading {
+	width: 100%;
+}
+
+.tab-heading .hold {
+	background: #0167DC;
+	background: -moz-linear-gradient(top, #2592fd 0%, #0167cd 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #2592fd),
+		color-stop(100%, #0167cd) );
+	background: -webkit-linear-gradient(top, #2592fd 0%, #0167cd 100%);
+	background: -o-linear-gradient(top, #2592fd 0%, #0167cd 100%);
+	background: -ms-linear-gradient(top, #2592fd 0%, #0167cd 100%);
+	background: linear-gradient(to bottom, #2592fd 0%, #0167cd 100%);
+	border-radius: 4px 4px 4px 4px;
+	color: #FFFFFF;
+	font-size: inherit;
+	height: 19px;
+	line-height: 19px;
+	margin: 0 auto;
+	width: 85%;
 	text-align: center;
-	vertical-align: middle;
-	width: 12%;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.8);
 }
 
-.empGrid .field-fullName {
+.tab-heading span {
+	display: inline-block;
+	/*padding: 8px 10px 8px 10px;*/
+	vertical-align: top;
+}
+/* CSS for Heading ends here */
+
+
+/*CSS for Tab Container Labels*/
+.customTabClass .tabLabel {
+      /*color: blue !important;*/
+      width: 130px;
+      text-align: center;
+      font-size: 85%;
+      font-weight: bold;
+    }
+/*CSS for Tab Container Labels Ends here*/
+
+.dojoxCalendarColumnView .dojoxCalendarRowHeaderTable td span{
+	display: none;
+}
+
+/* .nihilo .dojoxGridRowOdd {
+	background-color: #f2f2f2;
+} */
+
+.dojoxGrid .dojoxGridCell {
+	border: 1px solid;
+	border-color: #EBEADB;
+	border-right-color: #D5CDB5;
+	padding: 3px 3px 3px 3px;
 	text-align: left;
+	overflow: hidden;
+	word-wrap: break-word;
+	height: 20px;
+}
+
+.nihilo .dojoxGridHeader .dojoxGridCell {
+	border-width: 1px;
+	padding-bottom: 0px;
+	border-color: transparent #ACA899 #919191 transparent;
+	/*background: #C0C0C0 repeat-x top;*/
+	/*color: #000000 !important;*/
+	text-align: center;
+	font-weight: bold;
+}
+
+.soria .dojoxGridPaginator {
+border-top: 1px #B1BADF solid;
+text-align: center;
+width: 100%;
+height: 24px;
+table-layout: fixed;
+/*background-color: #EAEAEA;*/
+background: url("//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dijit/themes/soria/images/tabContainerSprite.gif") repeat-x 0 -351px;
+}
+
+
+
+table.dateTable {
+	font-family: inherit;
+	font-size: inherit;
+	color: inherit;
+	border-width: 1px;
+	border-color: #ddd;
+	border-collapse: separate;
+}
+table.dateTable th {
+	border-width: 1px;
+	border-style: solid;
+	border-color: #ddd;
+	background-color: #eee;
+	text-align: center;
+	font-weight: bold;
+}
+table.dateTable td {
+	border-width: 1px;
+	padding: 2px;
+	border-style: solid;
+	border-color: #ddd;
+	background-color: #ffffff;
+	text-align:left;
+}
+
+table.dateTable td.divLeft{
+	text-align:left;
+}
+
+table.dateTable td.noBorder{
+	border: none;
+}
+
+table.dateTable th.noBorder{
+	background-color: #ffffff;
+	border: none;
+}
+
+
+/*Store INfo Table*/
+
+table.storeInfoTable {
+	font-family: inherit;
+	font-size: 96%;
+	color: inherit;
+	border: none;
+	/*border-width: 0px;
+	border-color: #ddd;*/
+	border-collapse: collapse;
+}
+table.storeInfoTable td {
+	padding: 1px;
+	/* border-style: solid;
+	border-color: #ddd;
+	background-color: #ffffff;*/
+	text-align:left;
+	vertical-align: top;
+}
+
+/*Store Info Tabe ENds*/
+
+
+/*Add Record Dialog Table*/
+
+table.addRecordTable {
+	font-family: inherit;
+	font-size: 96%;
+	color: inherit;
+	border: none;
+	border-collapse: collapse;
+}
+table.addRecordTable td {
+	padding: 5px;
+	text-align:left;
+	vertical-align: top;
+}
+
+/*Add Record Dialog Table*/
+
+/*Accounting Table*/
+
+table.accountingTable {
+	font-family: inherit;
+	font-size: inherit;
+	color: inherit;
+	border: none !important;
+	border-collapse: collapse;
+}
+table.accountingTable th {
+	border-width: 1px;
+	border-style: solid;
+	border-color: #ddd;
+	background-color: #eee;
+	text-align: center;
+	font-weight: bold;
+}
+table.accountingTable td {
+	background-color: #ffffff;
+	text-align:left;
 	padding-left: 10px;
+	
 }
 
-.empGrid .dgrid-row {
-	height: 40px;
+table.accountingTable td.divLeft{
+	text-align:left;
 }
 
-.has-ie-6 .empGrid .dgrid-scroller {
-	/* IE6 doesn't react properly to hidden on this page for some reason */
-	overflow-y: visible;
+table.accountingTable td.noBorder{
+	border: none;
 }
 
-/* 
-.dgrid-row {
-    height: 22px;
+table.accountingTable th.noBorder{
+	background-color: #ffffff;
+	border: none;
 }
 
-.dgrid-cell {
-    text-overflow: ellipsis;
-    white-space: nowrap;
+
+
+
+
+
+/* Labor Table Styles*/
+
+table.laborTable {
+	font-family: inherit;
+	font-size: inherit;
+	color: inherit;
+	border-width: 1px;
+	border-color: #ddd;
+	border-collapse: separate;
+	border-spacing: 4px;
 }
 
-.dgrid-row-odd {
-    background: #F2F5F9;
+table.laborTable td {
+	border-width: 1px;
+	padding: 2px;
+	border-style: solid;
+	border-color: #ddd;
+	background-color: #ffffff;
+	text-align:left;
 }
 
-.dgrid-cell {
-    border: none;
+table.laborTable td.laborDateTd{
+	font-weight: bolder;
+	font-size: 100%;
+	font-style: italic;
+	color: grey;
+	border-width: 2px;
+	border-style: solid;
+	border-color: #000;
+	background-color: #fff;
+	padding-left: 12px;
+	padding-right: 12px;
 }
 
-.dgrid-selected {
-    background: #999; /* Make selected rows be gray */
+table.laborTable td.laborMgrTd{
+	font-weight: bold;
+	font-size: 95%;
+	font-style: italic;
+	color: #eee;
+	border-width: 1px;
+	border-style: solid;
+	border-color: inherit;
+	background-color: #0000AA;
+	padding-left: 8px;
+	padding-right: 8px;
 }
-*/
 
-/* #fmtCalendar .dijitCalendarDateTemplate { height: 50px; width: 50px; border: 1px solid #ccc; vertical-align: top }
-#fmtCalendar .dijitCalendarDateLabel, #calendar5 .dijitCalendarDateTemplate { text-align: inherit }
-#fmtCalendar .dijitCalendarDayLabel { font-weight: bold }
-#fmtCalendar .dijitCalendarSelectedYear { font-size: 1.5em }
-#fmtCalendar .dijitCalendarMonthLabel { font-family: serif; letter-spacing: 0.2em; font-size: 2em } */
+table.laborTable td.laborFrontTd{
+	font-weight: bold;
+	font-size: 95%;
+	font-style: italic;
+	color: #eee;
+	border-width: 1px;
+	border-style: solid;
+	border-color: inherit;
+	background-color: #00AA00;
+	padding-left: 8px;
+	padding-right: 8px;
+}
 
- 
- 
- 
- 
+table.laborTable td.laborCookTd{
+	font-weight: bold;
+	font-size: 95%;
+	font-style: italic;
+	color: #eee;
+	border-width: 1px;
+	border-style: solid;
+	border-color: inherit;
+	background-color: #AA0000;
+	padding-left: 8px;
+	padding-right: 8px;
+}
+
+/* Labor Table Styles End here*/
+
+table.bordered td.Manager{
+	color: #0000FF;
+	text-align: left;
+	font-weight: normal;
+	font-style: italic;
+}
+
+table.bordered td.Front{
+	color: #00FF00;
+	text-align: left;
+	font-weight: normal;
+	font-style: italic;
+}
+
+table.bordered td.Cook{
+	color: #FF0000;
+	text-align: left;
+	font-weight: normal;
+	font-style: italic;
+}
+table.bordered td.itemTime{
+	text-align: center;
+	font-weight: normal;
+	font-style: italic;
+}
+
+.dijitCalendar .Highlighted {
+	background-color: #fff0b4 !important;
+}
+.dijitCalendar .Highlighted .dijitCalendarDateLabel {
+	color: red !important;
+	border: solid 1px #fff0b4 !important;				
+}
+
+.deleteButton .dijitButtonNode{
+	background-color: #F88;
+}
+
+.propertyTitle {
+	font-weight: bold;
+}
+
+
+.soria .dijitSelectMenu td{
+padding: 0;
+/*background-color: grey;*/
+font-size: 85%;
+}
