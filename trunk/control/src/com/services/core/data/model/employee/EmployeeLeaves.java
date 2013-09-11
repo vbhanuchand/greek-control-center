@@ -39,8 +39,7 @@ public class EmployeeLeaves implements Serializable{
 	private String reason;
 	
 	@Column(name = "excused")
-	@Type(type="yes_no")
-	private Boolean excused;
+	private String excused;
 	
 	@Column(name = "hrs_active")
 	private Integer activeHrs;
@@ -61,7 +60,7 @@ public class EmployeeLeaves implements Serializable{
 	}
 
 	public EmployeeLeaves(Integer empId, Integer storeId, Date date, String reason,
-			Boolean excused, Integer activeHrs, Boolean active,
+			String excused, Integer activeHrs, Boolean active,
 			Integer updated_by) {
 		super();
 		this.empId = empId;
@@ -114,11 +113,11 @@ public class EmployeeLeaves implements Serializable{
 		this.reason = reason;
 	}
 
-	public Boolean getExcused() {
+	public String getExcused() {
 		return excused;
 	}
 
-	public void setExcused(Boolean excused) {
+	public void setExcused(String excused) {
 		this.excused = excused;
 	}
 

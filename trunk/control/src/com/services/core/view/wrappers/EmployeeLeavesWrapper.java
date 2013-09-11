@@ -20,7 +20,7 @@ public class EmployeeLeavesWrapper extends BaseModel {
 	
 	private String reason;
 	
-	private Boolean excused;
+	private String excused;
 	
 	private Integer activeHrs;
 	
@@ -35,7 +35,7 @@ public class EmployeeLeavesWrapper extends BaseModel {
 	}
 
 	public EmployeeLeavesWrapper(Integer id, Integer empId, Integer storeId, Date date, String reason,
-			Boolean excused, Integer activeHrs, Boolean active,
+			String excused, Integer activeHrs, Boolean active,
 			Integer updated_by) {
 		super();
 		this.id = id;
@@ -90,11 +90,11 @@ public class EmployeeLeavesWrapper extends BaseModel {
 		this.reason = reason;
 	}
 
-	public Boolean getExcused() {
+	public String getExcused() {
 		return excused;
 	}
 
-	public void setExcused(Boolean excused) {
+	public void setExcused(String excused) {
 		this.excused = excused;
 	}
 

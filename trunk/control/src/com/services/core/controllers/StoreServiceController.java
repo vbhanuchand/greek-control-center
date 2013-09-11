@@ -341,9 +341,13 @@ public class StoreServiceController {
 	
 	@RequestMapping(value = "/service/store/{storeId}/health/{healthId}", method = RequestMethod.PUT, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public SingleModelResponse<StoreInvoiceDetailsWrapper> updateHealthInspectionDetails(@PathVariable int storeId, @PathVariable int healthId, @RequestBody UploadNotesWrapper uploadNotesDetails)
+	public SingleModelResponse<UploadNotesWrapper> updateHealthInspectionDetails(@PathVariable int storeId, @PathVariable int healthId, @RequestBody UploadNotesWrapper uploadNotesDetails)
 			throws IOException {
-		return new SingleModelResponse<StoreInvoiceDetailsWrapper>(true, null);
+		uploadNotesDetails.setId(healthId);
+		uploadNotesDetails.setLinkedId(storeId);
+		uploadNotesDetails.setPurpose("healthInspection");
+		boolean execute = dataService.updateHealthInspectionDetails(uploadNotesDetails);
+		return new SingleModelResponse<UploadNotesWrapper>(execute, null);
 	}
 	
 }

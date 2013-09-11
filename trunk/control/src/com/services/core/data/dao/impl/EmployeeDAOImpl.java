@@ -208,14 +208,14 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 	}
 	
 	@Override
-	public boolean createEmployeeLeaves(int empId, int storeId, Date date, String reason, boolean excused, int activeHrs, boolean active, int updated_by){
+	public boolean createEmployeeLeaves(int empId, int storeId, Date date, String reason, String excused, int activeHrs, boolean active, int updated_by){
 		EmployeeLeaves empLeave = new EmployeeLeaves(empId, storeId, date, reason, excused, activeHrs, true, updated_by);
 		sessionFactory.getCurrentSession().save(empLeave);
 		return true;
 	}
 	
 	@Override
-	public boolean updateEmployeeLeaves(int id, int empId, int storeId, Date date, String reason, boolean excused, int activeHrs, boolean active, int updated_by){
+	public boolean updateEmployeeLeaves(int id, int empId, int storeId, Date date, String reason, String excused, int activeHrs, boolean active, int updated_by){
 		String hql = "UPDATE EmployeeLeaves el set el.empId = :empId, " + "el.storeId = :storeId, "  
 					+	"el.date = :date, el.reason = :reason, el.excused = :excused, el.activeHrs = :activeHrs,"
 					+	"el.updated_by=:updated_by "  

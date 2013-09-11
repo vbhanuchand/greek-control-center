@@ -261,4 +261,7 @@ PRIMARY KEY(id)
 
 drop table upload_docs_notes;
 
-select uploadnote0_.id as col_0_0_, uploadnote0_.purpose_date as col_1_0_, uploadnote0_.purpose_notes as col_2_0_, blobs1_.fileName as col_3_0_, blobs1_.blobKey as col_4_0_ from upload_docs_notes uploadnote0_ cross join blobs blobs1_ where blobs1_.linked_to_id=uploadnote0_.id and uploadnote0_.linked_id=1 and uploadnote0_.purpose='healthInspection' and blobs1_.tab='healthInspection'
+select uploadnote0_.id as col_0_0_, uploadnote0_.purpose_date as col_1_0_, uploadnote0_.purpose_notes as col_2_0_, blobs1_.fileName as col_3_0_, blobs1_.blobKey as col_4_0_ from upload_docs_notes uploadnote0_ cross join blobs blobs1_ where blobs1_.linked_to_id=uploadnote0_.id and uploadnote0_.linked_id=1 and uploadnote0_.purpose='healthInspection' and blobs1_.tab='healthInspection';
+
+alter table employee_leaves modify excused varchar(100);
+select * from employee_leaves;

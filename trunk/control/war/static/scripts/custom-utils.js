@@ -669,7 +669,9 @@ function applySecurityRoles(authoritiesData){
 		case 'ROLE_EMP':
 			break;
 	}
-	
+	//Remove the Labor Entry Tab in Employees Section for Everyone
+	registry.byId('employeeInfoTabContainer').removeChild(registry.byId('empLaborDetails'));
+	registry.byId('empLaborDetails').destroy();
 	//grid.layout.setColumnVisibility(columnIndex,booleanValue);
 	//pane.set("disabled", true);
 	
@@ -684,10 +686,14 @@ function addRecordDialog(dialogName){
 	var domStyle = require('dojo/dom-style');
 	var dom = require('dojo/dom');
 	var registry = require('dijit/registry');
+	var domConstruct = require('dojo/dom-construct');
 	switch(dialogName){
 	case 'healthInspection':
 		if(domStyle.getComputedStyle(dom.byId('healthInspectionWidgetsDiv')).display != 'none')
 			hideFileUploadDialog('healthInspection');
+		domConstruct.empty(dom.byId('healthInspectionUploaded'));
+		domConstruct.empty(dom.byId('healthInspectionExisting'));
+		
 		healthInspectionDialog.reset();
 		registry.byId('hiddenHealthId').set('value', 0);
 		//healthInspectionDialog.titleBar.style.display = 'none';
@@ -701,6 +707,45 @@ function addRecordDialog(dialogName){
 
 function editRecordByDialog(tab, id, rowIndex){
 	var registry = require('dijit/registry');
-	console.log('Edit '+ tab + ' Id ' + id + ' rowIndex ', rowIndex);
-	registry.byId('hiddenHealthId').set('value', id);
+	var dom = require('dojo/dom');
+	var domConstruct = require('dojo/dom-construct');
+	var baseArray = require('dojo/_base/array');
+	var stamp = require('dojo/date/stamp');
+	var domStyle = require('dojo/dom-style');
+	//console.log('Edit '+ tab + ' Id ' + id + ' rowIndex ', rowIndex);
+	
+	var grid; 
+	switch(tab){
+	case 'healthInspection':
+		if(domStyle.getComputedStyle(dom.byId('healthInspectionWidgetsDiv')).display != 'none')
+			hideFileUploadDialog('healthInspection');
+		registry.byId('hiddenHealthId').set('value', id);
+		domConstruct.empty(dom.byId('healthInspectionUploaded'));
+		
+		grid = registry.byId('storeHealthInspectionGrid');
+		
+		var date = (grid.store.getValue(grid.getItem(rowIndex), 'purposeDate')+'').split('/');
+		date = '' + date[2] + '-' + date[0] + '-' + date[1];
+		registry.byId('healthInspectionDate').set('value', stamp.fromISOString(date));
+		
+		if(grid.store.getValue(grid.getItem(rowIndex), 'blobKey') != '&#/#&'){
+			var fragment = document.createDocumentFragment();
+			domConstruct.create("li", {
+	                innerHTML: '&nbsp;&nbsp;' + '<a target="_new" href="/service/getBlob/' + grid.store.getValue(grid.getItem(rowIndex), 'blobKey') + '">' 
+								+  grid.store.getValue(grid.getItem(rowIndex), 'fileName') + '</a>'
+	            }, fragment);
+			domConstruct.empty(dom.byId('healthInspectionExisting'));
+			domConstruct.place(fragment, dom.byId('healthInspectionExisting'));
+		}
+		
+		registry.byId('healthInspectionNotes').set('value', grid.store.getValue(grid.getItem(rowIndex), 'purposeNotes'));
+		
+		healthInspectionDialog.show();
+		break;
+	}
+}
+
+
+function createInventoryItem(){
+	addInventoryItemDialog.show();
 }

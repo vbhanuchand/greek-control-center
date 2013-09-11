@@ -94,4 +94,6 @@ public interface StoreDAO {
 	int insertHealthInspectionDetails(int storeId, String purpose, Date purposeDate, String purposeNotes, int updatedBy, String blobKey, String fileName);
 	
 	boolean updateHealthInspectionDetails(int id, int storeId, String purpose, Date purposeDate, String purposeNotes, int updatedBy, String blobKey, String fileName);
+	
+	int insertStoreItem(int itemCode, String itemColor, String itemName, int itemPar, String itemUnits, int storeId, int updatedBy);
 }

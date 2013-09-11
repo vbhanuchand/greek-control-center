@@ -1,5 +1,6 @@
 package com.services.core.data.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -15,7 +16,9 @@ import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "blobs")
-public class Blobs {
+public class Blobs implements Serializable {
+
+	private static final long serialVersionUID = -7110305736276027171L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

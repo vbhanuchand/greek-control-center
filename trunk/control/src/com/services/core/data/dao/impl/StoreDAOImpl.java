@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.services.core.data.dao.StoreDAO;
 import com.services.core.data.model.Blobs;
+import com.services.core.data.model.Item;
 import com.services.core.data.model.store.Store;
 import com.services.core.data.model.store.StoreAccount;
 import com.services.core.data.model.store.StoreAlarm;
@@ -415,7 +416,31 @@ public class StoreDAOImpl implements StoreDAO {
 	
 	@Override
 	public boolean updateHealthInspectionDetails(int id, int storeId, String purpose, Date purposeDate, String purposeNotes, int updatedBy, String blobKey, String fileName){
-		String hql = "update UploadNotes un set purposeDate=:purposeDate, purposeNotes = :purposeNotes where un.id=:id"; 
-		return true;
+		String hql = "update UploadNotes un set un.purposeDate=:purposeDate, un.purposeNotes = :purposeNotes where un.id=:id"; 
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setParameter("id", id);
+		query.setParameter("purposeDate", purposeDate);
+		query.setParameter("purposeNotes", purposeNotes);
+		int result = query.executeUpdate();
+		if(fileName != null && fileName.equalsIgnoreCase("&#/#&")){
+			return (result == 1);
+		} else {
+			hql = "update Blobs b set b.fileName = :fileName, b.blobKey = :blobKey where b.linkedId = :id and b.tab = :tab"; 
+			Query query2 = sessionFactory.getCurrentSession().createQuery(hql);
+			query2.setParameter("id", id);
+			query2.setParameter("fileName", fileName);
+			query2.setParameter("blobKey", blobKey);
+			query2.setParameter("tab", purpose);
+			result = query2.executeUpdate();
+			return (result == 1);
+		}
+		
+	}
+	
+	@Override
+	public int insertStoreItem(int itemCode, String itemColor, String itemName, int itemPar, String itemUnits, int storeId, int updatedBy){
+		Item item = new Item(itemCode, itemColor, itemName, itemPar, itemUnits, storeId, updatedBy);
+		sessionFactory.getCurrentSession().save(item);
+		return item.getId();
 	}
 }
