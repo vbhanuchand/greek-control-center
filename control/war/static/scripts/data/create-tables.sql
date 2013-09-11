@@ -547,3 +547,17 @@ group by si.id, invoiceDate;
 
 /*DBS Cashline - Late Charges*/
 /*DBS Credit Card - Late Charges*/
+
+create table items(
+id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+item_code INT,
+item_color VARCHAR(6),
+item_name VARCHAR(50),
+item_par VARCHAR(10),
+item_units VARCHAR(10),
+item_type ENUM('distributor', 'stock-item'),
+store_id INT UNSIGNED NOT NULL,
+updated_by INT UNSIGNED NOT NULL,
+updated_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, 
+PRIMARY KEY(id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;

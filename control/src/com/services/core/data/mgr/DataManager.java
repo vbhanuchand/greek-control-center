@@ -13,6 +13,7 @@ import com.services.core.view.wrappers.EmployeeLeavesWrapper;
 import com.services.core.view.wrappers.EmployeeReviewWrapper;
 import com.services.core.view.wrappers.EmployeeSalaryWrapper;
 import com.services.core.view.wrappers.EmployeeWrapper;
+import com.services.core.view.wrappers.ItemWrapper;
 import com.services.core.view.wrappers.StoreAccountWrapper;
 import com.services.core.view.wrappers.StoreAlarmWrapper;
 import com.services.core.view.wrappers.StoreDateWrapper;
@@ -160,5 +161,7 @@ public interface DataManager {
 	int insertHealthInspectionDetails(UploadNotesWrapper notesWrapper);
 	
 	boolean updateHealthInspectionDetails(UploadNotesWrapper notesWrapper);
+	
+	int insertStoreItem(ItemWrapper item);
 	
 }

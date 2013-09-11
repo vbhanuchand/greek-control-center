@@ -679,7 +679,7 @@
 							</table>
 						</div>
 						<div id="empLeavesDetails" data-dojo-type="dijit/layout/ContentPane"
-								data-dojo-props="title:'Leaves Section', style:'margin-top:1px;height:99%;width:100%;'">
+								data-dojo-props="title:'Missed Shifts', style:'margin-top:1px;height:99%;width:100%;'">
 							<div id="employeeLeavesGrid" align="center"
 								style="height:98%;margin:2px; width:99%;vertical-align:top;"></div>
 							<div id="employeeLeavesGridStandBy" data-dojo-id="employeeLeavesGridStandBy" 
@@ -898,7 +898,7 @@
 						<tr valign="top" style="width: 100%; height: 5%;">
 							<td colspan="2">
 								<span style="float: left" id="checkStockLink">
-									<a href='javascript:checkStock("D");'>Check Stock</a>
+									<a style="padding-right: 5px; padding-left: 5px;" href='javascript:checkStock("D");'>Check Stock</a>
 										&nbsp;&nbsp;
 									<img src='resources/images/add-icon.png' onclick='javascript: addItemToStock();'/>
 								</span>
@@ -910,7 +910,8 @@
 								<span style="position: relative; left: 17%; color: whitesmoke; background-color: #B40431; border: 1px solid black;">&nbsp;SAMS CLUB&nbsp;</span>&nbsp;&nbsp;
 								<span style="position: relative; left: 18%; color: whitesmoke; background-color: #21610B; border: 1px solid black;">&nbsp;GS KITCHEN&nbsp;</span>&nbsp;&nbsp;
 								<span style="float: right" id="createInvoiceLink">
-									<a href='javascript:createInvoice();'>Create Invoice</a>
+									<a style="padding-right: 5px; padding-left: 5px;" href='javascript:createInventoryItem();'>Add Inventory Items</a>
+									<a style="padding-right: 5px; padding-left: 5px;" href='javascript:createInvoice();'>Create Invoice</a>
 								</span>
 							</td>
 							<!-- 
@@ -931,10 +932,10 @@
 							</td>
 							<td align="left" style="height: 95%; width: 50%;">
 								<div id="inventoryInvoiceDetailsGrid" align="center"
-									style="height: 100%; margin: 2px; width: 100%;">
+									style="height: 99%; margin: 2px; width: 99%;">
 								</div>
 								<div id="inventoryInvoiceDetailsGridStandBy" data-dojo-id="inventoryInvoiceDetailsGridStandBy" data-dojo-type="dojox/widget/Standby" 
-										data-dojo-props="target:'inventoryInvoiceDetailsGrid', color:'white'">
+									data-dojo-props="target:'inventoryInvoiceDetailsGrid', color:'white'">
 								</div>
 							</td>
 						</tr>
@@ -952,6 +953,7 @@
 	</div>
 
 <!-- Dialogs are defined here !!! -->
+
 <!-- Inventory Dialog Starts here  -->
 <div class="dijitHidden">
 	<div data-dojo-type="dijit/Dialog"
@@ -1185,7 +1187,7 @@
 				        							handleAs: 'json', data: json.stringify(uploadNotesWrapper), timeout: 10000 
 				        						}).then(function(healthDetailsResponse){
 				        								if(healthDetailsResponse.success){
-				        									dom.byId('messages').innerHTML = 'Add Successful';
+				        									dom.byId('messages').innerHTML = 'Update Successful';
 				        									storeLayout.refreshPane();
 				        								}
 														registry.byId(standByWidgetId).hide();
@@ -1218,6 +1220,74 @@
 	</div>
 </div>
 <!-- Health Inspection Dialog Ends here -->
+
+<!-- Add Inventory Items Dialog -->
+<div class="dijitHidden">
+	<div data-dojo-type="dijit/Dialog"
+		data-dojo-props="title:'Add Item to Inventory', loadingMessage:'Loading ...', style: 'font-size: 100%;'"
+		draggable="true" data-dojo-id="addInventoryItemDialog" id="addInventoryItemDialog" style="position: absolute; top: 80px; height: 400px; width: 600px;">
+		<div>
+			<fieldset style="border:1px dotted ThreeDDarkShadow;">
+			<legend style="display: block; background: none; margin-left: 10px; padding: 0px 3px 0px 3px; border:1px dotted ThreeDDarkShadow; text-align: left; font-size:90%;"><b>Add/Modify Details:</b></legend>
+				<form data-dojo-type="dijit/form/Form" data-dojo-id="inventoryItemForm" id="inventoryItemForm">
+					<table class="addRecordTable" style="width: 98%; height: 90%; padding: 10px;">
+						<tr>
+							<td width="25%"><b>Item Code:</b></td>
+							<td width="75%">
+								
+							</td>
+						</tr>
+						<tr>
+							<td width="25%"><b>Distributor:</b></td>
+							<td width="75%">
+								
+							</td>
+						</tr>
+						<tr>
+							<td width="25%"><b>Item Name:</b></td>
+							<td width="75%">
+								
+							</td>
+						</tr>
+						<tr>
+							<td width="25%"><b>Item Par:</b></td>
+							<td width="75%">
+								
+							</td>
+						</tr>
+						<tr>
+							<td width="25%"><b>Item Units:</b></td>
+							<td width="75%">
+								
+							</td>
+						</tr>
+					</table>
+				</form>
+			</fieldset>
+		</div>
+		<div style="text-align: right;" align="right">
+			<button data-dojo-type="dijit/form/Button" type="button" value="Confirm"
+				id="addInventoryItemSaveButton">Save
+				<script type="dojo/on" data-dojo-event="click" data-dojo-args="e">
+						e.preventDefault(); // prevent the default submit
+						e.stopPropagation();
+				</script>
+			</button>
+			<button data-dojo-type="dijit/form/Button" type="button" value="Back"
+				id="addInventoryItemCloseButton">Close
+				<script type="dojo/on" data-dojo-event="click" data-dojo-args="e">
+						e.preventDefault(); // prevent the default submit
+						e.stopPropagation();
+						addInventoryItemDialog.hide();
+				</script>
+			</button>
+		</div>
+		<div id="addInventoryItemDialogStandBy" data-dojo-id="addInventoryItemDialogStandBy" data-dojo-type="dojox/widget/Standby" 
+			data-dojo-props="target:'addInventoryItemDialog', color:'white'">
+		</div>
+	</div>
+</div>
+<!-- Inventory Items Dialog ends here -->
 
 </body>
 </html>

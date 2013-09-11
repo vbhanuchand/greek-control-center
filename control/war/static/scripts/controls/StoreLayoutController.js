@@ -4,7 +4,7 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 		"dijit/layout/BorderContainer", "dijit/layout/TabContainer", "dijit/Calendar", "dijit/TitlePane", "dijit/form/FilteringSelect",	"dijit/form/Form", "dijit/form/ValidationTextBox",	
 		"dojox/layout/ScrollPane", "dijit/Dialog", "dijit/form/DropDownButton", "dijit/form/Button", "dojox/grid/DataGrid", "dojox/grid/EnhancedGrid", "dojo/store/Memory", 
 		"dojo/data/ObjectStore", "dojo/request", "dojox/lang/functional", "dijit/form/CheckBox", "dojox/form/Manager", "dojox/math/random/Simple", "dojo/data/ItemFileWriteStore", "controls/LaborLayoutController",
-		"dojox/grid/enhanced/plugins/exporter/CSVWriter", "dojox/grid/enhanced/plugins/NestedSorting", "dojox/grid/enhanced/plugins/Pagination"],
+		"dojox/grid/enhanced/plugins/exporter/CSVWriter", "dojox/grid/enhanced/plugins/NestedSorting", "dojox/grid/enhanced/plugins/Pagination", "dojo/date/stamp"],
 		function(dijit, registry, query, dom, domStyle, domClass, domConstruct, domGeometry, string, on, 
 				keys, lang, baseArray, event, json, djConfig, ioQuery, win, aspect, 
 				locale, baseFx, Table, TextBox, ContentPane, SimpleTextArea, TextArea, 
@@ -182,12 +182,21 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 		    		return '<span style="text-align: center;"><a href="#">Add</a></span>';
 		    	else return '<span style="text-align: center;"><a href="#">Update</a></span>';
 		    },
+		    calculateTotalFrontCook = function(values, rowIndex){
+		    	return parseInt(values[0]) + parseInt(values[1]);
+		    },
 		    showScheduleLink = function(value){
 		    	//return "<div class='tab-heading'><div class='hold'><span>Schedule</span></div></div>";
 		    	return '<span style="text-align: center;"><a href="#">View Schedule</a></span>';
 		    },
 		    showEditLink = function(value, rowIndex){
 		    	return '<span style="text-align: center;"><a href="javascript: editRecordByDialog(' + "'healthInspection', " + value + "," + rowIndex + ');">Edit</a></span>';
+		    },
+		    showDocumentLink = function(values, rowIndex){
+		    	if(values[0] != '&#/#&')
+		    		return '<a target="_new" href="/service/getBlob/' + values[1] + '">' + values[0] + '</a>';
+		    	else 
+		    		return '-- No Attachments --';
 		    },
 		    fetchStoreData = function(storeId) {
 		    	registry.byId('storeInfoTitlePaneStandBy').show();
@@ -541,11 +550,12 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 					storeLaborGrid = new EnhancedGrid({
 											store: gridDataStore,
 											query: { id: "*" },
-											structure: [{ name: "Schedule", field: "week", editable: false, width: "12%", noresize: true, formatter: showScheduleLink}, 
-											            { name: "Date", field: "skeletonKey", editable: false, width: "23%", noresize: true},
-												{ name: "Manager Hours", field: "Manager", editable: false, width: "22%", noresize: true},
-												{ name: "Cook Hours", field: "Cook", editable: false, width: "22%", noresize: true},
-												{ name: "Front Hours", field: "Front", editable: false, width: "21%", noresize: true}],
+											structure: [{ name: "Schedule", field: "week", editable: false, width: "10%", noresize: true, formatter: showScheduleLink, styles: 'padding-left: 5px;'}, 
+											            { name: "Date", field: "skeletonKey", editable: false, width: "18%", noresize: true, styles: 'text-align: center;'},
+												{ name: "Manager Hours", field: "Manager", editable: false, width: "18%", noresize: true, styles: 'text-align: center;'},
+												{ name: "Total Hrs (Front & Cook)", fields: ["Front", "Cook"], editable: false, width: "18%", noresize: true, styles: 'text-align: center;', formatter: calculateTotalFrontCook},
+												{ name: "Front Hours", field: "Front", editable: false, width: "18%", noresize: true, styles: 'text-align: center;'},
+												{ name: "Cook Hours", field: "Cook", editable: false, width: "18%", noresize: true, styles: 'text-align: center;'}],
 											singleClickEdit: true,
 											editable: true,
 											selectable: true,
@@ -588,7 +598,7 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 											query: { id: "*" },
 											structure: [{ name: "Edit", field: "id", editable: false, width: "5%", noresize: true, formatter: showEditLink, styles: 'text-align: center;'}, 
 											            { name: "Date", field: "purposeDate", editable: false, width: "10%", noresize: true, styles: 'text-align: center;'},
-											            { name: "Document", fields: ["fileName", "blobKey"], editable: false, width: "35%", noresize: true, styles: 'padding-left: 5px;'},
+											            { name: "Document", fields: ["fileName", "blobKey"], editable: false, formatter: showDocumentLink, width: "35%", noresize: true, styles: 'padding-left: 5px;'},
 											            { name: "Notes", field: "purposeNotes", editable: false, width: "40%", noresize: true, styles: 'padding-left: 5px'}],
 											singleClickEdit: false,
 											editable: false,

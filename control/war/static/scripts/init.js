@@ -299,7 +299,10 @@ require(["dojo/parser", "dijit/dijit", "dojo/dom-style", "dojo/date", "dojo/date
 		                        innerHTML: innerHTMLText
 		                    }, fragment);
 							domConstruct.place(fragment, uploadFilesNode);
+							//This variable is used in Add/Edit Dialog to store the blobKey
 							registry.byId('hiddenUploadedDocId').set('value', dataArray['blob-key']);
+							//To Clear the Earlier Files
+							domConstruct.empty(dom.byId('healthInspectionExisting'));
 						}else{
 							console.log('error',data,ioArgs);
 						}

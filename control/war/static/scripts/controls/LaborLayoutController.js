@@ -211,11 +211,15 @@ define(["dijit/dijit", "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/fx", "do
         	calendar.set('createOnGridClick', false);
         	resetInputControls();
         	empLayout.populateEmployeesSelectWidget(registry.byId('hiddenStoreId').get('value'));
+        	registry.byId('itemStartDateEditor').set('value', new Date());
+        	fetchData = fetchData || ((registry.byId('labor-calendar').buttonContainer.innerHTML + '').indexOf('dijit_Toolbar_') > 0);
         	if(fetchData){
-	        	var currentYear = locale.format(registry.byId('itemStartDateEditor').get('value'), {selector: 'date', datePattern: 'yyyy', locale: 'en'});
+        		var currentYear = locale.format(registry.byId('itemStartDateEditor').get('value'), {selector: 'date', datePattern: 'yyyy', locale: 'en'});
 	        	var currentWeek = locale.format(registry.byId('itemStartDateEditor').get('value'), {selector: 'date', datePattern: 'w', locale: 'en'});
 	        	fetchCalendarData(registry.byId('hiddenStoreId').get('value'), (currentYear + '-' + (Number(currentWeek) + 1)));
         	}
+        	//if(domStyle.getComputedStyle(registry.byId('labor-calendar').buttonContainer))
+        	//if((registry.byId('labor-calendar').buttonContainer.innerHTML + '').indexOf('dijit_Toolbar_0') > 0)
         },
         populateData: function(storeId, yearWeek){
         	fetchCalendarData(storeId, yearWeek);

@@ -48,6 +48,7 @@ import com.services.core.view.wrappers.EmployeeLeavesWrapper;
 import com.services.core.view.wrappers.EmployeeReviewWrapper;
 import com.services.core.view.wrappers.EmployeeSalaryWrapper;
 import com.services.core.view.wrappers.EmployeeWrapper;
+import com.services.core.view.wrappers.ItemWrapper;
 import com.services.core.view.wrappers.RoleWrapper;
 import com.services.core.view.wrappers.StoreAccountWrapper;
 import com.services.core.view.wrappers.StoreAlarmWrapper;
@@ -903,7 +904,13 @@ public class DataManagerImpl implements DataManager{
 	@Override
 	@Transactional
 	public boolean updateHealthInspectionDetails(UploadNotesWrapper notesWrapper){
-		return true;//storeDAO.updateHealthInspectionDetails(notesWrapper.getLinkedId(), notesWrapper.getPurpose(), notesWrapper.getPurposeDate(), notesWrapper.getPurposeNotes(), 0, notesWrapper.getBlobKey(), notesWrapper.getFileName());
+		return storeDAO.updateHealthInspectionDetails(notesWrapper.getId(), notesWrapper.getLinkedId(), notesWrapper.getPurpose(), notesWrapper.getPurposeDate(), notesWrapper.getPurposeNotes(), 0, notesWrapper.getBlobKey(), notesWrapper.getFileName());
+	}
+	
+	@Override
+	@Transactional
+	public int insertStoreItem(ItemWrapper item){
+		return storeDAO.insertStoreItem(item.getItemCode(), item.getItemColor(), item.getItemName(), item.getItemPar(), item.getItemUnits(), item.getStoreId(), item.getUpdatedBy());
 	}
 	
 }
