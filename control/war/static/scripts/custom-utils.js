@@ -747,5 +747,25 @@ function editRecordByDialog(tab, id, rowIndex){
 
 
 function createInventoryItem(){
+	var registry = require('dijit/registry');
+	var dom = require('dojo/dom');
+	var domConstruct = require('dojo/dom-construct');
+	var baseArray = require('dojo/_base/array');
+	var stamp = require('dojo/date/stamp');
+	var domStyle = require('dojo/dom-style');
+	var lang = require('dojo/_base/lang');
+	var Memory = require('dojo/store/Memory');
+	var ObjectStore = require('dojo/data/ObjectStore');
+	var INVENTORY_DISTRIBUTORS = [{id: '400', name: 'NICHOLAS', color: '#2E2EFE'},
+	                             {id: '500', name: 'US FOODS', color: '#8904B1'},
+	                             {id: '600', name: 'SAMS CLUB', color: '#B40431'},
+	                             {id: '700', name: 'GS KITCHEN', color: '#21610B'}];
+	var codesData = [];
+	baseArray.forEach(dojo.clone(INVENTORY_DISTRIBUTORS), function(distributor){
+	codesData.push({ color: distributor.color, id: distributor.id, name: '&nbsp;<span style="background-color: ' + distributor.color + '; color: #fff;">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;' + distributor.name + '&nbsp;&nbsp;&nbsp;'});
+	});
+	var itemStockStore = new Memory({idProperty: 'id', data: codesData});
+	var os = new ObjectStore({ objectStore: itemStockStore });
+	dijit.byId('inventoryItemDistributor').setStore(os);
 	addInventoryItemDialog.show();
 }

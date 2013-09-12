@@ -21,6 +21,7 @@ import com.services.core.data.mgr.DataManager;
 import com.services.core.view.utils.Utilities;
 import com.services.core.view.wrappers.BaseModel;
 import com.services.core.view.wrappers.EmployeeReviewWrapper;
+import com.services.core.view.wrappers.ItemWrapper;
 import com.services.core.view.wrappers.MultipleModelResponse;
 import com.services.core.view.wrappers.SingleModelResponse;
 import com.services.core.view.wrappers.StoreAccountWrapper;
@@ -348,6 +349,22 @@ public class StoreServiceController {
 		uploadNotesDetails.setPurpose("healthInspection");
 		boolean execute = dataService.updateHealthInspectionDetails(uploadNotesDetails);
 		return new SingleModelResponse<UploadNotesWrapper>(execute, null);
+	}
+	
+	@RequestMapping(value = "/service/store/{storeId}/distributors", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public MultipleModelResponse<ItemWrapper> getDistributorsForStore(@PathVariable int storeId)
+			throws IOException {
+		return new MultipleModelResponse<ItemWrapper>(true, dataService.getDistributors(storeId));
+	}
+	
+	@RequestMapping(value = "/service/store/{storeId}/items", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public SingleModelResponse<ItemWrapper> insertInventoryItems(@PathVariable int storeId, @RequestBody ItemWrapper itemWrapper)
+			throws IOException {
+		itemWrapper.setUpdatedBy(0);
+		int id = dataService.insertStoreItem(itemWrapper);
+		return new SingleModelResponse<ItemWrapper>(true, null);
 	}
 	
 }

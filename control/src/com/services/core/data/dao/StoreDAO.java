@@ -3,6 +3,7 @@ package com.services.core.data.dao;
 import java.util.Date;
 import java.util.List;
 
+import com.services.core.data.model.Item;
 import com.services.core.data.model.store.Store;
 import com.services.core.data.model.store.StoreAccount;
 import com.services.core.data.model.store.StoreAlarm;
@@ -94,6 +95,8 @@ public interface StoreDAO {
 	int insertHealthInspectionDetails(int storeId, String purpose, Date purposeDate, String purposeNotes, int updatedBy, String blobKey, String fileName);
 	
 	boolean updateHealthInspectionDetails(int id, int storeId, String purpose, Date purposeDate, String purposeNotes, int updatedBy, String blobKey, String fileName);
+	
+	List<Item> getStoreDistributors(int storeId);
 	
 	int insertStoreItem(int itemCode, String itemColor, String itemName, int itemPar, String itemUnits, int storeId, int updatedBy);
 }

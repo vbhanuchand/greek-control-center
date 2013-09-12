@@ -437,9 +437,34 @@ public class StoreDAOImpl implements StoreDAO {
 		
 	}
 	
+	
+	@Override
+	public List<Item> getStoreDistributors(int storeId){
+		Query query = sessionFactory.getCurrentSession().createQuery("from Item where storeId = :storeId");
+		query.setParameter("storeId", storeId);
+		//query.setParameter("itemType", "distributor");
+		return query.list();
+	}
+	
 	@Override
 	public int insertStoreItem(int itemCode, String itemColor, String itemName, int itemPar, String itemUnits, int storeId, int updatedBy){
-		Item item = new Item(itemCode, itemColor, itemName, itemPar, itemUnits, storeId, updatedBy);
+		String hql = "select i from Item i where i.storeId = :istoreId and i.itemType = :iitemType and i.itemCode = (select max(ii.itemCode) from Item ii " +
+				"where ii.id = i.id and ii.storeId = :storeId and ii.itemType=:itemType and ii.itemCode > :itemCode)";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setParameter("istoreId", storeId);
+		query.setParameter("storeId", storeId);
+		query.setParameter("itemCode", itemCode);
+		query.setParameter("itemType", "stock-item");
+		query.setParameter("iitemType", "stock-item");
+		if(itemColor.length() > 0)
+			itemColor = itemColor.substring(1, itemColor.length()-1);
+		List<Item> itemsList = query.list();
+		Item item;
+		if(itemsList.size() > 0){
+			item = new Item(itemsList.get(0).getItemCode() + 1, itemColor, itemName, itemPar, itemUnits, "stock-item", storeId, updatedBy);
+		}else {
+			item = new Item(itemCode + 1, itemColor, itemName, itemPar, itemUnits, "stock-item", storeId, updatedBy);
+		}
 		sessionFactory.getCurrentSession().save(item);
 		return item.getId();
 	}

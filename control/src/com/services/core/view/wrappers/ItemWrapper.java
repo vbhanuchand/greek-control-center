@@ -14,6 +14,8 @@ public class ItemWrapper extends BaseModel{
 	
 	private String itemName;
 	
+	private String itemType;
+	
 	private Integer itemPar;
 	
 	private String itemUnits;
@@ -29,13 +31,14 @@ public class ItemWrapper extends BaseModel{
 	}
 
 	public ItemWrapper(Integer id, Integer itemCode, String itemColor,
-			String itemName, Integer itemPar, String itemUnits,
+			String itemName, String itemType, Integer itemPar, String itemUnits,
 			Integer storeId, Integer updatedBy, Date updatedDate) {
 		super();
 		this.id = id;
 		this.itemCode = itemCode;
 		this.itemColor = itemColor;
 		this.itemName = itemName;
+		this.itemType = itemType;
 		this.itemPar = itemPar;
 		this.itemUnits = itemUnits;
 		this.storeId = storeId;
@@ -73,6 +76,14 @@ public class ItemWrapper extends BaseModel{
 
 	public void setItemName(String itemName) {
 		this.itemName = itemName;
+	}
+
+	public String getItemType() {
+		return itemType;
+	}
+
+	public void setItemType(String itemType) {
+		this.itemType = itemType;
 	}
 
 	public Integer getItemPar() {
