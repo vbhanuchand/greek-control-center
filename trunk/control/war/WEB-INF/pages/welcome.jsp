@@ -39,6 +39,9 @@
 		},
 		packages : [{name : "controls", location : location.pathname.replace(/\/[^/]+$/, '') + "/resources/scripts/controls", main : "StoreLayoutController"}]
 	};
+	var INVENTORY_DISTRIBUTORS = [];
+	var INVENTORY_ITEMS = {};
+	var INVENTORY_DISTRIBUTORS_MAP = {};
 </script>
 
 <link rel="stylesheet"
@@ -979,10 +982,10 @@
 									dijit.byId('inventoryStockPar').reset();
 									dijit.byId('inventoryStockPar').set('value', items[0].par);
 									var newPar = Number(items[0].par);
-									if((newPar == 0) || newPar > 1)
-										dijit.byId('inventoryStockParUnits').set('value', items[0].units.plural);
-									else 
-										dijit.byId('inventoryStockParUnits').set('value', items[0].units.singular);
+									//if((newPar == 0) || newPar > 1)
+									//	dijit.byId('inventoryStockParUnits').set('value', items[0].units.plural);
+									//else 
+										dijit.byId('inventoryStockParUnits').set('value', items[0].units);
 									dijit.byId('inventoryStockParCategory').set('value', items[0].category);
 							}});
 							</script>
@@ -1227,50 +1230,100 @@
 		data-dojo-props="title:'Add Item to Inventory', loadingMessage:'Loading ...', style: 'font-size: 100%;'"
 		draggable="true" data-dojo-id="addInventoryItemDialog" id="addInventoryItemDialog" style="position: absolute; top: 80px; height: 400px; width: 600px;">
 		<div>
-			<fieldset style="border:1px dotted ThreeDDarkShadow;">
+			<fieldset style="padding: 10px 2px 10px 2px; border: 1px dotted ThreeDDarkShadow;">
 			<legend style="display: block; background: none; margin-left: 10px; padding: 0px 3px 0px 3px; border:1px dotted ThreeDDarkShadow; text-align: left; font-size:90%;"><b>Add/Modify Details:</b></legend>
 				<form data-dojo-type="dijit/form/Form" data-dojo-id="inventoryItemForm" id="inventoryItemForm">
 					<table class="addRecordTable" style="width: 98%; height: 90%; padding: 10px;">
 						<tr>
-							<td width="25%"><b>Item Code:</b></td>
-							<td width="75%">
-								
-							</td>
-						</tr>
-						<tr>
 							<td width="25%"><b>Distributor:</b></td>
 							<td width="75%">
-								
+								<div data-dojo-type="dijit/form/Select"
+									data-dojo-props="pageSize: 5, required: 'true', maxHeight: -1, labelAttr: 'name', style: 'width: 175px; font-size: 90%;', trim: 'true'"
+									id="inventoryItemDistributor" name="inventoryItemDistributor">
+								</div>
 							</td>
 						</tr>
 						<tr>
 							<td width="25%"><b>Item Name:</b></td>
 							<td width="75%">
-								
+								<input data-dojo-type="dijit/form/TextBox"
+									data-dojo-props="style: 'width: 200px; font-size: 90%;', required: 'true', trim: 'true'"
+									id="inventoryItemName" name="inventoryItemName"/>
 							</td>
 						</tr>
 						<tr>
 							<td width="25%"><b>Item Par:</b></td>
 							<td width="75%">
-								
+								<input data-dojo-type="dijit/form/NumberTextBox"
+							data-dojo-props="style: 'width: 50px; font-size: 90%;', required: 'true', trim: 'true', invalidMessage : 'Item is Invalid'"
+							id="inventoryItemPar" name="inventoryItemPar"/>
 							</td>
 						</tr>
 						<tr>
 							<td width="25%"><b>Item Units:</b></td>
 							<td width="75%">
-								
+								<input data-dojo-type="dijit/form/TextBox"
+									data-dojo-props="style: 'width: 50px; font-size: 90%;', required: 'true', trim: 'true'"
+									id="inventoryItemUnits" name="inventoryItemUnits"/>
 							</td>
 						</tr>
 					</table>
 				</form>
+				<div id="inventoryItemFormStandBy" data-dojo-id="inventoryItemFormStandBy" 
+						data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'inventoryItemForm', color:'lightgrey'">
+				</div>
 			</fieldset>
 		</div>
-		<div style="text-align: right;" align="right">
-			<button data-dojo-type="dijit/form/Button" type="button" value="Confirm"
+		<div style="text-align: right; padding: 10px 2px 0px 0px;" align="right">
+			<button data-dojo-type="dijit/form/Button" type="button" value="Save"
 				id="addInventoryItemSaveButton">Save
 				<script type="dojo/on" data-dojo-event="click" data-dojo-args="e">
-						e.preventDefault(); // prevent the default submit
-						e.stopPropagation();
+					e.preventDefault();
+					e.stopPropagation();
+					console.log('Form Validation ', healthInspectionForm.validate(), healthInspectionForm.get('value'));
+					var registry = require('dijit/registry');
+					var storeLayout = require('controls/StoreLayoutController');
+					if(inventoryItemForm.validate()){
+						var formValues = inventoryItemForm.get('value');
+						var itemWrapper = {};
+						
+						var selectedItem = '';
+						registry.byId('inventoryItemDistributor').store.fetch({query: {id: registry.byId('inventoryItemDistributor').get('value')}, 
+							onComplete: function(items, request){
+								if(items.length > 0){
+									selectedItem = items[0];
+								}
+								itemWrapper['itemColor'] = selectedItem['color'];
+								itemWrapper['itemName'] = formValues['inventoryItemName'];
+								itemWrapper['itemPar'] = formValues['inventoryItemPar'];
+								itemWrapper['itemUnits'] = formValues['inventoryItemUnits'];
+								itemWrapper['storeId'] = registry.byId('hiddenStoreId').get('value');
+								itemWrapper['id'] = formValues['inventoryItemDistributor'];
+								itemWrapper['itemCode'] = formValues['inventoryItemDistributor'];
+						
+								var ajaxRequest = require("dojo/request");
+								var json = require('dojo/json');
+								var dom = require('dojo/dom');
+								var standByWidgetId = 'inventoryItemFormStandBy';
+								registry.byId(standByWidgetId).show();
+
+								ajaxRequest.post("/service/store/" + registry.byId('hiddenStoreId').get('value') + "/items", {
+				       					headers: { "Content-Type":"application/json"}, 
+				       					handleAs: 'json', data: json.stringify(itemWrapper), timeout: 10000 
+				       			}).then(function(itemsResponse){
+									if(itemsResponse.success){
+				       					dom.byId('messages').innerHTML = 'Add Successful';
+				       				}
+									registry.byId(standByWidgetId).hide();
+									addInventoryItemDialog.hide();
+				       			}, function(error){
+				       				console.log('Error while updating --> ' + error);
+				       				dom.byId('messages').innerHTML = 'Error while Adding --> ' + error;
+				       				registry.byId(standByWidgetId).hide();
+				       			});
+							
+						}});
+					}
 				</script>
 			</button>
 			<button data-dojo-type="dijit/form/Button" type="button" value="Back"

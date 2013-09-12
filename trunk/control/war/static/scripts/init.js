@@ -9,9 +9,9 @@ require(["dojox/form/Uploader", "dojox/embed/Flash", "dojox/form/uploader/plugin
 require(["dojo/parser", "dijit/dijit", "dojo/dom-style", "dojo/date", "dojo/date/locale", "dojo/dom-construct", "dojo/_base/fx", "dojo/fx", "dojo/_base/declare", "dojo/dom", "dojo/on", "dijit/form/Select",
          "controls/StoreLayoutController", "controls/EmployeeLayoutController", "controls/LaborLayoutController", "controls/AccountingLayoutController", "controls/InventoryLayoutController", "dijit/form/DateTextBox", "dojo/store/Memory",
          "dojo/_base/lang", "dojo/request", "dojo/dom-form", "dojo/json", "dojo/query", "dijit/registry", "dojo/_base/array", "dojox/widget/Dialog", "dijit/form/FilteringSelect",
-         "dijit/TooltipDialog", "dijit/popup", 'dojox/form/Uploader', 'dojox/form/uploader/FileList', 'dojox/layout/ScrollPane', "dojox/form/TimeSpinner", "dijit/form/Button", 'dojo/ready'], 
+         "dijit/TooltipDialog", "dijit/popup", 'dojox/form/Uploader', 'dojox/form/uploader/FileList', 'dojox/layout/ScrollPane', "dojox/form/TimeSpinner", "dijit/form/Button", 'dojox/timing/doLater', 'dojo/ready'], 
          function(parser, dijit, domStyle, date, locale, domConstruct, fx, otherFx, declare, dom, on, formSelect, storeLayout, empLayout, laborLayout, accLayout, inventoryLayout, DateTextBox, Memory, lang, 
-        		 ajaxRequest, domForm, json, query, registry, baseArray, dojoxDialog, FilteringSelect, TooltipDialog, popup, uploader, fileList, scrollPane, TimeSpinner, Button, ready){
+        		 ajaxRequest, domForm, json, query, registry, baseArray, dojoxDialog, FilteringSelect, TooltipDialog, popup, uploader, fileList, scrollPane, TimeSpinner, Button, doLater, ready){
 		  ready(function(){
 		    parser.parse();
 		    var LoadingObj = declare(null, {
@@ -34,7 +34,7 @@ require(["dojo/parser", "dijit/dijit", "dojo/dom-style", "dojo/date", "dojo/date
 				}
 			});
 			loadingObj = new LoadingObj();
-			
+			registry.byId('hiddenStoreId').set('value', 0);
 			storeLayout.init();
 			empLayout.init();
 			laborLayout.init();

@@ -14,7 +14,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
  				query, declare, has, ObjectStore, ajaxRequest, dojoxFormManager, randomNumber, functional,
  				itemFileWriteStore, gridDijit, TimeTextBox, ValidationTextBox, CurrencyTextBox, Observable, Tooltip, popup, DNumber){
 
-	var INVENTORY_DISTRIBUTORS = [
+	/*var INVENTORY_DISTRIBUTORS = [
 	                              {id: '1', name: 'NICHOLAS', color: '#2E2EFE', items: [{code: '101', name: 'PITA BREAD', par: 10, units: {singular: 'Box', plural: 'Boxes'}},
 	                                                                  {code: '102', name: 'YEERO CONE', par: 10, units: {singular: 'Cone', plural: 'Cones'}},
 	                                                                  {code: '103', name: 'BREADED ZUCCHINI', par: 4, units: {singular: 'Bag', plural: 'Bags'}},
@@ -28,16 +28,8 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 	                                                                    {code: '402', name: 'HAND ROLLS', par: 2, units: {singular: 'Unit', plural: 'Units'}},
 	                                                                    {code: '403', name: 'BREADED ZUCCHINI', par: 4, units: {singular: 'Bag', plural: 'Bags'}},
 	                                                                    {code: '404', name: 'BREADED MUSHROOM', par: 4, units: {singular: 'Bag', plural: 'Bags'}}]}
-							],
-	inventoryDetailsGrid=null, invoiceItemsGrid=null, inventoryInvoicesGrid=null, INVENTORY_ITEMS = {}, isInvoiceDetail = false,
-	populateInventoryItems = function(){
-		INVENTORY_ITEMS = {};
-		dojo.forEach(INVENTORY_DISTRIBUTORS, function(catItem){
-			dojo.forEach(catItem.items, function(item){
-				INVENTORY_ITEMS[item.code] = lang.mixin(item, {'categoryId': catItem.id, 'distributorName': catItem.name, 'color': catItem.color});
-			});
-		});
-	},
+							],*/
+	var inventoryDetailsGrid=null, invoiceItemsGrid=null, inventoryInvoicesGrid=null, isInvoiceDetail = false,
 	refreshInvoiceDetails = function(){
 		registry.byId('inventoryInvoiceDetailsGrid').selection.clear();
 		dom.byId('createInvoiceLink').style.display = 'none';
@@ -62,6 +54,38 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 			if(nd && item){
 				nd.style.backgroundColor = INVENTORY_ITEMS[item['itemId'][0]]['color'];
 			}
+		});
+		fetchStoreDistributorsAndItems(registry.byId('hiddenStoreId').get('value'));
+	},
+	
+	fetchStoreDistributorsAndItems = function(storeId){
+		INVENTORY_DISTRIBUTORS = [];
+		INVENTORY_DISTRIBUTORS_MAP = {};
+		INVENTORY_ITEMS = {};
+		ajaxRequest.get("/service/store/" + storeId + "/distributors",{
+			handleAs: 'json'
+		}).then(function(response){
+			if(response.success){
+				baseArray.forEach(response.models, function(item, index){
+					if(item.itemType == 'stock-item'){
+						INVENTORY_ITEMS[item.itemCode] = {'code': item.itemCode,'categoryId': parseInt(item.itemCode/100)*100, 
+								'color': '#'+item.itemColor, 'name': item.itemName, 'par': item.itemPar, 'units': item.itemUnits};
+						var distributorCode = parseInt(item.itemCode/100) * 100;
+						if(!INVENTORY_DISTRIBUTORS_MAP[distributorCode])
+							INVENTORY_DISTRIBUTORS_MAP[distributorCode] = new Array();
+						
+						INVENTORY_DISTRIBUTORS_MAP[distributorCode].push(INVENTORY_ITEMS[item.itemCode]);
+					}
+				});
+				
+				baseArray.forEach(response.models, function(item, index){
+					if(item.itemType == 'distributor'){
+						INVENTORY_DISTRIBUTORS.push({id: item.itemCode, name: item.itemName, color: '#'+item.itemColor, items: INVENTORY_DISTRIBUTORS_MAP[item.itemCode]});
+					}
+				});
+			}
+		}, function(error){
+			console.error('Error occurred while fetching Inventory Details data ' + error);
 		});
 	},
 	
@@ -126,8 +150,8 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 		});
 	},*/
 	updateInventoryDetailsGrid = function(inventoryData){
-		if(inventoryData.length > 0)
-			populateInventoryItems();
+		//if(inventoryData.length > 0)
+		//	populateInventoryItems();
 		var tempStore = {
 				"identifier" : "id",
 				"items" : []
@@ -146,9 +170,9 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 		var formatParUnits = function(inVal){
 			var par = Number(INVENTORY_ITEMS[inVal]['par']);
 			if(par > 1)
-				return par + ' ' + INVENTORY_ITEMS[inVal]['units']['plural'];
+				return par + ' ' + INVENTORY_ITEMS[inVal]['units'];
 			else 
-				return par + ' ' + INVENTORY_ITEMS[inVal]['units']['singular'];
+				return par + ' ' + INVENTORY_ITEMS[inVal]['units'];
 		};
 		
 		var formatTotal = function(inVal){
@@ -312,11 +336,21 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 	resetScreen = function(){
 		dom.byId('inventoryTabTitle').innerHTML = 'Invoices / Stock';
 		dom.byId('createInvoiceLink').style.display = '';
-		fetchInvoiceGridData(registry.byId('hiddenStoreId').get('value'));
-		fetchStockGridData(registry.byId('hiddenStoreId').get('value'));
 		registry.byId('inventoryInvoicesGrid').selection.clear();
 		registry.byId('inventoryInvoiceDetailsGrid').selection.clear();
 		registry.byId('inventoryInvoiceItemId').set('value', 0);
+		INVENTORY_DISTRIBUTORS = [];
+		fetchStoreDistributorsAndItems(registry.byId('hiddenStoreId').get('value'));
+		var workLater = function(){
+			var chkCondition = (INVENTORY_DISTRIBUTORS) && (INVENTORY_DISTRIBUTORS.length > 0);
+			if(dojox.timing.doLater(chkCondition)){
+				return;
+			}
+			fetchInvoiceGridData(registry.byId('hiddenStoreId').get('value'));
+			fetchStockGridData(registry.byId('hiddenStoreId').get('value'));
+		};
+		workLater();
+		
 	},
 	
 	resetInvoiceDetails = function(){

@@ -162,6 +162,8 @@ public interface DataManager {
 	
 	boolean updateHealthInspectionDetails(UploadNotesWrapper notesWrapper);
 	
+	List<ItemWrapper> getDistributors(int storeId);
+	
 	int insertStoreItem(ItemWrapper item);
 	
 }

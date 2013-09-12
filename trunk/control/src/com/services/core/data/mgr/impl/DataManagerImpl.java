@@ -25,6 +25,7 @@ import com.services.core.data.dao.EmployeeDAO;
 import com.services.core.data.dao.StoreDAO;
 import com.services.core.data.mgr.DataManager;
 import com.services.core.data.model.Blobs;
+import com.services.core.data.model.Item;
 import com.services.core.data.model.employee.Employee;
 import com.services.core.data.model.employee.EmployeeDiscipline;
 import com.services.core.data.model.employee.EmployeeLabor;
@@ -905,6 +906,28 @@ public class DataManagerImpl implements DataManager{
 	@Transactional
 	public boolean updateHealthInspectionDetails(UploadNotesWrapper notesWrapper){
 		return storeDAO.updateHealthInspectionDetails(notesWrapper.getId(), notesWrapper.getLinkedId(), notesWrapper.getPurpose(), notesWrapper.getPurposeDate(), notesWrapper.getPurposeNotes(), 0, notesWrapper.getBlobKey(), notesWrapper.getFileName());
+	}
+	
+	
+	@Override
+	public List<ItemWrapper> getDistributors(int storeId){
+		List<ItemWrapper> returnList = new ArrayList<ItemWrapper>();
+		ItemWrapper item;
+		for(Item tempItem: storeDAO.getStoreDistributors(storeId)){
+			item = new ItemWrapper();
+			item.setId(tempItem.getId());
+			item.setItemCode(tempItem.getItemCode());
+			item.setItemColor(tempItem.getItemColor());
+			item.setItemName(tempItem.getItemName());
+			item.setStoreId(tempItem.getStoreId());
+			
+			item.setItemType(tempItem.getItemType());
+			item.setItemPar(tempItem.getItemPar());
+			item.setItemUnits(tempItem.getItemUnits());
+			
+			returnList.add(item);
+		}
+		return returnList;
 	}
 	
 	@Override

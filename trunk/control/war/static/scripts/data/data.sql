@@ -265,3 +265,65 @@ select uploadnote0_.id as col_0_0_, uploadnote0_.purpose_date as col_1_0_, uploa
 
 alter table employee_leaves modify excused varchar(100);
 select * from employee_leaves;
+
+commit;
+
+
+select * from items where store_id=5;
+
+select * from store_stock;
+
+delete from store_stock;
+select * from store_invoice_details;
+delete from store_invoice_details;
+select * from items;
+
+/*For Store 1*/
+insert into items(item_code, item_name, item_color, store_id, updated_by, item_type)
+values(400, 'NICHOLAS', '2E2EFE', 1, 0, 'distributor');
+insert into items(item_code, item_name, item_color, store_id, updated_by, item_type)
+values(500, 'US FOODS', '8904B1', 1, 0, 'distributor');
+insert into items(item_code, item_name, item_color, store_id, updated_by, item_type)
+values(600, 'SAMS CLUB', 'B40431', 1, 0, 'distributor');
+insert into items(item_code, item_name, item_color, store_id, updated_by, item_type)
+values(700, 'GS KITCHEN', '21610B', 1, 0, 'distributor');
+
+/*For Store 2*/
+insert into items(item_code, item_name, item_color, store_id, updated_by, item_type)
+values(400, 'NICHOLAS', '2E2EFE', 2, 0, 'distributor');
+insert into items(item_code, item_name, item_color, store_id, updated_by, item_type)
+values(500, 'US FOODS', '8904B1', 2, 0, 'distributor');
+insert into items(item_code, item_name, item_color, store_id, updated_by, item_type)
+values(600, 'SAMS CLUB', 'B40431', 2, 0, 'distributor');
+insert into items(item_code, item_name, item_color, store_id, updated_by, item_type)
+values(700, 'GS KITCHEN', '21610B', 2, 0, 'distributor');
+
+/*For Store 3*/
+insert into items(item_code, item_name, item_color, store_id, updated_by, item_type)
+values(400, 'NICHOLAS', '2E2EFE', 3, 0, 'distributor');
+insert into items(item_code, item_name, item_color, store_id, updated_by, item_type)
+values(500, 'US FOODS', '8904B1', 3, 0, 'distributor');
+insert into items(item_code, item_name, item_color, store_id, updated_by, item_type)
+values(600, 'SAMS CLUB', 'B40431', 3, 0, 'distributor');
+insert into items(item_code, item_name, item_color, store_id, updated_by, item_type)
+values(700, 'GS KITCHEN', '21610B', 3, 0, 'distributor');
+
+/*For Store 4*/
+insert into items(item_code, item_name, item_color, store_id, updated_by, item_type)
+values(400, 'NICHOLAS', '2E2EFE', 4, 0, 'distributor');
+insert into items(item_code, item_name, item_color, store_id, updated_by, item_type)
+values(500, 'US FOODS', '8904B1', 4, 0, 'distributor');
+insert into items(item_code, item_name, item_color, store_id, updated_by, item_type)
+values(600, 'SAMS CLUB', 'B40431', 4, 0, 'distributor');
+insert into items(item_code, item_name, item_color, store_id, updated_by, item_type)
+values(700, 'GS KITCHEN', '21610B', 4, 0, 'distributor');
+
+/*For Store 5*/
+insert into items(item_code, item_name, item_color, store_id, updated_by, item_type)
+values(400, 'NICHOLAS', '2E2EFE', 5, 0, 'distributor');
+insert into items(item_code, item_name, item_color, store_id, updated_by, item_type)
+values(500, 'US FOODS', '8904B1', 5, 0, 'distributor');
+insert into items(item_code, item_name, item_color, store_id, updated_by, item_type)
+values(600, 'SAMS CLUB', 'B40431', 5, 0, 'distributor');
+insert into items(item_code, item_name, item_color, store_id, updated_by, item_type)
+values(700, 'GS KITCHEN', '21610B', 5, 0, 'distributor');
