@@ -457,7 +457,7 @@ public class StoreDAOImpl implements StoreDAO {
 		query.setParameter("itemType", "stock-item");
 		query.setParameter("iitemType", "stock-item");
 		if(itemColor.length() > 0)
-			itemColor = itemColor.substring(1, itemColor.length()-1);
+			itemColor = itemColor.substring(1, itemColor.length());
 		List<Item> itemsList = query.list();
 		Item item;
 		if(itemsList.size() > 0){

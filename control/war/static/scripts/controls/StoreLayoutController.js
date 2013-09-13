@@ -293,7 +293,8 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 		    				+ '<a target="_new" href="/service/getBlob/' + blob.blobKey + '">' 
 		    				//+ ((blob.fileName.length > 20) ? (blob.fileName.substr(0, 20)+'...') : blob.fileName) 
 		    				+  blob.fileName
-		    				+ '</a>';
+		    				+ '</a>'
+		    				+ '&nbsp;&nbsp;' + '<img src="resources/images/delete-icon.png" onclick="javascript: deleteItem(' + "'blob','store-lease','" + blob.id + "'" + ');"/>';
 		    				//+ '&nbsp;<a target="_new" href="/service/getBlob/' + blob.blobKey + '">View/Download</a>';
 		    			domConstruct.create("li", {
 	                        innerHTML: innerHTMLText
@@ -328,10 +329,13 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 		    		tableTR = domConstruct.create("tr");
 		    		var td1 = domConstruct.create("td", { innerHTML: dateRecord.impDate }, tableTR);
 		    		var td2 = domConstruct.create("td", { innerHTML: dateRecord.notes }, tableTR);
+		    		var td3 = domConstruct.create("td", { innerHTML: '<img src="resources/images/delete-icon.png" onclick="javascript: deleteItem(' + "'date','','" + dateRecord.id + "'" + ');"/>' }, tableTR);
 		    		domStyle.set(td1, {style: "width: 30%"});
-		    		domStyle.set(td2, {style: "width: 70%"});
+		    		domStyle.set(td2, {style: "width: 60%"});
+		    		domStyle.set(td3, {style: "width: 10%; text-align: left;"});
 		    		tableTR.appendChild(td1);
 		    		tableTR.appendChild(td2);
+		    		tableTR.appendChild(td3);
 		    		impDatesList.appendChild(tableTR);
 		    	});
 		    },

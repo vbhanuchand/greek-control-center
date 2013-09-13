@@ -769,3 +769,46 @@ function createInventoryItem(){
 	dijit.byId('inventoryItemDistributor').setStore(os);
 	addInventoryItemDialog.show();
 }
+
+
+function deleteItem(src, blobSrc, id){
+	var registry = require('dijit/registry');
+	var ajaxRequest = require("dojo/request");
+	var json = require('dojo/json');
+	var dom = require('dojo/dom');
+	var storeLayout = require('controls/StoreLayoutController');
+	console.log('Deleting ', src, blobSrc, id);
+	switch(src){
+		case 'date':
+			registry.byId('storeInfoImpDatesStandBy').show();
+			ajaxRequest.get("/service/delete/date/" + id,{
+	    		handleAs: 'json'
+	    	}).then(function(deleteResponse){
+	    		if(deleteResponse.success){
+	    			storeLayout.refreshStoreDates(registry.byId('hiddenStoreId').get('value'));
+	    		}
+	    	}, function(error){
+	    		registry.byId('storeInfoImpDatesStandBy').hide();
+	    	});
+			break;
+		case 'blob':
+			switch(blobSrc){
+				case 'store-lease':
+					registry.byId('storeInfoLeaseDocumentsStandBy').show();
+					ajaxRequest.get("/service/delete/blob/" + id + '/store-lease',{
+			    		handleAs: 'json'
+			    	}).then(function(deleteResponse){
+			    		if(deleteResponse.success){
+			    			storeLayout.fetchStoreLeaseBlobs(registry.byId('hiddenStoreId').get('value'));
+			    		}
+			    	}, function(error){
+			    		registry.byId('storeInfoLeaseDocumentsStandBy').hide();
+			    	});
+				break;
+			}
+			break;
+		default:
+			break;
+	
+	}
+}

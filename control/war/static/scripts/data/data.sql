@@ -327,3 +327,6 @@ insert into items(item_code, item_name, item_color, store_id, updated_by, item_t
 values(600, 'SAMS CLUB', 'B40431', 5, 0, 'distributor');
 insert into items(item_code, item_name, item_color, store_id, updated_by, item_type)
 values(700, 'GS KITCHEN', '21610B', 5, 0, 'distributor');
+
+commit;
+delete from items;

@@ -69,7 +69,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 				baseArray.forEach(response.models, function(item, index){
 					if(item.itemType == 'stock-item'){
 						INVENTORY_ITEMS[item.itemCode] = {'code': item.itemCode,'categoryId': parseInt(item.itemCode/100)*100, 
-								'color': '#'+item.itemColor, 'name': item.itemName, 'par': item.itemPar, 'units': item.itemUnits};
+								'color': '#' + item.itemColor, 'name': item.itemName, 'par': item.itemPar, 'units': item.itemUnits};
 						var distributorCode = parseInt(item.itemCode/100) * 100;
 						if(!INVENTORY_DISTRIBUTORS_MAP[distributorCode])
 							INVENTORY_DISTRIBUTORS_MAP[distributorCode] = new Array();
@@ -80,12 +80,12 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 				
 				baseArray.forEach(response.models, function(item, index){
 					if(item.itemType == 'distributor'){
-						INVENTORY_DISTRIBUTORS.push({id: item.itemCode, name: item.itemName, color: '#'+item.itemColor, items: INVENTORY_DISTRIBUTORS_MAP[item.itemCode]});
+						INVENTORY_DISTRIBUTORS.push({id: item.itemCode, name: item.itemName, color: '#' + item.itemColor, items: INVENTORY_DISTRIBUTORS_MAP[item.itemCode]});
 					}
 				});
 			}
 		}, function(error){
-			console.error('Error occurred while fetching Inventory Details data ' + error);
+			console.log('Error occurred while fetching Inventory Details data ' + error);
 		});
 	},
 	
@@ -99,7 +99,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 				registry.byId('inventoryInvoicesGridStandBy').hide();
 			}
 		}, function(error){
-			console.error('Error occurred while fetching Invoice data ' + error);
+			console.log('Error occurred while fetching Invoice data ' + error);
 			registry.byId('inventoryInvoicesGridStandBy').hide();
 		});
 	},
@@ -115,7 +115,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 				registry.byId('inventoryInvoiceDetailsGridStandBy').hide();
 			}
 		}, function(error){
-			console.error('Error occurred while fetching Stock data ' + error);
+			console.log('Error occurred while fetching Stock data ' + error);
 			registry.byId('inventoryInvoiceDetailsGridStandBy').hide();
 		});
 	},
@@ -131,7 +131,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 				registry.byId('inventoryInvoiceDetailsGridStandBy').hide();
 			}
 		}, function(error){
-			console.error('Error occurred while fetching Invoice Details data ' + error);
+			console.log('Error occurred while fetching Invoice Details data ' + error);
 			registry.byId('inventoryInvoiceDetailsGridStandBy').hide();
 		});
 	},
@@ -145,7 +145,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 				registry.byId('invoiceItemsGridStandBy').hide();
 			}
 		}, function(error){
-			console.error('Error occurred while fetching Stock data ' + error);
+			console.log('Error occurred while fetching Stock data ' + error);
 			registry.byId('invoiceItemsGridStandBy').hide();
 		});
 	},*/
@@ -322,9 +322,10 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 		var codesData = [];
 		baseArray.forEach(dojo.clone(INVENTORY_DISTRIBUTORS), function(distributor){
 			baseArray.forEach(distributor.items, function(item){
-				codesData.push(lang.mixin(item, {category: distributor.id, code: item.code, name: '&nbsp;<span style="background-color: ' + distributor.color + '; color: #fff;">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;' + item.name + '&nbsp;&nbsp;&nbsp;'}));
+				codesData.push(lang.mixin(item, {category: item.categoryId, code: item.code, name: '&nbsp;<span style="background-color: ' + item.color + '; color: #fff;">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;' + item.name + '&nbsp;&nbsp;&nbsp;'}));
 			});
 		});
+		codesData.sort(function(a,b){return a.code - b.code });
 		var itemStockStore = new Memory({idProperty: 'code', data: codesData});
 		var os = new ObjectStore({ objectStore: itemStockStore });
 		dijit.byId('inventoryStockItem').setStore(os);

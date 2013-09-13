@@ -1304,6 +1304,8 @@
 								var ajaxRequest = require("dojo/request");
 								var json = require('dojo/json');
 								var dom = require('dojo/dom');
+								var inventoryLayout = require("controls/InventoryLayoutController");
+								
 								var standByWidgetId = 'inventoryItemFormStandBy';
 								registry.byId(standByWidgetId).show();
 
@@ -1313,6 +1315,7 @@
 				       			}).then(function(itemsResponse){
 									if(itemsResponse.success){
 				       					dom.byId('messages').innerHTML = 'Add Successful';
+										inventoryLayout.reset();
 				       				}
 									registry.byId(standByWidgetId).hide();
 									addInventoryItemDialog.hide();
