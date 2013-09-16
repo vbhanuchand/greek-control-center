@@ -271,12 +271,19 @@ commit;
 
 select * from items where store_id=5;
 
+select * from store_invoice_details;
 select * from store_stock;
+select * from items;
+select * from store_invoice;
+
+select * from items i where i.store_id=1 and i.item_type='stock-item' 
+and i.item_code = (select max(item_code) from items ii where ii.id = i.id and ii.store_id=1 and ii.item_type='stock-item' and ii.item_code > 500 and ii.item_code < 600);
 
 delete from store_stock;
 select * from store_invoice_details;
 delete from store_invoice_details;
-select * from items;
+select * from items where store_id=1 and item_type='stock-item';
+delete from items where item_type='stock-item';
 
 /*For Store 1*/
 insert into items(item_code, item_name, item_color, store_id, updated_by, item_type)
@@ -330,3 +337,5 @@ values(700, 'GS KITCHEN', '21610B', 5, 0, 'distributor');
 
 commit;
 delete from items;
+
+select * from items;

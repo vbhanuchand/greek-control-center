@@ -2,7 +2,7 @@ define(["dijit/dijit", "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/dom-cons
         "dojo/_base/lang", "dojo/request", "dojo/_base/array", "dojo/date/locale", "dijit/form/Select", "dijit/form/FilteringSelect", "dojo/number", "dojox/lang/functional"],
 function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Memory, json, otherFx, lang, ajaxRequest, arrayUtils, locale, formSelect, FilteringSelect, DNumber, functional){
 	var widgets = ['accountingLbrAmt', 'accountingFdAmt', 'accountingAdvtAmt', 'accountingMiscAmt', 'accountingProfitAmt'],
-	percentSuffix = 'Percent', accountingChart = null,
+	percentSuffix = 'Percent', accountingChart = null, accountingMonthlyChart=null,
 	initListening = function(){
 		arrayUtils.forEach(widgets, function(id){
 			var widget = dijit.byId(id);
@@ -89,19 +89,55 @@ function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Me
 	
 	populateQuartersList = function(domNode){
 		accountingChart = new google.visualization.PieChart(document.getElementById('accountingChartDiv'));
-		var quartersStore = new Memory({data: [{id: 0, name:"--Select Quarter--", label:"--Select Quarter--"}, {id: 1, name:"Quarter 1", label:"Quarter 1"}, 
-		                                       {id: 2, name:"Quarter 2", label:"Quarter 2"}, {id: 3, name:"Quarter 3", label:"Quarter 3"}, 
-		                                       {id: 4, name:"Quarter 4", label:"Quarter 4"}]});
+		
+		var quartersStore = new Memory({data: [
+		                                       {id: 0, name:"--Month--", label:"--Month--"}, 
+		                                       {id: 1, name:"January", label:"January"},
+		                                       {id: 2, name:"February", label:"February"},
+		                                       {id: 3, name:"March", label:"March"},
+		                                       {id: 4, name:"April", label:"April"},
+		                                       {id: 5, name:"May", label:"May"},
+		                                       {id: 6, name:"June", label:"June"},
+		                                       {id: 7, name:"July", label:"July"},
+		                                       {id: 8, name:"August", label:"August"},
+		                                       {id: 9, name:"September", label:"September"},
+		                                       {id: 10, name:"October", label:"October"},
+		                                       {id: 11, name:"November", label:"November"},
+		                                       {id: 12, name:"December", label:"December"},
+		                                      ]
+										});
 		                                   
 		var quartersList = new FilteringSelect({ id: "accountingQuartersList", value: 0, store: quartersStore, searchAttr: "name", name: "accountingQuartersList",
-             labelAttr: "label", style: "width: 35%;" }, dom.byId("accountingQuartersList"));
+             labelAttr: "label", style: "width: 25%; padding-left: 10px;" }, dom.byId("accountingQuartersList"));
 	
 		quartersList.on('change', function(newValue){
 			if(Number(newValue) > 0)
 				populateQuarterData(newValue);
 			else resetForm(true, true);
-			
 		});
+		
+		// Column Chart starts here
+		var data = google.visualization.arrayToDataTable([
+		                                                  ['Month', 'Labor', 'Food', 'Advertisement', 'Misc.', 'Profit'],
+		                                                  ['Jan', 1000, 800, 600, 400, 500],
+		                                                  ['Feb', 1000, 800, 600, 400, 500],
+		                                                  ['Mar', 1000, 800, 600, 400, 500],
+		                                                  ['Apr', 1000, 800, 600, 400, 500],
+		                                                  ['May', 1000, 800, 600, 400, 500],
+		                                                  ['Jun', 1000, 800, 600, 400, 500],
+		                                                  ['Jul', 1000, 800, 600, 400, 500],
+		                                                  ['Aug', 1000, 800, 600, 400, 500],
+		                                                  ['Sep', 1000, 800, 600, 400, 500],
+		                                                  ['Oct', 1000, 800, 600, 400, 500],
+		                                                  ['Nov', 1000, 800, 600, 400, 500],
+		                                                  ['Dec', 1000, 800, 600, 400, 500]
+		                                                ]);
+		var options = { title: 'Monthly Stats', hAxis: {title: 'Month', titleTextStyle: {color: 'black'}}, width: '800px' };
+		accountingMonthlyChart = new google.visualization.ColumnChart(document.getElementById('accountingMonthlyChartDiv'));
+		accountingMonthlyChart.draw(data, options);
+		
+		//Column Chart Ends here
+		
 	},
 	
 	populateQuarterData = function(quarter){
