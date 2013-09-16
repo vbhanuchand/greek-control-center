@@ -1,4 +1,4 @@
-define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry", "dojo/dom", "dojo/dom-style", "dojo/dom-class", "dojo/dom-construct", "dojo/dom-geometry", "dojo/string", "dojo/on", 
+define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Select", "dijit/registry", "dojo/dom", "dojo/dom-style", "dojo/dom-class", "dojo/dom-construct", "dojo/dom-geometry", "dojo/string", "dojo/on", 
          "dojo/keys", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/event", "dojo/json", "dojo/_base/config", "dojo/fx", "dojo/io-query", "dojo/_base/window", "dojo/aspect",
  		"dojo/date/locale",  "dojo/_base/fx", "dojox/layout/TableContainer", "dijit/form/TextBox", "dijit/layout/ContentPane", "dijit/form/SimpleTextarea", "dijit/form/Textarea",
  		"dijit/layout/BorderContainer", "dijit/layout/TabContainer", "dijit/Calendar", "dijit/TitlePane", "dijit/form/FilteringSelect",	"dijit/form/Form", 
@@ -6,7 +6,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
  		"dojo/query", "dojo/_base/declare", "dojo/has", "dojo/data/ObjectStore", "dojo/request", "dojox/form/Manager", "dojox/math/random/Simple", "dojox/lang/functional",
  		"dojo/data/ItemFileWriteStore", "dojox/grid/cells/dijit", "dijit/form/TimeTextBox", "dijit/form/ValidationTextBox",	"dijit/form/CurrencyTextBox", "dojo/store/Observable",  
  		"dijit/TooltipDialog", "dijit/popup", "dojo/number", "dojox/grid/enhanced/plugins/exporter/CSVWriter", "dojox/grid/enhanced/plugins/NestedSorting", "dojox/grid/enhanced/plugins/Pagination", "dojox/grid/enhanced/plugins/IndirectSelection"],
- 		function(declare, dijit, domForm, registry, dom, domStyle, domClass, domConstruct, domGeometry, string, on, 
+ 		function(declare, dijit, domForm, Select, registry, dom, domStyle, domClass, domConstruct, domGeometry, string, on, 
  				keys, lang, baseArray, event, json, djConfig, otherFx, ioQuery, win, aspect, 
  				locale, baseFx, Table, TextBox, ContentPane, SimpleTextArea, TextArea, 
  				BorderContainer, TabContainer, Calendar, TitlePane, FilteringSelect, Form, 
@@ -14,22 +14,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
  				query, declare, has, ObjectStore, ajaxRequest, dojoxFormManager, randomNumber, functional,
  				itemFileWriteStore, gridDijit, TimeTextBox, ValidationTextBox, CurrencyTextBox, Observable, Tooltip, popup, DNumber){
 
-	/*var INVENTORY_DISTRIBUTORS = [
-	                              {id: '1', name: 'NICHOLAS', color: '#2E2EFE', items: [{code: '101', name: 'PITA BREAD', par: 10, units: {singular: 'Box', plural: 'Boxes'}},
-	                                                                  {code: '102', name: 'YEERO CONE', par: 10, units: {singular: 'Cone', plural: 'Cones'}},
-	                                                                  {code: '103', name: 'BREADED ZUCCHINI', par: 4, units: {singular: 'Bag', plural: 'Bags'}},
-	                                                                  {code: '104', name: 'BREADED MUSHROOM', par: 4, units: {singular: 'Bag', plural: 'Bags'}}]},
-	                              {id: '2', name: 'US FOODS', color: '#8904B1', items: [{code: '201', name: 'WHITE SAUCE', par: 3, units: {singular: 'Pan', plural: 'Pans'}},
-	                                                                  {code: '202', name: 'RED SAUCE', par: 3, units: {singular: 'Pan', plural: 'Pans'}},
-	                                                                  {code: '203', name: 'CHICKEN SOULVAKI', par: 4, units: {singular: 'Tray', plural: 'Trays'}}]},
-	                              {id: '3', name: 'SAMS CLUB', color: '#B40431', items: [{code: '301', name: 'LOUKOUMADE SYRUP', par: 1, units: {singular: 'Bottle', plural: 'Bottles'}},
-	                                                                   {code: '302', name: 'LOUKOUMADE SPICE', par: 1, units: {singular: 'Bottle', plural: 'Bottles'}}]},
-	                              {id: '4', name: 'GS KITCHEN', color: '#21610B', items: [{code: '401', name: 'WINDEX', par: 2, units: {singular: 'Unit', plural: 'Units'}},
-	                                                                    {code: '402', name: 'HAND ROLLS', par: 2, units: {singular: 'Unit', plural: 'Units'}},
-	                                                                    {code: '403', name: 'BREADED ZUCCHINI', par: 4, units: {singular: 'Bag', plural: 'Bags'}},
-	                                                                    {code: '404', name: 'BREADED MUSHROOM', par: 4, units: {singular: 'Bag', plural: 'Bags'}}]}
-							],*/
-	var inventoryDetailsGrid=null, invoiceItemsGrid=null, inventoryInvoicesGrid=null, isInvoiceDetail = false,
+	var inventoryDetailsGrid=null, invoiceItemsGrid=null, inventoryInvoicesGrid=null, isInvoiceDetail = false, INVENTORY_ITEMS_INFO = {},
 	refreshInvoiceDetails = function(){
 		registry.byId('inventoryInvoiceDetailsGrid').selection.clear();
 		dom.byId('createInvoiceLink').style.display = 'none';
@@ -45,50 +30,53 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 		registry.byId('inventoryInvoiceDetailsGrid').selection.clear();
 		dojo.connect(registry.byId('inventoryInvoicesGrid').selection, 'onSelected', function(rowIndex){
 			refreshInvoiceDetails();
-			//dijit.byId('grid').rowSelectCell.setDisabled(rowIndex, true|false);
 		});
 		var grid = registry.byId('inventoryInvoiceDetailsGrid');
 		dojo.connect(grid, 'onStyleRow', function(row){
 			var item = grid.getItem(row.index);
 			var nd = dojo.query('td[idx="0"]', row.node)[0];
 			if(nd && item){
-				nd.style.backgroundColor = INVENTORY_ITEMS[item['itemId'][0]]['color'];
+				nd.style.backgroundColor = '#' + INVENTORY_ITEMS_INFO[item['itemId'][0]]['itemColor'];
 			}
 		});
-		fetchStoreDistributorsAndItems(registry.byId('hiddenStoreId').get('value'));
 	},
-	
-	fetchStoreDistributorsAndItems = function(storeId){
-		INVENTORY_DISTRIBUTORS = [];
-		INVENTORY_DISTRIBUTORS_MAP = {};
-		INVENTORY_ITEMS = {};
-		ajaxRequest.get("/service/store/" + storeId + "/distributors",{
-			handleAs: 'json'
-		}).then(function(response){
-			if(response.success){
-				baseArray.forEach(response.models, function(item, index){
-					if(item.itemType == 'stock-item'){
-						INVENTORY_ITEMS[item.itemCode] = {'code': item.itemCode,'categoryId': parseInt(item.itemCode/100)*100, 
-								'color': '#' + item.itemColor, 'name': item.itemName, 'par': item.itemPar, 'units': item.itemUnits};
-						var distributorCode = parseInt(item.itemCode/100) * 100;
-						if(!INVENTORY_DISTRIBUTORS_MAP[distributorCode])
-							INVENTORY_DISTRIBUTORS_MAP[distributorCode] = new Array();
-						
-						INVENTORY_DISTRIBUTORS_MAP[distributorCode].push(INVENTORY_ITEMS[item.itemCode]);
-					}
-				});
-				
-				baseArray.forEach(response.models, function(item, index){
-					if(item.itemType == 'distributor'){
-						INVENTORY_DISTRIBUTORS.push({id: item.itemCode, name: item.itemName, color: '#' + item.itemColor, items: INVENTORY_DISTRIBUTORS_MAP[item.itemCode]});
-					}
-				});
-			}
-		}, function(error){
-			console.log('Error occurred while fetching Inventory Details data ' + error);
-		});
+	destroyAndCreateSelectWidget = function(items){
+		if(registry.byId('inventoryStockItem')){
+			registry.byId('inventoryStockItem').destroy(true);
+		}
+		var itemStockStore = new Memory({idProperty: 'code', data: items});
+		var os = new ObjectStore({objectStore: itemStockStore});
+		
+		//registry.byId('inventoryStockInStock').reset();
+		//registry.byId('inventoryStockToOrder').reset();
+		//registry.byId('inventoryStockPPU').reset();
+		//registry.byId('inventoryStockGSCharge').reset();
+		//registry.byId('inventoryStockPar').reset();
+		//registry.byId('inventoryStockParUnits').reset();
+		
+		selectWdgt= new Select({
+            name: "inventoryStockItem",
+            store: os,
+            style: "width: 100px; font-size: 90%;",
+            labelAttr: "name",
+            invalidMessage : 'Item Selected is Invalid',
+            required: true,
+            maxHeight: -1, // tells _HasDropDown to fit menu within viewport
+            onChange: function(newVal){
+            	//console.log('onChange called witjh ', newVal);
+            	this.get('store').fetch({query: {'code': newVal}, onComplete: function(items){
+            		try{
+						registry.byId('inventoryStockPar').reset();
+						registry.byId('inventoryStockPar').set('value', items[0].par);
+						var newPar = Number(items[0].par);
+						registry.byId('inventoryStockParUnits').set('value', items[0].units);
+						registry.byId('inventoryStockParCategory').set('value', items[0].category);
+					}catch(e){console.log('Error in onChange() ', e);}
+            	}});
+            }
+        }, "inventoryStockItem");
+		selectWdgt.startup();
 	},
-	
 	fetchInvoiceGridData = function(storeId){
 		registry.byId('inventoryInvoicesGridStandBy').show();
 		ajaxRequest.get("/service/store/" + storeId + "/invoice",{
@@ -150,8 +138,6 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 		});
 	},*/
 	updateInventoryDetailsGrid = function(inventoryData){
-		//if(inventoryData.length > 0)
-		//	populateInventoryItems();
 		var tempStore = {
 				"identifier" : "id",
 				"items" : []
@@ -160,19 +146,14 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 		var gridDataStore = new itemFileWriteStore({data: tempStore});
 		
 		var formatItem = function(inVal, rowIndex){
-			var colorSpan = '';//'<span style="text-align: super;background-color: ' + INVENTORY_ITEMS[inVal[1]]['color'] + '">&nbsp;&nbsp;&nbsp;&nbsp;</span>';
 			if((isInvoiceDetail === true) || (isInvoiceDetail == 'true'))
-				return colorSpan + '<a href="javascript: editInvoiceItem(' + inVal[0] + ',' + rowIndex + ')">' + INVENTORY_ITEMS[inVal[1]]['name'] + '</a>';
+				return '<a href="javascript: editInvoiceItem(' + inVal[0] + ',' + rowIndex + ')">' + INVENTORY_ITEMS_INFO[inVal[1]]['itemName'] + '</a>';
 			else
-				return colorSpan + INVENTORY_ITEMS[inVal[1]]['name'];
+				return INVENTORY_ITEMS_INFO[inVal[1]]['itemName'];
 		};
 		
 		var formatParUnits = function(inVal){
-			var par = Number(INVENTORY_ITEMS[inVal]['par']);
-			if(par > 1)
-				return par + ' ' + INVENTORY_ITEMS[inVal]['units'];
-			else 
-				return par + ' ' + INVENTORY_ITEMS[inVal]['units'];
+			return INVENTORY_ITEMS_INFO[inVal]['itemPar'] + ' ' + INVENTORY_ITEMS_INFO[inVal]['itemUnits'];
 		};
 		
 		var formatTotal = function(inVal){
@@ -319,20 +300,16 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 	},*/
 	
 	showDialogToAddItem=function(){
-		var codesData = [];
-		baseArray.forEach(dojo.clone(INVENTORY_DISTRIBUTORS), function(distributor){
-			baseArray.forEach(distributor.items, function(item){
-				codesData.push(lang.mixin(item, {category: item.categoryId, code: item.code, name: '&nbsp;<span style="background-color: ' + item.color + '; color: #fff;">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;' + item.name + '&nbsp;&nbsp;&nbsp;'}));
-			});
-		});
-		codesData.sort(function(a,b){return a.code - b.code });
-		var itemStockStore = new Memory({idProperty: 'code', data: codesData});
-		var os = new ObjectStore({ objectStore: itemStockStore });
-		dijit.byId('inventoryStockItem').setStore(os);
-		dijit.byId('inventoryStockItem').startup();
-		registry.byId('inventoryItemDialogForm').reset();
+		//registry.byId('inventoryItemDialogForm').reset();
+		registry.byId('inventoryStockItem').reset();
+		registry.byId('inventoryStockInStock').reset();
+		registry.byId('inventoryStockToOrder').reset();
+		registry.byId('inventoryStockPPU').reset();
+		registry.byId('inventoryStockGSCharge').reset();
 		inventoryItemDialog.show();
 		domStyle.set(dom.byId('inventoryItemDialog'), {top:'40px', position: "absolute"});
+		//registry.byId('inventoryStockItem').set('value', '703');
+		//selectWdgt.set('value', '703');
 	},
 	resetScreen = function(){
 		dom.byId('inventoryTabTitle').innerHTML = 'Invoices / Stock';
@@ -340,17 +317,36 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 		registry.byId('inventoryInvoicesGrid').selection.clear();
 		registry.byId('inventoryInvoiceDetailsGrid').selection.clear();
 		registry.byId('inventoryInvoiceItemId').set('value', 0);
-		INVENTORY_DISTRIBUTORS = [];
-		fetchStoreDistributorsAndItems(registry.byId('hiddenStoreId').get('value'));
-		var workLater = function(){
-			var chkCondition = (INVENTORY_DISTRIBUTORS) && (INVENTORY_DISTRIBUTORS.length > 0);
-			if(dojox.timing.doLater(chkCondition)){
-				return;
+		
+		ajaxRequest.get("/service/store/" + registry.byId('hiddenStoreId').get('value') + "/distributors",{
+			handleAs: 'json'
+		}).then(function(response){
+			if(response.success){
+				var codesData = new Array();
+				baseArray.forEach(response.models, function(stockItem){
+					INVENTORY_ITEMS_INFO[stockItem.itemCode] = dojo.clone(stockItem);
+					var stockItemCategory = parseInt(stockItem.itemCode/100) * 100;
+					codesData.push({'code': stockItem.itemCode+'', 'par': stockItem.itemPar, 
+						'units': stockItem.itemUnits, 'category': stockItemCategory,
+						'name': '&nbsp;<span style="background-color: #' + stockItem.itemColor + '; color: #fff;">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;' + stockItem.itemName
+						});
+				});
+				fetchInvoiceGridData(registry.byId('hiddenStoreId').get('value'));
+				fetchStockGridData(registry.byId('hiddenStoreId').get('value'));
+				//var itemStockStore = new Memory({idProperty: 'code', data: codesData});
+				//var os = new ObjectStore({objectStore: itemStockStore});
+				//dijit.byId('inventoryStockItem').setStore(null);
+				//registry.byId('inventoryStockItem').setStore(os);
+				//var emptyStore = new Memory({idProperty: 'code', data: []});
+				//var emptyObjectStore = new ObjectStore({objectStore: emptyStore});
+				//registry.byId('inventoryStockItem').setStore(emptyObjectStore);
+				
+				//setTimeout(function(){registry.byId('inventoryStockItem').setStore(os)}, 100);
+				destroyAndCreateSelectWidget(codesData);
 			}
-			fetchInvoiceGridData(registry.byId('hiddenStoreId').get('value'));
-			fetchStockGridData(registry.byId('hiddenStoreId').get('value'));
-		};
-		workLater();
+		}, function(error){
+			console.log('Error occurred while fetching Inventory Details data ' + error);
+		});
 		
 	},
 	
@@ -372,9 +368,6 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 				resetScreen();
 			},
 			createInvoiceAction: function(){
-				//invoiceItemsDialog.show();
-				//domStyle.set(dom.byId('invoiceItemsDialog'), {top:'40px', position: "absolute"});
-				//fetchInvoiceItemsGridData(registry.byId('hiddenStoreId').get('value'));
 				var grid = registry.byId('inventoryInvoiceDetailsGrid');
 				var selectedItems = grid.selection.getSelected();
 				var invoiceDetails = [], invoice = {}, storeId=0;
@@ -415,7 +408,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 			editInvoiceItem: function(itemId, rowIndex){
 				showDialogToAddItem();
 				var selectedItem = registry.byId('inventoryInvoiceDetailsGrid').getItem(rowIndex);
-				registry.byId('inventoryStockItem').set('value', selectedItem['itemId'][0]);
+				registry.byId('inventoryStockItem').set('value', selectedItem['itemId'][0]+'');
 				registry.byId('inventoryStockItem').set('readOnly', true);
 				//registry.byid('inventoryStockParUnits').set('value', selectedItem[''][0]);
 				registry.byId('inventoryStockInStock').set('value', selectedItem['itemStock'][0]);

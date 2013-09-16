@@ -37,7 +37,9 @@
 				descending : true
 			} ]
 		},
-		packages : [{name : "controls", location : location.pathname.replace(/\/[^/]+$/, '') + "/resources/scripts/controls", main : "StoreLayoutController"}]
+		packages : [
+		            {name : "controls", location : location.pathname.replace(/\/[^/]+$/, '') + "/resources/scripts/controls", main : "StoreLayoutController"}
+		           ]
 	};
 	var INVENTORY_DISTRIBUTORS = [];
 	var INVENTORY_ITEMS = {};
@@ -707,15 +709,15 @@
 				<div id="accountingPane" data-dojo-type="dijit/layout/ContentPane" title="Accounting" data-dojo-props="selected:false" style="width: 99%; height: 99%">
 					<div id="accountingDetailsRegion" data-dojo-type="dijit/layout/ContentPane" style="width: 99%; height: 99%; border: .1em solid #ddd;" align="center">
 						<table style="width: 100%; height: 100%" class="dateTable">
-							<tr style="width: 100%; height: 100%">
+							<tr style="width: 100%; height: 60%;">
 								<td style="width: 56%; height: 100%" align="center" valign="top">
-									<div id="accountingDetailsPane" style="width: 99%; height: 30%; margin-top: 2px" align="center">
+									<div id="accountingDetailsPane" style="width: 99%; height: 100%; margin-top: 2px" align="center">
 										<table style="width: 100%; height: 100%" id="accountsQuarterDetails">
 											<tr>
 												<td style="width: 65%" valign="top" class="noBorder">
 													<form data-dojo-type="dijit/form/Form" data-dojo-id="accountingEntriesForm" id="accountingEntriesForm">
 														<table style="width: 100%; height: 50%" class="accountingTable">
-															<tr height="5%"><td colspan="3" align="left"><span id="accountingQuartersList"></span></td></tr>
+															<tr height="5%"><td colspan="3" align="left">Select Month:&nbsp;&nbsp;&nbsp;<span id="accountingQuartersList"></span></td></tr>
 															<tr height="5%">
 																<th style="width: 33%;">Distribution</th>
 																<th style="width: 34%;">Amount</th>
@@ -770,17 +772,17 @@
 														</table>
 														<input type="hidden" name="hiddenAccountingRecordId" id="hiddenAccountingRecordId" value="0" />
 														<script type="dojo/on" data-dojo-event="submit" data-dojo-args="evt">
-														evt.preventDefault();
-														evt.stopPropagation();
-														var json = require('dojo/json');
-														var registry = require('dijit/registry');
-														var accLayout = require('controls/AccountingLayoutController');
-														var buttonValue = registry.byId('accountingUpdateBtn').get('disabled') ? 'save' : 'update';
-														if(this.validate() && (Number(registry.byId('accountingQuartersList').get('value')) > 0)){
-															accLayout.updateAccountingData(this.getValues(), buttonValue);
-														}
+																evt.preventDefault();
+																evt.stopPropagation();
+																var json = require('dojo/json');
+																var registry = require('dijit/registry');
+																var accLayout = require('controls/AccountingLayoutController');
+																var buttonValue = registry.byId('accountingUpdateBtn').get('disabled') ? 'save' : 'update';
+																if(this.validate() && (Number(registry.byId('accountingQuartersList').get('value')) > 0)){
+																	accLayout.updateAccountingData(this.getValues(), buttonValue);
+																}
 														return false;
-													</script>
+														</script>
 													</form>
 												</td>
 												<td style="width: 35%" valign="top" class="noBorder">
@@ -804,9 +806,8 @@
 										<table style="width: 100%; height: 100%; display: none;" id="accountsYearlyDetails">
 											<tr>
 												<td colspan="5">
-													<div style="text-align: left;">
-														<a href="javascript: returnToAccountsPane();">&lt;&lt;&nbsp;&nbsp;Return</a>
-													</div>
+													<div style="float: left;"><a href="javascript: returnToAccountsPane();">&lt;&lt;&nbsp;&nbsp;Return</a></div>
+													<div style="text-align: center;"><b>End of Year Statement</b></div>
 												</td>
 											</tr>
 											<tr>
@@ -886,6 +887,11 @@
 									<div id="accountingYearsStandBy" data-dojo-id="accountingYearsStandBy" 
 													data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'accountingYearsTd', color:'white'">
 									</div>
+								</td>
+							</tr>
+							<tr style="width: 100%; height: 35%">
+								<td colspan="3"  style="width: 100%; height: 100%" align="center">
+									<div id="accountingMonthlyChartDiv" style="width: 100%; height: 100%;"></div>
 								</td>
 							</tr>
 						</table>
@@ -974,22 +980,7 @@
 					<tr>
 						<td align="left" valign="middle"><u>Stock Item:</u></td>
 						<td align="left" valign="middle">
-							<div data-dojo-type="dijit/form/Select"
-								data-dojo-props="pageSize: 5, required: 'true', maxHeight: -1, labelAttr: 'name', style: 'width: 100px; font-size: 90%;', trim: 'true', invalidMessage : 'Item Selected is Invalid'"
-								id="inventoryStockItem" name="inventoryStockItem">
-							<script type="dojo/on" data-dojo-event="change" data-dojo-args="newVal">
-								this.get('store').fetch({query: {'code': newVal}, onComplete: function(items){
-									dijit.byId('inventoryStockPar').reset();
-									dijit.byId('inventoryStockPar').set('value', items[0].par);
-									var newPar = Number(items[0].par);
-									//if((newPar == 0) || newPar > 1)
-									//	dijit.byId('inventoryStockParUnits').set('value', items[0].units.plural);
-									//else 
-										dijit.byId('inventoryStockParUnits').set('value', items[0].units);
-									dijit.byId('inventoryStockParCategory').set('value', items[0].category);
-							}});
-							</script>
-							</div>
+							<div id="inventoryStockItem" data-dojo-type="dijit/form/Select" name="inventoryStockItem"></div>
 						</td>
 					</tr>
 					<tr>
@@ -1280,52 +1271,41 @@
 				<script type="dojo/on" data-dojo-event="click" data-dojo-args="e">
 					e.preventDefault();
 					e.stopPropagation();
-					console.log('Form Validation ', healthInspectionForm.validate(), healthInspectionForm.get('value'));
+					console.log('Form Validation ', inventoryItemForm.validate(), inventoryItemForm.get('value'));
 					var registry = require('dijit/registry');
 					var storeLayout = require('controls/StoreLayoutController');
 					if(inventoryItemForm.validate()){
 						var formValues = inventoryItemForm.get('value');
 						var itemWrapper = {};
-						
-						var selectedItem = '';
-						registry.byId('inventoryItemDistributor').store.fetch({query: {id: registry.byId('inventoryItemDistributor').get('value')}, 
-							onComplete: function(items, request){
-								if(items.length > 0){
-									selectedItem = items[0];
-								}
-								itemWrapper['itemColor'] = selectedItem['color'];
-								itemWrapper['itemName'] = formValues['inventoryItemName'];
-								itemWrapper['itemPar'] = formValues['inventoryItemPar'];
-								itemWrapper['itemUnits'] = formValues['inventoryItemUnits'];
-								itemWrapper['storeId'] = registry.byId('hiddenStoreId').get('value');
-								itemWrapper['id'] = formValues['inventoryItemDistributor'];
-								itemWrapper['itemCode'] = formValues['inventoryItemDistributor'];
-						
-								var ajaxRequest = require("dojo/request");
-								var json = require('dojo/json');
-								var dom = require('dojo/dom');
-								var inventoryLayout = require("controls/InventoryLayoutController");
-								
-								var standByWidgetId = 'inventoryItemFormStandBy';
-								registry.byId(standByWidgetId).show();
-
-								ajaxRequest.post("/service/store/" + registry.byId('hiddenStoreId').get('value') + "/items", {
-				       					headers: { "Content-Type":"application/json"}, 
-				       					handleAs: 'json', data: json.stringify(itemWrapper), timeout: 10000 
-				       			}).then(function(itemsResponse){
-									if(itemsResponse.success){
-				       					dom.byId('messages').innerHTML = 'Add Successful';
-										inventoryLayout.reset();
-				       				}
-									registry.byId(standByWidgetId).hide();
-									addInventoryItemDialog.hide();
-				       			}, function(error){
-				       				console.log('Error while updating --> ' + error);
-				       				dom.byId('messages').innerHTML = 'Error while Adding --> ' + error;
-				       				registry.byId(standByWidgetId).hide();
-				       			});
-							
-						}});
+						itemWrapper['itemColor'] = INVENTORY_DISTRIBUTORS_MAP[formValues['inventoryItemDistributor']]['color'];
+						itemWrapper['itemName'] = formValues['inventoryItemName'];
+						itemWrapper['itemPar'] = formValues['inventoryItemPar'];
+						itemWrapper['itemUnits'] = formValues['inventoryItemUnits'];
+						itemWrapper['storeId'] = registry.byId('hiddenStoreId').get('value');
+						itemWrapper['id'] = formValues['inventoryItemDistributor'];
+						itemWrapper['itemCode'] = formValues['inventoryItemDistributor'];
+						var ajaxRequest = require("dojo/request");
+						var json = require('dojo/json');
+						var dom = require('dojo/dom');
+						var inventoryLayout = require("controls/InventoryLayoutController");
+						var standByWidgetId = 'inventoryItemFormStandBy';
+						registry.byId(standByWidgetId).show();
+							ajaxRequest.post("/service/store/" + registry.byId('hiddenStoreId').get('value') + "/items", {
+			       					headers: { "Content-Type":"application/json"}, 
+			       					handleAs: 'json', data: json.stringify(itemWrapper), timeout: 10000 
+			       			}).then(function(itemsResponse){
+								if(itemsResponse.success){
+			       					dom.byId('messages').innerHTML = 'Add Successful';
+									inventoryLayout.reset();
+									inventoryItemForm.reset();
+			       				}
+								registry.byId(standByWidgetId).hide();
+								addInventoryItemDialog.hide();
+			       			}, function(error){
+			       				console.log('Error while updating --> ' + error);
+			       				dom.byId('messages').innerHTML = 'Error while Adding --> ' + error;
+			       				registry.byId(standByWidgetId).hide();
+			       			});
 					}
 				</script>
 			</button>
