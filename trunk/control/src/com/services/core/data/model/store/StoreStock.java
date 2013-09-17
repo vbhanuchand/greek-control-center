@@ -25,6 +25,9 @@ public class StoreStock implements Serializable {
 
 	@Column(name = "store_id", nullable = false)
 	private Integer storeId;
+	
+	@Column(name = "category")
+	private String category;
 
 	@Column(name = "item_id")
 	private Integer itemId;
@@ -77,6 +80,14 @@ public class StoreStock implements Serializable {
 		this.storeId = storeId;
 	}
 
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+	
 	public Integer getItemId() {
 		return itemId;
 	}

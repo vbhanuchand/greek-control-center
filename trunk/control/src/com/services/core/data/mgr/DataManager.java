@@ -136,9 +136,9 @@ public interface DataManager {
 	
 	boolean updateStoreAccount(StoreAccountWrapper accDetails);
 	
-	List<StoreInvoiceWrapper> getStoreInvoices(int storeId);
+	List<StoreInvoiceWrapper> getStoreInvoices(int storeId, String category);
 	
-	int insertStoreInvoice(StoreInvoiceWrapper storeInv);
+	int insertStoreInvoice(StoreInvoiceWrapper storeInv, String category);
 	
 	boolean updateStoreInvoice(StoreInvoiceWrapper storeInv);
 	
@@ -148,11 +148,11 @@ public interface DataManager {
 	
 	boolean updateStoreInvoiceDetails(StoreInvoiceDetailsWrapper storeInvDetails);
 	
-	List<StoreStockWrapper> getStoreStock(int storeId);
+	List<StoreStockWrapper> getStoreStock(int storeId, String category);
 	
-	int insertStoreStock(StoreStockWrapper storeStock);
+	int insertStoreStock(StoreStockWrapper storeStock, String category);
 	
-	boolean updateStoreStock(StoreStockWrapper storeStock);
+	boolean updateStoreStock(StoreStockWrapper storeStock, String category);
 	
 	
 	
@@ -162,8 +162,8 @@ public interface DataManager {
 	
 	boolean updateHealthInspectionDetails(UploadNotesWrapper notesWrapper);
 	
-	List<ItemWrapper> getDistributors(int storeId);
+	List<ItemWrapper> getDistributors(int storeId, String category);
 	
-	int insertStoreItem(ItemWrapper item);
+	int insertStoreItem(ItemWrapper item, String category);
 	
 }

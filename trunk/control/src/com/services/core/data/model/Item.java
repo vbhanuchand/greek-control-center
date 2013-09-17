@@ -44,6 +44,9 @@ public class Item implements Serializable {
 	@Column(name = "store_id")
 	private Integer storeId;
 	
+	@Column(name = "category")
+	private String category;
+	
 	@Column(name = "updated_by", nullable = false)
 	private Integer updatedBy;
 	
@@ -123,6 +126,14 @@ public class Item implements Serializable {
 
 	public void setStoreId(Integer storeId) {
 		this.storeId = storeId;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
 	}
 
 	public Integer getUpdatedBy() {

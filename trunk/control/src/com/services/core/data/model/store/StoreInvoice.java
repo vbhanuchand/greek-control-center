@@ -28,6 +28,9 @@ public class StoreInvoice implements Serializable {
 	@Column(name = "store_id", nullable = false)
 	private Integer storeId;
 	
+	@Column(name = "category")
+	private String category;
+	
 	@Column(name = "invoice_date", nullable = true)
 	@Temporal(TemporalType.DATE)
 	private Date invoiceDate;
@@ -69,6 +72,14 @@ public class StoreInvoice implements Serializable {
 		this.storeId = storeId;
 	}
 
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+	
 	public Date getInvoiceDate() {
 		return invoiceDate;
 	}
