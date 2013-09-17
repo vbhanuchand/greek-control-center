@@ -71,9 +71,9 @@ public interface StoreDAO {
 	boolean updateStoreAccount(int id, int storeId, int quarter, int year, double labor, double foodCost, double advertisement, double misc, double profit, Boolean active, int updatedBy);
 	
 	//Store Inventory-tab related operations
-	List<StoreInvoice> getStoreInvoices(int storeId);
+	List<StoreInvoice> getStoreInvoices(int storeId, String category);
 	
-	int insertStoreInvoice(int storeId, Date invoiceDate, boolean locked, boolean active, int updatedBy);
+	int insertStoreInvoice(int storeId, Date invoiceDate, boolean locked, boolean active, int updatedBy, String category);
 	
 	boolean updateStoreInvoice(int id, int storeId, Date invoiceDate, boolean locked, boolean active, int updatedBy);
 	
@@ -83,11 +83,11 @@ public interface StoreDAO {
 	
 	List<StoreInvoiceDetails> getInvoiceDetails(int invoiceId);
 	
-	List<StoreStock> getStoreStock(int storeId);
+	List<StoreStock> getStoreStock(int storeId, String category);
 	
-	int insertStoreStock(int storeId, int itemId, int itemCategory, int itemStock, int itemOrder, double itemPricePerUnit, double itemGSPercent, int updatedBy);
+	int insertStoreStock(int storeId, int itemId, int itemCategory, int itemStock, int itemOrder, double itemPricePerUnit, double itemGSPercent, int updatedBy, String category);
 	
-	boolean updateStoreStock(int id, int storeId, int itemId, int itemCategory, int itemStock, int itemOrder, double itemPricePerUnit, double itemGSPercent, int updatedBy);
+	boolean updateStoreStock(int id, int storeId, int itemId, int itemCategory, int itemStock, int itemOrder, double itemPricePerUnit, double itemGSPercent, int updatedBy, String category);
 	
 	@SuppressWarnings("rawtypes")
 	List getStoreHealthInspectionDetails(int storeId, String tab); 
@@ -96,7 +96,7 @@ public interface StoreDAO {
 	
 	boolean updateHealthInspectionDetails(int id, int storeId, String purpose, Date purposeDate, String purposeNotes, int updatedBy, String blobKey, String fileName);
 	
-	List<Item> getStoreDistributors(int storeId);
+	List<Item> getStoreDistributors(int storeId, String category);
 	
-	int insertStoreItem(int itemCode, String itemColor, String itemName, int itemPar, String itemUnits, int storeId, int updatedBy);
+	int insertStoreItem(int itemCode, String itemColor, String itemName, int itemPar, String itemUnits, int storeId, int updatedBy, String category);
 }

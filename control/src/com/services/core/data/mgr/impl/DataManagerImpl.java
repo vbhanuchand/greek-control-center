@@ -789,8 +789,8 @@ public class DataManagerImpl implements DataManager{
 	}
 	
 	@Override
-	public List<StoreInvoiceWrapper> getStoreInvoices(int storeId){
-		List invoiceList = storeDAO.getStoreInvoices(storeId);
+	public List<StoreInvoiceWrapper> getStoreInvoices(int storeId, String category){
+		List invoiceList = storeDAO.getStoreInvoices(storeId, category);
 		Map rowObject;
 		List<StoreInvoiceWrapper> returnList = new ArrayList<StoreInvoiceWrapper>();
 		StoreInvoiceWrapper returnObject;
@@ -808,10 +808,9 @@ public class DataManagerImpl implements DataManager{
 	
 	@Override
 	@Transactional
-	public int insertStoreInvoice(StoreInvoiceWrapper storeInv){
-		
+	public int insertStoreInvoice(StoreInvoiceWrapper storeInv, String category){
 		int invoiceId = storeDAO.insertStoreInvoice(storeInv.getStoreId(), new Date(),
-				false, true, 0);
+				false, true, 0, category);
 		for(StoreInvoiceDetailsWrapper storeInvDetails: storeInv.getInvoiceDetails())
 		{
 			storeInvDetails.setInvoiceId(invoiceId);
@@ -853,9 +852,9 @@ public class DataManagerImpl implements DataManager{
 	}
 	
 	@Override
-	public List<StoreStockWrapper> getStoreStock(int storeId){
+	public List<StoreStockWrapper> getStoreStock(int storeId, String category){
 		List<StoreStockWrapper> returnList = new ArrayList<StoreStockWrapper>();
-		for(StoreStock tempStock: storeDAO.getStoreStock(storeId)){
+		for(StoreStock tempStock: storeDAO.getStoreStock(storeId, category)){
 			returnList.add(new StoreStockWrapper(tempStock.getId(), tempStock.getStoreId(), tempStock.getItemId(), tempStock.getItemCategory(), tempStock.getItemStock(), 
 					tempStock.getItemOrder(), tempStock.getItemPricePerUnit(), tempStock.getItemGSPercent(), tempStock.getUpdatedBy(), tempStock.getUpdatedDate()));
 		}
@@ -865,16 +864,16 @@ public class DataManagerImpl implements DataManager{
 	
 	@Override
 	@Transactional
-	public int insertStoreStock(StoreStockWrapper storeInvDetails){
+	public int insertStoreStock(StoreStockWrapper storeInvDetails, String category){
 		return storeDAO.insertStoreStock(storeInvDetails.getStoreId(), storeInvDetails.getItemId(), storeInvDetails.getItemCategory(), storeInvDetails.getItemStock(), 
-				storeInvDetails.getItemOrder(), storeInvDetails.getItemPricePerUnit(), storeInvDetails.getItemGSPercent(), 0);
+				storeInvDetails.getItemOrder(), storeInvDetails.getItemPricePerUnit(), storeInvDetails.getItemGSPercent(), 0, category);
 	}
 	
 	@Override
 	@Transactional
-	public boolean updateStoreStock(StoreStockWrapper storeInvDetails){
-		return storeDAO.updateStoreInvoiceDetails(storeInvDetails.getId(), storeInvDetails.getStoreId(), storeInvDetails.getItemId(), storeInvDetails.getItemCategory(), storeInvDetails.getItemStock(), 
-				storeInvDetails.getItemOrder(), storeInvDetails.getItemPricePerUnit(), storeInvDetails.getItemGSPercent(), 0);
+	public boolean updateStoreStock(StoreStockWrapper storeInvDetails, String category){
+		return storeDAO.updateStoreStock(storeInvDetails.getId(), storeInvDetails.getStoreId(), storeInvDetails.getItemId(), storeInvDetails.getItemCategory(), storeInvDetails.getItemStock(), 
+				storeInvDetails.getItemOrder(), storeInvDetails.getItemPricePerUnit(), storeInvDetails.getItemGSPercent(), 0, category);
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -910,10 +909,10 @@ public class DataManagerImpl implements DataManager{
 	
 	
 	@Override
-	public List<ItemWrapper> getDistributors(int storeId){
+	public List<ItemWrapper> getDistributors(int storeId, String category){
 		List<ItemWrapper> returnList = new ArrayList<ItemWrapper>();
 		ItemWrapper item;
-		for(Item tempItem: storeDAO.getStoreDistributors(storeId)){
+		for(Item tempItem: storeDAO.getStoreDistributors(storeId, category)){
 			item = new ItemWrapper();
 			item.setId(tempItem.getId());
 			item.setItemCode(tempItem.getItemCode());
@@ -932,8 +931,8 @@ public class DataManagerImpl implements DataManager{
 	
 	@Override
 	@Transactional
-	public int insertStoreItem(ItemWrapper item){
-		return storeDAO.insertStoreItem(item.getItemCode(), item.getItemColor(), item.getItemName(), item.getItemPar(), item.getItemUnits(), item.getStoreId(), item.getUpdatedBy());
+	public int insertStoreItem(ItemWrapper item, String category){
+		return storeDAO.insertStoreItem(item.getItemCode(), item.getItemColor(), item.getItemName(), item.getItemPar(), item.getItemUnits(), item.getStoreId(), item.getUpdatedBy(), category);
 	}
 	
 }

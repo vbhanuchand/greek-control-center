@@ -539,7 +539,6 @@ require(["dojo/parser", "dijit/dijit", "dojo/dom-style", "dojo/date", "dojo/date
 				}
 				registry.byId('storeInfoTabContainer').resize();
 			});
-			
 	  });
 });
 

@@ -79,7 +79,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 	},
 	fetchInvoiceGridData = function(storeId){
 		registry.byId('inventoryInvoicesGridStandBy').show();
-		ajaxRequest.get("/service/store/" + storeId + "/invoice",{
+		ajaxRequest.get("/service/store/" + storeId + '/' + registry.byId('hiddenInvoiceCategory').get('value') + "/invoice",{
 			handleAs: 'json'
 		}).then(function(invoiceResponse){
 			if(invoiceResponse.success){
@@ -94,7 +94,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 	
 	fetchStockGridData = function(storeId){
 		registry.byId('inventoryInvoiceDetailsGridStandBy').show();
-		ajaxRequest.get("/service/store/" + storeId + "/stock",{
+		ajaxRequest.get("/service/store/" + storeId + '/' + registry.byId('hiddenInvoiceCategory').get('value') + "/stock",{
 			handleAs: 'json'
 		}).then(function(stockResponse){
 			if(stockResponse.success){
@@ -318,7 +318,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 		registry.byId('inventoryInvoiceDetailsGrid').selection.clear();
 		registry.byId('inventoryInvoiceItemId').set('value', 0);
 		
-		ajaxRequest.get("/service/store/" + registry.byId('hiddenStoreId').get('value') + "/distributors",{
+		ajaxRequest.get("/service/store/" + registry.byId('hiddenStoreId').get('value') + '/' + registry.byId('hiddenInvoiceCategory').get('value') + "/distributors",{
 			handleAs: 'json'
 		}).then(function(response){
 			if(response.success){
@@ -364,6 +364,25 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 			applySecurity: function(){
 				
 			},
+			postCreate: function(){
+				var invoiceCategoryTabContainer = registry.byId("invoiceCategoryTabContainer");
+				registry.byId("invoiceCategoryTabContainer").watch("selectedChildWidget", function(name, oval, nval){
+				    var newPaneTitle = nval.get('title');
+				    switch(newPaneTitle){
+				    	case 'GS Kitchen':
+				    		registry.byId("hiddenInvoiceCategory").set('value', 'g');
+				    		dom.byId('inventoryTabTitleCategory').innerHTML = '(GS Kitchen)';
+				    		break;
+				    	case 'Distributor':
+				    		registry.byId("hiddenInvoiceCategory").set('value', 'd');
+				    		dom.byId('inventoryTabTitleCategory').innerHTML = '(Distributor)';
+				    		break;
+				    }
+				    //INVENTORY_ITEMS_INFO = {};
+		    		resetScreen();
+				});
+				registry.byId("hiddenInvoiceCategory").set('value', 'd');
+			},
 			reset: function(){
 				resetScreen();
 			},
@@ -384,7 +403,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 					invoice['active'] = true;
 					
 					registry.byId('inventoryPaneStandBy').show();
-					ajaxRequest.post('/service/store/'+ registry.byId('hiddenStoreId').get('value') +'/invoice', {
+					ajaxRequest.post('/service/store/'+ registry.byId('hiddenStoreId').get('value') + '/' + registry.byId('hiddenInvoiceCategory').get('value') + '/invoice', {
 			    		headers: { "Content-Type":"application/json"}, 
 			    		handleAs: 'json', data: json.stringify(invoice), timeout: 10000
 			    			}).then(function(invoiceResponse){
@@ -431,10 +450,10 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 				jsonRowObject['itemGSPercent'] = formData['inventoryStockGSCharge'];
 				var standByWidget = '';
 				
-				var postURL = '/service/store/'+ registry.byId('hiddenStoreId').get('value') +'/stock';
+				var postURL = '/service/store/'+ registry.byId('hiddenStoreId').get('value') + '/' + registry.byId('hiddenInvoiceCategory').get('value') + '/stock';
 				var itemId = registry.byId('inventoryInvoiceItemId').get('value');
 				if(Number(itemId) > 0){
-					postURL = '/service/store/invoiceDetail/'+ itemId;
+					postURL = '/service/store/' + '/' + registry.byId('hiddenInvoiceCategory').get('value') + 'invoiceDetail/'+ itemId;
 					jsonRowObject['id'] = itemId;
 					jsonRowObject['invoiceId'] = 0;
 					delete jsonRowObject['storeId'];

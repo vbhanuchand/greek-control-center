@@ -219,6 +219,7 @@ group by si.id, invoice_date;
 
 select * from store_invoice;
 select * from store_invoice_details;
+select * from upload_docs_notes;
 delete from store_invoice_details where invoice_id = 3;
 commit;
 
@@ -338,4 +339,22 @@ values(700, 'GS KITCHEN', '21610B', 5, 0, 'distributor');
 commit;
 delete from items;
 
+/*d --> Distributor, g --> GS Kitchen*/
 select * from items;
+alter table items add category varchar(10);
+update items set category='d';
+
+select * from store_invoice;
+alter table store_invoice add category varchar(10);
+update store_invoice set category='d';
+delete from store_invoice where store_id=3;
+
+select * from store_stock;
+alter table store_stock add category varchar(10);
+update store_stock set category='d';
+
+delete from store_invoice_details;
+delete from store_invoice;
+delete from items;
+delete from store_stock;
+

@@ -268,43 +268,45 @@ public class StoreServiceController {
 	}
 	
 	
-	@RequestMapping(value = "/service/store/{storeId}/stock", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	
+	//Accounting related methods start here
+	@RequestMapping(value = "/service/store/{storeId}/{category}/stock", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public MultipleModelResponse<StoreStockWrapper> getStoreStock(@PathVariable int storeId)
+	public MultipleModelResponse<StoreStockWrapper> getStoreStock(@PathVariable int storeId, @PathVariable String category)
 			throws IOException {
-		return new MultipleModelResponse<StoreStockWrapper>(true, dataService.getStoreStock(storeId));
+		return new MultipleModelResponse<StoreStockWrapper>(true, dataService.getStoreStock(storeId, category));
 	}
 	
-	@RequestMapping(value = "/service/store/{storeId}/stock", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/store/{storeId}/{category}/stock", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public SingleModelResponse<StoreStockWrapper> saveStoreStock(@PathVariable int storeId, @RequestBody StoreStockWrapper storeStock)
+	public SingleModelResponse<StoreStockWrapper> saveStoreStock(@PathVariable int storeId, @PathVariable String category, @RequestBody StoreStockWrapper storeStock)
 			throws IOException {
-		int id = dataService.insertStoreStock(storeStock);
+		int id = dataService.insertStoreStock(storeStock, category);
 		storeStock.setId(id);
 		return new SingleModelResponse<StoreStockWrapper>(true, storeStock);
 	}
 	
-	@RequestMapping(value = "/service/store/{storeId}/stock", method = RequestMethod.PUT, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/store/{storeId}/{category}/stock", method = RequestMethod.PUT, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public SingleModelResponse<StoreStockWrapper> updateStoreStock(@PathVariable int storeId, @RequestBody StoreStockWrapper storeStock)
+	public SingleModelResponse<StoreStockWrapper> updateStoreStock(@PathVariable int storeId, @PathVariable String category, @RequestBody StoreStockWrapper storeStock)
 			throws IOException {
-		return new SingleModelResponse<StoreStockWrapper>(dataService.updateStoreStock(storeStock), null);
+		return new SingleModelResponse<StoreStockWrapper>(dataService.updateStoreStock(storeStock, category), null);
 	}
 	
-	@RequestMapping(value = "/service/store/{storeId}/invoice", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/store/{storeId}/{category}/invoice", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public SingleModelResponse<StoreInvoiceWrapper> saveStoreInvoice(@PathVariable int storeId, @RequestBody StoreInvoiceWrapper storeInvoice)
+	public SingleModelResponse<StoreInvoiceWrapper> saveStoreInvoice(@PathVariable int storeId, @PathVariable String category, @RequestBody StoreInvoiceWrapper storeInvoice)
 			throws IOException {
-		int id = dataService.insertStoreInvoice(storeInvoice);
+		int id = dataService.insertStoreInvoice(storeInvoice, category);
 		storeInvoice.setId(id);
 		return new SingleModelResponse<StoreInvoiceWrapper>(true, null);
 	}
 	
-	@RequestMapping(value = "/service/store/{storeId}/invoice", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/store/{storeId}/{category}/invoice", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public MultipleModelResponse<StoreInvoiceWrapper> getStoreInvoices(@PathVariable int storeId)
+	public MultipleModelResponse<StoreInvoiceWrapper> getStoreInvoices(@PathVariable int storeId, @PathVariable String category)
 			throws IOException {
-		return new MultipleModelResponse<StoreInvoiceWrapper>(true, dataService.getStoreInvoices(storeId));
+		return new MultipleModelResponse<StoreInvoiceWrapper>(true, dataService.getStoreInvoices(storeId, category));
 	}
 	
 	@RequestMapping(value = "/service/store/invoice/{invoiceId}", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
@@ -321,6 +323,25 @@ public class StoreServiceController {
 		return new SingleModelResponse<StoreInvoiceDetailsWrapper>(dataService.updateStoreInvoiceDetails(storeInvDetail), null);
 	}
 	
+	@RequestMapping(value = "/service/store/{storeId}/{category}/distributors", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public MultipleModelResponse<ItemWrapper> getDistributorsForStore(@PathVariable int storeId, @PathVariable String category)
+			throws IOException {
+		return new MultipleModelResponse<ItemWrapper>(true, dataService.getDistributors(storeId, category));
+	}
+	
+	@RequestMapping(value = "/service/store/{storeId}/{category}/items", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public SingleModelResponse<ItemWrapper> insertInventoryItems(@PathVariable int storeId, @PathVariable String category, @RequestBody ItemWrapper itemWrapper)
+			throws IOException {
+		itemWrapper.setUpdatedBy(0);
+		int id = dataService.insertStoreItem(itemWrapper, category);
+		return new SingleModelResponse<ItemWrapper>(true, null);
+	}
+	
+	
+	
+	//Health Inspection Tab related methods starts here
 	@RequestMapping(value = "/service/store/{storeId}/health", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public MultipleModelResponse<UploadNotesWrapper> getHealthInspectionDetails(@PathVariable int storeId)
@@ -349,22 +370,6 @@ public class StoreServiceController {
 		uploadNotesDetails.setPurpose("healthInspection");
 		boolean execute = dataService.updateHealthInspectionDetails(uploadNotesDetails);
 		return new SingleModelResponse<UploadNotesWrapper>(execute, null);
-	}
-	
-	@RequestMapping(value = "/service/store/{storeId}/distributors", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
-	@ResponseBody
-	public MultipleModelResponse<ItemWrapper> getDistributorsForStore(@PathVariable int storeId)
-			throws IOException {
-		return new MultipleModelResponse<ItemWrapper>(true, dataService.getDistributors(storeId));
-	}
-	
-	@RequestMapping(value = "/service/store/{storeId}/items", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
-	@ResponseBody
-	public SingleModelResponse<ItemWrapper> insertInventoryItems(@PathVariable int storeId, @RequestBody ItemWrapper itemWrapper)
-			throws IOException {
-		itemWrapper.setUpdatedBy(0);
-		int id = dataService.insertStoreItem(itemWrapper);
-		return new SingleModelResponse<ItemWrapper>(true, null);
 	}
 	
 }

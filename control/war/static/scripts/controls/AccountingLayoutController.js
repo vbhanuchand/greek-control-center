@@ -1,6 +1,6 @@
 define(["dijit/dijit", "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/dom-construct", "dojo/fx", "dojo/parser", "dijit/registry", "dojo/store/Memory", "dojo/json", "dojo/fx",
-        "dojo/_base/lang", "dojo/request", "dojo/_base/array", "dojo/date/locale", "dijit/form/Select", "dijit/form/FilteringSelect", "dojo/number", "dojox/lang/functional"],
-function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Memory, json, otherFx, lang, ajaxRequest, arrayUtils, locale, formSelect, FilteringSelect, DNumber, functional){
+        "dojo/_base/lang", "dojo/request", "dojo/_base/array", "dojo/date/locale", "dijit/form/Select", "dijit/form/FilteringSelect", "dojo/number", "dojox/lang/functional", "dojo/window"],
+function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Memory, json, otherFx, lang, ajaxRequest, arrayUtils, locale, formSelect, FilteringSelect, DNumber, functional, window){
 	var widgets = ['accountingLbrAmt', 'accountingFdAmt', 'accountingAdvtAmt', 'accountingMiscAmt', 'accountingProfitAmt'],
 	percentSuffix = 'Percent', accountingChart = null, accountingMonthlyChart=null,
 	initListening = function(){
@@ -33,7 +33,7 @@ function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Me
 		                                                  ['Misc', dijit.byId('accountingMiscAmt').get('value')], 
 		                                                  ['Profit', dijit.byId('accountingProfitAmt').get('value')]]);
 		var options = {	title: 'Sales Distribution Chart', titleTextStyle: {}, is3D: true,
-				 			chartArea:{left:2,top:20,width:"100%",height:"60%"},
+				 			chartArea: {left:2, top:20, width: '100%'},
 				 			legend: {position: 'bottom', textStyle: {color: 'black', fontSize: 11}, alignment: 'center'}
 		 			};
 		accountingChart.draw(data, options);
@@ -89,6 +89,7 @@ function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Me
 	
 	populateQuartersList = function(domNode){
 		accountingChart = new google.visualization.PieChart(document.getElementById('accountingChartDiv'));
+		accountingMonthlyChart = new google.visualization.ColumnChart(document.getElementById('accountingMonthlyChartDiv'));
 		
 		var quartersStore = new Memory({data: [
 		                                       {id: 0, name:"--Month--", label:"--Month--"}, 
@@ -115,29 +116,6 @@ function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Me
 				populateQuarterData(newValue);
 			else resetForm(true, true);
 		});
-		
-		// Column Chart starts here
-		var data = google.visualization.arrayToDataTable([
-		                                                  ['Month', 'Labor', 'Food', 'Advertisement', 'Misc.', 'Profit'],
-		                                                  ['Jan', 1000, 800, 600, 400, 500],
-		                                                  ['Feb', 1000, 800, 600, 400, 500],
-		                                                  ['Mar', 1000, 800, 600, 400, 500],
-		                                                  ['Apr', 1000, 800, 600, 400, 500],
-		                                                  ['May', 1000, 800, 600, 400, 500],
-		                                                  ['Jun', 1000, 800, 600, 400, 500],
-		                                                  ['Jul', 1000, 800, 600, 400, 500],
-		                                                  ['Aug', 1000, 800, 600, 400, 500],
-		                                                  ['Sep', 1000, 800, 600, 400, 500],
-		                                                  ['Oct', 1000, 800, 600, 400, 500],
-		                                                  ['Nov', 1000, 800, 600, 400, 500],
-		                                                  ['Dec', 1000, 800, 600, 400, 500]
-		                                                ]);
-		var options = { title: 'Monthly Stats', hAxis: {title: 'Month', titleTextStyle: {color: 'black'}}, width: '800px' };
-		accountingMonthlyChart = new google.visualization.ColumnChart(document.getElementById('accountingMonthlyChartDiv'));
-		accountingMonthlyChart.draw(data, options);
-		
-		//Column Chart Ends here
-		
 	},
 	
 	populateQuarterData = function(quarter){
@@ -216,17 +194,44 @@ function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Me
     			{ handleAs: 'json'}).then(function(accountingYearsResponse){
     		if(accountingYearsResponse.success && (accountingYearsResponse.models.length > 0)){
     			var labels = ['Total Sales', 'blank', 'Labor', 'Food Cost', 'Advertisement', 'Misc', 'blank', 'Profit'], quarters = [1, 2, 3, 4];
-    			var dataForTable = {}, sampleData = {};
+    			var dataForTable = {}, sampleData = {}, quarterlyDataForTable = {};
     			arrayUtils.forEach(quarters, function(quarter){
-    				dataForTable[quarter] = {total: 0, labor: 0, foodCost: 0, advertisement: 0, misc: 0, profit: 0};
+    				dataForTable[quarter] = {'total': 0, 'labor': 0, 'foodCost': 0, 'advertisement': 0, 'misc': 0, 'profit': 0};
     			});
     			
     			arrayUtils.forEach(accountingYearsResponse.models, function(quartleryEntry, index){
     				var totalSales = quartleryEntry.labor + quartleryEntry.foodCost + quartleryEntry.advertisement + quartleryEntry.misc + quartleryEntry.profit;
-    				dataForTable[quartleryEntry.quarter] = {total: totalSales, labor: quartleryEntry.labor, foodCost: quartleryEntry.foodCost, 
-    						advertisement: quartleryEntry.advertisement, misc: quartleryEntry.misc, profit: quartleryEntry.profit};
+    				dataForTable[quartleryEntry.quarter] = {'total': totalSales, 'labor': quartleryEntry.labor, 'foodCost': quartleryEntry.foodCost, 
+    						'advertisement': quartleryEntry.advertisement, 'misc': quartleryEntry.misc, 'profit': quartleryEntry.profit};
     			});
     			
+    			arrayUtils.forEach(functional.keys(dataForTable), function(monthKey, index){
+    				var quarterNumber = parseInt(monthKey/3);
+    				if((monthKey%3) == 0)
+    					quarterNumber = quarterNumber+'';
+    				else 
+    					quarterNumber = (quarterNumber+1)+'';
+    				if(!(quarterNumber in quarterlyDataForTable))
+    					quarterlyDataForTable[quarterNumber] = lang.clone(dataForTable[monthKey]);
+    				else {
+    					var temp = lang.clone(dataForTable[monthKey]);
+    					quarterlyDataForTable[quarterNumber]['total'] = quarterlyDataForTable[quarterNumber]['total'] + temp.total;
+    					quarterlyDataForTable[quarterNumber]['labor'] = quarterlyDataForTable[quarterNumber]['labor'] + temp.labor;
+    					quarterlyDataForTable[quarterNumber]['foodCost'] = quarterlyDataForTable[quarterNumber]['foodCost'] + temp.foodCost;
+    					quarterlyDataForTable[quarterNumber]['advertisement'] = quarterlyDataForTable[quarterNumber]['advertisement'] + temp.advertisement;
+    					quarterlyDataForTable[quarterNumber]['misc'] = quarterlyDataForTable[quarterNumber]['misc'] + temp.misc;
+    					quarterlyDataForTable[quarterNumber]['profit'] = quarterlyDataForTable[quarterNumber]['profit'] + temp.profit;
+    				}
+    			});
+    			
+    			arrayUtils.forEach(quarters, function(quarterlyIndex){
+    				var quarterNumber = quarterlyIndex+'';
+    				if(!(quarterNumber in quarterlyDataForTable))
+    					quarterlyDataForTable[quarterNumber] = {'total': 0, 'labor': 0, 'foodCost': 0, 'advertisement': 0, 'misc': 0, 'profit': 0};
+    			});
+    			refreshColumnChartForYearlyData(lang.clone(dataForTable));
+    			
+    			dataForTable = lang.clone(quarterlyDataForTable);
     			var tableTR, td, tdLabel, tdValue=0, tdTotal=0, dataForGraph={};
     			arrayUtils.forEach(labels, function(label){
 	    			tableTR = domConstruct.create("tr");
@@ -239,22 +244,22 @@ function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Me
 					arrayUtils.forEach(quarters, function(quarterlyIndex){
 						switch(label){
 							case 'Total Sales':
-								tdValue = (dataForTable[quarterlyIndex]).total;
+								tdValue = (dataForTable[quarterlyIndex+'']).total;
 								break;
 							case 'Labor':
-								tdValue = (dataForTable[quarterlyIndex]).labor;
+								tdValue = (dataForTable[quarterlyIndex+'']).labor;
 								break;
 							case 'Food Cost':
-								tdValue = (dataForTable[quarterlyIndex]).foodCost;
+								tdValue = (dataForTable[quarterlyIndex+'']).foodCost;
 								break;
 							case 'Advertisement':
-								tdValue = (dataForTable[quarterlyIndex]).advertisement;
+								tdValue = (dataForTable[quarterlyIndex+'']).advertisement;
 								break;
 							case 'Misc':
-								tdValue = (dataForTable[quarterlyIndex]).misc;
+								tdValue = (dataForTable[quarterlyIndex+'']).misc;
 								break;
 							case 'Profit':
-								tdValue = (dataForTable[quarterlyIndex]).profit;
+								tdValue = (dataForTable[quarterlyIndex+'']).profit;
 								break;
 							case 'blank':
 								tdValue = '';
@@ -298,7 +303,6 @@ function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Me
 	    		});
     			refreshPieChartForYearlyData({labor: dataForGraph.labor, foodCost: dataForGraph.foodCost, advertisement: dataForGraph.advertisement, 
     				misc: dataForGraph.misc, profit: dataForGraph.profit});
-    			
     			dom.byId('totalYearlySalesAmt').innerHTML = '$' + DNumber.format(dataForGraph.totalSales, {places: 2, locale: 'en-us'});
     			
     			var totalOperExp = dataForGraph.labor + dataForGraph.foodCost + dataForGraph.advertisement + dataForGraph.misc;
@@ -307,10 +311,9 @@ function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Me
     			
     			dom.byId('totalProfitsAmt').innerHTML = '$' + DNumber.format(dataForGraph.profit, {places: 2, locale: 'en-us'});
     			dom.byId('totalProfitsPercent').innerHTML = DNumber.round((dataForGraph.profit/dataForGraph.totalSales) * 100, 2, 10) + '%' ;
-    			
-    			
     		}
     		registry.byId('accountsYearlyDetailsStandBy').hide();
+    		document.getElementById('accountingMonthlyChartDiv').style.display='';
     	}, function(error){
     		console.log('Error occurred while fetching Accounting data ' + error);
     		registry.byId('accountsYearlyDetailsStandBy').hide();
@@ -323,11 +326,46 @@ function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Me
 		                                                  ['Advertisement',  data.advertisement], 
 		                                                  ['Misc', data.misc], 
 		                                                  ['Profit', data.profit]]);
+		var windowBoxObj = window.getBox();
+		var chartHeight = parseInt(windowBoxObj.h - parseInt(32*(windowBoxObj.h/100)));
 		var options = {	title: 'Sales Distribution Chart', titleTextStyle: {}, is3D: true,
-				 			chartArea:{left:2,top:20,width:"100%",height:"60%"},
+				 			chartArea:{left:2, top:20, width: '100%'},
 				 			legend: {position: 'bottom', textStyle: {color: 'black', fontSize: 11}, alignment: 'center'}
 		 			};
 		accountingChart.draw(data, options);
+	},
+	refreshColumnChartForYearlyData = function(columnData){
+		//if(columnData.length > 0){
+			var months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+			var monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+			var googleData = [];
+			googleData.push(['Month', 'Labor', 'Food', 'Advertisement', 'Misc.', 'Profit']);
+			arrayUtils.forEach(months, function(month){
+				var tempArray = [];
+				if(month in columnData){
+					tempArray.push(monthNames[month-1]);
+					tempArray.push(columnData[month+''].labor);
+					tempArray.push(columnData[month+''].foodCost);
+					tempArray.push(columnData[month+''].advertisement);
+					tempArray.push(columnData[month+''].misc);
+					tempArray.push(columnData[month+''].profit);
+				} else {
+					tempArray.push(monthNames[month-1]);
+					tempArray.push(0);
+					tempArray.push(0);
+					tempArray.push(0);
+					tempArray.push(0);
+					tempArray.push(0);
+				}
+				googleData.push(tempArray);
+			});
+			var data = google.visualization.arrayToDataTable(googleData);
+			var windowBoxObj = window.getBox();
+			var chartWidth = parseInt(windowBoxObj.w - parseInt(25*(windowBoxObj.w/100)));
+			var chartHeight = parseInt(windowBoxObj.h - parseInt(60*(windowBoxObj.h/100)));
+			var options = { title: 'Monthly Stats', hAxis: {title: 'Month', titleTextStyle: {color: 'black'}}, width: chartWidth, height: chartHeight };
+			accountingMonthlyChart.draw(data, options);
+		//}
 	};
 	
 	return {
@@ -342,6 +380,8 @@ function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Me
 			registry.byId('accountingQuartersList').reset();
 			resetForm(true, true);
 			refreshPieChartForQuarter();
+			document.getElementById('accountingMonthlyChartDiv').style.display='none';
+			//refreshColumnChartForYearlyData([]);
 		},
 		fetchAccDetailsForYear: function(year){
 			registry.byId('hiddenSelectedYear').set('value', year);
@@ -350,6 +390,7 @@ function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Me
 	    				domStyle.set(this.node, {display: "none", width: "99%", height: "99%"});
 	    				dom.byId('accountsQuarterDetails').style.display = 'none';
 	    				dom.byId('accountsYearlyDetails').style.display = '';
+	    				document.getElementById('accountingMonthlyChartDiv').style.display='';
 	    			}
 	    	});
 	    	var wipeIn = otherFx.wipeIn({node: dom.byId('accountingDetailsPane'), duration: 1000, delay: 250, 

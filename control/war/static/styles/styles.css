@@ -919,3 +919,7 @@ padding: 0;
 /*background-color: grey;*/
 font-size: 85%;
 }
+
+.soria .dijitTabContainerTop-dijitContentPane{
+	padding: 1px 5px 0px 5px;
+}
