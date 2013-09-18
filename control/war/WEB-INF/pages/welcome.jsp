@@ -38,7 +38,9 @@
 			} ]
 		},
 		packages : [
-		            {name : "controls", location : location.pathname.replace(/\/[^/]+$/, '') + "/resources/scripts/controls", main : "StoreLayoutController"}
+		            {name : "controls", location : location.pathname.replace(/\/[^/]+$/, '') + "/resources/scripts/controls", main: "StoreLayoutController"},
+		            {"name": "bootstrap", location : location.pathname.replace(/\/[^/]+$/, '') + "/resources/scripts/bootstrap", main: "main" }, 
+					{"name": "xstyle", location : location.pathname.replace(/\/[^/]+$/, '') + "/resources/scripts/xstyle"}
 		           ]
 	};
 	var INVENTORY_DISTRIBUTORS = [];
@@ -79,6 +81,8 @@
 <!-- <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/widget/Dialog/Dialog.css" /> -->
 <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/layout/resources/ScrollPane.css" />
 <link rel="stylesheet" href="resources/styles/styles.css" />
+<link rel="stylesheet" type="text/css" href="resources/scripts/bootstrap/theme/dbootstrap/dbootstrap.css"
+/>
 <script
 	data-dojo-config="has:{'dojo-firebug': true, 'dojo-debug-messages': true}, cacheBust: true, parseOnLoad:false, isDebug: true,
 	waitSeconds: 10, locale: location.search.match(/locale=([\w\-]+)/) ? RegExp.$1 : 'en-us'"
@@ -93,7 +97,7 @@
 </script>
 </head>
 
-<body class="soria">
+<body class="soria dbootstrap">
 	<noscript><style type="text/css">#loadingOverlay { display: none !important; }</style></noscript>
 	<div id="loadingOverlay" class="loadingPanel" align="center"><div align="left"
 		style="background: #DBEB8F; padding: 2px">Loading...</div></div>

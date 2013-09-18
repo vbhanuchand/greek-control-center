@@ -358,3 +358,4 @@ delete from store_invoice;
 delete from items;
 delete from store_stock;
 
+describe blobs;
