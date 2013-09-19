@@ -38,8 +38,8 @@
 			} ]
 		},
 		packages : [
-					{name: "bootstrap", location: "/resources/scripts/bootstrap", main: "main"},
-					{name: "xstyle", location: "/resources/scripts/xstyle"},
+					{name: "bootstrap", location: "/resources/theme/bootstrap", main: "main"},
+					{name: "xstyle", location: "/resources/theme/xstyle"},
 		            {name: "controls", location: "/resources/scripts/controls"}
 		           ]
 	};
@@ -49,10 +49,10 @@
 </script>
 
 <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/resources/dojo.css" />
-<link rel="stylesheet" type="text/css" href="resources/scripts/bootstrap/theme/dbootstrap/dijit.css"/>
+<link rel="stylesheet" type="text/css" href="resources/theme/bootstrap/theme/dbootstrap/dijit.css"/>
 <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dijit/themes/soria/soria.css">
 <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/resources/soriaGrid.css" />
-<link rel="stylesheet" type="text/css" href="resources/scripts/bootstrap/theme/dbootstrap/dbootstrap.css"/>
+<link rel="stylesheet" type="text/css" href="resources/theme/bootstrap/theme/dbootstrap/dbootstrap.css"/>
 <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/enhanced/resources/claro/EnhancedGrid.css" />
 <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/enhanced/resources/EnhancedGrid_rtl.css"/>
 <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/form/resources/FileInput.css" />
