@@ -16,7 +16,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 			var employeesGrid = registry.byId('employeesGrid'), employeeSalaryDetailsGrid = registry.byId('employeeSalaryDetailsGrid'), 
 				employeeDisciplineGrid = registry.byId('employeeDisciplineGrid'), employeeDoingGoodGrid = registry.byId('employeeDoingGoodGrid'), 
 				employeeLeavesGrid=registry.byId('employeeLeavesGrid'), empLaborDetailsGrid=registry.byId('empLaborDetailsGrid'), 
-				storePattern = 'dd/MM/yyyy', storeTimePattern = 'HH:mm', displayPattern = 'd, MMMM yyyy', randomGen = new randomNumber(), blankArray=[],
+				storePattern = 'MM/DD/YYYY', storeTimePattern = 'HH:mm', displayPattern = 'd, MMMM yyyy', randomGen = new randomNumber(), blankArray=[],
 			formatDate = function(datum){
 				var d = locale.parse(datum, {selector: 'date', datePattern: storePattern});
 				//console.log('Format Date --> In Value is --> ' + datum + ' Converted to --> ' + locale.format(d, {selector: 'date', locale: 'en', datePattern: displayPattern}));
@@ -231,17 +231,17 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 			    			var tmpDate;
 			    			if(jsonRowObject.incrementDate){
 			    				try{tmpDate = jsonRowObject.incrementDate;
-			    					jsonRowObject.incrementDate = new Date(tmpDate.split('/')[2], Number(tmpDate.split('/')[1])-1, tmpDate.split('/')[0]);
+			    					jsonRowObject.incrementDate = new Date(tmpDate.split('/')[2], Number(tmpDate.split('/')[0])-1, tmpDate.split('/')[1]);
 			    				}catch(e){jsonRowObject.incrementDate = new Date();}
 			    			}
 			    			if(jsonRowObject.date){
 			    				try{tmpDate = jsonRowObject.date;
-		    						jsonRowObject.date = new Date(tmpDate.split('/')[2], Number(tmpDate.split('/')[1])-1, tmpDate.split('/')[0]);
+		    						jsonRowObject.date = new Date(tmpDate.split('/')[2], Number(tmpDate.split('/')[0])-1, tmpDate.split('/')[1]);
 			    				}catch(e){jsonRowObject.date = new Date();}
 			    			}
 			    			if(jsonRowObject.hiredDate){
 			    				try{tmpDate = jsonRowObject.hiredDate;
-		    						jsonRowObject.hiredDate = new Date(tmpDate.split('/')[2], Number(tmpDate.split('/')[1])-1, tmpDate.split('/')[0]);
+		    						jsonRowObject.hiredDate = new Date(tmpDate.split('/')[2], Number(tmpDate.split('/')[0])-1, tmpDate.split('/')[1]);
 			    				}catch(e){jsonRowObject.hiredDate = new Date();}
 			    			}
 			    			/*if(jsonRowObject.position && (addOrUpdate == 'true')){
@@ -338,11 +338,11 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 											            { name: "Last Name", field: "lname", width: "8%", noresize: true, editable: true, 
 											            	constraint:{required: true}, widgetProps: {maxLength: 25, promptMessage: 'Last Name within 25 characters', 
 											            	missingMessage: 'Please provide Last Name' }, widgetClass: ValidationTextBox},
-											            { name: "Date Hired", field: "hiredDate", width: "8%", noresize: true, editable: true, 
+											            { name: "Date Hired", field: "hiredDate", width: "7%", noresize: true, editable: true, 
 											            	constraint:{required: true}, widgetProps: {validator: validateDatePattern, 
-											            	promptMessage: 'Provide date in DD/MM/YYYY', missingMessage: 'Please provide date in DD/MM/YYYY', 
-											            	invalidMessage: 'Date format should be in DD/MM/YYYY'}, widgetClass: ValidationTextBox },
-											            { name: "Position", field: "position", width: "10%", editable: true, noresize: true, 
+											            	promptMessage: 'Provide date in MM/DD/YYYY', missingMessage: 'Please provide date in MM/DD/YYYY', 
+											            	invalidMessage: 'Date format should be in MM/DD/YYYY'}, widgetClass: ValidationTextBox },
+											            { name: "Position", field: "position", width: "8%", editable: true, noresize: true, 
 											            	type: dojox.grid.cells.Select, options: ['Manager', 'Front','Cook']},
 											            { name: "Work Cell", field: "phone", width: "9%", noresize: true, editable: true, hidden: false, 
 												            constraint:{required: true}, widgetProps: {maxLength: 20, promptMessage: 'Work Cell within 20 characters', 
@@ -356,10 +356,11 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 														{ name: "Address", field: "address", width: "13%", noresize: true, editable: true, hidden: false, 
 													            constraint:{required: true}, widgetProps: {maxLength: 40, promptMessage: 'Home Address within 40 characters', 
 														        missingMessage: 'Please provide Home Address' }, widgetClass: ValidationTextBox},
-											            { name: "Username", field: "username", width: "8%", noresize: true, editable: true, hidden: false, 
+											            { name: "Username", field: "username", width: "7%", noresize: true, editable: true, hidden: false, 
 											            	constraint:{required: false}, widgetProps: {maxLength: 20, promptMessage: 'Username within 20 characters', 
 											            	missingMessage: 'Please provide Username' }, widgetClass: ValidationTextBox},
 											            { name: "Details", field: 'id', width: "8%", noresize: true, formatter: createShowDetailsLink},
+											            { name: "Active", field: 'active', width: "4%", noresize: true, type: dojox.grid.cells.Bool, editable: true},
 											            { name: "Store", field: "storeId", width: "1%", editable: true, noresize: true, hidden: true}]}],
 											singleClickEdit: true,
 											editable: true,
@@ -412,8 +413,8 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 											            cells: [{ name: "Update", field: 'store', width: "8%", noresize: true, formatter: createAddUpdateLink},
 											            { name: "Date Of Increment", field: "incrementDate", width: "20%", noresize: true, editable: true, 
 												        	constraint:{required: true}, widgetProps: {validator: validateDatePattern, 
-												        	promptMessage: 'Provide date in DD/MM/YYYY', missingMessage: 'Please provide date in DD/MM/YYYY', 
-												        	invalidMessage: 'Date format should be in DD/MM/YYYY'}, widgetClass: ValidationTextBox },
+												        	promptMessage: 'Provide date in MM/DD/YYYY', missingMessage: 'Please provide date in MM/DD/YYYY', 
+												        	invalidMessage: 'Date format should be in MM/DD/YYYY'}, widgetClass: ValidationTextBox },
 											            { name: "Increment Amount", field: "increment", width: "15%", noresize: true, editable: true, 
 											            	formatter: formatCurrency, constraint:{currency: 'USD', required: true, min:1, max:1000, fractional:true}, 
 											            	widgetProps: { promptMessage: 'Provide the increment Amount in USD', rangeMessage: 'Min 1$ and Max 1000$',
@@ -475,8 +476,8 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 											            cells: [{ name: "Update", field: "store", width: "18%", noresize: true, formatter: createAddUpdateLink},
 												{ name: "Date", field: "date", width: "22%", noresize: true, editable: true, 
 										        	constraint:{required: true}, widgetProps: {validator: validateDatePattern, 
-										        	promptMessage: 'Provide date in DD/MM/YYYY', missingMessage: 'Please provide date in DD/MM/YYYY', 
-										        	invalidMessage: 'Date format should be in DD/MM/YYYY'}, widgetClass: ValidationTextBox },
+										        	promptMessage: 'Provide date in MM/DD/YYYY', missingMessage: 'Please provide date in MM/DD/YYYY', 
+										        	invalidMessage: 'Date format should be in MM/DD/YYYY'}, widgetClass: ValidationTextBox },
 										        { name: "Info", field: "notes", width: "60%", noresize: true, editable: true, 
 								        	   		constraint:{required: true}, widgetProps: {maxLength: 100, 
 								        	   		promptMessage: 'Provide Notes in not more than 100 characters', 
@@ -523,8 +524,8 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 											            cells: [{ name: "Update", field: "store", width: "18%", noresize: true, formatter: createAddUpdateLink},
 														{ name: "Date", field: "date", width: "22%", noresize: true, editable: true, 
 												        	constraint:{required: true}, widgetProps: {validator: validateDatePattern, 
-												        	promptMessage: 'Provide date in DD/MM/YYYY', missingMessage: 'Please provide date in DD/MM/YYYY', 
-												        	invalidMessage: 'Date format should be in DD/MM/YYYY'}, widgetClass: ValidationTextBox },
+												        	promptMessage: 'Provide date in MM/DD/YYYY', missingMessage: 'Please provide date in MM/DD/YYYY', 
+												        	invalidMessage: 'Date format should be in MM/DD/YYYY'}, widgetClass: ValidationTextBox },
 												        { name: "Info", field: "notes", width: "60%", noresize: true, editable: true, 
 										        	   		constraint:{required: true}, widgetProps: {maxLength: 100, 
 										        	   		promptMessage: 'Provide Notes in not more than 100 characters', 
@@ -571,8 +572,8 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 											           cells: [{ name: "Update", field: "store", width: "10%", noresize: true, formatter: createAddUpdateLink},
 														{ name: "Date", field: "date", width: "10%", noresize: true, editable: true, 
 											        	   constraint:{required: true}, widgetProps: {validator: validateDatePattern, 
-											        		   promptMessage: 'Provide date in DD/MM/YYYY', missingMessage: 'Please provide date in DD/MM/YYYY', 
-											        		   invalidMessage: 'Date format should be in DD/MM/YYYY'}, 
+											        		   promptMessage: 'Provide date in MM/DD/YYYY', missingMessage: 'Please provide date in MM/DD/YYYY', 
+											        		   invalidMessage: 'Date format should be in MM/DD/YYYY'}, 
 											        		   widgetClass: ValidationTextBox},
 														{ name: "Reason", field: "reason", width: "39%", noresize: true, editable: true, 
 											        	   			constraint:{required: true}, widgetProps: {maxLength: 100, 
@@ -625,8 +626,8 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 											           cells: [{ name: "Update", field: "store", width: "15%", noresize: true, formatter: createAddUpdateLink},
 														{ name: "Date", field: "date", width: "35%", noresize: true, editable: true, 
 											        	   constraint:{required: true}, widgetProps: {validator: validateDatePattern, 
-											        		   promptMessage: 'Provide date in DD/MM/YYYY', missingMessage: 'Please provide date in DD/MM/YYYY', 
-											        		   invalidMessage: 'Date format should be in DD/MM/YYYY'}, 
+											        		   promptMessage: 'Provide date in MM/DD/YYYY', missingMessage: 'Please provide date in MM/DD/YYYY', 
+											        		   invalidMessage: 'Date format should be in MM/DD/YYYY'}, 
 											        		   widgetClass: ValidationTextBox},
 														{ name: "Notes", field: "reason", width: "50%", noresize: true, editable: true, 
 											        	   			constraint:{required: true}, widgetProps: {maxLength: 100, 
@@ -659,8 +660,8 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 											structure: [{defaultCell: { width: "20%", type: dojox.grid.cells._Widget, styles: 'text-align: left;', noresize: true, editable: false },
 											            cells: [{ name: "Update", field: "store", width: "10%", noresize: true, formatter: createAddUpdateLink},
 														{ name: "Date", field: "date", width: "10%", noresize: true, editable: true, constraint:{required: true}, 
-											            	widgetProps: {validator: validateDatePattern, promptMessage: 'Provide date in DD/MM/YYYY', 
-											            	missingMessage: 'Please provide date in DD/MM/YYYY', invalidMessage: 'Date format should be in DD/MM/YYYY'},
+											            	widgetProps: {validator: validateDatePattern, promptMessage: 'Provide date in MM/DD/YYYY', 
+											            	missingMessage: 'Please provide date in MM/DD/YYYY', invalidMessage: 'Date format should be in MM/DD/YYYY'},
 											            	widgetClass: ValidationTextBox},
 											            { name: "Position", field: "position", width: "10%", noresize: true, editable: false},
 														{ name: "Time From", field: "timeFrom", width: "10%", noresize: true, editable: true, widgetClass: TimeTextBox, widgetProps: {openOnClick: true}, formatter: formatTime,
@@ -695,9 +696,8 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 				} else dijit.byId('empLaborDetailsGrid').setStore(gridDataStore);
 		    },
 		    validateDatePattern = function(value, constraints){
-		    	var reg = /^(((0[1-9]|[12]\d|3[01])\/(0[13578]|1[02])\/((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)\/(0[13456789]|1[012])\/((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])\/02\/((19|[2-9]\d)\d{2}))|(29\/02\/((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$/g;
-		    	var returnValue = reg.test(value);
-		    	return returnValue;
+		    	var dts  = value.split('/'), dateTest = new Date(value);
+		    	return !isNaN(dateTest) && dateTest.getFullYear()===parseInt(dts[2],10) && dateTest.getMonth()===(parseInt(dts[0],10)-1) && dateTest.getDate()===parseInt(dts[1],10); 
 		    },
 		    validateNumericDigits = function(value){
 		    	var reg = /^[1-9]?\d$/;
@@ -887,7 +887,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 		    		switch(gridId){
 				    	case 'employeesGrid': 
 				    		recordToAdd = {id: randomNumber, storeId: registry.byId('hiddenStoreId').get('value'), fname: 'First Name', lname: 'Last Name', 
-				    			hiredDate: '29/05/2013', username: 'user'+randomNumber, position: 'Front', phone: 'Add Phone', active: true, mgr: 1,
+				    			hiredDate: '12/05/2013', username: 'user'+randomNumber, position: 'Front', phone: 'Add Phone', active: true, mgr: 1,
 				    			updatedBy: 1, updated_date: '', store: '__new__', _self: '/service/store/'+registry.byId('hiddenStoreId').get('value')+'/employee/0', post: true};
 				    		break;
 				    	case 'employeeSalaryDetailsGrid': 
@@ -904,15 +904,15 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 				    			 _self: '/service/employee/'+empId+'/discipline', post: true, notes: 'Add Notes', notesType: 'good', active: true, updatedBy: 1, updatedDate: '', store: '__new__'};
 				    		break;
 				    	case 'employeeLeavesGrid':
-				    		recordToAdd = {id: randomNumber, storeId: registry.byId('hiddenStoreId').get('value'), empId: empId, date: '23/12/2013', active: true,
+				    		recordToAdd = {id: randomNumber, storeId: registry.byId('hiddenStoreId').get('value'), empId: empId, date: '12/12/2013', active: true,
 				    			 _self: '/service/employee/'+empId+'/leaves', post: true, reason: 'Reason in not More than 100 Characters', excused: '', activeHrs: 0, updatedBy: 1, updatedDate: '', store: '__new__'};
 				    		break;
 				    	case 'mgrLeavesGrid':
-				    		recordToAdd = {id: randomNumber, storeId: registry.byId('hiddenStoreId').get('value'), empId: empId, date: '23/12/2013', active: true,
+				    		recordToAdd = {id: randomNumber, storeId: registry.byId('hiddenStoreId').get('value'), empId: empId, date: '12/12/2013', active: true,
 				    			 _self: '/service/employee/'+empId+'/leaves', post: true, reason: 'Notes in not More than 100 Characters', excused: false, activeHrs: 0, updatedBy: 1, updatedDate: '', store: '__new__'};
 				    		break;
 				    	case 'empLaborDetailsGrid':
-				    		recordToAdd = {id: randomNumber, storeId: registry.byId('hiddenStoreId').get('value'), empId: empId, date: '20/12/2013', position: getSelectedEmployeePosition(), active: true,
+				    		recordToAdd = {id: randomNumber, storeId: registry.byId('hiddenStoreId').get('value'), empId: empId, date: '12/12/2013', position: getSelectedEmployeePosition(), active: true,
 				    			 _self: '/service/store/' + registry.byId('hiddenStoreId').get('value') + '/employee/'+empId+'/labor', post: true, timeFrom: '09:00', timeTo: '17:00', updatedBy: 1, store: '__new__'};
 				    		break;
 				    }

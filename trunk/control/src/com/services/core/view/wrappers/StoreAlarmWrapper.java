@@ -17,6 +17,8 @@ public class StoreAlarmWrapper extends BaseModel {
 	
 	private String name;
 	
+	private String userNumber;
+	
 	private String code;
 	
 	private String position;
@@ -36,12 +38,13 @@ public class StoreAlarmWrapper extends BaseModel {
 	}
 
 	public StoreAlarmWrapper(Integer id, Integer storeId, String name,
-			String code, String position, String notes, Boolean active,
+			String userNumber, String code, String position, String notes, Boolean active,
 			Integer updatedBy, Date updatedDate) {
 		super();
 		this.id = id;
 		this.storeId = storeId;
 		this.name = name;
+		this.userNumber = userNumber;
 		this.code = code;
 		this.position = position;
 		this.notes = notes;
@@ -64,6 +67,14 @@ public class StoreAlarmWrapper extends BaseModel {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public String getUserNumber() {
+		return userNumber;
+	}
+
+	public void setUserNumber(String userNumber) {
+		this.userNumber = userNumber;
 	}
 
 	public String getCode() {

@@ -30,6 +30,9 @@ public class StoreAlarm implements Comparable<StoreAlarm> {
 
 	@Column(name = "name")
 	private String name;
+	
+	@Column(name = "user_number")
+	private String userNumber;
 
 	@Column(name = "code")
 	private String code;
@@ -59,11 +62,12 @@ public class StoreAlarm implements Comparable<StoreAlarm> {
 		super();
 	}
 
-	public StoreAlarm(Integer storeId, String name, String code,
+	public StoreAlarm(Integer storeId, String name, String userNumber, String code,
 			String position, String notes, Integer updatedBy) {
 		super();
 		this.storeId = storeId;
 		this.name = name;
+		this.userNumber = userNumber;
 		this.code = code;
 		this.position = position;
 		this.notes = notes;
@@ -84,6 +88,14 @@ public class StoreAlarm implements Comparable<StoreAlarm> {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public String getUserNumber() {
+		return userNumber;
+	}
+
+	public void setUserNumber(String userNumber) {
+		this.userNumber = userNumber;
 	}
 
 	public String getCode() {

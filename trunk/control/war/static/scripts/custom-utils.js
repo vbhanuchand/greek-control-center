@@ -817,8 +817,40 @@ function deleteItem(src, blobSrc, id){
 				break;
 			}
 			break;
+		case 'store-tab':
+			var selectedChildId = registry.byId('storeInfoTabContainer').selectedChildWidget.id;
+			var standByNode = '', url = '';
+			switch(selectedChildId){
+				case 'storeAlarms':
+					standByNode = 'storeAlarmCodesGridStandBy';
+					url = "/service/delete/store/" + id + '/sa';
+					break;
+				case 'storeKeys':
+					standByNode = 'storeKeysGridStandBy';
+					url = "/service/delete/store/" + id + '/sk';
+					break;
+				case 'storeMaintenance':
+					standByNode = 'storeMaintenanceGridStandBy';
+					url = "/service/delete/store/" + id + '/sm';
+					break;
+			}
+			registry.byId(standByNode).show();
+			ajaxRequest.get(url,{
+	    		handleAs: 'json'
+	    	}).then(function(deleteResponse){
+	    		if(deleteResponse.success){
+	    			storeLayout.refreshPane();
+	    		}
+	    	}, function(error){
+	    		registry.byId(standByNode).hide();
+	    	});
+			break;
 		default:
 			break;
 	
 	}
+}
+
+function callManageUsers(){
+	console.log('callManageUsers() called !!!');
 }

@@ -88,8 +88,8 @@ public class StoreDAOImpl implements StoreDAO {
 	}
 	
 	@Override
-	public boolean updateStoreAlarm(int id, int storeId, String name, String code, String position, String notes, int updated_by){
-		String hql = "UPDATE StoreAlarm s set s.name = :name, " + "s.code = :code, "  
+	public boolean updateStoreAlarm(int id, int storeId, String name, String userNumber, String code, String position, String notes, int updated_by){
+		String hql = "UPDATE StoreAlarm s set s.name = :name, s.userNumber=:userNumber" + "s.code = :code, "  
 					+	"s.position = :position, s.updatedBy = :updatedBy, s.notes = :notes "  
 					+   "WHERE s.id = :id and s.storeId= :storeId and s.active=true";
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
@@ -100,13 +100,14 @@ public class StoreDAOImpl implements StoreDAO {
 		query.setParameter("notes", notes);
 		query.setParameter("id", id);
 		query.setParameter("storeId", storeId);
+		query.setParameter("userNumber", userNumber);
 		int result = query.executeUpdate();
 		return (result == 1);
 	}
 	
 	@Override
-	public boolean createStoreAlarm(int storeId, String name, String code, String position, String notes, int updated_by){
-		StoreAlarm storeAlarm = new StoreAlarm(storeId, name, code, position, notes, updated_by);
+	public boolean createStoreAlarm(int storeId, String name, String userNumber, String code, String position, String notes, int updated_by){
+		StoreAlarm storeAlarm = new StoreAlarm(storeId, name, userNumber, code, position, notes, updated_by);
 		storeAlarm.setActive(true);
 		sessionFactory.getCurrentSession().save(storeAlarm);
 		return true;

@@ -573,7 +573,7 @@ public class DataManagerImpl implements DataManager{
 		List<StoreAlarmWrapper> storeAlarmRecords = new ArrayList<StoreAlarmWrapper>();
 		for(StoreAlarm storeAlarm: storeDAO.getStoreAlarmRecords(storeId)){
 			storeAlarmRecords.add(new StoreAlarmWrapper(storeAlarm.getId(), storeAlarm.getStoreId(), 
-					storeAlarm.getName(), storeAlarm.getCode(), storeAlarm.getPosition(), storeAlarm.getNotes(), 
+					storeAlarm.getName(), storeAlarm.getUserNumber(), storeAlarm.getCode(), storeAlarm.getPosition(), storeAlarm.getNotes(), 
 					storeAlarm.getActive(), storeAlarm.getUpdatedBy(), storeAlarm.getUpdatedDate()));
 		}
 		return storeAlarmRecords;
@@ -600,14 +600,14 @@ public class DataManagerImpl implements DataManager{
 	@Override
 	@Transactional
 	public boolean updateStoreAlarm(StoreAlarmWrapper storeAlarm){
-		return storeDAO.updateStoreAlarm(storeAlarm.getId(), storeAlarm.getStoreId(), storeAlarm.getName(), 
+		return storeDAO.updateStoreAlarm(storeAlarm.getId(), storeAlarm.getStoreId(), storeAlarm.getName(), storeAlarm.getUserNumber(), 
 				storeAlarm.getCode(), storeAlarm.getPosition(), storeAlarm.getNotes(), storeAlarm.getUpdatedBy());
 	}
 	
 	@Override
 	@Transactional
 	public boolean insertStoreAlarm(StoreAlarmWrapper storeAlarm){
-		return storeDAO.createStoreAlarm(storeAlarm.getStoreId(), storeAlarm.getName(), 
+		return storeDAO.createStoreAlarm(storeAlarm.getStoreId(), storeAlarm.getName(), storeAlarm.getUserNumber(),
 				storeAlarm.getCode(), storeAlarm.getPosition(), storeAlarm.getNotes(), storeAlarm.getUpdatedBy());
 	}
 	

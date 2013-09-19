@@ -38,9 +38,9 @@
 			} ]
 		},
 		packages : [
-		            {name : "controls", location : location.pathname.replace(/\/[^/]+$/, '') + "/resources/scripts/controls", main: "StoreLayoutController"},
-		            {name: "bootstrap", location : location.pathname.replace(/\/[^/]+$/, '') + "/resources/scripts/bootstrap", main: "main" }, 
-					{name: "xstyle", location : location.pathname.replace(/\/[^/]+$/, '') + "/resources/scripts/xstyle"}
+					{name: "bootstrap", location: "/resources/scripts/bootstrap", main: "main"},
+					{name: "xstyle", location: "/resources/scripts/xstyle"},
+		            {name: "controls", location: "/resources/scripts/controls"}
 		           ]
 	};
 	var INVENTORY_DISTRIBUTORS = [];
@@ -48,40 +48,20 @@
 	var INVENTORY_DISTRIBUTORS_MAP = {};
 </script>
 
-<link rel="stylesheet"
-	href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/resources/dojo.css" />
-<link rel="stylesheet"
-	href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/enhanced/resources/EnhancedGrid_rtl.css" />
-	
-<link rel="stylesheet"
-	href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dijit/themes/nihilo/nihilo.css">
-<link rel="stylesheet"
-	href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/resources/nihiloGrid.css" />	
-
-<link rel="stylesheet"
-	href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dijit/themes/claro/claro.css" />
-<link rel="stylesheet"
-	href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/resources/claroGrid.css" />
-<link rel="stylesheet"
-	href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/enhanced/resources/claro/EnhancedGrid.css" />
-	
-<link rel="stylesheet"
-	href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dijit/themes/soria/soria.css">
-<link rel="stylesheet"
-	href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/resources/soriaGrid.css" />
-
-<link rel="stylesheet"
-	href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/calendar/themes/soria/Calendar.css" />
-<link rel="stylesheet"
-	href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/calendar/themes/nihilo/Calendar.css" />
-	<link rel="stylesheet"
-	href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/calendar/themes/claro/Calendar.css" />
-<link rel="stylesheet"
-	href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/form/resources/FileInput.css" />
-<!-- <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/widget/Dialog/Dialog.css" /> -->
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/resources/dojo.css" />
+<link rel="stylesheet" type="text/css" href="resources/scripts/bootstrap/theme/dbootstrap/dijit.css"/>
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dijit/themes/soria/soria.css">
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/resources/soriaGrid.css" />
+<link rel="stylesheet" type="text/css" href="resources/scripts/bootstrap/theme/dbootstrap/dbootstrap.css"/>
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/enhanced/resources/claro/EnhancedGrid.css" />
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/enhanced/resources/EnhancedGrid_rtl.css"/>
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/form/resources/FileInput.css" />
 <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/layout/resources/ScrollPane.css" />
 <link rel="stylesheet" href="resources/styles/styles.css" />
-<!-- <link rel="stylesheet" type="text/css" href="resources/scripts/bootstrap/theme/dbootstrap/dbootstrap.css"/>  -->
+<link rel="stylesheet" href="resources/styles/overrides-bootstrap.css" />
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/calendar/themes/soria/Calendar.css" />
+<link rel="stylesheet"href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/calendar/themes/claro/Calendar.css" />
+
 <script
 	data-dojo-config="has:{'dojo-firebug': true, 'dojo-debug-messages': true}, cacheBust: true, parseOnLoad:false, isDebug: true,
 	waitSeconds: 10, locale: location.search.match(/locale=([\w\-]+)/) ? RegExp.$1 : 'en-us'"
@@ -95,93 +75,98 @@
 </script>
 </head>
 
-<body class="soria">
+
+
+
+<body class="dbootstrap">
 	<noscript><style type="text/css">#loadingOverlay { display: none !important; }</style></noscript>
-	<div id="loadingOverlay" class="loadingPanel" align="center"><div align="left"
-		style="background: #DBEB8F; padding: 2px">Loading...</div></div>
+	
+	<div id="loadingOverlay" class="loadingPanel" align="center"><div align="left" style="background: #DBEB8F; padding: 2px">Loading...</div></div>
+	<!-- <div id="loadingOverlay" data-dojo-type="dijit/ProgressBar" data-dojo-props="'class': 'success', indeterminate: true"> Loading ... </div> -->
+
+
+	<!-- Hidden Fields definition goes here -->
 	<div class="dijitHidden" data-dojo-type="dijit/form/TextBox" data-dojo-id="hiddenStoreId" id="hiddenStoreId"></div>
 	<div class="dijitHidden" data-dojo-type="dijit/form/TextBox" data-dojo-id="hiddenInvoiceCategory" id="hiddenInvoiceCategory"></div>
 	<div class="dijitHidden" data-dojo-type="dijit/form/TextBox" data-dojo-id="hiddenUploadedDocId" id="hiddenUploadedDocId"></div>
 	<div class="dijitHidden" data-dojo-type="dijit/form/TextBox" data-dojo-id="hiddenSelectedYear" id="hiddenSelectedYear" value="2013"></div>
 	<div class="dijitHidden" data-dojo-type="dijit/form/DateTextBox" data-dojo-id="hiddenItemDate" id="hiddenItemDate" value="now"></div>
-	<!-- <div id="messagesTooltip" data-dojo-id="messagesTooltip" data-dojo-type="dijit/TooltipDialog"></div> -->
-	<div class="dijitHidden">  
-		<div data-dojo-type="dijit/Dialog"
-			data-dojo-props="title:'Login', loadingMessage:'Loading Login Form...'"
-			draggable="true" data-dojo-id="loginDialog" id="loginDialog" >
-			<form data-dojo-type="dijit/form/Form" data-dojo-id="loginForm" id="loginForm">
-				<table class="bordered" style="vertical-align: middle;">
-					<tr>
-						<td align="left" valign="middle"><img align="top"
-							src="resources/images/login.png" height="60" width="60" /></td>
-						<td align="left" valign="middle">Login with your credentials
-							to navigate further.</td>
-					</tr>
-					<tr id="loginTrId" style="display: none;" align="center">
-						<td colspan="2" align="center"><span id="loginMessage"></span></td>
-					</tr>
-					<tr>
-						<td colspan="2" align="left"><label for="username">Username:</label>&nbsp;&nbsp;&nbsp;&nbsp;<input
-							data-dojo-type="dijit/form/ValidationTextBox"
-							data-dojo-props="required: 'true', trim: 'true', ucfirst:'true', invalidMessage : 'Username is invalid', placeHolder:'(Assigned by Administrator)'"
-							id="j_username" name="j_username" /></td>
-					</tr>
-					<tr>
-						<td colspan="2" align="left"><label for="password">Password:</label>&nbsp;&nbsp;&nbsp;&nbsp;<input
-							data-dojo-type="dijit/form/ValidationTextBox" id="j_password"
-							data-dojo-props="required: 'true', trim: 'true', ucfirst:'true'"
-							name="j_password" type="password" /> &nbsp;&nbsp;&nbsp;
-							<button data-dojo-type="dijit/form/Button" type="submit" id="loginButton">Login</button>
-						</td>
-					</tr>
-				</table>
-				<script type="dojo/on" data-dojo-event="submit" data-dojo-args="e">
-					var registry = require("dijit/registry");
-					registry.byId('loginButton').set('disabled', true);
-            		e.preventDefault(); // prevent the default submit
-					e.stopPropagation();
-            		if(!loginForm.isValid()){ 
-						displayMessage("loginTrId", "loginMessage", "Invalid Username and Password. Please check.. ", "warning");
-						return; 
-					};
-					
-					var ajaxRequest = require("dojo/request");
-					var json = require('dojo/json');
-					var domForm = require('dojo/dom-form');
-					var promise = ajaxRequest.post('/service/j_spring_security_check', {data: domForm.toObject('loginForm'), sync: true});
-					promise.response.then(function(response){
-						var message = dojo.fromJson(response.data);
-						if(message.success && (message.roles != 'ROLE_EMP')){
-							displayMessage("loginTrId", "loginMessage", "Login to the Portal is successful.", "success");
-							
-							applySecurityRoles(message);
-							var otherFx = require("dojo/fx");
-							var dom = require("dojo/dom");
-							var domStyle = require('dojo/dom-style');
-							
-							otherFx.wipeOut({node: dom.byId('loginDialog'),duration: 1000, delay: 250, onEnd: function(){
-								registry.byId('loginDialog').hide();
-							}}).play();
-							//checkSelectedPane('locationTabletr1', 'rightAccordion', 1);
-							modifyContentPaneTitles();
-							modifyStoreDateLabel('store-info-important-dates');
-							var storeLayout = require("controls/StoreLayoutController");
-							var empLayout = require("controls/EmployeeLayoutController");
-							var accLayout = require("controls/AccountingLayoutController");
-							var invLayout = require("controls/InventoryLayoutController");
-							storeLayout.postCreate();
-							empLayout.postCreate();
-							accLayout.postCreate();
-							invLayout.postCreate();
-						} else {
-							registry.byId('loginButton').set('disabled', false);
-							displayMessage("loginTrId", "loginMessage", "Invalid Username and Password. Please check.. ", "error");
-							return false; 
-						}					
-					});
-        		</script>
-			</form>
+
+	
+	<div class="dijitHidden">
+		<!-- Login Dialog -->  
+		<div data-dojo-type="dijit/Dialog" data-dojo-props="title:'Login', loadingMessage:'Loading Login Form...'" draggable="true" data-dojo-id="loginDialog" id="loginDialog">
+			<div class="dijitDialogPaneContentArea">
+				<form data-dojo-type="dijit/form/Form" data-dojo-id="loginForm" id="loginForm">
+					<table style="padding: 10px 0px 10px 0px;">
+		                <tr>
+							<td><img align="top" src="resources/images/login.png" height="60" width="60"/></td>
+							<td>Login with your credentials to navigate further.</td>
+						</tr>
+						<tr id="loginTrId" style="display: none; padding-bottom: 10px; padding-top: 10px;">
+							<td colspan="2" align="center"><span id="loginMessage"></span></td>
+						</tr>
+		                <tr>
+		                    <td align="left"><label for="username">Username:</label></td>
+		                    <td align="center"><input data-dojo-type="dijit/form/ValidationTextBox" id="j_username" name="j_username" 
+		                    data-dojo-props="required: 'true', trim: 'true', ucfirst:'true', invalidMessage : 'Username is invalid', placeHolder:'(Assigned by Administrator)'"/></td>
+		                </tr>
+		                <tr>
+		                    <td align="left"><label for="password">Password:</label></td>
+		                    <td align="center"><input name="j_password" type="password" data-dojo-type="dijit/form/ValidationTextBox" id="j_password" data-dojo-props="required: 'true', trim: 'true', ucfirst:'true'"/></td>
+		                </tr>
+	            	</table>
+					<div class="dijitDialogPaneActionBar">
+			            <button data-dojo-type="dijit/form/Button" data-dojo-props="'class':'primary'" type="submit" id="loginButton">Login</button>
+			            <button data-dojo-type="dijit/form/Button" data-dojo-props="'class':'inverse', disabled:true" disabled>Cancel</button>
+			        </div>
+					<script type="dojo/on" data-dojo-event="submit" data-dojo-args="e">
+						var registry = require("dijit/registry");
+						registry.byId('loginButton').set('disabled', true);
+            			e.preventDefault(); // prevent the default submit
+						e.stopPropagation();
+            			if(!loginForm.isValid()){ 
+							displayMessage("loginTrId", "loginMessage", "Invalid Username and Password. Please check.. ", "warning");
+							return; 
+						};
+						var ajaxRequest = require("dojo/request");
+						var json = require('dojo/json');
+						var domForm = require('dojo/dom-form');
+						var promise = ajaxRequest.post('/service/j_spring_security_check', {data: domForm.toObject('loginForm'), sync: true});
+						promise.response.then(function(response){
+							var message = dojo.fromJson(response.data);
+							if(message.success && (message.roles != 'ROLE_EMP')){
+								displayMessage("loginTrId", "loginMessage", "Login to the Portal is successful.", "success");
+								applySecurityRoles(message);
+								var otherFx = require("dojo/fx");
+								var dom = require("dojo/dom");
+								var domStyle = require('dojo/dom-style');
+								otherFx.wipeOut({node: dom.byId('loginDialog'),duration: 1000, delay: 250, onEnd: function(){
+									registry.byId('loginDialog').hide();
+								}}).play();
+								modifyContentPaneTitles();
+								modifyStoreDateLabel('store-info-important-dates');
+								var storeLayout = require("controls/StoreLayoutController");
+								var empLayout = require("controls/EmployeeLayoutController");
+								var accLayout = require("controls/AccountingLayoutController");
+								var invLayout = require("controls/InventoryLayoutController");
+								storeLayout.postCreate();
+								empLayout.postCreate();
+								accLayout.postCreate();
+								invLayout.postCreate();
+							} else {
+								registry.byId('loginButton').set('disabled', false);
+								displayMessage("loginTrId", "loginMessage", "Invalid Username and Password. Please check.. ", "error");
+								return false; 
+							}					
+						});
+        			</script>
+				</form>
+			</div>
 		</div>
+		<!-- End of Login Dialog -->
+		
+		
 		<div id="fileUploadDialog" data-dojo-type="dijit/Dialog"
 			data-dojo-props="title:'Upload Files', loadingMessage:'Loading Form...'"
 			draggable="true" data-dojo-id="fileUploadDialog">
@@ -192,13 +177,23 @@
        			 <input type="submit" label="Submit" data-dojo-type="dijit/form/Button" />
 			</form>
 		</div>
+		
 	</div>
 
-	<div data-dojo-type="dijit/layout/BorderContainer"
-		style="padding: 0px; width: 100%; height: 100%;"
-		data-dojo-props="design:'sidebar', gutters:true">
-		<div data-dojo-type="dijit/layout/ContentPane" style="width: 15%;height: 98%;"
-			data-dojo-props="splitter:false, region:'leading'">
+
+
+
+	<div data-dojo-type="dijit/layout/BorderContainer" class="application" data-dojo-props="design:'headline', gutters:true, liveSplitters: false">
+		<div id="header" data-dojo-type="dijit/MenuBar" data-dojo-props="region:'top', 'class':'primary inverse'">
+	        <span class='brand'>Greek Souvlaki Control Centre</span>
+	        <div data-dojo-type="dijit/PopupMenuBarItem" id="adminPopupMenu">
+	            <span>Administrator</span>
+	            <div data-dojo-type="dijit/Menu" style="float: right;">
+	                <div data-dojo-type="dijit/MenuItem" data-dojo-props="onClick: callManageUsers">Manage Users</div>
+	            </div>
+	        </div>
+	    </div>
+		<div data-dojo-type="dijit/layout/ContentPane" style="width: 15%;" data-dojo-props="splitter: true, region: 'leading', minSize: 20">
 			<div style='margin-top: 2px;'>
 				<table class="bordered" style="width: 100%; height: 30%;"
 					id="locationTable">
@@ -281,16 +276,8 @@
 
 
 
-		<div data-dojo-type="dijit/layout/ContentPane"
-			data-dojo-props="splitter:false, doLayout:true, region:'center'"
-			style="width: 85%; height: 100%">
-			<!-- <div data-dojo-type="dijit/TitlePane"
-				data-dojo-props="title:'Welcome Owner / Manager', style:'margin-top:0px;height:5%;width:100%;', open:false">
-			</div> -->
-			<div data-dojo-id="tabContainer" id="tabContainer" class="customTabClass"
-				data-dojo-type="dijit/layout/TabContainer"
-				data-dojo-props="tabPosition: 'top'"
-				style="font-style: italic; width: 100%; height: 95%">
+		<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="splitter: false, doLayout: true, region:'center'" style="width: 85%; height: 100%;">
+			<div data-dojo-id="tabContainer" id="tabContainer" data-dojo-type="dijit/layout/TabContainer" data-dojo-props="tabPosition: 'top'" style="font-style: italic; width: 100%; height: 95%">
 				<div id="managePane" data-dojo-type="dijit/layout/ContentPane"
 					title="Manage" data-dojo-props="selected:false"
 					style="width: 99%; height: 99%">
@@ -424,15 +411,15 @@
 					
 					<div id="storeInfoTabContainer" data-dojo-id="storeInfoTabContainer" data-dojo-type="dijit/layout/TabContainer" 
 						data-dojo-props="tabPosition: 'top'" style="margin:2px;font-style: italic; width:100%;height:52%; vertical-align: bottom;">
-						<div data-dojo-type="dijit/layout/ContentPane" id="storeMaintenance"
-								data-dojo-props="title:'Maintenance', style:'margin-top:1px;height:99%;width:100%;', selected:false">
+						<div data-dojo-type="dijit/layout/ContentPane" id="storeMaintenance" class="soria" 
+							data-dojo-props="title:'Maintenance', style:'margin-top:1px;height:99%;width:100%;', selected:false">
 							<div id="storeMaintenanceGrid" align="center"
 							style="height:99%;margin:2px; width:99%;"></div>
 							<div id="storeMaintenanceGridStandBy" data-dojo-id="storeMaintenanceGridStandBy" 
 											data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'storeMaintenanceGrid', color:'white'">
 							</div>
 						</div>
-						<div data-dojo-type="dijit/layout/ContentPane" id="storeHealthInspection"
+						<div data-dojo-type="dijit/layout/ContentPane" id="storeHealthInspection" class="soria"
 								data-dojo-props="title:'Health Inspection', style:'margin-top:1px;height:99%;width:100%;', selected:false">
 							<div style="width:99%; text-align: right; margin-right: 10px; vertical-align: top; padding: 3px;"><a href="javascript: addRecordDialog('healthInspection');">Add</a></div>
 							<div data-dojo-type="dijit/layout/ContentPane" style="height:93%; width:100%;">
@@ -443,7 +430,7 @@
 								</div>
 							</div>
 						</div>
-						<div data-dojo-type="dijit/layout/ContentPane" id="storeAlarms"
+						<div data-dojo-type="dijit/layout/ContentPane" id="storeAlarms" class="soria"
 								data-dojo-props="title:'Alarm Codes', style:'margin-top:1px;height:99%;width:100%;'">
 							<div id="storeAlarmCodesGrid" align="center"
 							style="height:99%;margin:2px; width:99%;"></div>
@@ -451,7 +438,7 @@
 											data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'storeAlarmCodesGrid', color:'white'">
 							</div>
 						</div>
-						<div data-dojo-type="dijit/layout/ContentPane" id="storeKeys"
+						<div data-dojo-type="dijit/layout/ContentPane" id="storeKeys" class="soria"
 								data-dojo-props="title:'Keys Information', style:'margin-top:1px;height:99%;width:100%;'">
 							<div id="storeKeysGrid" align="center"
 							style="height:99%;margin:2px; width:99%;"></div>
@@ -459,7 +446,7 @@
 											data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'storeKeysGrid', color:'white'">
 							</div>
 						</div>
-						<div data-dojo-type="dijit/layout/ContentPane" id="storeLabor"
+						<div data-dojo-type="dijit/layout/ContentPane" id="storeLabor" class="soria"
 								data-dojo-props="title:'Labor Summary', style:'margin-top:1px;height:99%;width:100%;'">
 							<div id="storeLaborGrid" align="center"
 							style="height:99%;margin:2px; width:99%;"></div>
@@ -547,7 +534,7 @@
 						<table style="width: 99%; height: 66%; margin-top: 1px;" class='dateTable' align="center">
 							<tr style="width: 100%; height: 100%">
 								<td style="width: 50%; height: 99%" align="center" valign="top">
-									<div align="center" style="width: 99%; height: 98%; font-weight: bold;font-style: inherit; vertical-align: bottom;">
+									<div align="center" style="width: 99%; height: 98%; font-weight: bold;font-style: inherit; vertical-align: bottom;" class="soria">
 										<u>Personal / Sick Days</u> <span id="mgrAddLeavesIcon" style="display: none;">&nbsp; <img align='top' src='resources/images/add-icon.png' onclick='javascript: addManagerLeavesTabRecord(event);'/> &nbsp;</span>
 										<div id="mgrLeavesGrid" align="center"
 											style="height:70%; padding:2px; width:98%;">
@@ -643,7 +630,7 @@
 					</div>
 				</div>
 				<div id="employeePane" data-dojo-type="dijit/layout/ContentPane" title="Employees" data-dojo-props="selected:false" style="width: 100%; height: 100%">
-					<div id="employeesGridContentPane" data-dojo-type="dijit/layout/ContentPane" style="margin:2px;width:99%;height:50%; vertical-align:top;">
+					<div id="employeesGridContentPane" data-dojo-type="dijit/layout/ContentPane" style="margin:2px;width:99%;height:50%; vertical-align:top;" class="soria">
 						<div id="employeesGrid" align="center"
 							style="margin:2px;width:99%;height:99%; vertical-align:top;">
 						</div>
@@ -653,7 +640,7 @@
 					</div>
 					<div id="employeeInfoTabContainer" data-dojo-id="employeeInfoTabContainer" data-dojo-type="dijit/layout/TabContainer" 
 						data-dojo-props="tabPosition: 'top'" style="margin:2px;font-style: italic; width:100%;height:49%;vertical-align:bottom;">
-						<div id="empSalaryDetails" data-dojo-type="dijit/layout/ContentPane"
+						<div id="empSalaryDetails" data-dojo-type="dijit/layout/ContentPane" class="soria"
 								data-dojo-props="title:'Salary Particulars', style:'margin-top:1px;height:99%;width:100%;vertical-align:top;'">
 							<div id="employeeSalaryDetailsGrid" align="center"
 							style="height:98%;margin:2px; width:99%;"></div>
@@ -661,7 +648,7 @@
 									data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'employeeSalaryDetailsGrid', color:'white'">
 							</div>
 						</div>
-						<div id="empDisciplineDetails" data-dojo-type="dijit/layout/ContentPane"
+						<div id="empDisciplineDetails" data-dojo-type="dijit/layout/ContentPane" class="soria"
 								data-dojo-props="title:'Discipline Details', style:'margin-top:1px;height:100%;width:100%;'">
 							<table style="width: 100%;height: 100%" class="bordered">
 								<tr>
@@ -688,7 +675,7 @@
 								</tr>
 							</table>
 						</div>
-						<div id="empLeavesDetails" data-dojo-type="dijit/layout/ContentPane"
+						<div id="empLeavesDetails" data-dojo-type="dijit/layout/ContentPane" class="soria"
 								data-dojo-props="title:'Missed Shifts', style:'margin-top:1px;height:99%;width:100%;'">
 							<div id="employeeLeavesGrid" align="center"
 								style="height:98%;margin:2px; width:99%;vertical-align:top;"></div>
@@ -696,7 +683,7 @@
 								data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'employeeLeavesGrid', color:'white'">
 							</div>
 						</div>
-						<div id="empLaborDetails" data-dojo-type="dijit/layout/ContentPane"
+						<div id="empLaborDetails" data-dojo-type="dijit/layout/ContentPane" class="soria"
 								data-dojo-props="title:'Labor Entry', style:'margin-top:1px;height:99%;width:100%;'">
 							<div id="empLaborDetailsGrid" align="center"
 								style="height:98%;margin:2px; width:99%;vertical-align:top;"></div>
@@ -942,19 +929,23 @@
 						</tr>
 						<tr valign="top" style="width: 100%; height: 88%;">
 							<td align="left" style="height: 95%; width: 50%;">
-								<div id="inventoryInvoicesGrid" align="center"
-									style="height: 100%; margin: 2px; width: 100%;">
-								</div>
-								<div id="inventoryInvoicesGridStandBy" data-dojo-id="inventoryInvoicesGridStandBy" data-dojo-type="dojox/widget/Standby" 
-										data-dojo-props="target:'inventoryInvoicesGrid', color:'white'">
+								<div data-dojo-type="dijit/layout/ContentPane" style="width: 99%; height: 99%;" class="soria">
+									<div id="inventoryInvoicesGrid" align="center" 
+										style="height: 100%; margin: 2px; width: 100%;">
+									</div>
+									<div id="inventoryInvoicesGridStandBy" data-dojo-id="inventoryInvoicesGridStandBy" data-dojo-type="dojox/widget/Standby" 
+											data-dojo-props="target:'inventoryInvoicesGrid', color:'white'">
+									</div>
 								</div>
 							</td>
 							<td align="left" style="height: 95%; width: 50%;">
-								<div id="inventoryInvoiceDetailsGrid" align="center"
-									style="height: 99%; margin: 2px; width: 99%;">
-								</div>
-								<div id="inventoryInvoiceDetailsGridStandBy" data-dojo-id="inventoryInvoiceDetailsGridStandBy" data-dojo-type="dojox/widget/Standby" 
-									data-dojo-props="target:'inventoryInvoiceDetailsGrid', color:'white'">
+								<div data-dojo-type="dijit/layout/ContentPane" style="width: 99%; height: 99%;" class="soria">
+									<div id="inventoryInvoiceDetailsGrid" align="center" class="soria"
+										style="height: 99%; margin: 2px; width: 99%;">
+									</div>
+									<div id="inventoryInvoiceDetailsGridStandBy" data-dojo-id="inventoryInvoiceDetailsGridStandBy" data-dojo-type="dojox/widget/Standby" 
+										data-dojo-props="target:'inventoryInvoiceDetailsGrid', color:'white'">
+									</div>
 								</div>
 							</td>
 						</tr>
