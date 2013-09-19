@@ -854,3 +854,33 @@ function deleteItem(src, blobSrc, id){
 function callManageUsers(){
 	console.log('callManageUsers() called !!!');
 }
+function printInvoiceDetails(divId, title){
+	var dom = require('dojo/dom');
+	var innerHTML = dom.byId(divId).innerHTML;
+	var html = '';
+    html += '<html lang="en-us">';
+    html += '<head>' + '<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/resources/dojo.css" />';
+    html += '<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/enhanced/resources/EnhancedGrid_rtl.css" />';
+    html += '<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dijit/themes/soria/soria.css">';
+    html += '<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/resources/soriaGrid.css" />';
+    html += '<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/resources/claroGrid.css" />';
+    html += '<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/enhanced/resources/claro/EnhancedGrid.css" />';
+    html += '<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/calendar/themes/claro/Calendar.css" />';
+    html += '<link rel="stylesheet" href="resources/styles/styles.css"/>' + '</head>';
+    
+    html += "<body class='soria' style='width: 100%; height: 100%;color: #000000; background: #ffffff; font-family: \"Times New Roman\", Times, serif; font-size: 12pt;'>";
+    var strTitle = dom.byId(title).innerHTML + '';
+    var titleToPrint = strTitle.substr(1, strTitle.length - 2);
+    html += '<div align="center"><h2>' + titleToPrint.toUpperCase() + ' INVOICE </h2></div>';
+    innerHTML += '<br/><br/>';
+    innerHTML += '<div align="left" style="position: absolute; bottom: 20px; left: 10px;"><table style="width: 100%;" class="dateTable"><tr><th style="width: 25%;">Manager Signature</th><th style="width: 30%;" class="noBorder"></th><th style="width: 20%;">GS CHARGES</th><th style="width: 20%;">TOTAL CHARGES</th></tr>';
+    innerHTML += '<tr><td style="width: 25%;"></td><td style="width: 30%;" class="noBorder"></td><td style="width: 20%;">&nbsp;&nbsp;$84.30</td><td style="width: 20%;">&nbsp;&nbsp;$843.00</td></tr>';
+    innerHTML += '</table></div>';
+    html += innerHTML;
+	html += "</body>";
+	
+	var w = window.open("about:blank");
+	w.document.write(html);
+	w.document.close();
+	w.print(); 
+}

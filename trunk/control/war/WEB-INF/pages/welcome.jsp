@@ -38,9 +38,7 @@
 			} ]
 		},
 		packages : [
-		            {name : "controls", location : location.pathname.replace(/\/[^/]+$/, '') + "/resources/scripts/controls", main: "StoreLayoutController"},
-		            {name: "bootstrap", location : location.pathname.replace(/\/[^/]+$/, '') + "/resources/scripts/bootstrap", main: "main" }, 
-					{name: "xstyle", location : location.pathname.replace(/\/[^/]+$/, '') + "/resources/scripts/xstyle"}
+		            {name : "controls", location : location.pathname.replace(/\/[^/]+$/, '') + "/resources/scripts/controls", main: "StoreLayoutController"}
 		           ]
 	};
 	var INVENTORY_DISTRIBUTORS = [];
@@ -48,39 +46,27 @@
 	var INVENTORY_DISTRIBUTORS_MAP = {};
 </script>
 
-<link rel="stylesheet"
-	href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/resources/dojo.css" />
-<link rel="stylesheet"
-	href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/enhanced/resources/EnhancedGrid_rtl.css" />
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/resources/dojo.css" />
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/enhanced/resources/EnhancedGrid_rtl.css" />
 	
-<link rel="stylesheet"
-	href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dijit/themes/nihilo/nihilo.css">
-<link rel="stylesheet"
-	href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/resources/nihiloGrid.css" />	
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dijit/themes/nihilo/nihilo.css">
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/resources/nihiloGrid.css" />	
 
-<link rel="stylesheet"
-	href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dijit/themes/claro/claro.css" />
-<link rel="stylesheet"
-	href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/resources/claroGrid.css" />
-<link rel="stylesheet"
-	href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/enhanced/resources/claro/EnhancedGrid.css" />
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dijit/themes/claro/claro.css" />
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/resources/claroGrid.css" />
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/enhanced/resources/claro/EnhancedGrid.css" />
 	
-<link rel="stylesheet"
-	href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dijit/themes/soria/soria.css">
-<link rel="stylesheet"
-	href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/resources/soriaGrid.css" />
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dijit/themes/soria/soria.css">
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/resources/soriaGrid.css" />
 
-<link rel="stylesheet"
-	href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/calendar/themes/soria/Calendar.css" />
-<link rel="stylesheet"
-	href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/calendar/themes/nihilo/Calendar.css" />
-	<link rel="stylesheet"
-	href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/calendar/themes/claro/Calendar.css" />
-<link rel="stylesheet"
-	href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/form/resources/FileInput.css" />
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/calendar/themes/soria/Calendar.css" />
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/calendar/themes/nihilo/Calendar.css" />
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/calendar/themes/claro/Calendar.css" />
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/form/resources/FileInput.css" />
 <!-- <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/widget/Dialog/Dialog.css" /> -->
 <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/layout/resources/ScrollPane.css" />
-<link rel="stylesheet" href="resources/styles/styles.css" />
+<link rel="stylesheet" href="resources/styles/styles.css"/>
+ <link rel="stylesheet" type="text/css" href="resources/styles/print.css" media="print">
 <!-- <link rel="stylesheet" type="text/css" href="resources/scripts/bootstrap/theme/dbootstrap/dbootstrap.css"/>  -->
 <script
 	data-dojo-config="has:{'dojo-firebug': true, 'dojo-debug-messages': true}, cacheBust: true, parseOnLoad:false, isDebug: true,
@@ -197,7 +183,7 @@
 	<div data-dojo-type="dijit/layout/BorderContainer"
 		style="padding: 0px; width: 100%; height: 100%;"
 		data-dojo-props="design:'sidebar', gutters:true">
-		<div data-dojo-type="dijit/layout/ContentPane" style="width: 15%;height: 98%;"
+		<div id="storesListContentPane" data-dojo-type="dijit/layout/ContentPane" style="width: 15%;height: 98%;"
 			data-dojo-props="splitter:false, region:'leading'">
 			<div style='margin-top: 2px;'>
 				<table class="bordered" style="width: 100%; height: 30%;"
@@ -281,7 +267,7 @@
 
 
 
-		<div data-dojo-type="dijit/layout/ContentPane"
+		<div data-dojo-type="dijit/layout/ContentPane" id="centerRegionContent" class="print"
 			data-dojo-props="splitter:false, doLayout:true, region:'center'"
 			style="width: 85%; height: 100%">
 			<!-- <div data-dojo-type="dijit/TitlePane"
@@ -913,7 +899,7 @@
 					<table style="width: 99%; height: 99%;" id="inventoryPaneTable">
 						<tr valign="bottom" style="width: 100%; height: 5%;">
 							<td colspan="2">
-								<div id="invoiceCategoryTabContainer" data-dojo-type="dijit/layout/TabContainer" style="width: 100%;" doLayout="false">
+								<div id="invoiceCategoryTabContainer" data-dojo-type="dijit/layout/TabContainer" data-dojo-props="tabPosition: 'top'" style="width: 100%;" doLayout="false">
 							        <div data-dojo-type="dijit/layout/ContentPane" title="Distributor" data-dojo-props="selected:true" style="border: 0px; height: 0px;">
 							        </div>
 							        <div data-dojo-type="dijit/layout/ContentPane" title="GS Kitchen" data-dojo-props="selected:false" style="border: 0px; height: 0px;">
@@ -924,16 +910,15 @@
 						<tr valign="middle" style="width: 100%; height: 7%;">
 							<td colspan="2">
 								<span style="float: left" id="checkStockLink">
-									<a style="padding-right: 5px; padding-left: 5px;" href='javascript:checkStock("D");'>Check Stock</a>
-										&nbsp;&nbsp;
+									<a href="javascript: printInvoiceDetails('inventoryInvoiceDetailsGrid', 'inventoryTabTitleCategory');">Print Invoice</a>&nbsp;<a style="padding-right: 5px; padding-left: 5px;" href='javascript:checkStock("D");'>Check Stock</a>&nbsp;
 									<img src='resources/images/add-icon.png' onclick='javascript: addItemToStock();'/>
 								</span>
-								<span style="position: relative; left: 10%; color: whitesmoke; background-color: #2E2EFE; border: 1px solid black;">&nbsp;NICHOLAS&nbsp;</span>&nbsp;&nbsp;
-								<span style="position: relative; left: 11%; color: whitesmoke; background-color: #8904B1; border: 1px solid black;">&nbsp;US FOODS&nbsp;</span>&nbsp;&nbsp;
-								<span style="position: relative; left: 14%; color: orange; font-weight: bolder; font-size: 100%;" id="inventoryTabTitle">Invoices / Stock</span>&nbsp;&nbsp;
-								<span style="position: relative; left: 14%; color: orange; font-weight: bolder; font-size: 100%;" id="inventoryTabTitleCategory">(Distributor)</span>
-								<span style="position: relative; left: 17%; color: whitesmoke; background-color: #B40431; border: 1px solid black;">&nbsp;SAMS CLUB&nbsp;</span>&nbsp;&nbsp;
-								<span style="position: relative; left: 18%; color: whitesmoke; background-color: #21610B; border: 1px solid black;">&nbsp;GS KITCHEN&nbsp;</span>&nbsp;&nbsp;
+								<span style="position: relative; left: 1%; color: whitesmoke; background-color: #2E2EFE; border: 1px solid black;">&nbsp;NICHOLAS&nbsp;</span>&nbsp;&nbsp;
+								<span style="position: relative; left: 1%; color: whitesmoke; background-color: #8904B1; border: 1px solid black;">&nbsp;US FOODS&nbsp;</span>&nbsp;&nbsp;
+								<span style="position: relative; left: 4%; color: orange; font-weight: bolder; font-size: 100%;" id="inventoryTabTitle">Invoices / Stock</span>&nbsp;&nbsp;
+								<span style="position: relative; left: 4%; color: orange; font-weight: bolder; font-size: 100%;" id="inventoryTabTitleCategory">(Distributor)</span>
+								<span style="position: relative; left: 10%; color: whitesmoke; background-color: #B40431; border: 1px solid black;">&nbsp;SAMS CLUB&nbsp;</span>&nbsp;&nbsp;
+								<span style="position: relative; left: 10%; color: whitesmoke; background-color: #21610B; border: 1px solid black;">&nbsp;GS KITCHEN&nbsp;</span>&nbsp;&nbsp;
 								<span style="float: right" id="createInvoiceLink">
 									<a style="padding-right: 5px; padding-left: 5px;" href='javascript:createInventoryItem();'>Add Inventory Items</a>
 									<a style="padding-right: 5px; padding-left: 5px;" href='javascript:createInvoice();'>Create Invoice</a>

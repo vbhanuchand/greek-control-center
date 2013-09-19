@@ -378,7 +378,6 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 				    		dom.byId('inventoryTabTitleCategory').innerHTML = '(Distributor)';
 				    		break;
 				    }
-				    //INVENTORY_ITEMS_INFO = {};
 		    		resetScreen();
 				});
 				registry.byId("hiddenInvoiceCategory").set('value', 'd');
