@@ -44,5 +44,27 @@ public class DeleteServiceController {
 		query.setParameter("id", id);
 		return new SingleModelResponse<BaseModel>(query.executeUpdate() == 1, null);
 	}
+	
+	@Transactional
+	@RequestMapping(value = "/service/delete/store/{id}/{tab}", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public SingleModelResponse<BaseModel> deleteStoreTabs(@PathVariable int id, @PathVariable String tab) {
+		String hql = "";
+		switch(tab){
+			case "sa":
+				hql = "delete from StoreAlarm where id=:id"; 
+				break;
+			case "sk":
+				hql = "delete from StoreKey where id=:id"; 
+				break;
+			case "sm":
+				hql = "delete from StoreMaintenance where id=:id"; 
+				break;
+		}
+		
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setParameter("id", id);
+		return new SingleModelResponse<BaseModel>(query.executeUpdate() == 1, null);
+	}
 
 }

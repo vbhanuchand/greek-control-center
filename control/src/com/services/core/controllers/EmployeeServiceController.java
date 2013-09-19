@@ -111,7 +111,7 @@ public class EmployeeServiceController {
 	public MultipleModelResponse<EmployeeWrapper> updateEmployee(@PathVariable int storeId, @PathVariable int empId, @RequestBody EmployeeWrapper empWrapper)
 			throws IOException {
 		logger.info("Updating Employee Data For Emp Id --> " + empId);
-		empWrapper.setActive(true);
+		//empWrapper.setActive(true);
 		boolean updateStatus = dataService.updateEmployee(empWrapper);
 		return new MultipleModelResponse<EmployeeWrapper>(updateStatus, null);
 	}

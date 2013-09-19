@@ -49,12 +49,12 @@ public class StoreServiceController {
 	//@RequestMapping(value = "/start", method = RequestMethod.GET)
 	@RequestMapping(value = "/start", method = RequestMethod.GET)
 	public String startPage() {
-		  return "welcome";
+		  return "welcome2";
 	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String redirect2(ModelMap model) {
-		  return "welcome";
+		  return "welcome2";
 	}
 	
 	@RequestMapping(value = "/service/stores", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)

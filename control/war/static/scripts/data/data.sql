@@ -359,3 +359,5 @@ delete from items;
 delete from store_stock;
 
 describe blobs;
+commit;
+alter table store_alarm add user_number varchar(10);

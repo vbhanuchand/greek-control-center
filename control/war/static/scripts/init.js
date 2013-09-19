@@ -1,19 +1,18 @@
-require(["dojox/form/Uploader", "dojox/embed/Flash", "dojox/form/uploader/plugins/IFrame"], function(uploader, flash){
-	if(flash.available){
-		  	require(["dojox/form/uploader/plugins/Flash"]);
-		}else{
-			require(["dojox/form/uploader/plugins/IFrame"]);
-		}
-});
+/*require(['bootstrap', 'dojo/ready', "dojo/parser", 'dijit/MenuBar', 'dijit/PopupMenuBarItem', 'dijit/Menu', 'dijit/MenuItem', 'dijit/MenuSeparator', 'dijit/PopupMenuItem', 'dijit/CheckedMenuItem'], 
+		function(bootstrap, ready, parser){
+		ready(function(){
+			parser.parse();
+		});
+});*/
 
-require(["bootstrap", "dojo/parser", "dijit/dijit", "dojo/dom-style", "dojo/date", "dojo/date/locale", "dojo/dom-construct", "dojo/_base/fx", "dojo/fx", "dojo/_base/declare", "dojo/dom", "dojo/on", "dijit/form/Select",
+require(["bootstrap", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dojo/parser", "dijit/dijit", "dojo/dom-style", "dojo/date", "dojo/date/locale", "dojo/dom-construct", "dojo/_base/fx", "dojo/fx", "dojo/_base/declare", "dojo/dom", "dojo/on", "dijit/form/Select",
          "controls/StoreLayoutController", "controls/EmployeeLayoutController", "controls/LaborLayoutController", "controls/AccountingLayoutController", "controls/InventoryLayoutController", "dijit/form/DateTextBox", "dojo/store/Memory",
          "dojo/_base/lang", "dojo/request", "dojo/dom-form", "dojo/json", "dojo/query", "dijit/registry", "dojo/_base/array", "dojox/widget/Dialog", "dijit/form/FilteringSelect",
          "dijit/TooltipDialog", "dijit/popup", 'dojox/form/Uploader', 'dojox/form/uploader/FileList', 'dojox/layout/ScrollPane', "dojox/form/TimeSpinner", "dijit/form/Button", 'dojox/timing/doLater', 'dojo/ready'], 
-         function(bootstrap, parser, dijit, domStyle, date, locale, domConstruct, fx, otherFx, declare, dom, on, formSelect, storeLayout, empLayout, laborLayout, accLayout, inventoryLayout, DateTextBox, Memory, lang, 
+         function(bootstrap, MenuBar, PopupMenu, parser, dijit, domStyle, date, locale, domConstruct, fx, otherFx, declare, dom, on, formSelect, storeLayout, empLayout, laborLayout, accLayout, inventoryLayout, DateTextBox, Memory, lang, 
         		 ajaxRequest, domForm, json, query, registry, baseArray, dojoxDialog, FilteringSelect, TooltipDialog, popup, uploader, fileList, scrollPane, TimeSpinner, Button, doLater, ready){
 		  ready(function(){
-		    parser.parse();
+		   parser.parse();
 		    var LoadingObj = declare(null, {
 				overlayNode: null,
 				constructor : function() {
@@ -559,7 +558,13 @@ function createPieChart(divId){
       var chart = new google.visualization.PieChart(document.getElementById('accountingChartDiv'));
       chart.draw(data, options);
 }
-
+require(["dojox/form/Uploader", "dojox/embed/Flash", "dojox/form/uploader/plugins/IFrame"], function(uploader, flash){
+	if(flash.available){
+		  	require(["dojox/form/uploader/plugins/Flash"]);
+		}else{
+			require(["dojox/form/uploader/plugins/IFrame"]);
+		}
+});
 /*var fileUploadIdAppender = 0;
 function addNewUpload(){
 	var node = document.createElement('input'); 

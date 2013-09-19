@@ -26,9 +26,9 @@ public interface StoreDAO {
 	
 	boolean createStoreDate(int storeId, Date impDate, String notes, int updated_by);
 	
-	boolean createStoreAlarm(int storeId, String name, String code, String position, String notes, int updated_by);
+	boolean createStoreAlarm(int storeId, String name, String userNumber, String code, String position, String notes, int updated_by);
 	
-	boolean updateStoreAlarm(int id, int storeId, String name, String code, String position, String notes, int updated_by);
+	boolean updateStoreAlarm(int id, int storeId, String name, String userNumber, String code, String position, String notes, int updated_by);
 	
 	boolean createStoreKey(int id, int storeId, String name, String type, String position, String notes, int updated_by);
 	
