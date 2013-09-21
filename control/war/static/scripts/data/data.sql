@@ -361,3 +361,10 @@ delete from store_stock;
 describe blobs;
 commit;
 alter table store_alarm add user_number varchar(10);
+
+
+select * from employee;
+select * from employee_role;
+
+insert into employee_role(employee_id, store_id, updated_by, role_tab)
+values (7, 1, 0, 'store-mgr');

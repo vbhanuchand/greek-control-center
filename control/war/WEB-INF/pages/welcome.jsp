@@ -141,6 +141,7 @@
 							displayMessage("loginTrId", "loginMessage", "Login to the Portal is successful.", "success");
 							
 							applySecurityRoles(message);
+							console.log('Applied Security Roles');
 							var otherFx = require("dojo/fx");
 							var dom = require("dojo/dom");
 							var domStyle = require('dojo/dom-style');

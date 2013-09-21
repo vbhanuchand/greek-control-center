@@ -104,7 +104,7 @@ function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Me
 		                                       {id: 9, name:"September", label:"September"},
 		                                       {id: 10, name:"October", label:"October"},
 		                                       {id: 11, name:"November", label:"November"},
-		                                       {id: 12, name:"December", label:"December"},
+		                                       {id: 12, name:"December", label:"December"}
 		                                      ]
 										});
 		                                   
