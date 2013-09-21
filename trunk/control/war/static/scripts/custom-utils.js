@@ -630,7 +630,6 @@ function applySecurityRoles(authoritiesData){
 	else 
 		storeToSelect = storeToSelect > 0 ? storeToSelect : 5;
 	
-	
 	switch(role){
 		case 'ROLE_OWNER':
 			checkSelectedPane('locationTabletr'+storeToSelect, 'rightAccordion', storeToSelect);
@@ -640,7 +639,6 @@ function applySecurityRoles(authoritiesData){
 			registry.byId('tabContainer').removeChild(registry.byId('managePane'));
 			registry.byId('managePane').destroy();
 			//Remove the Manage Tab Ends here
-			
 			//Remove the View Schedule Column in Store Info --> Labor Summary Grid Start here
 			registry.byId('storeLaborGrid').layout.setColumnVisibility(0,false);
 			//Remove the View Schedule Column in Store Info --> Labor Summary Grid Ends here
@@ -649,15 +647,15 @@ function applySecurityRoles(authoritiesData){
 			registry.byId('tabContainer').removeChild(registry.byId('managerPane'));
 			registry.byId('managerPane').destroy();
 			//Remove the Manager Tab in the Main Tab Container Ends here
-			
 			//Remove the Update Column in Employees Grid, Salary Particulars Tab in the Employee Tabs, Labor Entry Tab
 			registry.byId('employeesGrid').layout.setColumnVisibility(0,false);
 			
 			registry.byId('employeeInfoTabContainer').removeChild(registry.byId('empSalaryDetails'));
 			registry.byId('empSalaryDetails').destroy();
 			
-			registry.byId('employeeInfoTabContainer').removeChild(registry.byId('empLaborDetails'));
-			registry.byId('empLaborDetails').destroy();
+			
+			//registry.byId('employeeInfoTabContainer').removeChild(registry.byId('empLaborDetails'));
+			//registry.byId('empLaborDetails').destroy();
 			//All of the above Ends here
 			
 			//Remove the Accounting Tab Starts here
@@ -665,9 +663,11 @@ function applySecurityRoles(authoritiesData){
 			registry.byId('accountingPane').destroy();
 			//Remove the Accounting Tab Ends here
 			
+			
 			//Adjusting the Inventory Tab Starts here
 			registry.byId('inventoryInvoicesGrid').layout.setColumnVisibility(2,false);
 			registry.byId('inventoryInvoicesGrid').layout.setColumnVisibility(3,false);
+			
 			
 			registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(4,false);
 			registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(5,false);
@@ -675,7 +675,6 @@ function applySecurityRoles(authoritiesData){
 			registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(7,false);
 			//registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(8,false);
 			//Ends here
-			
 			checkSelectedPane('locationTabletr'+storeToSelect, 'rightAccordion', storeToSelect);
 			break;
 		case 'ROLE_EMP':
@@ -691,6 +690,7 @@ function applySecurityRoles(authoritiesData){
 		//dijit.byId("myTabContainer").removeChild(dijit.byId("myContentPane"));
 		//dijit.byId("myContentPane").destroy();
 	/*For Removing a child of Tab Container*/
+	console.log('End of Apply ROles method');
 }
 
 
