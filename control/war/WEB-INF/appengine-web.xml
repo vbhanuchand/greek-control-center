@@ -35,6 +35,10 @@
         <include path="/**.js" />
         <include path="/**.html" />
         <include path="/**.ico" />
+        <include path="/**.woff" />
+        <include path="/**.svg" />
+        <include path="/**.ttf" />
+        <include path="/**.eot" />
     </static-files>
 
 </appengine-web-app>
