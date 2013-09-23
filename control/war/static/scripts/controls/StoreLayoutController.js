@@ -345,10 +345,13 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 		    	console.log('Populating the Store Information values');
 		    	try{
 			    	if(dijit.byId('store-info-mailing-address') && dijit.byId('store-info-phone-numbers') && dijit.byId('store-info-notes')){
-			    		dijit.byId('store-info-mailing-address').set('value', storeInfoDataModel.store_address);
-				    	dijit.byId('store-info-phone-numbers').set('value', storeInfoDataModel.store_contact_details);
-				    	dijit.byId('store-info-operating-hrs').set('value', storeInfoDataModel.operating_hrs);
-				    	dijit.byId('store-info-notes').set('value', storeInfoDataModel.store_notes);
+			    		try{dijit.byId('store-info-mailing-address').set('value', storeInfoDataModel.store_address);}catch(e){dijit.byId('store-info-mailing-address').set('value', '');}
+			    		try{dijit.byId('store-info-phone-numbers').set('value', storeInfoDataModel.store_contact_details);}catch(e){dijit.byId('store-info-phone-numbers').set('value', '');}
+			    		try{dijit.byId('store-info-operating-hrs').set('value', storeInfoDataModel.operating_hrs);}catch(e){dijit.byId('store-info-operating-hrs').set('value', '');}
+			    		try{dijit.byId('store-info-notes').set('value', storeInfoDataModel.store_notes);}catch(e){dijit.byId('store-info-notes').set('value', '');}
+			    		try{dijit.byId('store-info-property-mgr-info').set('value', storeInfoDataModel.property_info);}catch(e){dijit.byId('store-info-property-mgr-info').set('value', '');}
+			    		try{dijit.byId('store-mortgage-info').set('value', storeInfoDataModel.lease_info);}catch(e){dijit.byId('store-mortgage-info').set('value', '');}
+				    	
 			    	}
 		    	}catch(e){console.log('Error Occurred during populateStoreParticulars() method ' + e);}
 		    },
@@ -393,8 +396,8 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 											store: gridDataStore,
 											query: { id: "*" },
 											structure: [{defaultCell: { width: "20%", type: dojox.grid.cells._Widget, styles: 'text-align: left;', noresize: true, editable: false },
-											    cells: [{ name: "Delete", field: 'id', width: "7%", noresize: true, formatter: createDeleteLink},
-											            { name: "Update", fields: ['id', 'store'], width: "7%", noresize: true, formatter: createAddUpdateLink},
+											    cells: [{ name: "Delete", field: 'id', width: "7%", noresize: true, formatter: createDeleteLink, styles: 'text-align: center;'},
+											            { name: "Update", fields: ['id', 'store'], width: "7%", noresize: true, formatter: createAddUpdateLink, styles: 'text-align: center;'},
 											    { name: "Name", field: "name", width: "20%", noresize: true, editable: true, hidden: false, 
 													constraint:{required: true}, widgetProps: {maxLength: 30, promptMessage: 'Name within 30 characters', 
 													missingMessage: 'Please provide Name' }, widgetClass: ValidationTextBox},
@@ -449,8 +452,8 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 											store: gridDataStore,
 											query: { id: "*" },
 											structure: [{defaultCell: { width: "20%", type: dojox.grid.cells._Widget, styles: 'text-align: left;', noresize: true, editable: false },
-											            cells:[{ name: "Delete", field: 'id', width: "7%", noresize: true, formatter: createDeleteLink},
-											                   { name: "Update", fields: ['id', 'store'], width: "7%", noresize: true, formatter: createAddUpdateLink},
+											            cells:[{ name: "Delete", field: 'id', width: "7%", noresize: true, formatter: createDeleteLink, styles: 'text-align: center;'},
+											                   { name: "Update", fields: ['id', 'store'], width: "7%", noresize: true, formatter: createAddUpdateLink, styles: 'text-align: center;'},
 											            { name: "Name", field: "name", width: "20%", noresize: true, editable: true, hidden: false, 
 														  	constraint:{required: true}, widgetProps: {maxLength: 20, promptMessage: 'Name within 20 characters', 
 															missingMessage: 'Please provide Name' }, widgetClass: ValidationTextBox},
@@ -501,12 +504,12 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 											store: gridDataStore,
 											query: { id: "*" },
 											structure: [{defaultCell: { width: "20%", type: dojox.grid.cells._Widget, styles: 'text-align: left;', noresize: true, editable: false },
-											    cells:[{ name: "Delete", field: 'id', width: "7%", noresize: true, formatter: createDeleteLink},
-											           { name: "Update", fields: ['id', 'store'], width: "7%", noresize: true, formatter: createAddUpdateLink},
+											    cells:[{ name: "Delete", field: 'id', width: "7%", noresize: true, formatter: createDeleteLink, styles: 'text-align: center;'},
+											           { name: "Update", fields: ['id', 'store'], width: "7%", noresize: true, formatter: createAddUpdateLink, styles: 'text-align: center;'},
 											    { name: "Date", field: "date", width: "12%", noresize: true, editable: true, constraint:{required: true}, 
 											    	widgetProps: {validator: validateDatePattern, promptMessage: 'Provide date in MM/DD/YYYY', 
 											    	missingMessage: 'Please provide date in MM/DD/YYYY', invalidMessage: 'Date format should be in MM/DD/YYYY'}, 
-											    	widgetClass: ValidationTextBox },
+											    	widgetClass: ValidationTextBox, styles: 'text-align: center;' },
 											    { name: "Problem", field: "problem", width: "15%", noresize: true, editable: true, hidden: false, 
 											    	constraint:{required: true}, widgetProps: {maxLength: 50, promptMessage: 'Problem within 50 characters', 
 											    	missingMessage: 'Please provide Problem Description' }, widgetClass: ValidationTextBox},
@@ -560,11 +563,11 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 											store: gridDataStore,
 											query: { id: "*" },
 											structure: [{ name: "Schedule", field: "week", editable: false, width: "10%", noresize: true, formatter: showScheduleLink, styles: 'padding-left: 5px;'}, 
-											            { name: "Date", field: "skeletonKey", editable: false, width: "18%", noresize: true, styles: 'text-align: center;'},
-												{ name: "Manager Hours", field: "Manager", editable: false, width: "18%", noresize: true, styles: 'text-align: center;'},
+											            { name: "Date", field: "skeletonKey", editable: false, width: "25%", noresize: true, styles: 'text-align: center;'},
+												{ name: "Manager Hours", field: "Manager", editable: false, width: "15%", noresize: true, styles: 'text-align: center;'},
 												{ name: "Total Hrs (Front & Cook)", fields: ["Front", "Cook"], editable: false, width: "18%", noresize: true, styles: 'text-align: center;', formatter: calculateTotalFrontCook},
-												{ name: "Front Hours", field: "Front", editable: false, width: "18%", noresize: true, styles: 'text-align: center;'},
-												{ name: "Cook Hours", field: "Cook", editable: false, width: "18%", noresize: true, styles: 'text-align: center;'}],
+												{ name: "Front Hours", field: "Front", editable: false, width: "15%", noresize: true, styles: 'text-align: center;'},
+												{ name: "Cook Hours", field: "Cook", editable: false, width: "17%", noresize: true, styles: 'text-align: center;'}],
 											singleClickEdit: true,
 											editable: true,
 											selectable: true,
@@ -653,6 +656,8 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 		        				operating_hrs: dijit.byId('store-info-operating-hrs').get('value'),
 		        				store_contact_details: dijit.byId('store-info-phone-numbers').get('value'),
 		        				store_notes: dijit.byId('store-info-notes').get('value'),
+		        				property_info: dijit.byId('store-info-property-mgr-info').get('value'),
+		        				lease_info: dijit.byId('store-mortgage-info').get('value'),
 		        				lease_copy_loc: dijit.byId('store-info-mailing-address').get('value'),
 		        				updated_by: 0
 		        				//,imp_date: new Date()
@@ -674,7 +679,7 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 		        	addRow(gridId);
 		        },
 		        postCreate: function(){
-		        	console.log('Calling Tab Container Listener ' + registry.byId("storeInfoTabContainer"));
+		        	//console.log('Calling Tab Container Listener ' + registry.byId("storeInfoTabContainer"));
 				    var storeTabsContainer = registry.byId("storeInfoTabContainer");
 				    dojo.connect(storeTabsContainer, "selectChild", function(child){
 						baseArray.forEach(storeTabsContainer.getChildren(), function(storeTab){
@@ -691,6 +696,9 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 								break;
 							case 'storeMaintenance':
 								child.set('title', child.get('title') + " &nbsp; <img align='top' src='resources/images/add-icon.png' onclick='addStoreMaintenanceTabRecord(event)'/> &nbsp;");
+								break;
+							case 'storeHealthInspection':
+								child.set('title', child.get('title') + " &nbsp; <img align='top' src='resources/images/add-icon.png' onclick='addStoreInspectionRecord(event);'/> &nbsp;");
 								break;
 						}
 						refreshSelectedPane();

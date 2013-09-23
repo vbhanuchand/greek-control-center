@@ -4,13 +4,12 @@
 			parser.parse();
 		});
 });*/
-
-require(["dijit/MenuBar", "dijit/PopupMenuBarItem", "dojo/parser", "dijit/dijit", "dojo/dom-style", "dojo/date", "dojo/date/locale", "dojo/dom-construct", "dojo/_base/fx", "dojo/fx", "dojo/_base/declare", "dojo/dom", "dojo/on", "dijit/form/Select",
+require(["bootstrap", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/dijit", "dojo/dom-style", "dojo/date", "dojo/date/locale", "dojo/dom-construct", "dojo/_base/fx", "dojo/fx", "dojo/_base/declare", "dojo/dom", "dojo/on", "dijit/form/Select",
          "controls/StoreLayoutController", "controls/EmployeeLayoutController", "controls/LaborLayoutController", "controls/AccountingLayoutController", "controls/InventoryLayoutController", "dijit/form/DateTextBox", "dojo/store/Memory",
          "dojo/_base/lang", "dojo/request", "dojo/dom-form", "dojo/json", "dojo/query", "dijit/registry", "dojo/_base/array", "dojox/widget/Dialog", "dijit/form/FilteringSelect",
-         "dijit/TooltipDialog", "dijit/popup", 'dojox/form/Uploader', 'dojox/form/uploader/FileList', 'dojox/layout/ScrollPane', "dojox/form/TimeSpinner", "dijit/form/Button", 'dojox/timing/doLater', 'dojo/ready'], 
-         function(MenuBar, PopupMenu, parser, dijit, domStyle, date, locale, domConstruct, fx, otherFx, declare, dom, on, formSelect, storeLayout, empLayout, laborLayout, accLayout, inventoryLayout, DateTextBox, Memory, lang, 
-        		 ajaxRequest, domForm, json, query, registry, baseArray, dojoxDialog, FilteringSelect, TooltipDialog, popup, uploader, fileList, scrollPane, TimeSpinner, Button, doLater, ready){
+         "dijit/TooltipDialog", "dijit/popup", 'dojox/form/Uploader', 'dojox/form/uploader/FileList', 'dojox/layout/ScrollPane', "dojox/form/TimeSpinner", "dijit/form/Button", 'dojox/timing/doLater', "dojo/parser", 'dojo/ready'], 
+         function(bootstrap, MenuBar, PopupMenu, dijit, domStyle, date, locale, domConstruct, fx, otherFx, declare, dom, on, formSelect, storeLayout, empLayout, laborLayout, accLayout, inventoryLayout, DateTextBox, Memory, lang, 
+        		 ajaxRequest, domForm, json, query, registry, baseArray, dojoxDialog, FilteringSelect, TooltipDialog, popup, uploader, fileList, scrollPane, TimeSpinner, Button, doLater, parser, ready){
 		  ready(function(){
 		   parser.parse();
 		    var LoadingObj = declare(null, {
@@ -204,9 +203,8 @@ require(["dijit/MenuBar", "dijit/PopupMenuBarItem", "dojo/parser", "dijit/dijit"
 			
 			
 			// Manager Tab Details
-			var mgrSelectWidget = new formSelect({style: {width: '50%', 'text-align': 'right'}}, dom.byId('mgrList'));
+			var mgrSelectWidget = new formSelect({style: {width: '200px', 'text-align': 'right'}}, dom.byId('mgrList'));
 			mgrSelectWidget.startup();
-
 			mgrSelectWidget.on("change", function(){
 				var empId = this.get('value');
 				if(Number(this.get('value')) > 0){
@@ -529,15 +527,16 @@ require(["dijit/MenuBar", "dijit/PopupMenuBarItem", "dojo/parser", "dijit/dijit"
 				else empLayout.resetMgrForm();
 			});
 			
-			dojo.connect(registry.byId('storeInfoTitlePane'),"toggle",function(){
-				console.log('Open Value is ', this.open);
+			dojo.connect(registry.byId('storeInfoTitlePane'), "toggle", function(){
 				if(!this.open){
-					dom.byId('storeInfoTabContainer').style.height = '94%';
+					dom.byId('storeInfoTabContainer').style.height = '92%';
 				} else{
-					dom.byId('storeInfoTabContainer').style.height = '52%';
+					dom.byId('storeInfoTabContainer').style.height = '50%';
 				}
 				registry.byId('storeInfoTabContainer').resize();
+				dom.byId('storeInfoTabContainer').style.width = '99%';
 			});
+			registry.byId('storeInfoTabContainer').resize();
 	  });
 });
 

@@ -109,7 +109,7 @@ function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Me
 										});
 		                                   
 		var quartersList = new FilteringSelect({ id: "accountingQuartersList", value: 0, store: quartersStore, searchAttr: "name", name: "accountingQuartersList",
-             labelAttr: "label", style: "width: 25%; padding-left: 10px;" }, dom.byId("accountingQuartersList"));
+             labelAttr: "label", style: "height: 12px; width: 100px; padding-left: 10px;" }, dom.byId("accountingQuartersList"));
 	
 		quartersList.on('change', function(newValue){
 			if(Number(newValue) > 0)
