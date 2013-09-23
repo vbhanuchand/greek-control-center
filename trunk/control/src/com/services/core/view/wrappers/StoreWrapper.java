@@ -17,6 +17,8 @@ public class StoreWrapper extends BaseModel {
 	private String store_address;
 	private String store_contact_details;
 	private String store_notes;
+	private String property_info;
+	private String lease_info;
 	private String operating_hrs;
 	private String lease_copy_loc;
 	private Integer updated_by;
@@ -36,7 +38,7 @@ public class StoreWrapper extends BaseModel {
 
 	public StoreWrapper(Integer id, String displayName, Boolean active,
 			String store_address, String store_contact_details,
-			String store_notes, String operating_hrs, String lease_copy_loc,
+			String store_notes, String property_info, String lease_info, String operating_hrs, String lease_copy_loc,
 			Integer updated_by, Date updated_date) {
 		super();
 		this.id = id;
@@ -45,6 +47,8 @@ public class StoreWrapper extends BaseModel {
 		this.store_address = store_address;
 		this.store_contact_details = store_contact_details;
 		this.store_notes = store_notes;
+		this.property_info = property_info;
+		this.lease_info = lease_info;
 		this.operating_hrs = operating_hrs;
 		this.lease_copy_loc = lease_copy_loc;
 		this.updated_by = updated_by;
@@ -119,6 +123,28 @@ public class StoreWrapper extends BaseModel {
 
 	public void setStore_notes(String store_notes) {
 		this.store_notes = store_notes;
+	}
+
+	public String getProperty_info() {
+		return property_info;
+	}
+
+
+
+	public void setProperty_info(String property_info) {
+		this.property_info = property_info;
+	}
+
+
+
+	public String getLease_info() {
+		return lease_info;
+	}
+
+
+
+	public void setLease_info(String lease_info) {
+		this.lease_info = lease_info;
 	}
 
 

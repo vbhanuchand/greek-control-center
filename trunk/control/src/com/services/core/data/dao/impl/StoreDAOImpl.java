@@ -70,10 +70,10 @@ public class StoreDAOImpl implements StoreDAO {
 	}
 
 	@Override
-	public boolean updateStoreInfo(int id, String store_address, String operating_hrs, String contact_details, String lease_copy_loc, String store_notes, int updated_by){
+	public boolean updateStoreInfo(int id, String store_address, String operating_hrs, String contact_details, String lease_copy_loc, String store_notes, String property_info, String lease_info, int updated_by){
 		String hql = "UPDATE Store s set s.store_address = :store_address, " + "s.operating_hrs = :operating_hrs, "  
 					+	"s.contact_details = :contact_details, "  +	"s.lease_copy_loc = :lease_copy_loc, " 
-					+	"s.store_notes = :store_notes, "  +	"s.updatedBy = :updated_by "  
+					+	"s.store_notes = :store_notes, s.property_info = :property_info, s.lease_info = :lease_info, "  +	"s.updatedBy = :updated_by "  
 					+   "WHERE s.id = :store_id and s.active=true";
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
 		query.setParameter("store_address", store_address);
@@ -81,6 +81,8 @@ public class StoreDAOImpl implements StoreDAO {
 		query.setParameter("contact_details", contact_details);
 		query.setParameter("lease_copy_loc", lease_copy_loc);
 		query.setParameter("store_notes", store_notes);
+		query.setParameter("property_info", property_info);
+		query.setParameter("lease_info", lease_info);
 		query.setParameter("updated_by", updated_by);
 		query.setParameter("store_id", id);
 		int result = query.executeUpdate();
