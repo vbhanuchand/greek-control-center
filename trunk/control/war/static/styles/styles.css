@@ -1,115 +1,10 @@
-/* From ECP
-
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address,  cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-strike, strong, sub, sup, tt, var,
- u, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,caption, tbody, tfoot, thead, th, 
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-    margin: 0;
-    padding: 0;
+html, body {
+    width: 100%;
+    height: 100%;
     border: 0;
-    font-size: 100%;
-    font: inherit;
-    vertical-align: baseline;
-}
-
-*{big :not() font-size:100.01%;}
-
-
-/* HTML5 display-role reset for older browsers *//*
-article, aside, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section {
-    display: block;
-}
-* {font-size:100.01%;}
-html{font-size:62.5%;}
-body {
-    margin:0;
-    color:#333;
-    font:1.3em/1.231em Helvetica, Arial, sans-serif;
-    background:#444 url('../image/bg-page.gif');    
-    min-width:964px;
-    -webkit-text-size-adjust:100%;
-}
-ol, ul {
-    list-style: none;
-}
-blockquote, q {
-    quotes: none;
-}
-blockquote:before, blockquote:after,
-q:before, q:after {
-    content: '';
-    content: none;
-}
-table {
-    border-collapse: collapse;
-    border-spacing: 0;
-    margin: 0;
     padding: 0;
-    font-size: auto;
-    font: auto;
-    vertical-align: baseline;
-}
-
-img{
-    border-style:none;
-    vertical-align:top;
-    margin:0 8px 0 0;
-}
-a{
-    text-decoration:none;
-    color:#0066cd;
-    border-bottom:1px dotted #0066cd;								
-    outline:none !important;
-}
-
-a:hover{
-    color:#09f;
-    text-decoration:none;
-    border-bottom-style:solid;
-    border-bottom-color:#09f;
-}
-
-*/
-
-
-/* Control Center specific styling goes here  */
-html,body {
-	height: 100%;
-	margin: 0;
-	overflow: hidden;
-	padding: 0;
-	font:1.3em/1.231em Helvetica, Arial, sans-serif;
-    -webkit-text-size-adjust:100%;
-}
-
-/* html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address,  cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-strike, strong, sub, sup, tt, var,
- u, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,caption, tbody, tfoot, thead, th, 
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
     margin: 0;
-    padding: 0;
-    border: 0;
-    font-size: 100%;
-    font: inherit;
-    vertical-align: baseline;
-} */
+}
 
 #fmtCalendar {
   table-layout:auto;
@@ -131,118 +26,8 @@ time, mark, audio, video {
 	color: #999;
 }
 
-* {
-	padding: 0;
-	margin: 0;
-}
-
-img{
-    border-style:none;
-    vertical-align:top;
-    margin:0 8px 0 0;
-}
-a{
-    text-decoration:none;
-    color:#E21111;
-    border-bottom:1px dotted #E21111;								
-    outline:none !important;
-}
-
-a:hover{
-    color:#f90;
-    text-decoration:none;
-    border-bottom-style:solid;
-    border-bottom-color:#f90;
-}
-
 /* cursor :: hand */
 [onclick], a{ cursor:pointer; }
-
-body {
-	font-family: Times New Roman, Times, serif;
-	font-size: 14px;
-	margin: 2px auto;
-}
-
-.customBackground{
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#ebf3fc), to(#f9f9f9));
-	background-image: -webkit-linear-gradient(top, rgba(235, 137, 13, 0.31), #FD4802);
-	background-image: -moz-linear-gradient(top, rgba(235, 137, 13, 0.31), #FD4802);
-	background-image: -ms-linear-gradient(top, rgba(235, 137, 13, 0.31), #FD4802);
-	background-image: -o-linear-gradient(top, rgba(235, 137, 13, 0.31), #FD4802);
-	background-image: linear-gradient(top, rgba(235, 137, 13, 0.31), #FD4802);
-}
-
-#header {
-	width: 100%;
-	margin: 0px auto;
-	background: url(../images/page-bg-tile.jpg) repeat-x;
-	border: 0px;
-}
-
-/* Class for Info or Error or Warning Msgs*/
-.info,.success,.warning,.error {
-	border: 1px solid;
-	margin: 10px 40px 10px 30px;
-	padding: 5px 50px 5px 50px;
-	background-repeat: no-repeat;
-	background-position: 10px center;
-}
-
-.info {
-	color: #00529B;
-	background-color: #BDE5F8;
-	background-image: url('../images/info.png');
-}
-
-.success {
-	color: #4F8A10;
-	background-color: #DFF2BF;
-	background-image: url('../images/success.png');
-}
-
-.warning {
-	color: #9F6000;
-	background-color: #FEEFB3;
-	background-image: url('../images/warning.png');
-}
-
-.error {
-	color: #D8000C;
-	background-color: #FFBABA;
-	background-image: url('../images/warning.png');
-}
-
-/* Dgrid Styles*/
-#empGrid{
-	font-style: normal;
-}
-
-#storeAlarmCodesGrid{
-	font-style: normal;
-}
-
-#storeLaborGrid {
-	text-align: center;
-	font-style: normal;
-}
-
-#storeKeysGrid{
-	text-align: center;
-	font-style: normal;
-}
-
-#storeMaintenanceGrid{
-	text-align: center;
-	font-style: normal;
-}
-
-/* CSS 3  table 
-table {
-	*border-collapse: collapse; 
-	border-spacing: 0;
-	width: 100%;
-}*/
 
 .bordered {
 	border-spacing: 0;
@@ -254,13 +39,6 @@ table {
 	-moz-box-shadow: 0 1px 1px #ccc;
 	box-shadow: 0 1px 1px #ccc;
 	margin-right: auto;
-	/* background-image: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#ffffff));
-	background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0), rgb(255, 255, 255));
-	background-image: -moz-linear-gradient(top, rgba(255, 255, 255, 0), rgb(255, 255, 255));
-	background-image: -ms-linear-gradient(top, rgba(255, 255, 255, 0), rgb(255, 255, 255));
-	background-image: -o-linear-gradient(top, rgba(255, 255, 255, 0), rgb(255, 255, 255));
-	background-image: linear-gradient(top, rgba(255, 255, 255, 0), rgb(255, 255, 255)); */
-	
 }
 
 .bordered tr:hover {
@@ -308,32 +86,6 @@ table {
 	font-weight: bolder;
 	font-style: italic;
 	color: #243C5F;
-	/* 
-	background-color: grey;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#ebf3fc),
-		to(#f9f9f9) );
-	background-image: -webkit-linear-gradient(top, rgba(235, 243, 252, 0.31),
-		#f9f9f9 );
-	background-image: -moz-linear-gradient(top, rgba(235, 243, 252, 0.31),
-		#f9f9f9 );
-	background-image: -ms-linear-gradient(top, rgba(235, 243, 252, 0.31),
-		#f9f9f9 );
-	background-image: -o-linear-gradient(top, rgba(235, 243, 252, 0.31),
-		#f9f9f9 );
-	background-image: linear-gradient(top, rgba(235, 243, 252, 0.31),
-		#f9f9f9 ); 
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#ebf3fc),
-		to(#3B83F0) );
-	background-image: -webkit-linear-gradient(top, rgba(55, 176, 243, 0.31), #3B83F0);
-	background-image: -moz-linear-gradient(top, rgba(55, 176, 243, 0.31), #3B83F0);
-	background-image: -ms-linear-gradient(top, rgba(55, 176, 243, 0.31), #3B83F0);
-	background-image: -o-linear-gradient(top, rgba(55, 176, 243, 0.31), #3B83F0);
-	background-image: linear-gradient(top, rgba(55, 176, 243, 0.31), #3B83F0);
-	-webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, .8) inset;
-	-moz-box-shadow: 0 1px 0 rgba(255, 255, 255, .8) inset;
-	box-shadow: 0 1px 0 rgba(255, 255, 255, .8) inset;
-	border-top: none;
-	text-shadow: 0 1px 0 rgba(255, 255, 255, .5);*/
 }
 
 .bordered tr.hoveredClass:hover {
@@ -565,9 +317,9 @@ table {
 .leaseInfo-labelsAndValues-labelCell {
 	width: 33%;
   	text-align: left;
-  	/*background-color: lightgrey;*/
-  	padding-left: 2px;
-  	font-style: oblique;
+  	padding-left: 10px;
+  	font-style: inherit;
+  	text-decoration: underline;
   	font-weight: bold;
   	color: #243C5F;
 }
@@ -590,59 +342,11 @@ table {
 
 /* CSS Ends here*/
 
-
-/* CSS for Headings */
-.tab-heading {
-	width: 100%;
-}
-
-.tab-heading .hold {
-	background: #0167DC;
-	background: -moz-linear-gradient(top, #2592fd 0%, #0167cd 100%);
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #2592fd),
-		color-stop(100%, #0167cd) );
-	background: -webkit-linear-gradient(top, #2592fd 0%, #0167cd 100%);
-	background: -o-linear-gradient(top, #2592fd 0%, #0167cd 100%);
-	background: -ms-linear-gradient(top, #2592fd 0%, #0167cd 100%);
-	background: linear-gradient(to bottom, #2592fd 0%, #0167cd 100%);
-	border-radius: 4px 4px 4px 4px;
-	color: #FFFFFF;
-	font-size: inherit;
-	height: 19px;
-	line-height: 19px;
-	margin: 0 auto;
-	width: 85%;
-	text-align: center;
-	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.8);
-}
-
-.tab-heading span {
-	display: inline-block;
-	/*padding: 8px 10px 8px 10px;*/
-	vertical-align: top;
-}
-/* CSS for Heading ends here */
-
-
-/*CSS for Tab Container Labels*/
-.customTabClass .tabLabel {
-      /*color: blue !important;*/
-      width: 130px;
-      text-align: center;
-      font-size: 85%;
-      font-weight: bold;
-    }
-/*CSS for Tab Container Labels Ends here*/
-
 .dojoxCalendarColumnView .dojoxCalendarRowHeaderTable td span{
 	display: none;
 }
 
-/* .nihilo .dojoxGridRowOdd {
-	background-color: #f2f2f2;
-} */
-
-.dojoxGrid .dojoxGridCell {
+/* .dojoxGrid .dojoxGridCell {
 	border: 1px solid;
 	border-color: #EBEADB;
 	border-right-color: #D5CDB5;
@@ -657,8 +361,8 @@ table {
 	border-width: 1px;
 	padding-bottom: 0px;
 	border-color: transparent #ACA899 #919191 transparent;
-	/*background: #C0C0C0 repeat-x top;*/
-	/*color: #000000 !important;*/
+	background: #C0C0C0 repeat-x top;
+	color: #000000 !important;
 	text-align: center;
 	font-weight: bold;
 }
@@ -669,11 +373,9 @@ text-align: center;
 width: 100%;
 height: 24px;
 table-layout: fixed;
-/*background-color: #EAEAEA;*/
+background-color: #EAEAEA;
 background: url("//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dijit/themes/soria/images/tabContainerSprite.gif") repeat-x 0 -351px;
-}
-
-
+} */
 
 table.dateTable {
 	font-family: inherit;
@@ -914,12 +616,12 @@ table.bordered td.itemTime{
 }
 
 
-.soria .dijitSelectMenu td{
+/*.soria .dijitSelectMenu td{
 padding: 0;
-/*background-color: grey;*/
+background-color: grey;
 font-size: 85%;
 }
 
 .soria .dijitTabContainerTop-dijitContentPane{
 	padding: 1px 5px 0px 5px;
-}
+}*/
