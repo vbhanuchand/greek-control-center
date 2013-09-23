@@ -445,7 +445,7 @@ public class DataManagerImpl implements DataManager{
 		List<StoreWrapper> storeWrappers = new ArrayList<StoreWrapper>();
 		for(Store store: storeDAO.getStores()){
 			storeWrappers.add(new StoreWrapper(store.getId(), store.getDisplayName(), 
-					store.getActive(), store.getStore_address(), store.getContact_details(), store.getStore_notes(), store.getOperating_hrs(), store.getLease_copy_loc(), 
+					store.getActive(), store.getStore_address(), store.getContact_details(), store.getStore_notes(), store.getProperty_info(), store.getLease_info(), store.getOperating_hrs(), store.getLease_copy_loc(), 
 					store.getUpdatedBy(), store.getUpdatedDate()));
 		}
 		return storeWrappers;
@@ -520,7 +520,7 @@ public class DataManagerImpl implements DataManager{
 		StoreWrapper storeWrapper = new StoreWrapper();
 		if(store != null){
 			storeWrapper = new StoreWrapper(store.getId(), store.getDisplayName(), store.getActive(), 
-				store.getStore_address(), store.getContact_details(), store.getStore_notes(), store.getOperating_hrs(), store.getLease_copy_loc(), store.getUpdatedBy(), 
+				store.getStore_address(), store.getContact_details(), store.getStore_notes(), store.getProperty_info(), store.getLease_info(), store.getOperating_hrs(), store.getLease_copy_loc(), store.getUpdatedBy(), 
 				store.getUpdatedDate());
 			
 			/*Set<StoreDateWrapper> storeDateRecords = new HashSet<StoreDateWrapper>();
@@ -594,7 +594,7 @@ public class DataManagerImpl implements DataManager{
 	@Transactional
 	public boolean updateStoreInfo(StoreWrapper store){
 		return storeDAO.updateStoreInfo(store.getId(), store.getStore_address(), store.getOperating_hrs(), 
-				store.getStore_contact_details(), store.getLease_copy_loc(), store.getStore_notes(), store.getUpdated_by());
+				store.getStore_contact_details(), store.getLease_copy_loc(), store.getStore_notes(), store.getProperty_info(), store.getLease_info(), store.getUpdated_by());
 	}
 	
 	@Override

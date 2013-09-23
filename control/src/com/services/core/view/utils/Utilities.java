@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class Utilities {
 	
-	public static SimpleDateFormat laborScheduleFormatter = new SimpleDateFormat("dd-MMM-yyyy");
+	public static SimpleDateFormat laborScheduleFormatter = new SimpleDateFormat("MMM dd, yyyy");
 	public static SimpleDateFormat dbDateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 	private static DecimalFormat dataBaseDecimalFormat = new DecimalFormat("##.##");
 

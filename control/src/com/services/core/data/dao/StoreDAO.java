@@ -22,7 +22,7 @@ public interface StoreDAO {
 	
 	void updateStore(Store store);
 	
-	boolean updateStoreInfo(int id, String store_address, String operating_hrs, String contact_details, String lease_copy_loc, String store_notes, int updated_by);
+	boolean updateStoreInfo(int id, String store_address, String operating_hrs, String contact_details, String lease_copy_loc, String store_notes, String property_info, String lease_info, int updated_by);
 	
 	boolean createStoreDate(int storeId, Date impDate, String notes, int updated_by);
 	

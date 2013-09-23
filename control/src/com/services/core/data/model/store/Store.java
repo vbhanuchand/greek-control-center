@@ -58,6 +58,12 @@ public class Store implements Serializable {
 	@Column(name = "store_notes")
 	private String store_notes;
 	
+	@Column(name = "property_info")
+	private String property_info;
+	
+	@Column(name = "lease_info")
+	private String lease_info;
+	
 	@Column(name = "updated_by", nullable = false)
 	private Integer updatedBy;
 	
@@ -145,6 +151,22 @@ public class Store implements Serializable {
 
 	public void setStore_notes(String store_notes) {
 		this.store_notes = store_notes;
+	}
+
+	public String getProperty_info() {
+		return property_info;
+	}
+
+	public void setProperty_info(String property_info) {
+		this.property_info = property_info;
+	}
+
+	public String getLease_info() {
+		return lease_info;
+	}
+
+	public void setLease_info(String lease_info) {
+		this.lease_info = lease_info;
 	}
 
 	public Integer getUpdatedBy() {
