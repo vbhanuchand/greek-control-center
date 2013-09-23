@@ -34,9 +34,10 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 		var grid = registry.byId('inventoryInvoiceDetailsGrid');
 		dojo.connect(grid, 'onStyleRow', function(row){
 			var item = grid.getItem(row.index);
-			var nd = dojo.query('td[idx="0"]', row.node)[0];
+			var nd = dojo.query('td[idx="1"]', row.node)[0];
 			if(nd && item){
 				nd.style.backgroundColor = '#' + INVENTORY_ITEMS_INFO[item['itemId'][0]]['itemColor'];
+				nd.style.color = '#ffffff';
 			}
 		});
 	},
@@ -175,13 +176,14 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 									store: gridDataStore,
 									query: { id: "*" },
 									structure: [{defaultCell: { width: "20%", type: dojox.grid.cells._Widget, styles: 'padding-left: 2px; text-align: left;', noresize: true, editable: false },
-										cells: [{ name: "Stock Item", fields: ['id', "itemId"], width: "20%", noresize: true, formatter: formatItem },
+										cells: [{ name: "Code", field: "itemId", width: "9%", noresize: true, styles: 'text-align: center;' },
+										        { name: "Stock Item", fields: ['id', "itemId"], width: "16%", noresize: true, formatter: formatItem },
 									            { name: "Par (Units)", field: "itemId", width: "15%", noresize: true, formatter: formatParUnits },
 												{ name: "In Stock", field: "itemStock", width: "12%", noresize: true },
 												{ name: "Order", field: "itemOrder", width: "10%", noresize: true },
-												{ name: "Per Unit", field: "itemPricePerUnit", width: "15%", noresize: true, formatter: formatToCurrency },
+												{ name: "Per Unit", field: "itemPricePerUnit", width: "13%", noresize: true, formatter: formatToCurrency },
 												{ name: "GS Charge", field: "itemGSPercent", width: "16%", noresize: true, formatter: formatToPercent },
-												{ name: "Total", fields: ['itemOrder', 'itemPricePerUnit', 'itemGSPercent'], width: "12%", noresize: true, formatter: formatTotal }
+												{ name: "Total", fields: ['itemOrder', 'itemPricePerUnit', 'itemGSPercent'], width: "9%", noresize: true, formatter: formatTotal }
 												]}],
 									singleClickEdit: false,
 									editable: false,
@@ -194,7 +196,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 									selectionMode: "multiple",
 									rowSelector: '0px;',
 									keepSelection: false,
-									plugins: {indirectSelection: {headerSelector:true, width:"15px", styles:"text-align: center;"}}
+									plugins: {indirectSelection: {headerSelector:true, width:"25px", styles:"text-align: center;"}}
 									}, "inventoryInvoiceDetailsGrid");
 			inventoryDetailsGrid.startup();
 		} else dijit.byId('inventoryInvoiceDetailsGrid').setStore(gridDataStore);

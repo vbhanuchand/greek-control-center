@@ -368,3 +368,6 @@ select * from employee_role;
 
 insert into employee_role(employee_id, store_id, updated_by, role_tab)
 values (7, 1, 0, 'store-mgr');
+
+alter table store add property_info varchar(100);
+alter table store add lease_info varchar(100);

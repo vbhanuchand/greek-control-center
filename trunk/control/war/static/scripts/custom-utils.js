@@ -73,14 +73,14 @@ function returnToManagerPane(){
 	
 	var wipeOut = otherFx.wipeOut({node: dom.byId('mgrYearlyDetailsRegion'), duration: 1000, delay: 250, 
 		onEnd: function(node){
-				domStyle.set(this.node, {display: "none", width: "99%", height: "99%"});
+				domStyle.set(this.node, {display: "none", width: "99%", height: "98%"});
 				domStyle.set(dom.byId('mgrUnusedPersonalDaysDetailsDiv'), "display","none");
 			}
 	});
 	
 	var wipeIn = otherFx.wipeIn({node: dom.byId('managerDetailsPane'), duration: 1000, delay: 250, 
 		onBegin: function(node){
-				domStyle.set(this.node, {display: "", width: "99%", height: "99%"});
+				domStyle.set(this.node, {display: "", width: "99%", height: "98%"});
 				domStyle.set(dom.byId('mgrReviewFormDiv'), "display","");
 			}
 	});
@@ -249,16 +249,16 @@ function checkSelectedPane(trId, rightPane, storeId) {
     var domStyle = require('dojo/dom-style');
     var otherFx = require('dojo/fx');
     var dom = require('dojo/dom');
-    query("#locationTable tr").forEach(function (node) {
+    query("#locationTable li").forEach(function (node) {
            domClass.remove(node.id, 'active');
-           domClass.remove(node.id, 'dijitTab');
-           domClass.remove(node.id, 'dijitTabChecked');
+           //domClass.remove(node.id, 'dijitTab');
+           //domClass.remove(node.id, 'dijitTabChecked');
            //domClass.replace(trId, 'hoveredClass', 'hoveredClass');
     });
     //domClass.add(trId, 'active');
     domClass.add(trId, 'active');
-    domClass.add(trId, 'dijitTab');
-    domClass.add(trId, 'dijitTabChecked');
+    //domClass.add(trId, 'dijitTab');
+    //domClass.add(trId, 'dijitTabChecked');
     registry.byId('hiddenStoreId').set('value', storeId);
     storeId = registry.byId('hiddenStoreId').get('value');
     var child = registry.byId('tabContainer').selectedChildWidget;
@@ -362,7 +362,7 @@ function addStoreHealthInspectionRecord(evt){
 	evt.preventDefault();
 	evt.stopPropagation();}catch(e){console.log('Error is --> ' + e);}
 	var storeLayout = require("controls/StoreLayoutController");
-	storeLayout.addRowInGrid('storeMaintenanceGrid');
+	storeLayout.addRowInGrid('storeHealthInspectionGrid');
 }
 
 function addEmployeeRecord(evt) {
@@ -694,7 +694,13 @@ function applySecurityRoles(authoritiesData){
 }
 
 
-function addRecordDialog(dialogName){
+function addStoreInspectionRecord(evt){
+	var dialogName = 'healthInspection';
+	
+	try{if (!evt) var evt = window.event;
+	evt.preventDefault();
+	evt.stopPropagation();}catch(e){console.log('Error is --> ' + e);}
+	
 	var domStyle = require('dojo/dom-style');
 	var dom = require('dojo/dom');
 	var registry = require('dijit/registry');
