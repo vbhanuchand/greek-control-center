@@ -203,7 +203,7 @@ require(["bootstrap", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/dijit", 
 			
 			
 			// Manager Tab Details
-			var mgrSelectWidget = new formSelect({style: {width: '200px', 'text-align': 'right'}}, dom.byId('mgrList'));
+			/*var mgrSelectWidget = new formSelect({style: {width: '200px', 'text-align': 'right'}}, dom.byId('mgrList'));
 			mgrSelectWidget.startup();
 			mgrSelectWidget.on("change", function(){
 				var empId = this.get('value');
@@ -231,7 +231,9 @@ require(["bootstrap", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/dijit", 
 					registry.byId('quartersList').set('value', 0);
 				}
 				empLayout.resetMgrForm();
-			});
+			});*/
+			
+			
 			// Manager Tab Details ends
 			
 			//Manager Contract File Upload
@@ -518,7 +520,7 @@ require(["bootstrap", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/dijit", 
 	             searchAttr: "name",
 	             name: "quartersList",
 	             labelAttr: "label",
-	             style: "width: 90px;"
+	             style: "width: 150px;"
 	       }, dom.byId("quartersList"));
 		
 			quartersList.on('change', function(newValue){

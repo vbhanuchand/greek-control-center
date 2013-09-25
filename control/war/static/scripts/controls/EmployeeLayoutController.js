@@ -173,7 +173,8 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 		    		if(imageURLObject.success){
 		    			dom.byId(photoImgNode).setAttribute('src', imageURLObject.model.imageURL);
 		    			otherFx.wipeIn({node: dom.byId(photoPane),duration: 1000, delay: 250, onBegin: function(node){
-							domStyle.set(this.node, {display: ""});
+							//domStyle.set(this.node, {display: ""});
+							this.node.style.display = 'inline-block';
 						}}).play();
 		    		}
 		    		registry.byId(standByDomWidget).hide();
@@ -192,7 +193,8 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 		    		if(imageURLObject.success){
 		    			dom.byId('employeeImg').setAttribute('src', imageURLObject.model.imageURL);
 		    			otherFx.wipeIn({node: dom.byId('employeePaneInfo'),duration: 1000, delay: 250, onBegin: function(node){
-							domStyle.set(this.node, {display: ""});
+							//domStyle.set(this.node, {display: ""});
+							this.node.style.display = 'inline-block';
 						}
 					}).play();
 		    		}
@@ -888,7 +890,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 				    	case 'employeesGrid': 
 				    		recordToAdd = {id: randomNumber, storeId: registry.byId('hiddenStoreId').get('value'), fname: 'First Name', lname: 'Last Name', 
 				    			hiredDate: '12/05/2013', username: 'user'+randomNumber, position: 'Front', phone: 'Add Phone', active: true, mgr: 1,
-				    			updatedBy: 1, updated_date: '', store: '__new__', _self: '/service/store/'+registry.byId('hiddenStoreId').get('value')+'/employee/0', post: true};
+				    			updatedBy: 1, updated_date: '', store: '__new__', _self: '/service/store/'+registry.byId('hiddenStoreId').get('value')+'/employees/0', post: true};
 				    		break;
 				    	case 'employeeSalaryDetailsGrid': 
 				    		recordToAdd = {id: randomNumber, storeId: registry.byId('hiddenStoreId').get('value'), empId: empId, increment: 'Add Amt in USD', 
@@ -951,8 +953,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 		        		addRow(gridId, getSelectedEmployeeId());
 		        },
 			    postCreate: function(){
-			    	console.log('Calling Tab Container Listener ' + registry.byId("employeeInfoTabContainer"));
-				    dojo.connect(registry.byId("employeeInfoTabContainer"), "selectChild", function(child){
+			    	dojo.connect(registry.byId("employeeInfoTabContainer"), "selectChild", function(child){
 						baseArray.forEach(registry.byId("employeeInfoTabContainer").getChildren(), function(empTab){
 							if(empTab.get('title').indexOf(' &nbsp; <img ') > 0){
 								empTab.set('title', empTab.get('title').substring(0, empTab.get('title').indexOf(' &nbsp; <img ')));
@@ -977,6 +978,42 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 							refreshSelectedPane();
 						}
 					});
+			    	on(registry.byId('mgrList'), 'change', function(){
+			    		var empId = this.get('value');
+			    		var empLayout = require('controls/EmployeeLayoutController');
+						if(Number(this.get('value')) > 0){
+							//domStyle.set(dom.byId('mgrContract'), 'display','block');
+							dom.byId('mgrContract').style.display = 'inline-block';
+							//domStyle.set(dom.byId('mgrAddLeavesIcon'), 'display','');
+							dom.byId('mgrAddLeavesIcon').style.display = 'inline-block';
+							this.store.fetch({query: {id: this.get('value')}, onComplete: function(items, request){
+								if(items.length > 0){
+									empLayout.populateManagerInfo(items[0]);
+								}
+							}});
+					      empLayout.showPhotoByEmpId(this.get('value'), 'managerPhoto', 'mgrPhotoPane', 'mgrPhotoPaneStandBy');
+					      empLayout.fetchManagerContractBlobs(this.get('value'));
+					      empLayout.fetchMgrLeavesDetails(empId);
+					      empLayout.fetchCurrentYearReviews(empId);
+					      registry.byId('quartersList').set('disabled', false);
+						} else {
+							domConstruct.empty(dom.byId('mgrPaneInfoUl'));
+							domConstruct.empty(dom.byId('mgrYearlyReviewsTable'));
+							//domStyle.set(dom.byId('mgrContract'), 'display','none');
+							dom.byId('mgrContract').style.display = 'none';
+							empLayout.hidePhoto('mgrPhotoPane');
+							//domStyle.set(dom.byId('mgrAddLeavesIcon'), 'display','none');
+							dom.byId('mgrAddLeavesIcon').style.display = 'none';
+							empLayout.resetMgrLeavesGrid();
+							registry.byId('quartersList').set('disabled', true);
+							registry.byId('quartersList').set('value', 0);
+						}
+						empLayout.resetMgrForm();
+			    	});
+			    	//Manager Tab --> Personal / Sick Days Tab
+			    	var addIconLabel = "<span id='mgrAddLeavesIcon' style='display: none;'>&nbsp;<img align='top' src='resources/images/add-icon.png' onclick='javascript: addManagerLeavesTabRecord(event);'/></span>";
+					var widget = registry.byId('mgrLeavesTab');
+				    widget.set('title', widget.get('title') + '&nbsp;' + addIconLabel);
 		        },
 		        populateManagerTabDetails: function(storeId){
 		        	var mgrArray = [{id: 0, label: 'Select Manager'}];
@@ -1037,9 +1074,17 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 		       populateManagerInfo: function(selectedItem){
 		    	   	var mgrPaneDetailsNode = dom.byId('mgrPaneInfoUl');
 					domConstruct.empty(mgrPaneDetailsNode);
-					var fragment,  innerHTMLText;
+					//var fragment,  innerHTMLText;
 					
-					fragment = document.createDocumentFragment();
+					mgrPaneDetailsNode.appendChild(domConstruct.create("li", { innerHTML: '<b>Name: </b> ' + selectedItem.label }));
+					mgrPaneDetailsNode.appendChild(domConstruct.create("li", { innerHTML: '<b>Type: </b> ' + selectedItem.position }));
+					mgrPaneDetailsNode.appendChild(domConstruct.create("li", { innerHTML: '<b>Work Cell: </b> ' + selectedItem.phone }));
+					mgrPaneDetailsNode.appendChild(domConstruct.create("li", { innerHTML: '<b>Personal: </b>' + selectedItem.personalPhone }));
+					mgrPaneDetailsNode.appendChild(domConstruct.create("li", { innerHTML: '<b>Emergency Contact: </b> ' + selectedItem.emergencyContact }));
+					mgrPaneDetailsNode.appendChild(domConstruct.create("li", { innerHTML: '<b>Home Address: </b> ' + selectedItem.address }));
+					
+					
+					/*fragment = document.createDocumentFragment();
 					innerHTMLText = '<b>Name: </b> ' + selectedItem.label;
 					domConstruct.create("li", {
                        innerHTML: innerHTMLText
@@ -1079,7 +1124,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 					domConstruct.create("li", {
 	                    innerHTML: innerHTMLText
 	                }, fragment);
-					domConstruct.place(fragment, mgrPaneDetailsNode);
+					domConstruct.place(fragment, mgrPaneDetailsNode);*/
 		       },
 		       fetchManagerContractBlobs: function(storeId){
 			    	registry.byId('mgrContractStandBy').show();
@@ -1207,20 +1252,28 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 			    	fetchYearlyReviews(empId);
 			    },
 			    fetchReviewsForYear: function(year){
-			    	console.log('Fetch Data for --> ' + registry.byId('mgrList').get('value') + ' and Year --> ' + year);
+			    	//console.log('Fetch Data for --> ' + registry.byId('mgrList').get('value') + ' and Year --> ' + year);
 			    	
 			    	var wipeOut = otherFx.wipeOut({node: dom.byId('managerDetailsPane'), duration: 1000, delay: 250, 
 			    		onEnd: function(node){
-			    				domStyle.set(this.node, {display: "none", width: "99%", height: "99%"});
-			    				domStyle.set(dom.byId('mgrReviewFormDiv'), "display","none");
+			    				this.node.style.display = 'none';
+			    				this.node.style.width = '99%';
+			    				this.node.style.height = '1%';
+			    				//domStyle.set(this.node, {display: "none", width: "99%", height: "2%"});
+			    				//domStyle.set(dom.byId('mgrReviewFormDiv'), "display","none");
+			    				dom.byId('mgrReviewFormDiv').style.display = 'none';
 			    			}
 			    	});
 			    	var wipeIn = otherFx.wipeIn({node: dom.byId('mgrYearlyDetailsRegion'), duration: 1000, delay: 250, 
 			    		onBegin: function(node){
-			    				domStyle.set(this.node, {display: "", width: "99%", height: "99%"});
+			    				//domStyle.set(this.node, {display: "", width: "99%", height: "98%"});
+			    				this.node.style.display = 'block';
+			    				this.node.style.width = '99%';
+			    				this.node.style.height = '39%';
 			    			},
 			    		onEnd: function(node){
-			    			
+			    			//registry.byId('mgrYearlyDetailsRegion').resize();
+		    				//registry.byId('managerDetailsPaneContentPane').resize();
 			    		}
 			    	});
 			    	otherFx.chain([wipeOut, wipeIn]).play();

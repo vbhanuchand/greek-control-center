@@ -64,7 +64,7 @@
 <link rel="stylesheet" href="resources/styles/styles.css" />
 <link rel="stylesheet" href="resources/styles/overrides-bootstrap.css" />
 
-<script data-dojo-config="has:{'dojo-firebug': true, 'dojo-debug-messages': true}, cacheBust: true, parseOnLoad:false, isDebug: true, waitSeconds: 10, locale: location.search.match(/locale=([\w\-]+)/) ? RegExp.$1 : 'en-us'" src="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/dojo.js"></script>
+<script data-dojo-config="has:{'dojo-firebug': true, 'dojo-debug-messages': true}, cacheBust: true, parseOnLoad:false, isDebug: true, locale: location.search.match(/locale=([\w\-]+)/) ? RegExp.$1 : 'en-us'" src="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/dojo.js"></script>
 <script src="resources/scripts/custom-utils.js"></script>
 <script src="resources/scripts/init.js"></script>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
@@ -288,7 +288,7 @@
 			<div id="storeInfo" data-dojo-type="dijit/layout/ContentPane" title="Store Info" data-dojo-props="selected:true" style="width: 99%; height: 99%">
 				<div data-dojo-type="dijit/TitlePane" id="storeInfoTitlePane" data-dojo-props="title:'Store Information', style:'width:99%;', open: false">
 					<form data-dojo-type="dijit/form/Form" data-dojo-id="storeInfoForm" id="storeInfoForm">	
-						<div data-dojo-type="dojox/layout/TableContainer" data-dojo-props="showLabels:true, orientation:'vert', spacing:1, cols:3, customClass:'leaseInfo-labelsAndValues', style:'width:100%;'" id="storeInfoTable">
+						<div  id="storeInfoTable" data-dojo-type="dojox/layout/TableContainer" data-dojo-props="showLabels:true, orientation:'vert', spacing:1, cols:3, customClass:'leaseInfo-labelsAndValues', style:'width:100%;'">
 							<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'Contact Info'" style="border: .1em solid #ddd; width: 99%; padding: 0px 2px 0px 2px !important;">
 								<table class="storeInfoTable">
 									<tr>
@@ -411,174 +411,129 @@
 					</div>
 				</div>
 			</div>
-			<div id="managerPane" data-dojo-type="dijit/layout/ContentPane" title="Manager's" data-dojo-props="selected:false" style="width: 99%; height: 99%">
-				<div id="mgrYearlyDetailsRegion" data-dojo-type="dijit/layout/ContentPane" style="display: none; width: 99%;" align="center">
+			<div id="managerPane" data-dojo-type="dijit/layout/ContentPane" title="Manager" data-dojo-props="selected:false" style="width: 99%; height: 99%">
+				<div id="mgrYearlyDetailsRegion" data-dojo-type="dijit/layout/ContentPane" style="display: none; width: 99%; height: 1%;" align="center">
 					<div id="mgrYearlyDetailsRegionContent" align="left">
 						<span style="text-align: left;"><a href="javascript: returnToManagerPane();"><i class="icon-chevron-left"></i><i class="icon-chevron-left"></i>&nbsp;&nbsp;Return</a></span>
 						<div align="center" style="padding: 2px;">
 							<table style="width: 99%; height: 99%;" class='dateTable' id="mgrYearlyReviewsQuarterTable">
-								<tr>
-									<th width="10%">Quarter #</th>
-									<th width="45%">Notes</th>
-									<th width="10%">Bonus</th>
-									<th width="35%">End Year Payout</th>
-								</tr>
+								<tr><th width="10%">Quarter #</th><th width="45%">Notes</th><th width="10%">Bonus</th><th width="35%">End Year Payout</th></tr>
 							</table>
 						</div>
 					</div>
-					<div id="mgrYearlyDetailsRegionStandBy" data-dojo-id="mgrYearlyDetailsRegionStandBy" data-dojo-type="dojox/widget/Standby" 
-						data-dojo-props="target:'mgrYearlyDetailsRegion', color:'lightgrey'"></div>
+					<div id="mgrUnusedPersonalDaysDetailsDiv" align="center" style="display: none; height: 4%; vertical-align: bottom;">
+						<table style="width: 99%; height: 99%;" class='dateTable' id="mgrUnusedPersonalDaysDetailsTable"></table>
+					</div>
 				</div>
-				<div id="managerDetailsPane" style="width: 99%; height: 35%; margin-top: 1px" align="center">
-					<table style="width: 99%; height: 99%;" class='dateTable'>
-						<tr style="width: 100%; height: 100%">
-							<td style="width: 18%" align="center">
-								<div id="mgrPhotoPane" style="width: 100%; height: 100%" align="center">
-									<img id="managerPhoto" align="top" src='resources/images/no-photo.png' width="150px" height="170px"/>
-									<div id="mgrPhotoPaneStandBy" data-dojo-id="mgrPhotoPaneStandBy" data-dojo-type="dojox/widget/Standby" 
-										data-dojo-props="target:'mgrPhotoPane', color:'white'">
-									</div>
-								</div>
-							</td>
-							<td id="managerPersonalInfo" style="width: 35%" valign="top">
-								<div align="center" style="font-weight: bold;font-style: inherit;"><u>Manager Details</u></div>
-								<div id="mgrList"></div>
-								<ul id="mgrPaneInfoUl" style="list-style: none;"></ul>
-							</td>
-							<td style="width: 35%" valign="top">
-								<div align="center" style="font-weight: bold;font-style: inherit;">
-									<u>Contract Documents</u>
-									<div id="mgrContract" data-dojo-type="dijit/layout/ContentPane" style="margin-top: 2px;font-weight: normal;width: 100%" align="left">
-										<div id="mgrContractWidgetsDiv" style="display: none;">
-											<span id="mgrContractWidgets"></span>
-										  	<span id="mgrContractWidgetsProgressMsgs"></span>
-										  	<a href="javascript: hideFileUploadDialog('mgrContract');">Hide</a>
-										</div>
-									   	<div id="mgrContractUpload">
-										  	<img align='top' src='resources/images/file-upload.png'/>
-										  	<a href="javascript: showFileUploadDialog('mgrContract');">Upload Contract</a>
-										</div>
-										<div>
-											<ul id="mgrContractUploaded"></ul>
-										  		<ol id="mgrContractExisting"></ol>
-										</div>
-										<div id="mgrContractStandBy" data-dojo-id="mgrContractStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'mgrContract', color:'lightgrey'"></div>
-									</div>
-								</div>
-							</td>
-							<td style="width: 12%" valign="top" id="mgrYearlyReviews">
-								<div align="center" style="font-weight: bold;font-style: inherit;">
-									<u>Yearly Reviews</u>
-								</div>
-								<div align="center" style="padding-top: 5px;">
-									<table id="mgrYearlyReviewsTable" style="width: 40%; height: 100%;" class='storeInfoTable' align="center">
-		  								<tr><td>No Data Available !!!</td></tr>
-		  							</table>
-								</div>
-								<div id="mgrYearlyReviewsStandBy" data-dojo-id="mgrYearlyReviewsStandBy" 
-											data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'mgrYearlyReviews', color:'white'">
-								</div>
-							</td>
-						</tr>
-					</table>
-				</div>
-				<table style="width: 99%; height: 62%; margin-top: 1px;" class='dateTable' align="center">
-					<tr style="width: 100%; height: 100%">
-						<td style="width: 50%; height: 99%" align="center" valign="top">
-							<div align="center" style="width: 99%; height: 98%; font-weight: bold;font-style: inherit; vertical-align: bottom;">
-								<u>Personal / Sick Days</u> <span id="mgrAddLeavesIcon" style="display: none;">&nbsp; <img align='top' src='resources/images/add-icon.png' onclick='javascript: addManagerLeavesTabRecord(event);'/> &nbsp;</span>
-								<div id="mgrLeavesGrid" align="center"
-									style="height:70%; padding:2px; width:98%;">
-								</div>
-								<div align="center" id="mgrUnusedPersonalDaysDetailsDiv" style="display: none; height:20%; padding:2px; vertical-align: bottom;">
-									<table style="width: 99%; height: 99%;" class='dateTable' id="mgrUnusedPersonalDaysDetailsTable">
+				<div id="managerDetailsPane" style="display: block; width: 99%; height: 39%;" data-dojo-type="dijit/layout/ContentPane">
+						<div style="width: 18%; height: 99%; padding: 0px 2px 0px 2px !important; display: inline-block; vertical-align: middle;"><!--  
+						--><div id="mgrList" data-dojo-type="dijit/form/Select" style="display: block; width: 150px; height: 35px; vertical-align: top; padding-left: 10px;"></div><!--
+						--><div id="mgrPhotoPane" style="display: block; width: 100%; height: 100%;"><div style="display: block; text-decoration: underline; font-weight: bold;">Photograph</div><img id="managerPhoto" align="top" src='resources/images/no-photo.png' width="170px;" height="50%;"/></div><!-- 
+					 --></div><!-- 
+					 --><div id="managerPersonalInfo" style="width: 34%; height: 99%; display: inline-block; vertical-align: top;"><!-- 
+						 --><div style="display: block; text-decoration: underline; font-weight: bold;">Manager Details</div><ul id="mgrPaneInfoUl" style="vertical-align: top; list-style: none; height: 80%;"></ul><!-- 
+					 --></div><!-- 
+					 --><div style="width: 35%; height: 99%; padding: 0px 2px 0px 2px !important; display: inline-block; vertical-align: top;"><!--
+						--><div style="display: block; text-decoration: underline; font-weight: bold; text-align: center;">Contract Documents</div><div id="mgrContract" style="display: block;"><div id="mgrContractWidgetsDiv" style="display: none; padding-left: 10px;"><!--
+							--><span id="mgrContractWidgets"></span><span id="mgrContractWidgetsProgressMsgs"></span><a href="javascript: hideFileUploadDialog('mgrContract');">Hide</a><!--
+						--></div><!--
+						--><div id="mgrContractUpload" style="padding-left: 10px;"><!--
+							--><img align='top' src='resources/images/file-upload.png'/><a href="javascript: showFileUploadDialog('mgrContract');">Upload Contract</a><!--
+						--></div><!--
+						--><div style="padding-left: 10px;"><!--
+							--><ul id="mgrContractUploaded"></ul><!--
+							--><ol id="mgrContractExisting"></ol><!--
+						--></div></div><!--
+					--></div><!--
+					--><div id="mgrYearlyReviews" style="width: 10%; height: 99%; padding: 0px 2px 0px 2px !important; display: inline-block; vertical-align: top;" title="Yearly Reviews"><!--
+						--><div style="display: block; text-decoration: underline; font-weight: bold; text-align: center;">Yearly</div><table id="mgrYearlyReviewsTable" class='storeInfoTable' align="center"></table><!--
+					--></div><!--
+				--></div>
+				<div id="mgrDetailsTabContainer" data-dojo-id="mgrDetailsTabContainer" data-dojo-type="dijit/layout/TabContainer" data-dojo-props="tabPosition: 'top'" style="width:99%; height:59%;">
+					<div id="mgrLeavesTab" data-dojo-type="dijit/layout/ContentPane" class="nihilo" data-dojo-props="title:'Personal/Sick Days', style:'height:99%;width:99%;', selected:true">
+						<!-- <div style="display: block;" align="center"><u>Personal / Sick Days</u></div> -->
+						<div id="mgrLeavesGrid" style="width: 99%; height: 98%;"></div>
+					</div>
+					<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'Add/Edit Review', style:'height:99%;width:99%;', selected:false">
+						<div data-dojo-type="dijit/form/Form" id="quarterlyReviewForm" data-dojo-id="quarterlyReviewForm" encType="multipart/form-data">
+							<div id="mgrReviewFormDiv" align="left" style="font-weight: normal; width: 60%; font-style: normal; padding-left: 5px;">
+								<!-- <u style="font-weight: bolder; font-style: italic;">Quarterly Reviews</u> -->
+								<div style="padding-top: 5px; width: 100%" align="center">
+									<table class="dataTable" style="width: 100%" align="center">
+										<tr>
+											<td style="width: 40%; text-align: left" class="noBorder" align="left">
+												<span style="position: relative; padding-left: 1px;">
+													<label for="quartersList" style="font-weight: bold; font-size: 90%">Choose Quarter:&nbsp;&nbsp;</label><div id="quartersList"></div>
+												</span>
+											</td>
+											<td style="width: 59%; padding: 2px; text-align: right;" align="right" class="noBorder">
+												<label for="possibleBonus" style="font-weight: bold; font-size: 90%">Possible Quarterly Bonus: </label>
+												<input style="width: 90px;" type="text" name="possibleBonus" id="possibleBonus" value="0" required="true" data-dojo-type="dijit/form/CurrencyTextBox" 
+													data-dojo-props="constraints:{fractional:false}, currency:'USD', invalidMessage:'Invalid Amount.'" />
+											</td>
+										</tr>
 									</table>
 								</div>
-								<div id="mgrLeavesGridStandBy" data-dojo-id="mgrLeavesGridStandBy" 
-									data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'mgrLeavesGrid', color:'white'">
+								<div style="padding: 2px; padding-top: 5px">
+									<table style="width: 100%; height: 100%" class="dateTable">
+										<tr>
+											<th style="width: 33%;">Date</th>
+											<th style="width: 34%;" class="noBorder"></th>
+											<th style="width: 33%;">Bonus</th>
+										</tr>
+										<tr>
+											<td style="width: 33%;">
+												<input style="width: 100%;" type="text" name="bonusDate" id="bonusDate" value="now" data-dojo-type="dijit/form/DateTextBox" required="true"/>
+											</td>
+											<td style="width: 34%;" class="noBorder"></td>
+											<td style="width: 33%;">
+												<input style="width: 100%;" type="text" name="bonusAmt" id="bonusAmt" value="0" required="true" data-dojo-type="dijit/form/CurrencyTextBox" 
+													data-dojo-props="constraints:{fractional:false}, currency:'USD', invalidMessage:'Invalid Amount.'" />
+											</td>
+										</tr>
+										<tr><td colspan="3" class="noBorder"></td></tr>
+										<tr>
+											<td colspan="3" style="background-color: #eee; text-align: center;font-weight: bold;" height="5px;">Notes</td>
+										</tr>
+										<tr>
+											<td colspan="3" style="text-align: center;">
+												<span id="quarterlyNotes" data-dojo-type="dijit/InlineEditBox" 
+													data-dojo-props="editor: dijit.form.Textarea, rows:2, cols:20, maxLength: 100" 
+													width="99%"></span>
+											</td>
+										</tr>
+										<tr><td colspan="3" class="noBorder">
+												<button id="reviewUpdateBtn" data-dojo-type="dijit/form/Button" disabled="disabled" type="submit" style="padding: 3px;" value="update">Update</button>
+												<button id="reviewSaveBtn" data-dojo-type="dijit/form/Button" disabled="disabled" type="submit" style="padding: 3px;" value="save">Save</button>
+										</td></tr>
+									</table>
 								</div>
 							</div>
-						</td>
-						<td style="width: 50%;height:100%" align="center" valign="top">
-							<div data-dojo-type="dijit/form/Form" id="quarterlyReviewForm" data-dojo-id="quarterlyReviewForm" 
-								encType="multipart/form-data" action="" method="">
-								<div id="mgrReviewFormDiv" align="center" style="font-weight: normal; width: 100%; font-style: normal;">
-									<u style="font-weight: bolder; font-style: italic;">Quarterly Reviews</u>
-									<div style="padding-top: 5px; width: 100%" align="center">
-										<table class="dataTable" style="width: 100%" align="center">
-											<tr>
-												<td style="width: 40%; text-align: left" class="noBorder" align="left">
-													<span style="position: relative; padding-left: 1px; font-style: italic;">
-														<input id="quartersList" style="text-align: center; font-style: italic;"/>
-													</span>
-												</td>
-												<td style="width: 59%; padding: 2px; text-align: right;" align="right" class="noBorder">
-													<label for="possibleBonus" style="font-style: italic; font-weight: bold; font-size: 90%">Possible Quarterly Bonus: </label>
-													<input style="width: 90px;" type="text" name="possibleBonus" id="possibleBonus" value="0" required="true" data-dojo-type="dijit/form/CurrencyTextBox" 
-														data-dojo-props="constraints:{fractional:false}, currency:'USD', invalidMessage:'Invalid Amount.'" />
-												</td>
-											</tr>
-										</table>
-									</div>
-									<div style="padding: 2px; padding-top: 5px">
-										<table style="width: 100%; height: 100%" class="dateTable">
-											<tr>
-												<th style="width: 33%;">Date</th>
-												<th style="width: 34%;" class="noBorder"></th>
-												<th style="width: 33%;">Bonus</th>
-											</tr>
-											<tr>
-												<td style="width: 33%;">
-													<input style="width: 100%;" type="text" name="bonusDate" id="bonusDate" value="now" data-dojo-type="dijit/form/DateTextBox" required="true"/>
-												</td>
-												<td style="width: 34%;" class="noBorder"></td>
-												<td style="width: 33%;">
-													<input style="width: 100%;" type="text" name="bonusAmt" id="bonusAmt" value="0" required="true" data-dojo-type="dijit/form/CurrencyTextBox" 
-														data-dojo-props="constraints:{fractional:false}, currency:'USD', invalidMessage:'Invalid Amount.'" />
-												</td>
-											</tr>
-											<tr><td colspan="3" class="noBorder"></td></tr>
-											<tr>
-												<td colspan="3" style="background-color: #eee; text-align: center;font-weight: bold;" height="5px;">Notes</td>
-											</tr>
-											<tr>
-												<td colspan="3" style="text-align: center;">
-													<span id="quarterlyNotes" data-dojo-type="dijit/InlineEditBox" 
-														data-dojo-props="editor: dijit.form.Textarea, rows:2, cols:20, maxLength: 100" 
-														width="99%"></span>
-												</td>
-											</tr>
-											<tr><td colspan="3" class="noBorder">
-													<button id="reviewUpdateBtn" data-dojo-type="dijit/form/Button" disabled="disabled" type="submit" style="padding: 3px;" value="update">Update</button>
-													<button id="reviewSaveBtn" data-dojo-type="dijit/form/Button" disabled="disabled" type="submit" style="padding: 3px;" value="save">Save</button>
-											</td></tr>
-										</table>
-									</div>
-								</div>
-								<div id="mgrReviewStandBy" data-dojo-id="mgrReviewStandBy" 
-											data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'mgrReviewFormDiv', color:'white'">
-								</div>
-								<input type="hidden" name="hiddenReviewRecordId" id="hiddenReviewRecordId" value="0" />
-								<script type="dojo/on" data-dojo-event="submit" data-dojo-args="evt">
-									evt.preventDefault();
-									evt.stopPropagation();
-									var json = require('dojo/json');
-									var registry = require('dijit/registry');
-									var empLayout = require('controls/EmployeeLayoutController');
-									var buttonValue = registry.byId('reviewSaveBtn').get('disabled') ? 'update' : 'save';
-									if(this.validate() && (Number(registry.byId('quartersList').get('value')) > 0)){
-										empLayout.updateMgrReview(this.getValues(), buttonValue);
-									}
-									return false;
-								</script>
-							</div>
-						</td>
-					</tr>
-				</table>
-			<div id="managerDetailsStandBy" data-dojo-id="managerDetailsStandBy" 
-						data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'managerPersonalInfo', color:'white'">
+							<input type="hidden" name="hiddenReviewRecordId" id="hiddenReviewRecordId" value="0" />
+							<script type="dojo/on" data-dojo-event="submit" data-dojo-args="evt">
+								evt.preventDefault();
+								evt.stopPropagation();
+								var json = require('dojo/json');
+								var registry = require('dijit/registry');
+								var empLayout = require('controls/EmployeeLayoutController');
+								var buttonValue = registry.byId('reviewSaveBtn').get('disabled') ? 'update' : 'save';
+								if(this.validate() && (Number(registry.byId('quartersList').get('value')) > 0)){
+									empLayout.updateMgrReview(this.getValues(), buttonValue);
+								}
+								return false;
+							</script>
+						</div>
+					</div>
+				</div>
+				<div id="managerDetailsStandBy" data-dojo-id="managerDetailsStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'managerPersonalInfo', color:'white'"></div>
+				<div id="mgrReviewStandBy" data-dojo-id="mgrReviewStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'mgrReviewFormDiv', color:'white'"></div>
+				<div id="mgrLeavesGridStandBy" data-dojo-id="mgrLeavesGridStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'mgrLeavesGrid', color:'white'"></div>
+				<div id="mgrPhotoPaneStandBy" data-dojo-id="mgrPhotoPaneStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'mgrPhotoPane', color:'white'"></div>
+				<div id="mgrYearlyDetailsRegionStandBy" data-dojo-id="mgrYearlyDetailsRegionStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'mgrYearlyDetailsRegion', color:'lightgrey'"></div>
+				<div id="mgrContractStandBy" data-dojo-id="mgrContractStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'mgrContract', color:'lightgrey'"></div>
+				<div id="mgrYearlyReviewsStandBy" data-dojo-id="mgrYearlyReviewsStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'mgrYearlyReviews', color:'white'"></div>
+			
 			</div>
-		</div>
 			<div id="employeePane" data-dojo-type="dijit/layout/ContentPane" title="Employees" data-dojo-props="selected:false" style="width: 100%; height: 100%">
 					<div id="employeesGridContentPane" data-dojo-type="dijit/layout/ContentPane" style="margin:2px;width:99%;height:50%; vertical-align:top;">
 						<div id="employeesGrid" align="center"
