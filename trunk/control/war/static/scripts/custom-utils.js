@@ -73,27 +73,43 @@ function returnToManagerPane(){
 	
 	var wipeOut = otherFx.wipeOut({node: dom.byId('mgrYearlyDetailsRegion'), duration: 1000, delay: 250, 
 		onEnd: function(node){
-				domStyle.set(this.node, {display: "none", width: "99%", height: "98%"});
-				domStyle.set(dom.byId('mgrUnusedPersonalDaysDetailsDiv'), "display","none");
+				this.node.style.display = 'none';
+				this.node.style.width = '99%';
+				this.node.style.height = '1%';
+				//domStyle.set(this.node, {display: "none", width: "99%", height: "2%"});
+				//domStyle.set(dom.byId('mgrUnusedPersonalDaysDetailsDiv'), "display","none");
+				dom.byId('mgrUnusedPersonalDaysDetailsDiv').style.display = 'none';
 			}
 	});
 	
 	var wipeIn = otherFx.wipeIn({node: dom.byId('managerDetailsPane'), duration: 1000, delay: 250, 
 		onBegin: function(node){
-				domStyle.set(this.node, {display: "", width: "99%", height: "98%"});
-				domStyle.set(dom.byId('mgrReviewFormDiv'), "display","");
-			}
+				this.node.style.display = 'block';
+				this.node.style.width = '99%';
+				this.node.style.height = '39%';
+				//domStyle.set(this.node, {display: "", width: "99%", height: "98%"});
+				//domStyle.set(dom.byId('mgrReviewFormDiv'), "display","");
+				dom.byId('mgrReviewFormDiv').style.display = 'block';
+			},
+		onEnd: function(){
+			//registry.byId('mgrYearlyDetailsRegion').resize();
+			//registry.byId('managerDetailsPaneContentPane').resize();
+		}
 	});
 	otherFx.chain([wipeOut, wipeIn]).play();
 	query('#mgrYearlyReviewsTable td a').forEach(function(node){
 		if(registry.byId('hiddenSelectedYear').get('value') == node.innerHTML){
 			domStyle.set(node, 'color', '#fff');
 			domStyle.set(node, 'font-weight', 'bold');
+			domStyle.set(node, 'padding-left', '3px');
+			domStyle.set(node, 'padding-right', '3px');
 			domStyle.set(node.parentNode, 'background-color', '#a00');
 		}
 		else {
 			domStyle.set(node, 'color', '');
 			domStyle.set(node, 'font-weight', '');
+			domStyle.set(node, 'padding-left', '3px');
+			domStyle.set(node, 'padding-right', '3px');
 			domStyle.set(node.parentNode, 'background-color', '#fff');
 		}
 	});
