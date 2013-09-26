@@ -99,12 +99,12 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 		Query query;
 		if(getMgrOnly){
 			query = sessionFactory.getCurrentSession().createQuery("from Employee e where e.id in (select employeeId from Role where storeId=:storeId and roleTab <> :roleTab) and e.position=:position" +
-					" order by e.position desc, e.hired_date");
+					" order by e.position desc, e.active desc, e.hired_date");
 			query.setParameter("position", "Manager");
 		}
 		else{
 			query = sessionFactory.getCurrentSession().createQuery("from Employee e where e.id in (select employeeId from Role where storeId=:storeId and roleTab <> :roleTab) and e.position in :positions" +
-					" order by e.position desc, e.hired_date");
+					" order by e.position desc, e.active desc, e.hired_date");
 			query.setParameterList("positions", new Object[]{"Manager", "Front", "Cook"});
 		}
 		query.setParameter("roleTab", "store-ownr");

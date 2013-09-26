@@ -76,7 +76,7 @@ public class FileServiceController {
         		
         	responseHTML = "{\"status\": \"success\", \"fileName\":\"" + blobInfo.getFilename() + "\",\"fileType\":\"" 
         					+ blobInfo.getContentType() + "\", \"blob-key\":\"" + blobInfo.getBlobKey().getKeyString() + "\",\"imageURL\": \"" + imgServingURL + "\"}";
-        }else {
+        } else {
         	responseHTML = "{\"status\": \"failed\", \"fileName\":\"" + "File Upload Failed. Please try again" + "\",\"fileType\":\"" 
         					+ "--none--" + "\", \"blob-key\":\"" + "--none--" + "\"}";
         }
@@ -116,6 +116,7 @@ public class FileServiceController {
 	@RequestMapping(value = "/service/getImage/{empId}", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public SingleModelResponse<SimpleModel> getImage(@PathVariable int empId, final HttpServletResponse response) throws IOException {
+		try{
 		logger.info("Getting Blob --> " + empId);
 		String imgServingURL = "resources/images/no-photo.png";
 		List<BlobsWrapper> blobsList = dataService.getBlobs(empId, "photo");
@@ -127,6 +128,12 @@ public class FileServiceController {
 		SimpleModel returnModel = new SimpleModel();
 		returnModel.setImageURL(imgServingURL);
 		return new SingleModelResponse<SimpleModel>(true, returnModel);
+		} catch(Exception e){
+			String imgServingURL = "resources/images/no-photo.png";
+			SimpleModel returnModel = new SimpleModel();
+			returnModel.setImageURL(imgServingURL);
+			return new SingleModelResponse<SimpleModel>(true, returnModel);
+		}
 	}
 	
 	

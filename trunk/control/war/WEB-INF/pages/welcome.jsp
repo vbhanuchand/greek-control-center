@@ -46,6 +46,8 @@
 	var INVENTORY_DISTRIBUTORS = [];
 	var INVENTORY_ITEMS = {};
 	var INVENTORY_DISTRIBUTORS_MAP = {};
+	var laborPaneCalledFromStore = false;
+	var globalYearWeekForRefresh = '';
 </script>
 
 <!-- --><link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/resources/dojo.css" />
@@ -60,7 +62,9 @@
 <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/form/resources/FileInput.css" />
 <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/layout/resources/ScrollPane.css" />
 <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/calendar/themes/soria/Calendar.css" />
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dijit/themes/claro/claro.css">
 <link rel="stylesheet"href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/calendar/themes/claro/Calendar.css" />
+<link rel="stylesheet"href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/calendar/themes/claro/MonthColumnView.css" />
 <link rel="stylesheet" href="resources/styles/styles.css" />
 <link rel="stylesheet" href="resources/styles/overrides-bootstrap.css" />
 
@@ -192,7 +196,7 @@
 	            </div>
 	        </div>
 	    </div>
-		<div data-dojo-type="dijit/layout/ContentPane" style="width: 18%; top: 25px !important;" data-dojo-props="splitter: true, region: 'leading'">
+		<div data-dojo-type="dijit/layout/ContentPane" style="width: 15%; top: 25px !important; overflow: visible;" data-dojo-props="splitter: true, region: 'leading'">
 			<div class="bs-docs-sidebar" style="width: 100%;">
 				<ul class="nav nav-list bs-docs-sidenav" id="locationTable">
 					<li class="active" id="locationTabletr1">
@@ -208,7 +212,7 @@
 						<a href="javascript: checkSelectedPane('locationTabletr4', 'rightAccordion', 4);"><i class="icon-chevron-right"></i> South Jordan</a>
 					</li>
 					<li class="" id="locationTabletr5">
-						<a href="javascript: checkSelectedPane('locationTabletr5', 'rightAccordion', 5);"><i class="icon-chevron-right"></i> Salt Lake City</a>
+						<a href="javascript: checkSelectedPane('locationTabletr5', 'rightAccordion', 5);"><i class="icon-chevron-right"></i> Airport</a>
 					</li>
 				</ul>
 			</div>
@@ -242,7 +246,7 @@
 					<div id="itemEndTimeEditor" data-dojo-attach-point="itemEndTimeEditor" data-dojo-type="dojox/form/TimeSpinner" style="width:45%;" data-dojo-props="disabled:false, pattern: 'HH:mm', smallDelta: 60, largeDelta: 60" ></div>
 				</div>
 				<div class="dijitHidden" data-dojo-type="dijit/form/TextBox" data-dojo-id="hiddenLaborItemId" id="hiddenLaborItemId"> </div>
-				<div style="margin-top:10px; text-align:right">
+				<div style="margin-top:10px; text-align:left;">
 					<span style="text-align:left">
 						<button id="deleteItemButton" type="button"></button>
 					</span>
@@ -251,14 +255,10 @@
 						<button id="addItemButton" type="button"></button>
 					</span>
 				</div>
-				<div id="calendarEntryTitlePaneStandBy" data-dojo-id="calendarEntryTitlePaneStandBy" 
-						data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'calendarEntryTitlePane', color:'white'">
-				</div>
+				<div id="calendarEntryTitlePaneStandBy" data-dojo-id="calendarEntryTitlePaneStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'calendarEntryTitlePane', color:'white'"></div>
 			</div>
 			<div id="laborPaneInfo" data-dojo-type="dijit/TitlePane" data-dojo-props="title:'Summary', style:'width:100%;font-size:90%; height: 10%;', open:true">
-				<div data-dojo-type="dijit/layout/ContentPane">
-					<div id="laborPaneInfoContent"></div>
-				</div>
+				<div id="laborPaneInfoContent"></div>
 			</div>
 		</div>
 
@@ -414,23 +414,27 @@
 			<div id="managerPane" data-dojo-type="dijit/layout/ContentPane" title="Manager" data-dojo-props="selected:false" style="width: 99%; height: 99%">
 				<div id="mgrYearlyDetailsRegion" data-dojo-type="dijit/layout/ContentPane" style="display: none; width: 99%; height: 1%;" align="center">
 					<div id="mgrYearlyDetailsRegionContent" align="left">
-						<span style="text-align: left;"><a href="javascript: returnToManagerPane();"><i class="icon-chevron-left"></i><i class="icon-chevron-left"></i>&nbsp;&nbsp;Return</a></span>
-						<div align="center" style="padding: 2px;">
+						<div style="text-align: left; display: inline-block;"><!-- 
+							--><span style="text-align: left;">&nbsp;&nbsp;<i class="icon-chevron-left"></i><i class="icon-chevron-left"></i>&nbsp;&nbsp;<a href="javascript: returnToManagerPane();">Return</a></span></div><!-- 
+						--><div style="text-align: left; display: inline-block; padding-left: 5px;"><button id="yearButton" data-dojo-type="dijit/form/Button" data-dojo-props="'class':'danger', disabled:true" disabled></button></div><!-- 
+						 --><div style="text-align: right; display: inline-block; float: right; padding-right: 10px;"><button data-dojo-type="dijit/form/Button" data-dojo-props="'class':'primary'">Print</button></div><!-- 
+						  --><div align="center" style="display:block; padding: 2px;">
 							<table style="width: 99%; height: 99%;" class='dateTable' id="mgrYearlyReviewsQuarterTable">
 								<tr><th width="10%">Quarter #</th><th width="45%">Notes</th><th width="10%">Bonus</th><th width="35%">End Year Payout</th></tr>
 							</table>
 						</div>
 					</div>
+					<hr class="spacer">
 					<div id="mgrUnusedPersonalDaysDetailsDiv" align="center" style="display: none; height: 4%; vertical-align: bottom;">
 						<table style="width: 99%; height: 99%;" class='dateTable' id="mgrUnusedPersonalDaysDetailsTable"></table>
 					</div>
 				</div>
 				<div id="managerDetailsPane" style="display: block; width: 99%; height: 39%;" data-dojo-type="dijit/layout/ContentPane">
-						<div style="width: 18%; height: 99%; padding: 0px 2px 0px 2px !important; display: inline-block; vertical-align: middle;"><!--  
+						<div style="width: 15%; height: 99%; padding: 0px 2px 0px 2px !important; display: inline-block; vertical-align: middle;"><!--  
 						--><div id="mgrList" data-dojo-type="dijit/form/Select" style="display: block; width: 150px; height: 35px; vertical-align: top; padding-left: 10px;"></div><!--
-						--><div id="mgrPhotoPane" style="display: block; width: 100%; height: 100%;"><div style="display: block; text-decoration: underline; font-weight: bold;">Photograph</div><img id="managerPhoto" align="top" src='resources/images/no-photo.png' width="170px;" height="50%;"/></div><!-- 
+						--><div id="mgrPhotoPane" style="display: block; width: 100%; height: 100%;"><div style="display: block; text-decoration: underline; font-weight: bold;">Photograph</div><img id="managerPhoto" align="top" width="170px;" height="60%;"/></div><!-- 
 					 --></div><!-- 
-					 --><div id="managerPersonalInfo" style="width: 34%; height: 99%; display: inline-block; vertical-align: top;"><!-- 
+					 --><div id="managerPersonalInfo" style="width: 30%; height: 99%; display: inline-block; vertical-align: top; padding-left: 20px;"><!-- 
 						 --><div style="display: block; text-decoration: underline; font-weight: bold;">Manager Details</div><ul id="mgrPaneInfoUl" style="vertical-align: top; list-style: none; height: 80%;"></ul><!-- 
 					 --></div><!-- 
 					 --><div style="width: 35%; height: 99%; padding: 0px 2px 0px 2px !important; display: inline-block; vertical-align: top;"><!--
@@ -449,26 +453,28 @@
 						--><div style="display: block; text-decoration: underline; font-weight: bold; text-align: center;">Yearly</div><table id="mgrYearlyReviewsTable" class='storeInfoTable' align="center"></table><!--
 					--></div><!--
 				--></div>
+				<!-- <hr class="spacer"> -->
 				<div id="mgrDetailsTabContainer" data-dojo-id="mgrDetailsTabContainer" data-dojo-type="dijit/layout/TabContainer" data-dojo-props="tabPosition: 'top'" style="width:99%; height:59%;">
 					<div id="mgrLeavesTab" data-dojo-type="dijit/layout/ContentPane" class="nihilo" data-dojo-props="title:'Personal/Sick Days', style:'height:99%;width:99%;', selected:true">
-						<!-- <div style="display: block;" align="center"><u>Personal / Sick Days</u></div> -->
 						<div id="mgrLeavesGrid" style="width: 99%; height: 98%;"></div>
 					</div>
 					<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'Add/Edit Review', style:'height:99%;width:99%;', selected:false">
 						<div data-dojo-type="dijit/form/Form" id="quarterlyReviewForm" data-dojo-id="quarterlyReviewForm" encType="multipart/form-data">
-							<div id="mgrReviewFormDiv" align="left" style="font-weight: normal; width: 60%; font-style: normal; padding-left: 5px;">
-								<!-- <u style="font-weight: bolder; font-style: italic;">Quarterly Reviews</u> -->
+							<div id="mgrReviewFormDiv" align="left" style="font-weight: normal; width: 50%; font-style: normal; padding-left: 5px;">
 								<div style="padding-top: 5px; width: 100%" align="center">
-									<table class="dataTable" style="width: 100%" align="center">
+									<table class="dateTable" style="width: 100%" align="center">
 										<tr>
-											<td style="width: 40%; text-align: left" class="noBorder" align="left">
-												<span style="position: relative; padding-left: 1px;">
-													<label for="quartersList" style="font-weight: bold; font-size: 90%">Choose Quarter:&nbsp;&nbsp;</label><div id="quartersList"></div>
-												</span>
+											<th style="width: 33%;">Choose Quarter</th>
+											<th style="width: 34%;" class="noBorder"></th>
+											<th style="width: 33%;">Possible Bonus</th>
+										</tr>
+										<tr>
+											<td style="width: 33%;" class="noBorder">
+												<div id="quartersList" style="width: 100%;"></div>
 											</td>
-											<td style="width: 59%; padding: 2px; text-align: right;" align="right" class="noBorder">
-												<label for="possibleBonus" style="font-weight: bold; font-size: 90%">Possible Quarterly Bonus: </label>
-												<input style="width: 90px;" type="text" name="possibleBonus" id="possibleBonus" value="0" required="true" data-dojo-type="dijit/form/CurrencyTextBox" 
+											<td style="width: 34%;" class="noBorder"></td>
+											<td style="width: 33%;">
+												<input style="width: 100%;" type="text" name="possibleBonus" id="possibleBonus" value="0" required="true" data-dojo-type="dijit/form/CurrencyTextBox" 
 													data-dojo-props="constraints:{fractional:false}, currency:'USD', invalidMessage:'Invalid Amount.'" />
 											</td>
 										</tr>
@@ -534,73 +540,50 @@
 				<div id="mgrYearlyReviewsStandBy" data-dojo-id="mgrYearlyReviewsStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'mgrYearlyReviews', color:'white'"></div>
 			
 			</div>
-			<div id="employeePane" data-dojo-type="dijit/layout/ContentPane" title="Employees" data-dojo-props="selected:false" style="width: 100%; height: 100%">
-					<div id="employeesGridContentPane" data-dojo-type="dijit/layout/ContentPane" style="margin:2px;width:99%;height:50%; vertical-align:top;">
-						<div id="employeesGrid" align="center"
-							style="margin:2px;width:99%;height:99%; vertical-align:top;">
-						</div>
+			<div id="employeePane" data-dojo-type="dijit/layout/ContentPane" title="Employees" data-dojo-props="selected:false" style="width: 99%; height: 99%">
+				<div id="employeesGridContentPane" data-dojo-type="dijit/layout/ContentPane" class="nihilo" style="width:99%;height:49%; vertical-align:top;">
+					<div id="employeesGrid" align="center" class="nihilo" style="margin:2px;width:99%;height:99%; vertical-align:top;"></div>
+				</div>
+				<div id="employeeInfoTabContainer" data-dojo-id="employeeInfoTabContainer" data-dojo-type="dijit/layout/TabContainer" data-dojo-props="tabPosition: 'top'" style="width:100%;height:49%;vertical-align:bottom;">
+					<div id="empSalaryDetails" data-dojo-type="dijit/layout/ContentPane" class="nihilo" data-dojo-props="title:'Salary Particulars', style:'margin-top:1px;height:99%;width:100%;vertical-align:top;'">
+						<div id="employeeSalaryDetailsGrid" class="nihilo" align="center" style="height:98%;margin:2px; width:99%;"></div>
 					</div>
-					<div id="employeesGridStandBy" data-dojo-id="employeesGridStandBy" 
-									data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'employeesGridContentPane', color:'white'">
+					<div id="empDisciplineDetails" data-dojo-type="dijit/layout/ContentPane" class="nihilo" data-dojo-props="title:'Performance', style:'margin-top:1px;height:100%;width:100%;'">
+						<table style="width: 100%;height: 100%" class="bordered">
+							<tr>
+								<th>Disciplinary Details&nbsp;<img align='top' src='resources/images/add-icon.png' onclick='javascript: addEmployeeDisciplineTabRecord(event);'/>&nbsp;</th>
+								<th>Doing Good Section&nbsp;<img align='top' src='resources/images/add-icon.png' onclick='javascript: addEmployeeDoingGoodTabRecord(event);'/>&nbsp;</th>
+							</tr>
+							<tr style="height: 100%">
+								<td style="width: 50%;height: 100%">
+									<div id="employeeDisciplineGrid" class="nihilo" align="left" style="height:99%;margin:2px; width:100%;vertical-align:top;"></div>
+								</td>
+								<td style="width: 50%;height: 100%">
+									<div id="employeeDoingGoodGrid" class="nihilo" align="right" style="height:99%;margin:2px; width:100%;vertical-align:top;"></div>
+								</td>
+							</tr>
+						</table>
 					</div>
-					<div id="employeeInfoTabContainer" data-dojo-id="employeeInfoTabContainer" data-dojo-type="dijit/layout/TabContainer" 
-						data-dojo-props="tabPosition: 'top'" style="margin:2px;font-style: italic; width:100%;height:49%;vertical-align:bottom;">
-						<div id="empSalaryDetails" data-dojo-type="dijit/layout/ContentPane"
-								data-dojo-props="title:'Salary Particulars', style:'margin-top:1px;height:99%;width:100%;vertical-align:top;'">
-							<div id="employeeSalaryDetailsGrid" align="center"
-							style="height:98%;margin:2px; width:99%;"></div>
-							<div id="employeeSalaryDetailsGridStandBy" data-dojo-id="employeeSalaryDetailsGridStandBy" 
-									data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'employeeSalaryDetailsGrid', color:'white'">
-							</div>
-						</div>
-						<div id="empDisciplineDetails" data-dojo-type="dijit/layout/ContentPane"
-								data-dojo-props="title:'Discipline Details', style:'margin-top:1px;height:100%;width:100%;'">
-							<table style="width: 100%;height: 100%" class="bordered">
-								<tr>
-									<td>Disciplinary Details&nbsp;<img align='top' src='resources/images/add-icon.png' onclick='javascript: addEmployeeDisciplineTabRecord(event);'/>&nbsp;</td>
-									<td>Doing Good Section&nbsp;<img align='top' src='resources/images/add-icon.png' onclick='javascript: addEmployeeDoingGoodTabRecord(event);'/>&nbsp;</td>
-								</tr>
-								<tr style="height: 100%">
-									<td style="width: 50%;height: 100%">
-										<div id="employeeDisciplineGrid" align="left"
-											style="height:99%;margin:2px; width:100%;vertical-align:top;">
-										</div>
-										<div id="employeeDisciplineGridStandBy" data-dojo-id="employeeDisciplineGridStandBy" 
-											data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'employeeDisciplineGrid', color:'white'">
-										</div>
-									</td>
-									<td style="width: 50%;height: 100%">
-										<div id="employeeDoingGoodGrid" align="right"
-											style="height:99%;margin:2px; width:100%;vertical-align:top;">
-										</div>
-										<div id="employeeDoingGoodGridStandBy" data-dojo-id="employeeDoingGoodGridStandBy" 
-											data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'employeeDoingGoodGrid', color:'white'">
-										</div>
-									</td>
-								</tr>
-							</table>
-						</div>
-						<div id="empLeavesDetails" data-dojo-type="dijit/layout/ContentPane"
-								data-dojo-props="title:'Missed Shifts', style:'margin-top:1px;height:99%;width:100%;'">
-							<div id="employeeLeavesGrid" align="center"
-								style="height:98%;margin:2px; width:99%;vertical-align:top;"></div>
-							<div id="employeeLeavesGridStandBy" data-dojo-id="employeeLeavesGridStandBy" 
-								data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'employeeLeavesGrid', color:'white'">
-							</div>
-						</div>
-						<div id="empLaborDetails" data-dojo-type="dijit/layout/ContentPane"
-								data-dojo-props="title:'Labor Entry', style:'margin-top:1px;height:99%;width:100%;'">
-							<div id="empLaborDetailsGrid" align="center"
-								style="height:98%;margin:2px; width:99%;vertical-align:top;"></div>
-							<div id="empLaborDetailsGridStandBy" data-dojo-id="empLaborDetailsGridStandBy" 
-								data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'empLaborDetailsGrid', color:'white'">
-							</div>
-						</div>
+					<div id="empLeavesDetails" data-dojo-type="dijit/layout/ContentPane" class="nihilo" data-dojo-props="title:'Missed Shifts', style:'margin-top:1px;height:99%;width:100%;'">
+						<div id="employeeLeavesGrid" class="nihilo" align="center" style="height:98%;margin:2px; width:99%;vertical-align:top;"></div>
+					</div>
+					<div id="empLaborDetails" data-dojo-type="dijit/layout/ContentPane" class="nihilo" data-dojo-props="title:'Labor Entry', style:'margin-top:1px;height:99%;width:100%;'">
+						<div id="empLaborDetailsGrid" class="nihilo" align="center" style="height:98%;margin:2px; width:99%;vertical-align:top;"></div>
 					</div>
 				</div>
-			<div id="laborPane" data-dojo-type="dijit/layout/ContentPane" title="Current Schedule" data-dojo-props="selected: false, style:'width:99%; height:99%;'">
-					<div id="labor-calendar" class="claro" data-dojo-type="dojox/calendar/Calendar" data-dojo-props="style: 'position:relative;width:100%;height:99%;'"></div>
+				<div id="employeesGridStandBy" data-dojo-id="employeesGridStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'employeesGridContentPane', color:'white'"></div>
+				<div id="employeeSalaryDetailsGridStandBy" data-dojo-id="employeeSalaryDetailsGridStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'employeeSalaryDetailsGrid', color:'white'"></div>
+				<div id="employeeDisciplineGridStandBy" data-dojo-id="employeeDisciplineGridStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'employeeDisciplineGrid', color:'white'"></div>
+				<div id="employeeDoingGoodGridStandBy" data-dojo-id="employeeDoingGoodGridStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'employeeDoingGoodGrid', color:'white'"></div>
+				<div id="employeeLeavesGridStandBy" data-dojo-id="employeeLeavesGridStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'employeeLeavesGrid', color:'white'"></div>
+				<div id="empLaborDetailsGridStandBy" data-dojo-id="empLaborDetailsGridStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'empLaborDetailsGrid', color:'white'"></div>
+			</div>
+			<div id="laborPane" class="claro" data-dojo-type="dijit/layout/ContentPane" title="Current Schedule" data-dojo-props="selected: false, style:'width:99%; height:99%;'" style="font-size: 90% !important;">
+				<div id="calendarSummaryDetails" style="display: inline-block; height: 4%; width: 80%; font-size: 95% !important;"></div><div id="noPrint1" style="vertical-align: top; font-weight: bold; display: inline-block; padding-left: 5px;" align="left"><a href="javascript: refreshCalendarForSelectedWeek();">Refresh</a>&nbsp;&nbsp;<a href="javascript: printCalendar();">Print</a></div>
+				<div data-dojo-type="dijit/layout/ContentPane" style="width:99%; height:94%; font-size: inherit;" class="claro">
+					<div id="labor-calendar" class="claro" data-dojo-type="dojox/calendar/Calendar" data-dojo-props="style: 'position:relative; width:99%; height:99%;'" style="font-size: inherit;"></div>
 				</div>
+			</div>
 			<div id="accountingPane" data-dojo-type="dijit/layout/ContentPane" title="Accounting" data-dojo-props="selected:false" style="width: 99%; height: 99%">
 					<div id="accountingDetailsRegion" data-dojo-type="dijit/layout/ContentPane" style="width: 99%; height: 100%; border: .1em solid #ddd;" align="center">
 						<div data-dojo-type="dijit/layout/ContentPane" style="width: 99%; height: 54%; border: .1em solid #ddd;" align="center">
@@ -613,7 +596,7 @@
 													<td style="width: 65%; vertical-align: top;" valign="top" class="noBorder">
 														<form data-dojo-type="dijit/form/Form" data-dojo-id="accountingEntriesForm" id="accountingEntriesForm">
 															<table style="width: 100%; height: 50%; vertical-align: top;" class="accountingTable">
-																<tr style="height: 5%;" valign="top"><td colspan="3" align="left">Select Month:&nbsp;&nbsp;&nbsp;<span id="accountingQuartersList"></span></td></tr>
+																<tr style="height: 10%;" valign="top"><td colspan="3" align="left">Select Month:&nbsp;&nbsp;&nbsp;<span id="accountingQuartersList"></span></td></tr>
 																<tr style="height: 5%;" valign="top">
 																	<th style="width: 33%;">Distribution</th>
 																	<th style="width: 34%;">Amount</th>

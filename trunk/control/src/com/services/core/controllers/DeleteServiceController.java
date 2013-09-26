@@ -66,5 +66,15 @@ public class DeleteServiceController {
 		query.setParameter("id", id);
 		return new SingleModelResponse<BaseModel>(query.executeUpdate() == 1, null);
 	}
+	
+	@Transactional
+	@RequestMapping(value = "/service/delete/employee/leaves/{id}", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public SingleModelResponse<BaseModel> deleteManagerLeaves(@PathVariable int id) {
+		String hql = "delete from EmployeeLeaves where id=:id";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setParameter("id", id);
+		return new SingleModelResponse<BaseModel>(query.executeUpdate() == 1, null);
+	}
 
 }
