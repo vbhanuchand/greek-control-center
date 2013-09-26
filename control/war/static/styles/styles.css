@@ -51,19 +51,19 @@ html, body {
 	transition: all 0.1s ease-in-out; */
 }
 
-.bordered td, .bordered th {
-	border-left: 1px solid #ccc;
-	border-top: 1px solid #ccc;
-	padding: 10px;
-	cursor: pointer;
-}
-
 .bordered td {
 	text-align: left;
 }
 
-.bordered th {
+/* .bordered th {
 	text-align: center;
+	padding: 5px;
+	cursor: pointer;
+} */
+
+.bordered td, .bordered th {
+	border-left: 1px solid #ccc;
+	border-top: 1px solid #ccc;
 }
 
 .bordered th {
@@ -80,6 +80,10 @@ html, body {
 	box-shadow: 0 1px 0 rgba(255, 255, 255, .8) inset;
 	border-top: none;
 	text-shadow: 0 1px 0 rgba(255, 255, 255, .5);
+	text-align: center;
+	font-weight: bold;
+	padding: 5px;
+	cursor: pointer;
 }
 
 .bordered tr.active {
@@ -288,17 +292,20 @@ html, body {
 
 
 #manager {
-	color: #004400;
+	color: #ffffff;
+	background-color: #004400;
 	font-weight: bold;
 }
 
 #cook {
-	color: #440000;
+	color: #ffffff;
+	background-color: #440000;
 	font-weight: bold;
 }
 
 #front {
-	color: #000044;
+	color: #ffffff;
+	background-color: #000044;
 	font-weight: bold;
 }
 
@@ -541,23 +548,23 @@ table.accountingTable th.noBorder{
 
 
 
-/* Labor Table Styles*/
+/* Labor Header (Summary) Table Styles*/
 
 table.laborTable {
 	font-family: inherit;
 	font-size: inherit;
 	color: inherit;
 	border-width: 1px;
-	border-color: #ddd;
+	border-color: #eee;
 	border-collapse: separate;
-	border-spacing: 4px;
+	border-spacing: 1px;
 }
 
 table.laborTable td {
 	border-width: 1px;
-	padding: 2px;
+	padding: 1px;
 	border-style: solid;
-	border-color: #ddd;
+	border-color: #eee;
 	background-color: #ffffff;
 	text-align:left;
 }
@@ -565,9 +572,8 @@ table.laborTable td {
 table.laborTable td.laborDateTd{
 	font-weight: bolder;
 	font-size: 100%;
-	font-style: italic;
 	color: grey;
-	border-width: 2px;
+	border-width: 0.1em;
 	border-style: solid;
 	border-color: #000;
 	background-color: #fff;
@@ -578,9 +584,8 @@ table.laborTable td.laborDateTd{
 table.laborTable td.laborMgrTd{
 	font-weight: bold;
 	font-size: 95%;
-	font-style: italic;
 	color: #eee;
-	border-width: 1px;
+	border-width: 0.1em;
 	border-style: solid;
 	border-color: inherit;
 	background-color: #0000AA;
@@ -591,9 +596,8 @@ table.laborTable td.laborMgrTd{
 table.laborTable td.laborFrontTd{
 	font-weight: bold;
 	font-size: 95%;
-	font-style: italic;
 	color: #eee;
-	border-width: 1px;
+	border-width: 0.1em;
 	border-style: solid;
 	border-color: inherit;
 	background-color: #00AA00;
@@ -604,9 +608,8 @@ table.laborTable td.laborFrontTd{
 table.laborTable td.laborCookTd{
 	font-weight: bold;
 	font-size: 95%;
-	font-style: italic;
 	color: #eee;
-	border-width: 1px;
+	border-width: 0.1em;
 	border-style: solid;
 	border-color: inherit;
 	background-color: #AA0000;
@@ -614,32 +617,34 @@ table.laborTable td.laborCookTd{
 	padding-right: 8px;
 }
 
-/* Labor Table Styles End here*/
+/* Labor Header (Summary) Table End here*/
 
-table.bordered td.Manager{
-	color: #0000FF;
+.Manager{
+	color: #ffffff;
+	background-color: #0000FF;
 	text-align: left;
 	font-weight: normal;
 	font-style: italic;
 }
 
-table.bordered td.Front{
-	color: #00FF00;
+.Front{
+	color: #ffffff;
+	background-color: #00ff00;
 	text-align: left;
 	font-weight: normal;
 	font-style: italic;
 }
 
-table.bordered td.Cook{
-	color: #FF0000;
+.Cook{
+	color: #ffffff;
+	background-color: #ff0000;
 	text-align: left;
 	font-weight: normal;
 	font-style: italic;
 }
-table.bordered td.itemTime{
+.itemTime{
 	text-align: center;
 	font-weight: normal;
-	font-style: italic;
 }
 
 .dijitCalendar .Highlighted {

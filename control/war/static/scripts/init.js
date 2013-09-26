@@ -90,7 +90,7 @@ require(["bootstrap", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/dijit", 
 					case 'laborPane':
 						if(domStyle.get(dom.byId('employeePaneInfo'), 'display') != 'none')
 							otherFx.wipeOut({node: dom.byId('employeePaneInfo'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
-						laborLayout.resetToCurrentWeek(false);
+						laborLayout.resetToCurrentWeek(true);
 						if(domStyle.get(dom.byId('calendarEntryTitlePane'), 'display') == 'none')
 							otherFx.wipeIn({node: dom.byId('calendarEntryTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "block"});}}).play();
 						break;
@@ -327,9 +327,15 @@ require(["bootstrap", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/dijit", 
 			var empSelectWidget = new formSelect({style: {width: '75%'}}, dom.byId('itemSummaryEditor'));
 			empSelectWidget.startup();
 			empSelectWidget.on('change', function(){
+				//registry.byId('addItemButton').set('disabled', false);
+				//registry.byId('updateItemButton').set('disabled', true);
+				//registry.byId('deleteItemButton').set('disabled', true);
 				registry.byId('addItemButton').set('disabled', false);
+				registry.byId('addItemButton').domNode.style.display = 'inline-block';
 				registry.byId('updateItemButton').set('disabled', true);
+				registry.byId('updateItemButton').domNode.style.display = 'none';
 				registry.byId('deleteItemButton').set('disabled', true);
+				registry.byId('deleteItemButton').domNode.style.display = 'none';
 			});
 			
 			
@@ -503,9 +509,15 @@ require(["bootstrap", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/dijit", 
 			
 			
 			
-			addItemButton.set('disabled', false);
-			updateItemButton.set('disabled', true);
-			deleteItemButton.set('disabled', true);
+			//addItemButton.set('disabled', false);
+			//updateItemButton.set('disabled', true);
+			//deleteItemButton.set('disabled', true);
+			registry.byId('addItemButton').set('disabled', false);
+			registry.byId('addItemButton').domNode.style.display = 'inline-block';
+			registry.byId('updateItemButton').set('disabled', true);
+			registry.byId('updateItemButton').domNode.style.display = 'none';
+			registry.byId('deleteItemButton').set('disabled', true);
+			registry.byId('deleteItemButton').domNode.style.display = 'none';
 			
 			var quartersStore = new Memory({data: [{id: 0, name:"--Select--", label:"--Select--"},
 			                                       {id: 1, name:"Quarter 1", label:"Quarter 1"}, 
@@ -519,8 +531,7 @@ require(["bootstrap", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/dijit", 
 	             store: quartersStore,
 	             searchAttr: "name",
 	             name: "quartersList",
-	             labelAttr: "label",
-	             style: "width: 150px;"
+	             labelAttr: "label"
 	       }, dom.byId("quartersList"));
 		
 			quartersList.on('change', function(newValue){

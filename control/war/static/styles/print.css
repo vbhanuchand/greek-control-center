@@ -16,3 +16,11 @@ a {
 	width: 100%;
 	height: 100%;
 }
+
+.dijitCheckBox{
+	display: none;
+}
+
+#noPrint1 {
+	display: none;
+}

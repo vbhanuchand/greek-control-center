@@ -809,6 +809,7 @@ function deleteItem(src, blobSrc, id){
 	var json = require('dojo/json');
 	var dom = require('dojo/dom');
 	var storeLayout = require('controls/StoreLayoutController');
+	var empLayout = require('controls/EmployeeLayoutController');
 	console.log('Deleting ', src, blobSrc, id);
 	switch(src){
 		case 'date':
@@ -835,6 +836,18 @@ function deleteItem(src, blobSrc, id){
 			    		}
 			    	}, function(error){
 			    		registry.byId('storeInfoLeaseDocumentsStandBy').hide();
+			    	});
+				break;
+				case 'mgrContract':
+					registry.byId('mgrContractStandBy').show();
+					ajaxRequest.get("/service/delete/blob/" + id + '/mgrContract',{
+			    		handleAs: 'json'
+			    	}).then(function(deleteResponse){
+			    		if(deleteResponse.success){
+			    			empLayout.fetchManagerContractBlobs(registry.byId('mgrList').get('value'));
+			    		}
+			    	}, function(error){
+			    		registry.byId('mgrContractStandBy').hide();
 			    	});
 				break;
 			}
@@ -867,6 +880,20 @@ function deleteItem(src, blobSrc, id){
 	    		registry.byId(standByNode).hide();
 	    	});
 			break;
+		case 'mgr-leaves':
+			var standByNode = 'mgrLeavesGridStandBy', url = '/service/delete/employee/leaves/' + id;
+			url = "/service/delete/employee/leaves/" + id;
+			registry.byId(standByNode).show();
+			ajaxRequest.get(url,{
+	    		handleAs: 'json'
+	    	}).then(function(deleteResponse){
+	    		if(deleteResponse.success){
+	    			empLayout.fetchMgrLeavesData(registry.byId('mgrList').get('value'));
+	    		}
+	    	}, function(error){
+	    		registry.byId(standByNode).hide();
+	    	});
+			break;
 		default:
 			break;
 	
@@ -878,28 +905,84 @@ function callManageUsers(){
 }
 function printInvoiceDetails(divId, title){
 	var dom = require('dojo/dom');
-	var innerHTML = dom.byId(divId).innerHTML;
+	var registry = require('dijit/registry');
+	registry.byId(divId).layout.setColumnVisibility(0,false);
+	var innerHTML = '<div style="display: block;" class="soria">' + dom.byId(divId).innerHTML + '</div>';
+	registry.byId(divId).layout.setColumnVisibility(0,true);
 	var html = '';
     html += '<html lang="en-us">';
-    html += '<head>' + '<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/resources/dojo.css" />';
+    html += '<head>';
+    html += '<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/resources/dojo.css" />';
     html += '<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/enhanced/resources/EnhancedGrid_rtl.css" />';
+    
     html += '<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dijit/themes/soria/soria.css">';
     html += '<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/resources/soriaGrid.css" />';
-    html += '<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/resources/claroGrid.css" />';
+    /*html += '<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/resources/claroGrid.css" />';
     html += '<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/enhanced/resources/claro/EnhancedGrid.css" />';
     html += '<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/calendar/themes/claro/Calendar.css" />';
-    html += '<link rel="stylesheet" href="resources/styles/styles.css"/>' + '</head>';
+    */
+    html += '<link rel="stylesheet" type="text/css" href="resources/themes/bootstrap/theme/dbootstrap/dbootstrap.css"/>';
+    html += '<link rel="stylesheet" type="text/css" href="resources/themes/bootstrap/theme/dbootstrap/dijit.css"/>';
+    html += '<link rel="stylesheet" href="resources/styles/styles.css"/>'; 
+    html += '<link rel="stylesheet" href="resources/styles/print.css"/>';
+    html += '</head>';
     
-    html += "<body class='soria' style='width: 100%; height: 100%;color: #000000; background: #ffffff; font-family: \"Times New Roman\", Times, serif; font-size: 12pt;'>";
+    html += "<body class='dbootstrap' style='width: 100%; height: 100%;color: #000000; background: #ffffff; font-family: \"Times New Roman\", Times, serif; font-size: 12pt;'>";
     var strTitle = dom.byId(title).innerHTML + '';
     var titleToPrint = strTitle.substr(1, strTitle.length - 2);
-    html += '<div align="center"><h2>' + titleToPrint.toUpperCase() + ' INVOICE </h2></div>';
+    html += '<div style="display: block;" align="center"><h4>' + titleToPrint.toUpperCase() + ' INVOICE </h4></div>';
+    html += '<br/><br/>';
     innerHTML += '<br/><br/>';
     innerHTML += '<div align="left" style="position: absolute; bottom: 20px; left: 10px;"><table style="width: 100%;" class="dateTable"><tr><th style="width: 25%;">Manager Signature</th><th style="width: 30%;" class="noBorder"></th><th style="width: 20%;">GS CHARGES</th><th style="width: 20%;">TOTAL CHARGES</th></tr>';
     innerHTML += '<tr><td style="width: 25%;"></td><td style="width: 30%;" class="noBorder"></td><td style="width: 20%;">&nbsp;&nbsp;$84.30</td><td style="width: 20%;">&nbsp;&nbsp;$843.00</td></tr>';
     innerHTML += '</table></div>';
     html += innerHTML;
 	html += "</body>";
+	html += "</html>";
+	
+	var w = window.open("about:blank");
+	w.document.write(html);
+	w.document.close();
+	w.print(); 
+}
+
+function refreshCalendarForSelectedWeek(){
+	var laborLayout = require('controls/LaborLayoutController');
+	var registry = require('dijit/registry');
+	if(globalYearWeekForRefresh && (globalYearWeekForRefresh.length > 0))
+		laborLayout.populateData(registry.byId('hiddenStoreId').get('value'), globalYearWeekForRefresh);
+}
+
+function printCalendar(){
+	var dom = require('dojo/dom');
+	var registry = require('dijit/registry');
+	dom.byId('noPrint1').style.display = 'none';
+	dom.byId('calendarSummaryDetails').style.width = '99%';
+	var innerHTML = '<div style="display: block; font-size: 90% !important;" class="claro">' + dom.byId('laborPane').innerHTML + '</div>';
+	dom.byId('noPrint1').style.display = 'inline-block';
+	dom.byId('calendarSummaryDetails').style.width = '80%';
+	var html = '';
+    html += '<html lang="en-us">';
+    html += '<head>';
+    html += '<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/resources/dojo.css" />';
+    html += '<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dijit/themes/claro/claro.css">';
+    html += '<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/calendar/themes/claro/Calendar.css" />';
+    html += '<link rel="stylesheet" type="text/css" href="resources/themes/bootstrap/theme/dbootstrap/dbootstrap.css"/>';
+    html += '<link rel="stylesheet" type="text/css" href="resources/themes/bootstrap/theme/dbootstrap/dijit.css"/>';
+    html += '<link rel="stylesheet" href="resources/styles/styles.css"/>'; 
+    html += '<link rel="stylesheet" href="resources/styles/print.css"/>';
+    html += '</head>';
+    
+    html += "<body class='dbootstrap' style='width: 100%; height: 100%; color: #000000; background: #ffffff; font-family: \"Times New Roman\", Times, serif; font-size: 12pt;'>";
+    html += '<div style="display: block;" align="center"><h4>' + ' Schedule' + '</h4></div>';
+    //html += '<br/><br/>';
+    //innerHTML += '<br/><br/>';
+    //innerHTML += '<div align="left" style="position: absolute; bottom: 20px; left: 10px;"><table style="width: 100%;" class="dateTable"><tr><th style="width: 25%;">Manager Signature</th><th style="width: 30%;" class="noBorder"></th><th style="width: 20%;">GS CHARGES</th><th style="width: 20%;">TOTAL CHARGES</th></tr>';
+    //innerHTML += '<tr><td style="width: 25%;"></td><td style="width: 30%;" class="noBorder"></td><td style="width: 20%;">&nbsp;&nbsp;$84.30</td><td style="width: 20%;">&nbsp;&nbsp;$843.00</td></tr>';
+    //innerHTML += '</table></div>';
+    html += innerHTML;
+	html += "</body>";
+	html += "</html>";
 	
 	var w = window.open("about:blank");
 	w.document.write(html);

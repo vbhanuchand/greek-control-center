@@ -14,8 +14,10 @@ define(["dijit/dijit", "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/fx", "do
     			var calendar = registry.byId('labor-calendar');
     			registry.byId('labor-calendar').set('date', registry.byId('itemStartDateEditor').get('value'));
     			calendar.set('store', new Observable(new Memory({data: []})));
-    			registry.byId('labor-calendar').buttonContainer.innerHTML = 'Data Not Available !!!';
-    			dojo.byId('laborPaneInfoContent').innerHTML = 'Data Not Available !!!';
+    			//registry.byId('labor-calendar').buttonContainer.innerHTML = 'Data Not Available !!!';
+    			registry.byId('labor-calendar').buttonContainer.style.display = 'none';
+    			dom.byId('calendarSummaryDetails').innerHTML = 'Data Not Available !!!';
+    			dojo.byId('laborPaneInfoContent').innerHTML = 'No Data !!!';
     			//calendar.set('startDate', registry.byId('itemStartTimeEditor').get('value'));
             	//calendar.set('endDate', date.add(registry.byId('itemStartTimeEditor').get('value'), 6, 'day'));
             	//calendar.set('dateInterval', 'week');
@@ -55,8 +57,10 @@ define(["dijit/dijit", "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/fx", "do
 				+ '<td class="laborDateTd">Total Hours (Manager Hrs not Included): ' + (totalsMap.totalFront + totalsMap.totalCook) + '</td>'
 				+ '</tr></table></div>';
 		
-		registry.byId('labor-calendar').buttonContainer.innerHTML = laborInfoTableHTML;
-		var employeeDetailsPaneContent = '<table class="bordered" style="width: 100%; height: 40%;"><tbody>';
+		//registry.byId('labor-calendar').buttonContainer.innerHTML = laborInfoTableHTML;
+		registry.byId('labor-calendar').buttonContainer.style.display = 'none';
+		dom.byId('calendarSummaryDetails').innerHTML = laborInfoTableHTML;
+		var employeeDetailsPaneContent = '<table style="width: 100%; height: 100%; border: .1em solid #ddd;"><tbody>';
 		for(var key in employeeHrsMap){
 			empHrsArray.push(employeeHrsMap[key]);
 		}
@@ -127,6 +131,7 @@ define(["dijit/dijit", "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/fx", "do
 		calendar.set('startDate', new Date(2013, 4, 19));
 		calendar.set('endDate', new Date(2013, 4, 25));
 		calendar.set('dateIntervalSteps', 1);
+		calendar.set('percentOverlap', 70);
 		
 		calendar.columnView.set('columnHeaderDatePattern', 'MMM dd (EEEE)');
 		calendar.columnView.set('rowHeaderTimePattern', '');
@@ -141,8 +146,11 @@ define(["dijit/dijit", "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/fx", "do
 		
 		calendar.on("itemClick", function(e){
 			registry.byId('addItemButton').set('disabled', true);
+			registry.byId('addItemButton').domNode.style.display = 'none';
 			registry.byId('updateItemButton').set('disabled', false);
+			registry.byId('updateItemButton').domNode.style.display = 'inline-block';
 			registry.byId('deleteItemButton').set('disabled', false);
+			registry.byId('deleteItemButton').domNode.style.display = 'inline-block';
 		});
 		
 		calendar.set('createOnGridClick', false);
@@ -187,8 +195,11 @@ define(["dijit/dijit", "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/fx", "do
 				}else resetInputControls();
 			}catch(e){resetInputControls();}
 			registry.byId('addItemButton').set('disabled', false);
+			registry.byId('addItemButton').domNode.style.display = 'inline-block';
 			registry.byId('updateItemButton').set('disabled', true);
+			registry.byId('updateItemButton').domNode.style.display = 'none';
 			registry.byId('deleteItemButton').set('disabled', true);
+			registry.byId('deleteItemButton').domNode.style.display = 'none';
 		});	
 	},
 	resetInputControls = function(){
@@ -204,6 +215,7 @@ define(["dijit/dijit", "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/fx", "do
 			initCalendar();
 			if(domStyle.get(dom.byId('calendarEntryTitlePane'), 'display') != 'none')
 				otherFx.wipeOut({node: dom.byId('calendarEntryTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+			registry.byId('labor-calendar').buttonContainer.style.display = 'none';
 			console.log('Labor Layout Controller Initialized ()');
         },
         resetToCurrentWeek: function(fetchData){
@@ -212,11 +224,15 @@ define(["dijit/dijit", "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/fx", "do
         	resetInputControls();
         	empLayout.populateEmployeesSelectWidget(registry.byId('hiddenStoreId').get('value'));
         	registry.byId('itemStartDateEditor').set('value', new Date());
-        	fetchData = fetchData || ((registry.byId('labor-calendar').buttonContainer.innerHTML + '').indexOf('dijit_Toolbar_') > 0);
-        	if(fetchData){
+        	//fetchData = fetchData || ((registry.byId('labor-calendar').buttonContainer.innerHTML + '').indexOf('dijit_Toolbar_') > 0);
+        	if(fetchData && !((laborPaneCalledFromStore) && (laborPaneCalledFromStore === true))){
         		var currentYear = locale.format(registry.byId('itemStartDateEditor').get('value'), {selector: 'date', datePattern: 'yyyy', locale: 'en'});
 	        	var currentWeek = locale.format(registry.byId('itemStartDateEditor').get('value'), {selector: 'date', datePattern: 'w', locale: 'en'});
 	        	fetchCalendarData(registry.byId('hiddenStoreId').get('value'), (currentYear + '-' + (Number(currentWeek) + 1)));
+	        	globalYearWeekForRefresh = currentYear + '-' + (Number(currentWeek) + 1);
+        	}
+        	if((laborPaneCalledFromStore) && (laborPaneCalledFromStore === true)){
+        		laborPaneCalledFromStore = false;
         	}
         	//if(domStyle.getComputedStyle(registry.byId('labor-calendar').buttonContainer))
         	//if((registry.byId('labor-calendar').buttonContainer.innerHTML + '').indexOf('dijit_Toolbar_0') > 0)

@@ -210,7 +210,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 		    },
 		    attachGridEvents = function(gridId){
 		    	registry.byId(gridId).on("CellClick", function(evt){
-		    		if(evt.cellIndex == 0){
+		    		if(((evt.grid.get('id') != 'mgrLeavesGrid') && (evt.cellIndex == 0)) || ((evt.grid.get('id') == 'mgrLeavesGrid') && (evt.cellIndex == 1))){
 		    			var standByWidgetId = evt.grid.get('id') + 'StandBy';
 		    			registry.byId(standByWidgetId).show();
 		    			var grid = evt.grid, serviceURL= evt.grid.getItem(evt.rowIndex)._self, addOrUpdate = evt.grid.getItem(evt.rowIndex).post;
@@ -316,10 +316,13 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 		    createAddUpdateLink = function(value, rowIndex){
 		    	if(value === '__new__')
 		    		return '<span style="text-align: center;"><a href="#">Add</a></span>';
-		    	else return '<span style="text-align: center;"><a href="#">Update</a></span>';
+		    	else return '<span style="text-align: center;"><a href="#">Save</a></span>';
+		    },
+		    createDeleteLink = function(id, rowIndex){
+		    	return '<span style="text-align: center;"><a href="javascript: deleteItem(\'mgr-leaves\', \'\', ' + id + ');">Delete</a></span>';
 		    },
 		    createShowDetailsLink = function(id){
-		    	return '<span style="text-align: center;"><a href="#">Show Details</a></span>';
+		    	return '<span style="text-align: center;"><a href="#">View</a></span>';
 		    },
 		    updateEmployeesGrid = function(employeesData){
 		    	var tempStore = {
@@ -333,37 +336,37 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 											store: gridDataStore,
 											query: { id: "*" },
 											structure: [{defaultCell: { width: "20%", type: dojox.grid.cells._Widget, styles: 'text-align: left;', noresize: true, editable: false },
-											            cells: [{ name: "Update", field: 'store', width: "5%", noresize: true, formatter: createAddUpdateLink},
-											            { name: "First Name", field: "fname", width: "8%", noresize: true, editable: true, 
+											            cells: [{ name: "Save", field: 'store', width: "4%", noresize: true, formatter: createAddUpdateLink, styles: 'text-align: center;'},
+											            { name: "First Name", field: "fname", width: "7%", noresize: true, editable: true, 
 											            	constraint:{required: true}, widgetProps: {maxLength: 25, promptMessage: 'First Name within 25 characters', 
 											            	missingMessage: 'Please provide First Name' }, widgetClass: ValidationTextBox},
-											            { name: "Last Name", field: "lname", width: "8%", noresize: true, editable: true, 
+											            { name: "Last Name", field: "lname", width: "7%", noresize: true, editable: true, 
 											            	constraint:{required: true}, widgetProps: {maxLength: 25, promptMessage: 'Last Name within 25 characters', 
 											            	missingMessage: 'Please provide Last Name' }, widgetClass: ValidationTextBox},
-											            { name: "Date Hired", field: "hiredDate", width: "7%", noresize: true, editable: true, 
+											            { name: "Date Hired", field: "hiredDate", width: "8%", noresize: true, editable: true, 
 											            	constraint:{required: true}, widgetProps: {validator: validateDatePattern, 
 											            	promptMessage: 'Provide date in MM/DD/YYYY', missingMessage: 'Please provide date in MM/DD/YYYY', 
-											            	invalidMessage: 'Date format should be in MM/DD/YYYY'}, widgetClass: ValidationTextBox },
+											            	invalidMessage: 'Date format should be in MM/DD/YYYY'}, widgetClass: ValidationTextBox, styles: 'text-align: center;' },
 											            { name: "Position", field: "position", width: "8%", editable: true, noresize: true, 
-											            	type: dojox.grid.cells.Select, options: ['Manager', 'Front','Cook']},
+											            	type: dojox.grid.cells.Select, options: ['Manager', 'Front','Cook'], styles: 'text-align: center;'},
 											            { name: "Work Cell", field: "phone", width: "9%", noresize: true, editable: true, hidden: false, 
 												            constraint:{required: true}, widgetProps: {maxLength: 20, promptMessage: 'Work Cell within 20 characters', 
 												            missingMessage: 'Please provide Work Cell' }, widgetClass: ValidationTextBox},
-												        { name: "Personal", field: "personalPhone", width: "10%", noresize: true, editable: true, hidden: false, 
+												        { name: "Personal", field: "personalPhone", width: "9%", noresize: true, editable: true, hidden: false, 
 												            constraint:{required: true}, widgetProps: {maxLength: 20, promptMessage: 'Personal Number within 20 characters', 
 													        missingMessage: 'Please provide Personal Number' }, widgetClass: ValidationTextBox},
-													    { name: "Emergency Contact", field: "emergencyContact", width: "12%", noresize: true, editable: true, hidden: false, 
+													    { name: "Emergency Contact", field: "emergencyContact", width: "13%", noresize: true, editable: true, hidden: false, 
 													        constraint:{required: true}, widgetProps: {maxLength: 30, promptMessage: 'Emergency Contact Details within 30 characters', 
 														    missingMessage: 'Please provide Emergency Contact Details' }, widgetClass: ValidationTextBox},
-														{ name: "Address", field: "address", width: "13%", noresize: true, editable: true, hidden: false, 
+														{ name: "Address", field: "address", width: "14%", noresize: true, editable: true, hidden: false, 
 													            constraint:{required: true}, widgetProps: {maxLength: 40, promptMessage: 'Home Address within 40 characters', 
 														        missingMessage: 'Please provide Home Address' }, widgetClass: ValidationTextBox},
 											            { name: "Username", field: "username", width: "7%", noresize: true, editable: true, hidden: false, 
 											            	constraint:{required: false}, widgetProps: {maxLength: 20, promptMessage: 'Username within 20 characters', 
 											            	missingMessage: 'Please provide Username' }, widgetClass: ValidationTextBox},
-											            { name: "Details", field: 'id', width: "8%", noresize: true, formatter: createShowDetailsLink},
+											            { name: "Details", field: 'id', width: "5%", noresize: true, formatter: createShowDetailsLink, styles: 'text-align: center;'},
 											            { name: "Active", field: 'active', width: "4%", noresize: true, type: dojox.grid.cells.Bool, editable: true},
-											            { name: "Store", field: "storeId", width: "1%", editable: true, noresize: true, hidden: true}]}],
+											            { name: "Store", field: "storeId", width: "0%", editable: true, noresize: true, hidden: true}]}],
 											singleClickEdit: true,
 											editable: true,
 											selectable: true,
@@ -625,7 +628,8 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 											store: gridDataStore,
 											query: { id: "*" },
 											structure: [{defaultCell: { width: "20%", type: dojox.grid.cells._Widget, styles: 'text-align: left;', noresize: true, editable: false },
-											           cells: [{ name: "Update", field: "store", width: "15%", noresize: true, formatter: createAddUpdateLink},
+											           cells: [{ name: "Delete", field: 'id', width: "7%", noresize: true, formatter: createDeleteLink, styles: 'text-align: center;'},
+											                   { name: "Update", field: "store", width: "7%", noresize: true, formatter: createAddUpdateLink, styles: 'text-align: center;'},
 														{ name: "Date", field: "date", width: "35%", noresize: true, editable: true, 
 											        	   constraint:{required: true}, widgetProps: {validator: validateDatePattern, 
 											        		   promptMessage: 'Provide date in MM/DD/YYYY', missingMessage: 'Please provide date in MM/DD/YYYY', 
@@ -1053,7 +1057,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 			    				storeItem = {};
 			    				storeItem.id = (item.id+'');
 			    				storeItem.value = (item.id+'');
-			    				storeItem.label = item.fname + ' (' + item.position + ')';
+			    				storeItem.label = item.fname + ' (' + item.position + ') --> ' + (item.active ? 'Active': 'Inactive');
 			    				array.push(lang.mixin(storeItem, item));
 			    			});
 			    			var store = new Memory({idProperty: "id", data:array});
@@ -1126,9 +1130,9 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 	                }, fragment);
 					domConstruct.place(fragment, mgrPaneDetailsNode);*/
 		       },
-		       fetchManagerContractBlobs: function(storeId){
+		       fetchManagerContractBlobs: function(mgrId){
 			    	registry.byId('mgrContractStandBy').show();
-			    	ajaxRequest.get("/service/blobs/mgrContract/" + storeId,{
+			    	ajaxRequest.get("/service/blobs/mgrContract/" + mgrId,{
 			    		handleAs: 'json'
 			    	}).then(function(blobsResponse){
 			    		var uploadFilesNode = dom.byId('mgrContractExisting');
@@ -1141,7 +1145,10 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 			    				+ '<a target="_new" href="/service/getBlob/' + blob.blobKey + '">' 
 			    				//+ ((blob.fileName.length > 20) ? (blob.fileName.substr(0, 20)+'...') : blob.fileName) 
 			    				+  blob.fileName 
-			    				+ '</a>';
+			    				+ '</a>'
+			    				/*+ '&nbsp;&nbsp;' + '<img src="resources/images/delete-icon.png" onclick="javascript: deleteItem(' + "'blob','mgrContract','" + blob.id + "'" + ');"/>'*/
+			    				+ '&nbsp;&nbsp;' + '<span onclick="javascript: deleteItem(' + "'blob','mgrContract','" + blob.id + "'" + ');"><i class="icon-remove"></i></span>'
+			    				;
 			    				//+ '&nbsp;<a target="_new" href="/service/getBlob/' + blob.blobKey + '">View/Download</a>';
 			    			domConstruct.create("li", {
 		                        innerHTML: innerHTMLText
@@ -1278,6 +1285,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 			    	});
 			    	otherFx.chain([wipeOut, wipeIn]).play();
 			    	registry.byId('hiddenSelectedYear').set('value', year);
+			    	dom.byId('yearButton').innerHTML = year;
 			    	fetchMgrLeavesData(registry.byId('mgrList').get('value'));
 			    	
 			    	var standByNode = "mgrYearlyDetailsRegionStandBy";
@@ -1358,6 +1366,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 					    	});
 			    		}
 			    		var unusedList = dom.byId("mgrUnusedPersonalDaysDetailsTable");
+			    		var leavesAvailed = registry.byId('mgrLeavesGrid').rowCount;
 				    	domConstruct.empty(unusedList);
 				    	var tr, th, td;
 				    	tr = domConstruct.create("tr");
@@ -1372,7 +1381,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 				    	
 				    	tr = domConstruct.create("tr");
 				    	td = domConstruct.create("td", { 
-			    			innerHTML: (10-modelsLength) + " Unused Days"
+			    			innerHTML: (10-leavesAvailed) + " Unused Days"
 		    			}, tr);
 				    	domStyle.set(td, 'text-align', 'center');
 				    	tr.appendChild(td);
@@ -1384,7 +1393,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 				    	tr.appendChild(td);
 				    	
 				    	td = domConstruct.create("td", { 
-			    			innerHTML: "Total = $" + ((10-modelsLength)*50)
+			    			innerHTML: "Total = $" + ((10-leavesAvailed)*50)
 		    			}, tr);
 				    	domStyle.set(td, 'text-align', 'center');
 				    	tr.appendChild(td);
