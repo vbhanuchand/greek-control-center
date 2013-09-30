@@ -5,13 +5,16 @@ function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Me
 	percentSuffix = 'Percent', accountingChart = null, accountingMonthlyChart=null,
 	initListening = function(){
 		arrayUtils.forEach(widgets, function(id){
-			var widget = dijit.byId(id);
-			widget.on('change', function(newVal){
-				if(!(isNaN(newVal))){
-					calculatePercents(newVal);
-					refreshPieChartForQuarter();
-				}
-			}); 
+			var widget = '';
+			try{
+				widget = dijit.byId(id);
+				widget.on('change', function(newVal){
+					if(!(isNaN(newVal))){
+						calculatePercents(newVal);
+						refreshPieChartForQuarter();
+					}
+				});
+			} catch(e){}
 		});
 	},
 	calculatePercents = function(newVal){

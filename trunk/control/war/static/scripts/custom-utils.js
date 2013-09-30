@@ -317,20 +317,30 @@ function checkSelectedPane(trId, rightPane, storeId) {
 function modifyContentPaneTitles() {
     require(["dijit/registry", "dojo/dom-attr", "dojo/domReady!"], function (registry, domAttr) {
         console.log('Setting Title Node ');
-        var widget = registry.byId('storeInfo');
-        widget.set('title', "<img align='top' src='resources/images/store.png'/> &nbsp;" + widget.get('title'));
-
-        widget = registry.byId('managerPane');
-        widget.set('title', "<img align='top' src='resources/images/manager-icon.png'/> &nbsp;" + widget.get('title'));
-
-        widget = registry.byId('employeePane');
-        widget.set('title', "<img align='top' src='resources/images/admin.png'/> &nbsp;" + widget.get('title'));
-
-        widget = registry.byId('laborPane');
-        widget.set('title', "<img align='top' src='resources/images/labor.png'/> &nbsp;" + widget.get('title'));
         
-        widget = registry.byId('managePane');
-        widget.set('title', "<img align='top' src='resources/images/manage.png'/> &nbsp;" + widget.get('title'));
+        var widget = registry.byId('storeInfo');
+        try{
+        	widget.set('title', "<img align='top' src='resources/images/store.png'/> &nbsp;" + widget.get('title'));
+    	}catch(e){}
+        try{
+        	widget = registry.byId('managerPane');
+            widget.set('title', "<img align='top' src='resources/images/manager-icon.png'/> &nbsp;" + widget.get('title'));
+        }catch(e){}
+
+        try{
+        	widget = registry.byId('employeePane');
+        	widget.set('title', "<img align='top' src='resources/images/admin.png'/> &nbsp;" + widget.get('title'));
+        }catch(e){}
+        
+        try{
+        	widget = registry.byId('laborPane');
+        	widget.set('title', "<img align='top' src='resources/images/labor.png'/> &nbsp;" + widget.get('title'));
+    	}catch(e){}
+        
+    	try{
+        	widget = registry.byId('managePane');
+        	widget.set('title', "<img align='top' src='resources/images/manage.png'/> &nbsp;" + widget.get('title'));
+    	}catch(e){}
     });
 }
 
@@ -780,14 +790,12 @@ function editRecordByDialog(tab, id, rowIndex){
 }
 
 
-function createInventoryItem(){
+/*function createInventoryItem(){
 	var registry = require('dijit/registry');
 	var dom = require('dojo/dom');
 	var domConstruct = require('dojo/dom-construct');
 	var baseArray = require('dojo/_base/array');
-	var stamp = require('dojo/date/stamp');
 	var domStyle = require('dojo/dom-style');
-	var lang = require('dojo/_base/lang');
 	var Memory = require('dojo/store/Memory');
 	var ObjectStore = require('dojo/data/ObjectStore');
 	
@@ -800,7 +808,7 @@ function createInventoryItem(){
 	dijit.byId('inventoryItemDistributor').setStore(os);
 	addInventoryItemDialog.show();
 	domStyle.set(dom.byId('addInventoryItemDialog'), {top:'40px', position: "absolute"});
-}
+}*/
 
 
 function deleteItem(src, blobSrc, id){

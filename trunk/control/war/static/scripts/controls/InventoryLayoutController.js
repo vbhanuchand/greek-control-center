@@ -19,7 +19,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 		registry.byId('inventoryInvoiceDetailsGrid').selection.clear();
 		dom.byId('createInvoiceLink').style.display = 'none';
 		var selectedRow = registry.byId('inventoryInvoicesGrid').selection.getSelected()[0];
-		dom.byId('inventoryTabTitle').innerHTML = 'Invoice Details';
+		dom.byId('inventoryTabTitle1').innerHTML = 'Invoice Details';
 		fetchInvoiceDetails(selectedRow['id'][0]);
 	},
 	initInventory = function(){
@@ -30,6 +30,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 		registry.byId('inventoryInvoiceDetailsGrid').selection.clear();
 		dojo.connect(registry.byId('inventoryInvoicesGrid').selection, 'onSelected', function(rowIndex){
 			refreshInvoiceDetails();
+			registry.byId("invoiceActionSelect").set('value', 'reset');
 		});
 		var grid = registry.byId('inventoryInvoiceDetailsGrid');
 		dojo.connect(grid, 'onStyleRow', function(row){
@@ -200,6 +201,28 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 									}, "inventoryInvoiceDetailsGrid");
 			inventoryDetailsGrid.startup();
 		} else dijit.byId('inventoryInvoiceDetailsGrid').setStore(gridDataStore);
+		
+		if(registry.byId('invoiceCategorySelect')){
+			var selectedValue = registry.byId('invoiceCategorySelect').get('value');
+			switch(selectedValue){
+				case 'Distributor':
+					registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(6, false);
+					registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(7, false);
+					registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(8, false);
+					//registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(9, false);
+					//registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(10, false);
+					break;
+				case 'GS Kitchen':
+					registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(6, true);
+					registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(7, true);
+					registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(8, true);
+					//registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(9, true);
+					//registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(10, true);
+					break;
+			}
+		}
+		
+		
 	},
 	
 	updateInventoryInvoicesGrid = function(invoiceData){
@@ -210,7 +233,10 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 		tempStore.items = invoiceData;
 		var gridDataStore = new itemFileWriteStore({data: tempStore});
 		var formatGSInvoice = function(inVal){
-			return '<a href="#" onClick="return false;">Invoice Details</a>';
+			return '<a href="#" onClick="return false;">GS Invoice</a>';
+		};
+		var formatInventory = function(inVal){
+			return '<a href="#" onClick="return false;">Inventory</a>';
 		};
 		var formatToCurrency = function(inVal){
 			return '$ ' + inVal;
@@ -220,10 +246,11 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 									store: gridDataStore,
 									query: { id: "*" },
 									structure: [{defaultCell: { width: "20%", type: dojox.grid.cells._Widget, styles: 'text-align: left;', noresize: true, editable: false },
-									            cells: [{ name: "Date", field: "invoiceDate", width: "25%", noresize: true},
-									            { name: "GS Invoice", field: "id", width: "25%", noresize: true, formatter: formatGSInvoice},
-												{ name: "GS Charges", field: "gsCharges", width: "25%", noresize: true, formatter: formatToCurrency},
-												{ name: "Total Charges", field: "totalCharges", width: "25%", noresize: true, formatter: formatToCurrency}
+									            cells: [{ name: "Date", field: "invoiceDate", width: "20%", noresize: true, styles: 'text-align: center;'},
+									            { name: "GS Invoice", field: "id", width: "20%", noresize: true, formatter: formatGSInvoice, styles: 'text-align: center;'},
+									            { name: "Inventory", field: "id", width: "20%", noresize: true, formatter: formatInventory, styles: 'text-align: center;'},
+												{ name: "GS Charges", field: "gsCharges", width: "20%", noresize: true, formatter: formatToCurrency},
+												{ name: "Total Charges", field: "totalCharges", width: "20%", noresize: true, formatter: formatToCurrency}
 												]}],
 									singleClickEdit: false,
 									editable: false,
@@ -237,6 +264,25 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 									}, "inventoryInvoicesGrid");
 			inventoryInvoicesGrid.startup();
 		} else dijit.byId('inventoryInvoicesGrid').setStore(gridDataStore);
+		
+		if(registry.byId('invoiceCategorySelect')){
+			var selectedValue = registry.byId('invoiceCategorySelect').get('value');
+			switch(selectedValue){
+				case 'Distributor':
+					registry.byId('inventoryInvoicesGrid').layout.setColumnVisibility(1, false);
+					registry.byId('inventoryInvoicesGrid').layout.setColumnVisibility(2, true);
+					registry.byId('inventoryInvoicesGrid').layout.setColumnVisibility(3, false);
+					registry.byId('inventoryInvoicesGrid').layout.setColumnVisibility(4, false);
+					break;
+				case 'GS Kitchen':
+					registry.byId('inventoryInvoicesGrid').layout.setColumnVisibility(1, true);
+					registry.byId('inventoryInvoicesGrid').layout.setColumnVisibility(2, false);
+					registry.byId('inventoryInvoicesGrid').layout.setColumnVisibility(3, true);
+					registry.byId('inventoryInvoicesGrid').layout.setColumnVisibility(4, true);
+					break;
+			}
+		}
+		
 	},
 	/* Inventory Items Dialog Grid
 	updateInvoiceItemsGrid = function(invoiceData){
@@ -314,12 +360,14 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 		//selectWdgt.set('value', '703');
 	},
 	resetScreen = function(){
-		dom.byId('inventoryTabTitle').innerHTML = 'Invoices / Stock';
+		dom.byId('inventoryTabTitle').innerHTML = 'Invoices';
+		dom.byId('inventoryTabTitle1').innerHTML = 'Items in Stock';
 		dom.byId('createInvoiceLink').style.display = '';
 		registry.byId('inventoryInvoicesGrid').selection.clear();
 		registry.byId('inventoryInvoiceDetailsGrid').selection.clear();
 		registry.byId('inventoryInvoiceItemId').set('value', 0);
-		
+		//registry.byId("invoiceCategorySelect").set('value', 'Distributor');
+		//registry.byId("invoiceActionSelect").set('value', 'reset');
 		ajaxRequest.get("/service/store/" + registry.byId('hiddenStoreId').get('value') + '/' + registry.byId('hiddenInvoiceCategory').get('value') + "/distributors",{
 			handleAs: 'json'
 		}).then(function(response){
@@ -367,7 +415,8 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 				
 			},
 			postCreate: function(){
-				var invoiceCategoryTabContainer = registry.byId("invoiceCategoryTabContainer");
+				console.log('Inventory --> postCreate()');
+				/*var invoiceCategoryTabContainer = registry.byId("invoiceCategoryTabContainer");
 				registry.byId("invoiceCategoryTabContainer").watch("selectedChildWidget", function(name, oval, nval){
 				    var newPaneTitle = nval.get('title');
 				    switch(newPaneTitle){
@@ -381,8 +430,68 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 				    		break;
 				    }
 		    		resetScreen();
+				});*/
+				
+				on(registry.byId("invoiceCategorySelect"), "change", function(){
+					var newVal = this.get('value');
+					switch(newVal){
+				    	case 'GS Kitchen':
+				    		registry.byId("hiddenInvoiceCategory").set('value', 'g');
+				    		dom.byId('inventoryTabTitleCategory').innerHTML = '(GS Kitchen)';
+				    		dom.byId('inventoryTabTitleCategory1').innerHTML = '(GS Kitchen)';
+				    		dom.byId('invoiceItemPPURow').style.display='';
+				    		dom.byId('invoiceItemGSChargeRow').style.display='';
+				    		break;
+				    	case 'Distributor':
+				    		registry.byId("hiddenInvoiceCategory").set('value', 'd');
+				    		dom.byId('inventoryTabTitleCategory').innerHTML = '(Distributor)';
+				    		dom.byId('inventoryTabTitleCategory1').innerHTML = '(Distributor)';
+				    		dom.byId('invoiceItemPPURow').style.display='none';
+				    		dom.byId('invoiceItemGSChargeRow').style.display='none';
+				    		break;
+					}
+					resetScreen();
+					registry.byId("invoiceActionSelect").set('value', 'reset');
 				});
 				registry.byId("hiddenInvoiceCategory").set('value', 'd');
+				dom.byId('invoiceItemPPURow').style.display='none';
+	    		dom.byId('invoiceItemGSChargeRow').style.display='none';
+				
+				on(registry.byId("invoiceActionSelect"), "change", function(){
+					var newVal = this.get('value');
+					switch(newVal){
+				    	case 'checkStock':
+				    		resetScreen();
+				    		break;
+				    	case 'updateStock':
+				    		registry.byId('inventoryInvoiceItemId').set('value', 0);
+							registry.byId('inventoryStockItem').set('readOnly', false);
+							showDialogToAddItem();
+				    		break;
+				    	case 'addInventoryItem':
+				    		var codesData = [];
+				    		baseArray.forEach(dojo.clone(INVENTORY_DISTRIBUTORS), function(distributor){
+				    			codesData.push({ color: distributor.color, id: distributor.id, name: '&nbsp;<span style="background-color: ' + distributor.color + '; color: #fff;">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;' + distributor.name + '&nbsp;&nbsp;&nbsp;'});
+				    		});
+				    		var itemStockStore = new Memory({idProperty: 'id', data: codesData});
+				    		var os = new ObjectStore({ objectStore: itemStockStore });
+				    		dijit.byId('inventoryItemDistributor').setStore(os);
+				    		addInventoryItemDialog.show();
+				    		domStyle.set(dom.byId('addInventoryItemDialog'), {top:'40px', position: "absolute"});
+				    		break;
+				    	default:
+				    		break;
+					}
+				});
+				
+				on(registry.byId("inventoryItemDialog"), 'hide', function(){
+					registry.byId("invoiceActionSelect").set('value', 'reset');
+				});
+				
+				on(registry.byId("addInventoryItemDialog"), 'hide', function(){
+					registry.byId("invoiceActionSelect").set('value', 'reset');
+				});
+				
 			},
 			reset: function(){
 				resetScreen();
