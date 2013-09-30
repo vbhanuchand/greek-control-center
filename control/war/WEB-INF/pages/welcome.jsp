@@ -774,51 +774,50 @@
 				</div>
 			<div id="inventoryPane" data-dojo-type="dijit/layout/ContentPane" title="Inventory" data-dojo-props="selected:false" style="width: 99%; height: 99%;">
 					<table style="width: 99%; height: 99%;" id="inventoryPaneTable">
-						<tr valign="bottom" style="width: 100%; height: 5%;">
-							<td style="width: 50%;">
-								<div id="invoiceCategoryTabContainer" data-dojo-type="dijit/layout/TabContainer" data-dojo-props="tabPosition: 'top'" style="width: 100%;" doLayout="false">
-							        <div data-dojo-type="dijit/layout/ContentPane" title="Distributor" data-dojo-props="selected:true" style="border: 0px; height: 0px;">
-							        </div>
-							        <div data-dojo-type="dijit/layout/ContentPane" title="GS Kitchen" data-dojo-props="selected:false" style="border: 0px; height: 0px;">
-							        </div>
-							   </div>
-							</td>
-							<td style="width: 50%;">
-								<u><b>Select Category:</b></u>&nbsp;&nbsp;<!--   
-								--><div  id="invoiceCategorySelect" name="invoiceCategorySelect" data-dojo-type="dijit/form/Select" style="width: 170px; height: 30px; text-align: center;">
-								    <span value="Distributor" selected="selected"><b>Distributor</b></span>
-								    <span value="GS Kitchen"><b>GS Kitchen</b></span>
-								</div>
-							</td> 
-						</tr>
-						<tr valign="middle" style="width: 100%; height: 7%;">
-							<td colspan="2">
-								<span style="float: left" id="checkStockLink">
-									<a href="javascript: printInvoiceDetails('inventoryInvoiceDetailsGrid', 'inventoryTabTitleCategory');">Print Invoice</a>&nbsp;<a style="padding-right: 5px; padding-left: 5px;" href='javascript:checkStock("D");'>Check Stock</a>&nbsp;
-									<img src='resources/images/add-icon.png' onclick='javascript: addItemToStock();'/>
-								</span>
-								<span style="position: relative; left: 1%; color: whitesmoke; background-color: #2E2EFE; border: 1px solid black;">&nbsp;NICHOLAS&nbsp;</span>&nbsp;&nbsp;
-								<span style="position: relative; left: 1%; color: whitesmoke; background-color: #8904B1; border: 1px solid black;">&nbsp;US FOODS&nbsp;</span>&nbsp;&nbsp;
-								<span style="position: relative; left: 3%; color: orange; font-weight: bolder; font-size: 100%;" id="inventoryTabTitle">Invoices / Stock</span>&nbsp;&nbsp;
-								<span style="position: relative; left: 3%; color: orange; font-weight: bolder; font-size: 100%;" id="inventoryTabTitleCategory">(Distributor)</span>
-								<span style="position: relative; left: 5%; color: whitesmoke; background-color: #B40431; border: 1px solid black;">&nbsp;SAMS CLUB&nbsp;</span>&nbsp;&nbsp;
-								<span style="position: relative; left: 5%; color: whitesmoke; background-color: #21610B; border: 1px solid black;">&nbsp;GS KITCHEN&nbsp;</span>&nbsp;&nbsp;
-								<span style="float: right" id="createInvoiceLink">
-									<a href='javascript:createInventoryItem();'>Add Inventory Items</a>
-									<a href='javascript:createInvoice();'>Create Invoice</a>
-								</span>
+						<tr valign="middle" style="width: 100%; height: 8%;">
+							<td style="text-align: left; border: .1em solid #ddd; padding: 2px 0px 2px 0px;" colspan="2"><!--
+								 --><div style="display: inline-block;">&nbsp;&nbsp;<font style="font-weight: normal; text-decoration: underline;">Select Category</font></div>:&nbsp;&nbsp;<!--   
+								--><div id="invoiceCategorySelect" name="invoiceCategorySelect" data-dojo-type="dijit/form/Select" style="width: 150px; text-align: center; display: inline-block;"><!-- 
+								     --><span value="Distributor" selected="selected"><b>Distributor</b></span><!-- 
+								     --><span value="GS Kitchen"><b>GS Kitchen</b></span><!--
+								 --></div><!--
+								 --><div style="display: inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;<font style="font-weight: normal; text-decoration: underline;">Choose Action</font></div>:&nbsp;&nbsp;<!--
+								--><div id="invoiceActionSelect" name="invoiceActionSelect" data-dojo-type="dijit/form/Select" style="width: 250px; text-align: center; display: inline-block;"><!--
+									--><span value="reset" selected="selected" style="font-style: italic;"><i><b>--Select Action--</b></i></span><!--
+								    --><span value="checkStock"><b>Check Stock</b></span><!-- 
+								    --><span value="updateStock"><b>Add/Update Item In Stock</b></span><!--
+								    --><span value="addInventoryItem"><b>Add Item to Inventory</b></span><!--
+								 --></div><!--
+								--><div align="right" style="float: right; vertical-align: baseline;"><u>Distributors</u>:&nbsp;&nbsp;<div style="display: inline-block;"><font style="color: whitesmoke; background-color: #2E2EFE; border: 1px solid black;">&nbsp;NICHOLAS&nbsp;</font></div>&nbsp;&nbsp;<!-- 
+								--><div style="display: inline-block;"><font style="color: whitesmoke; background-color: #8904B1; border: 1px solid black;">&nbsp;US FOODS&nbsp;</font></div>&nbsp;&nbsp;<!-- 
+								--><div style="display: inline-block;"><font style="color: whitesmoke; background-color: #B40431; border: 1px solid black;">&nbsp;SAMS CLUB&nbsp;</font></div>&nbsp;&nbsp;<!-- 
+								--><div style="display: inline-block;"><font style="color: whitesmoke; background-color: #21610B; border: 1px solid black;">&nbsp;GS KITCHEN&nbsp;</font></div>&nbsp;&nbsp;<!-- 
+								--></div>
 							</td>
 						</tr>
-						<tr valign="top" style="width: 100%; height: 88%;">
-							<td align="left" style="height: 95%; width: 40%;">
-								<div id="inventoryInvoicesGrid" align="center"
+						<tr valign="middle" style="width: 100%; height: 5%;">
+							<td style="text-align: center;"><!--
+								  --><div style="text-decoration:underline; display: inline-block; color: orange; font-weight: bolder; font-size: 100%;" id="inventoryTabTitle">Invoices</div>&nbsp;&nbsp;<!-- 
+								 --><div style="display: inline-block; color: orange; font-weight: bolder; font-size: 100%;" id="inventoryTabTitleCategory">(Distributor)</div><!--
+							 --></td>
+							<td style="text-align: center;"><!--
+								  --><div style="text-decoration:underline; display: inline-block; color: orange; font-weight: bolder; font-size: 100%;" id="inventoryTabTitle1">Stock</div>&nbsp;&nbsp;<!-- 
+								 --><div style="display: inline-block; color: orange; font-weight: bolder; font-size: 100%;" id="inventoryTabTitleCategory1">(Distributor)</div><!--
+								 --><div style="display: inline-block; float: right" id="createInvoiceLink"><!--
+									 --><a href='javascript:createInvoice();'>Create Invoice</a>&nbsp;&nbsp;<a href="javascript: printInvoiceDetails('inventoryInvoiceDetailsGrid', 'inventoryTabTitleCategory');">Print Invoice</a><!-- 
+								 --></div><!-- 
+							 --></td>
+						</tr>
+						<tr valign="top" style="width: 100%; height: 87%;">
+							<td align="left" style="height: 95%; width: 39%; border: .1em solid #ddd;">
+								<div id="inventoryInvoicesGrid" align="center" class="nihilo"
 									style="height: 100%; margin: 2px; width: 100%;">
 								</div>
 								<div id="inventoryInvoicesGridStandBy" data-dojo-id="inventoryInvoicesGridStandBy" data-dojo-type="dojox/widget/Standby" 
 										data-dojo-props="target:'inventoryInvoicesGrid', color:'white'">
 								</div>
 							</td>
-							<td align="left" style="height: 95%; width: 60%;">
+							<td align="left" style="height: 95%; width: 59%; border: .1em solid #ddd;">
 								<div id="inventoryInvoiceDetailsGrid" align="center"
 									style="height: 99%; margin: 2px; width: 99%;">
 								</div>
@@ -855,7 +854,7 @@
 					<tr>
 						<td align="left" valign="middle"><u>Stock Item:</u></td>
 						<td align="left" valign="middle">
-							<div id="inventoryStockItem" data-dojo-type="dijit/form/Select" name="inventoryStockItem"></div>
+							<div id="inventoryStockItem" data-dojo-type="dijit/form/Select" name="inventoryStockItem" style="width: 200px;"></div>
 						</td>
 					</tr>
 					<tr>
@@ -891,14 +890,14 @@
 							id="inventoryStockToOrder" name="inventoryStockToOrder"/></td>
 					</tr>
 								
-					<tr>
+					<tr id="invoiceItemPPURow">
 						<td align="left" valign="middle"><u>Price Per Unit:</u></td>
 						<td align="left" valign="middle"><input data-dojo-type="dijit/form/CurrencyTextBox"
 							data-dojo-props="style: 'width: 100px; font-size: 90%;', required: 'true', trim: 'true', invalidMessage : 'Item is Invalid', value: 0"
 							id="inventoryStockPPU" name="inventoryStockPPU"/></td>
 					</tr>
 									
-					<tr>
+					<tr id="invoiceItemGSChargeRow">
 						<td align="left" valign="middle"><u>GS Charge %:</u></td>
 						<td align="left" valign="middle"><input data-dojo-type="dijit/form/CurrencyTextBox"
 							data-dojo-props="style: 'width: 100px; font-size: 90%;', required: 'true', trim: 'true', invalidMessage : 'Item is Invalid', value: 0"
@@ -1103,9 +1102,7 @@
 						<tr>
 							<td width="25%"><b>Distributor:</b></td>
 							<td width="75%">
-								<div data-dojo-type="dijit/form/Select"
-									data-dojo-props="pageSize: 5, required: 'true', maxHeight: -1, labelAttr: 'name', style: 'width: 175px; font-size: 90%;', trim: 'true'"
-									id="inventoryItemDistributor" name="inventoryItemDistributor">
+								<div data-dojo-type="dijit/form/Select" style="width: 200px;" data-dojo-props="required: 'true', labelAttr: 'name', trim: 'true'" id="inventoryItemDistributor" name="inventoryItemDistributor">
 								</div>
 							</td>
 						</tr>

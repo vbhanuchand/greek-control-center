@@ -957,6 +957,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 		        		addRow(gridId, getSelectedEmployeeId());
 		        },
 			    postCreate: function(){
+			    	console.log('EmployeeLayoutController --> postCreate() start');
 			    	dojo.connect(registry.byId("employeeInfoTabContainer"), "selectChild", function(child){
 						baseArray.forEach(registry.byId("employeeInfoTabContainer").getChildren(), function(empTab){
 							if(empTab.get('title').indexOf(' &nbsp; <img ') > 0){
@@ -982,42 +983,45 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 							refreshSelectedPane();
 						}
 					});
-			    	on(registry.byId('mgrList'), 'change', function(){
-			    		var empId = this.get('value');
-			    		var empLayout = require('controls/EmployeeLayoutController');
-						if(Number(this.get('value')) > 0){
-							//domStyle.set(dom.byId('mgrContract'), 'display','block');
-							dom.byId('mgrContract').style.display = 'inline-block';
-							//domStyle.set(dom.byId('mgrAddLeavesIcon'), 'display','');
-							dom.byId('mgrAddLeavesIcon').style.display = 'inline-block';
-							this.store.fetch({query: {id: this.get('value')}, onComplete: function(items, request){
-								if(items.length > 0){
-									empLayout.populateManagerInfo(items[0]);
-								}
-							}});
-					      empLayout.showPhotoByEmpId(this.get('value'), 'managerPhoto', 'mgrPhotoPane', 'mgrPhotoPaneStandBy');
-					      empLayout.fetchManagerContractBlobs(this.get('value'));
-					      empLayout.fetchMgrLeavesDetails(empId);
-					      empLayout.fetchCurrentYearReviews(empId);
-					      registry.byId('quartersList').set('disabled', false);
-						} else {
-							domConstruct.empty(dom.byId('mgrPaneInfoUl'));
-							domConstruct.empty(dom.byId('mgrYearlyReviewsTable'));
-							//domStyle.set(dom.byId('mgrContract'), 'display','none');
-							dom.byId('mgrContract').style.display = 'none';
-							empLayout.hidePhoto('mgrPhotoPane');
-							//domStyle.set(dom.byId('mgrAddLeavesIcon'), 'display','none');
-							dom.byId('mgrAddLeavesIcon').style.display = 'none';
-							empLayout.resetMgrLeavesGrid();
-							registry.byId('quartersList').set('disabled', true);
-							registry.byId('quartersList').set('value', 0);
-						}
-						empLayout.resetMgrForm();
-			    	});
-			    	//Manager Tab --> Personal / Sick Days Tab
-			    	var addIconLabel = "<span id='mgrAddLeavesIcon' style='display: none;'>&nbsp;<img align='top' src='resources/images/add-icon.png' onclick='javascript: addManagerLeavesTabRecord(event);'/></span>";
-					var widget = registry.byId('mgrLeavesTab');
-				    widget.set('title', widget.get('title') + '&nbsp;' + addIconLabel);
+			    	try{
+				    	on(registry.byId('mgrList'), 'change', function(){
+				    		var empId = this.get('value');
+				    		var empLayout = require('controls/EmployeeLayoutController');
+							if(Number(this.get('value')) > 0){
+								//domStyle.set(dom.byId('mgrContract'), 'display','block');
+								dom.byId('mgrContract').style.display = 'inline-block';
+								//domStyle.set(dom.byId('mgrAddLeavesIcon'), 'display','');
+								dom.byId('mgrAddLeavesIcon').style.display = 'inline-block';
+								this.store.fetch({query: {id: this.get('value')}, onComplete: function(items, request){
+									if(items.length > 0){
+										empLayout.populateManagerInfo(items[0]);
+									}
+								}});
+						      empLayout.showPhotoByEmpId(this.get('value'), 'managerPhoto', 'mgrPhotoPane', 'mgrPhotoPaneStandBy');
+						      empLayout.fetchManagerContractBlobs(this.get('value'));
+						      empLayout.fetchMgrLeavesDetails(empId);
+						      empLayout.fetchCurrentYearReviews(empId);
+						      registry.byId('quartersList').set('disabled', false);
+							} else {
+								domConstruct.empty(dom.byId('mgrPaneInfoUl'));
+								domConstruct.empty(dom.byId('mgrYearlyReviewsTable'));
+								//domStyle.set(dom.byId('mgrContract'), 'display','none');
+								dom.byId('mgrContract').style.display = 'none';
+								empLayout.hidePhoto('mgrPhotoPane');
+								//domStyle.set(dom.byId('mgrAddLeavesIcon'), 'display','none');
+								dom.byId('mgrAddLeavesIcon').style.display = 'none';
+								empLayout.resetMgrLeavesGrid();
+								registry.byId('quartersList').set('disabled', true);
+								registry.byId('quartersList').set('value', 0);
+							}
+							empLayout.resetMgrForm();
+				    	});
+				    	//Manager Tab --> Personal / Sick Days Tab
+				    	var addIconLabel = "<span id='mgrAddLeavesIcon' style='display: none;'>&nbsp;<img align='top' src='resources/images/add-icon.png' onclick='javascript: addManagerLeavesTabRecord(event);'/></span>";
+						var widget = registry.byId('mgrLeavesTab');
+					    widget.set('title', widget.get('title') + '&nbsp;' + addIconLabel);
+			    	} catch(e){console.log('Error occurred in postCreate() EmployeeLayoutController ', e);}
+			    	console.log('EmployeeLayoutController --> postCreate() end');
 		        },
 		        populateManagerTabDetails: function(storeId){
 		        	var mgrArray = [{id: 0, label: 'Select Manager'}];
