@@ -274,7 +274,11 @@ public class StoreServiceController {
 	@ResponseBody
 	public MultipleModelResponse<StoreStockWrapper> getStoreStock(@PathVariable int storeId, @PathVariable String category)
 			throws IOException {
-		return new MultipleModelResponse<StoreStockWrapper>(true, dataService.getStoreStock(storeId, category));
+		List<StoreStockWrapper> items = dataService.getStoreStock(storeId, category);
+		for(StoreStockWrapper tempItem: items){
+			tempItem.set_self("/service/store/" + storeId + "/" + category + "/stock");
+		}
+		return new MultipleModelResponse<StoreStockWrapper>(true, items);
 	}
 	
 	@RequestMapping(value = "/service/store/{storeId}/{category}/stock", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
@@ -313,7 +317,11 @@ public class StoreServiceController {
 	@ResponseBody
 	public MultipleModelResponse<StoreInvoiceDetailsWrapper> getInvoiceDetails(@PathVariable int invoiceId)
 			throws IOException {
-		return new MultipleModelResponse<StoreInvoiceDetailsWrapper>(true, dataService.getInvoiceDetails(invoiceId));
+		List<StoreInvoiceDetailsWrapper> items = dataService.getInvoiceDetails(invoiceId);
+		for(StoreInvoiceDetailsWrapper tempItem: items){
+			tempItem.set_self("/service/store/invoiceDetail/" + tempItem.getId());
+		}
+		return new MultipleModelResponse<StoreInvoiceDetailsWrapper>(true, items);
 	}
 	
 	@RequestMapping(value = "/service/store/invoiceDetail/{invoiceItemId}", method = RequestMethod.PUT, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)

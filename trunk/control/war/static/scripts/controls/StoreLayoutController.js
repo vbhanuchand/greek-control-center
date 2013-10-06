@@ -191,7 +191,7 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 		    },
 		    showScheduleLink = function(value){
 		    	//return "<div class='tab-heading'><div class='hold'><span>Schedule</span></div></div>";
-		    	return '<span style="text-align: center;"><a href="#">View Schedule</a></span>';
+		    	return '<span style="text-align: center;"><a href="#">Schedule Details</a></span>';
 		    },
 		    showEditLink = function(value, rowIndex){
 		    	return '<span style="text-align: center;"><a href="javascript: editRecordByDialog(' + "'healthInspection', " + value + "," + rowIndex + ');">Edit</a></span>';
@@ -567,7 +567,7 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 					storeLaborGrid = new EnhancedGrid({
 											store: gridDataStore,
 											query: { id: "*" },
-											structure: [{ name: "Schedule", field: "week", editable: false, width: "10%", noresize: true, formatter: showScheduleLink, styles: 'padding-left: 5px;'}, 
+											structure: [{ name: "Schedule", field: "week", editable: false, width: "10%", noresize: true, formatter: showScheduleLink, styles: 'text-align: center;'}, 
 											            { name: "Date", field: "skeletonKey", editable: false, width: "25%", noresize: true, styles: 'text-align: center;'},
 												{ name: "Manager Hours", field: "Manager", editable: false, width: "15%", noresize: true, styles: 'text-align: center;'},
 												{ name: "Total Hrs (Front & Cook)", fields: ["Front", "Cook"], editable: false, width: "18%", noresize: true, styles: 'text-align: center;', formatter: calculateTotalFrontCook},

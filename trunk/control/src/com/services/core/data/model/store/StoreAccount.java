@@ -49,6 +49,15 @@ public class StoreAccount implements Serializable {
 	@Column(name = "profitAmt")
 	private Double profit;
 	
+	@Column(name = "totalSales")
+	private Double totalSales;
+	
+	@Column(name = "totalOpExp")
+	private Double totalOpExp;
+	
+	@Column(name = "totalProfits")
+	private Double totalProfits;
+	
 	@Column(name = "active")
 	@Type(type = "yes_no")
 	private Boolean active;
@@ -66,7 +75,7 @@ public class StoreAccount implements Serializable {
 
 	public StoreAccount(Integer storeId, Integer quarter, Integer year,
 			Double labor, Double foodCost, Double advertisement, Double misc,
-			Double profit, Boolean active, Integer updated_by) {
+			Double profit, Double totalSales, Double totalOpExp, Double totalProfits, Boolean active, Integer updated_by) {
 		super();
 		this.storeId = storeId;
 		this.quarter = quarter;
@@ -76,6 +85,9 @@ public class StoreAccount implements Serializable {
 		this.advertisement = advertisement;
 		this.misc = misc;
 		this.profit = profit;
+		this.totalSales = totalSales;
+		this.totalOpExp = totalOpExp;
+		this.totalProfits = totalProfits;
 		this.active = active;
 		this.updated_by = updated_by;
 	}
@@ -144,6 +156,30 @@ public class StoreAccount implements Serializable {
 
 	public void setProfit(Double profit) {
 		this.profit = profit;
+	}
+
+	public Double getTotalSales() {
+		return totalSales;
+	}
+
+	public void setTotalSales(Double totalSales) {
+		this.totalSales = totalSales;
+	}
+
+	public Double getTotalOpExp() {
+		return totalOpExp;
+	}
+
+	public void setTotalOpExp(Double totalOpExp) {
+		this.totalOpExp = totalOpExp;
+	}
+
+	public Double getTotalProfits() {
+		return totalProfits;
+	}
+
+	public void setTotalProfits(Double totalProfits) {
+		this.totalProfits = totalProfits;
 	}
 
 	public Boolean getActive() {

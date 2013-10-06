@@ -232,16 +232,16 @@ public class StoreDAOImpl implements StoreDAO {
 	}
 	
 	@Override
-	public int createStoreAccount(int storeId, int quarter, int year, double labor, double foodCost, double advertisement, double misc, double profit, Boolean active, int updatedBy){
-		StoreAccount storeAcc = new StoreAccount(storeId, quarter, year, labor, foodCost, advertisement, misc, profit, true, 1);
+	public int createStoreAccount(int storeId, int quarter, int year, double labor, double foodCost, double advertisement, double misc, double profit, double totalSales, double totalOpExp, double totalProfits, Boolean active, int updatedBy){
+		StoreAccount storeAcc = new StoreAccount(storeId, quarter, year, labor, foodCost, advertisement, misc, profit, totalSales, totalOpExp, totalProfits, true, 1);
 		sessionFactory.getCurrentSession().save(storeAcc);
 		return storeAcc.getId();
 	}
 	
 	@Override
-	public boolean updateStoreAccount(int id, int storeId, int quarter, int year, double labor, double foodCost, double advertisement, double misc, double profit, Boolean active, int updatedBy){
+	public boolean updateStoreAccount(int id, int storeId, int quarter, int year, double labor, double foodCost, double advertisement, double misc, double profit, double totalSales, double totalOpExp, double totalProfits, Boolean active, int updatedBy){
 		String hql = "UPDATE StoreAccount sa set sa.storeId = :storeId, sa.quarter = :quarter, sa.year = :year, sa.labor = :labor, " 
-				+ "sa.foodCost=:foodCost, sa.advertisement = :advertisement, sa.misc=:misc, sa.profit = :profit, sa.active=:active," 
+				+ "sa.foodCost=:foodCost, sa.advertisement = :advertisement, sa.misc=:misc, sa.profit = :profit, sa.totalSales = :totalSales, sa.totalOpExp = :totalOpExp, sa.totalProfits = :totalProfits, sa.active=:active," 
 				+ "sa.updated_by=:updatedBy WHERE sa.id = :id";
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
 		query.setParameter("storeId", storeId);
@@ -252,6 +252,9 @@ public class StoreDAOImpl implements StoreDAO {
 		query.setParameter("advertisement", advertisement);
 		query.setParameter("misc", misc);
 		query.setParameter("profit", profit);
+		query.setParameter("totalSales", totalSales);
+		query.setParameter("totalOpExp", totalOpExp);
+		query.setParameter("totalProfits", totalProfits);
 		query.setParameter("active", active);
 		query.setParameter("updatedBy", updatedBy);
 		query.setParameter("id", id);
@@ -324,7 +327,7 @@ public class StoreDAOImpl implements StoreDAO {
 	@Override
 	public List<StoreInvoiceDetails> getInvoiceDetails(int invoiceId){
 		Query query = sessionFactory.getCurrentSession().createQuery(
-				"from StoreInvoiceDetails where invoiceId = :invoiceId");
+				"from StoreInvoiceDetails where invoiceId = :invoiceId order by itemId");
 		query.setParameter("invoiceId", invoiceId);
 		return query.list();
 	}
@@ -332,7 +335,7 @@ public class StoreDAOImpl implements StoreDAO {
 	@Override
 	public List<StoreStock> getStoreStock(int storeId, String category){
 		Query query = sessionFactory.getCurrentSession().createQuery(
-				"from StoreStock where storeId = :storeId and category = :category");
+				"from StoreStock where storeId = :storeId and category = :category order by itemId");
 		query.setParameter("storeId", storeId);
 		query.setParameter("category", category);
 		return query.list();
@@ -482,6 +485,11 @@ public class StoreDAOImpl implements StoreDAO {
 		}
 		item.setCategory(category);
 		sessionFactory.getCurrentSession().save(item);
+		
+		StoreStock stockItem = new StoreStock(item.getStoreId(), item.getItemCode(), ((item.getItemCode()/100) * 100), 0, 0, 0.00, 0.00, updatedBy);
+		stockItem.setCategory(category);
+		sessionFactory.getCurrentSession().save(stockItem);
+		
 		return item.getId();
 	}
 }

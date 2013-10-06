@@ -545,8 +545,33 @@ table.accountingTable th.noBorder{
 }
 
 
-
-
+/*Print Table*/
+table.printTable {
+	font-family: inherit;
+	font-size: inherit;
+	color: inherit;
+	border-width: 1px;
+	border-color: #555;
+	border-collapse: collapse;
+	border-style: solid;
+	
+}
+table.printTable th {
+	border-width: 1px;
+	border-style: solid;
+	border-color: #555;
+	background-color: #eee;
+	text-align: center;
+	font-weight: bold;
+}
+table.printTable td {
+	background-color: #ffffff;
+	text-align:left;
+	padding-left: 10px;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #555;
+}
 
 
 /* Labor Header (Summary) Table Styles*/
