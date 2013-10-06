@@ -13,6 +13,8 @@ select * from employee_labor;
 desc employee_salary; 
 desc store;
 select * from store_accounting;
+desc store_accounting;
+
 delete from store_stock;
 commit;
 drop table store;
@@ -371,3 +373,15 @@ values (7, 1, 0, 'store-mgr');
 
 alter table store add property_info varchar(100);
 alter table store add lease_info varchar(100);
+
+alter table store_accounting add totalSales decimal(8,2);
+alter table store_accounting add totalOpExp decimal(8,2);
+alter table store_accounting add totalProfits decimal(8,2);
+
+desc blobs;
+
+alter table blobs modify tab enum('store-lease','photo','mgrContract','healthInspection','employee-docs', 'maintenance', 'accMonthlyDocument');       
+select * from store_stock;
+select * from items;
+delete from store_stock where id in (9);
+delete from items where id in (9);

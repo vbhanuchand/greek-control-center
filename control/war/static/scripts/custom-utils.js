@@ -9,6 +9,7 @@ var INVENTORY_DISTRIBUTORS_MAP = {
 									'600': {id: '600', name: 'SAMS CLUB', color: '#B40431'},
 									'700': {id: '700', name: 'GS KITCHEN', color: '#21610B'}
 								};
+var INVENTORY_ITEMS_INFO = {};
 
 function displayMessage(trId, msgSpan, msg, styleClassToApply) {
     var styleClasses = ["success", "warning", "info"];
@@ -119,7 +120,7 @@ function returnToManagerPane(){
 function saveFileRefToDB(tab, fileName, blobKey){
 	var registry = require('dijit/registry'), dom = require('dojo/dom'), otherFx = require('dojo/fx'), domStyle = require('dojo/dom-style'),
 	domConstruct = require('dojo/dom-construct'), ajaxRequest = require("dojo/request"), json = require('dojo/json'), 
-	storeLayout = require('controls/StoreLayoutController'), empLayout = require('controls/EmployeeLayoutController');
+	storeLayout = require('controls/StoreLayoutController'), empLayout = require('controls/EmployeeLayoutController'), accLayout = require('controls/AccountingLayoutController');
 	var linkedId, standByWidget;
 	
 	switch(tab){
@@ -136,6 +137,11 @@ function saveFileRefToDB(tab, fileName, blobKey){
 			var empId = registry.byId('mgrList').get('value');
 			linkedId = Number(empId);
 			standByWidget = 'mgrContractStandBy';
+			break;
+		case 'accMonthlyDocument': 
+			var accRecId = registry.byId('hiddenAccountingRecordId').get('value');
+			linkedId = Number(accRecId);
+			standByWidget = 'accMonthlyDocumentStandBy';
 			break;
 	}
 	
@@ -166,6 +172,11 @@ function saveFileRefToDB(tab, fileName, blobKey){
 				domConstruct.empty(dom.byId('mgrContractUploaded'));
 				registry.byId(standByWidget).hide();
 				empLayout.fetchManagerContractBlobs(linkedId);
+				break;
+			case 'accMonthlyDocument': 
+				domConstruct.empty(dom.byId('accMonthlyDocumentUploaded'));
+				registry.byId(standByWidget).hide();
+				accLayout.fetchAccountingMonthlyBlobs(linkedId);
 				break;
 			}
 		}
@@ -203,6 +214,13 @@ function showFileUploadDialog(domNode){
 			standByWidget = 'healthInspectionStandBy';
 			fileUploadWidget = 'healthInspectionWidgetsDiv';
 			progressMsg = 'healthInspectionWidgetsProgressMsgs';
+			break;
+		case 'accMonthlyDocument':
+			standByWidget = 'accMonthlyDocumentStandBy';
+			fileUploadWidget = 'accMonthlyDocumentWidgetsDiv';
+			progressMsg = 'accMonthlyDocumentWidgetsProgressMsgs';
+			if(!(registry.byId('accountingQuartersList').get('value') > 0))
+				return;
 			break;
 	}
 	
@@ -244,6 +262,9 @@ function hideFileUploadDialog(domNode){
 			break;
 		case 'healthInspection':
 			fileUploadWidget = 'healthInspectionWidgetsDiv';
+			break;
+		case 'accMonthlyDocument':
+			fileUploadWidget = 'accMonthlyDocumentWidgetsDiv';
 			break;
 	}
 	otherFx.wipeOut({node: dom.byId(fileUploadWidget), duration: 1000, delay: 250, 
@@ -818,6 +839,8 @@ function deleteItem(src, blobSrc, id){
 	var dom = require('dojo/dom');
 	var storeLayout = require('controls/StoreLayoutController');
 	var empLayout = require('controls/EmployeeLayoutController');
+	var accLayout = require('controls/AccountingLayoutController');
+	var invLayout = require('controls/InventoryLayoutController');
 	console.log('Deleting ', src, blobSrc, id);
 	switch(src){
 		case 'date':
@@ -856,6 +879,18 @@ function deleteItem(src, blobSrc, id){
 			    		}
 			    	}, function(error){
 			    		registry.byId('mgrContractStandBy').hide();
+			    	});
+				break;
+				case 'accMonthlyDocument':
+					registry.byId('accMonthlyDocumentStandBy').show();
+					ajaxRequest.get("/service/delete/blob/" + id + '/accMonthlyDocument',{
+			    		handleAs: 'json'
+			    	}).then(function(deleteResponse){
+			    		if(deleteResponse.success){
+			    			accLayout.fetchAccountingMonthlyBlobs(registry.byId('hiddenAccountingRecordId').get('value'));
+			    		}
+			    	}, function(error){
+			    		registry.byId('accMonthlyDocumentStandBy').hide();
 			    	});
 				break;
 			}
@@ -897,6 +932,32 @@ function deleteItem(src, blobSrc, id){
 	    	}).then(function(deleteResponse){
 	    		if(deleteResponse.success){
 	    			empLayout.fetchMgrLeavesData(registry.byId('mgrList').get('value'));
+	    		}
+	    	}, function(error){
+	    		registry.byId(standByNode).hide();
+	    	});
+			break;
+		case 'invoice-item':
+			var standByNode = 'inventoryInvoiceDetailsGridStandBy', url = '/service/delete/invoice-details/' + id;
+			registry.byId(standByNode).show();
+			ajaxRequest.get(url,{
+	    		handleAs: 'json'
+	    	}).then(function(deleteResponse){
+	    		if(deleteResponse.success){
+	    			invLayout.refreshSelectedInvoiceDetails();
+	    		}
+	    	}, function(error){
+	    		registry.byId(standByNode).hide();
+	    	});
+			break;
+		case 'stock-item':
+			var standByNode = 'inventoryInvoiceDetailsGridStandBy', url = '/service/delete/stock-item/' + id;
+			registry.byId(standByNode).show();
+			ajaxRequest.get(url,{
+	    		handleAs: 'json'
+	    	}).then(function(deleteResponse){
+	    		if(deleteResponse.success){
+	    			invLayout.reset();
 	    		}
 	    	}, function(error){
 	    		registry.byId(standByNode).hide();
@@ -953,6 +1014,75 @@ function printInvoiceDetails(divId, title){
 	w.document.close();
 	w.print(); 
 }
+
+function printInvoice(gridId, title){
+	var registry = require('dijit/registry');
+	var baseArray = require('dojo/_base/array');
+	var dom = require('dojo/dom');
+	var totalUnitsCost=0, totalGsPercent=0, totalTotalCost=0;
+	
+	var selectedOption = registry.byId('invoiceCategorySelect').get('value');
+	var finalHTML = '';
+	finalHTML += '<html lang="en-us">';
+	finalHTML += '<head>';
+	finalHTML += '<link rel="stylesheet" href="resources/styles/styles.css"/>';
+	finalHTML += '</head>';
+	finalHTML += "<body class='dbootstrap' style='width: 100%; height: 100%;color: #000000; background: #ffffff; font-family: \"Times New Roman\", Times, serif; font-size: 12pt;'>";
+	var strTitle = dom.byId(title).innerHTML + '';
+    var titleToPrint = strTitle.substr(1, strTitle.length - 2);
+    finalHTML += '<div style="display: block; width: 100%; height: 20px;" align="center"><h4>' + titleToPrint.toUpperCase() + ' INVOICE </h4></div>';
+    finalHTML += '<br/><br/>';
+    
+	var table = '<table style="width: 100%; vertical-align: top;" class="printTable">';
+	var bgColor = '';
+	table += '<tr style="height: 10px;"><th style="width: 10px;">ITEM #</th><th>STOCK ITEM</th><th>PAR (UNITS)</th><th>IN STOCK</th><th>ORDER</th>' + ((selectedOption != 'Distributor') ? '<th>PRICE PER UNIT</th><th>GS CHARGE</th><th>TOTAL</th></tr>' : '</tr>');
+	registry.byId(gridId).store.fetch({
+		onComplete: function(items){
+			baseArray.forEach(items, function(item, index){
+				table += '<tr style="height: 10px;">';
+				var gridStore = registry.byId('inventoryInvoiceDetailsGrid').store;
+				bgColor = INVENTORY_DISTRIBUTORS_MAP[gridStore.getValue(item, 'itemCategory')+'']['color'];
+				table += '<td style="text-align: center; width: 10px; color: #ffffff; background-color: ' + bgColor + '">' + gridStore.getValue(item, 'itemId') + '</td>';
+				table += '<td>' + INVENTORY_ITEMS_INFO[gridStore.getValue(item, 'itemId')+'']['itemName'] + '</td>';
+				table += '<td>' + INVENTORY_ITEMS_INFO[gridStore.getValue(item, 'itemId')+'']['itemPar'] + ' ' + INVENTORY_ITEMS_INFO[gridStore.getValue(item, 'itemId')+'']['itemUnits']  + '</td>';
+				table += '<td>' + gridStore.getValue(item, 'itemStock') + '</td>';
+				table += '<td>' + gridStore.getValue(item, 'itemOrder') + '</td>';
+				if(selectedOption != 'Distributor'){
+					table += '<td> $' + gridStore.getValue(item, 'itemPricePerUnit') + '</td>';
+					table += '<td>' + gridStore.getValue(item, 'itemGSPercent') + '%</td>';
+					var unitsCost = parseInt(gridStore.getValue(item, 'itemPricePerUnit')+'') * parseInt(gridStore.getValue(item, 'itemOrder')+'');
+					var gsPercent = parseInt((unitsCost * parseInt(gridStore.getValue(item, 'itemGSPercent')+''))/100);
+					//console.log('unitsCost --> ' + unitsCost + ' gsPercent--> ' + gsPercent + ' ppu--> ' + gridStore.getValue(item, 'itemPricePerUnit') + ' order--> ' + gridStore.getValue(item, 'itemOrder'));
+					var totalCost = unitsCost + gsPercent;
+					table += '<td> $' + totalCost + '</td>';
+					totalUnitsCost += unitsCost;
+					totalGsPercent += gsPercent;
+					totalTotalCost += totalCost;
+				}
+				table += '</tr>';
+			});
+			table += '</table>';
+			
+			finalHTML += table;
+			
+			if(selectedOption != 'Distributor'){
+				finalHTML += '<br/><br/>';
+				finalHTML += '<div align="left" style="width: 95%; height: 10%; position: absolute; bottom: 20px; left: 10px;"><table style="width: 100%; height: 100%;" class="dateTable"><tr style="height: 10px;"><th style="width: 25%;">Manager Signature</th><th style="width: 30%;" class="noBorder"></th><th style="width: 20%;">GS CHARGES</th><th style="width: 20%;">TOTAL</th></tr>';
+				finalHTML += '<tr><td style="width: 25%;"></td><td style="width: 30%;" class="noBorder"></td><td style="width: 20%;">&nbsp;&nbsp;$' + totalGsPercent + '</td><td style="width: 20%;">&nbsp;&nbsp;$' + totalTotalCost + '</td></tr>';
+				finalHTML += '</table></div>';
+			}
+			finalHTML += "</body>";
+			finalHTML += "</html>";
+			
+			var w = window.open("about:blank");
+			w.document.write(finalHTML);
+			w.document.close();
+			w.print(); 
+		}
+	}); 
+	
+}
+
 
 function refreshCalendarForSelectedWeek(){
 	var laborLayout = require('controls/LaborLayoutController');

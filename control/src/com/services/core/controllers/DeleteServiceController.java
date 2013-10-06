@@ -76,5 +76,25 @@ public class DeleteServiceController {
 		query.setParameter("id", id);
 		return new SingleModelResponse<BaseModel>(query.executeUpdate() == 1, null);
 	}
+	
+	@Transactional
+	@RequestMapping(value = "/service/delete/invoice-details/{id}", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public SingleModelResponse<BaseModel> deleteInvoiceItem(@PathVariable int id) {
+		String hql = "delete from StoreInvoiceDetails where id=:id";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setParameter("id", id);
+		return new SingleModelResponse<BaseModel>(query.executeUpdate() == 1, null);
+	}
+	
+	@Transactional
+	@RequestMapping(value = "/service/delete/stock-item/{id}", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public SingleModelResponse<BaseModel> deleteStockItem(@PathVariable int id) {
+		String hql = "delete from StoreStock where id=:id";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setParameter("id", id);
+		return new SingleModelResponse<BaseModel>(query.executeUpdate() == 1, null);
+	}
 
 }

@@ -1,7 +1,7 @@
 define(["dijit/dijit", "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/dom-construct", "dojo/fx", "dojo/parser", "dijit/registry", "dojo/store/Memory", "dojo/json", "dojo/fx",
         "dojo/_base/lang", "dojo/request", "dojo/_base/array", "dojo/date/locale", "dijit/form/Select", "dijit/form/FilteringSelect", "dojo/number", "dojox/lang/functional", "dojo/window"],
 function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Memory, json, otherFx, lang, ajaxRequest, arrayUtils, locale, formSelect, FilteringSelect, DNumber, functional, window){
-	var widgets = ['accountingLbrAmt', 'accountingFdAmt', 'accountingAdvtAmt', 'accountingMiscAmt', 'accountingProfitAmt'],
+	var widgets = ['accountingLbrAmt', 'accountingFdAmt', 'accountingAdvtAmt', 'accountingMiscAmt', 'accountingProfitAmt', 'accountingTotalSales', 'accountingTotalOpExp', 'accountingTotalProfits'],
 	percentSuffix = 'Percent', accountingChart = null, accountingMonthlyChart=null,
 	initListening = function(){
 		arrayUtils.forEach(widgets, function(id){
@@ -25,7 +25,7 @@ function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Me
 		arrayUtils.forEach(widgets, function(id){
 			var value = isNaN(dijit.byId(id).get('value')) ? 0 : dijit.byId(id).get('value');
 			var percent = Number(isNaN(Number(value)/Number(total)) ? 0 : Number(value)/Number(total)) * 100;
-			dom.byId(id+percentSuffix).innerHTML = DNumber.round(percent, 2, 10) + ' %';
+			try{dom.byId(id+percentSuffix).innerHTML = DNumber.round(percent, 2, 10) + ' %';}catch(e){}
 		});
 	},
 	refreshPieChartForQuarter = function(){
@@ -47,7 +47,8 @@ function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Me
 		var modifiedData = { storeId: registry.byId('hiddenStoreId').get('value'), quarter: registry.byId('accountingQuartersList').get('value'), 
 				year: registry.byId('hiddenSelectedYear').get('value'), labor: dijit.byId('accountingLbrAmt').get('value'), 
 				foodCost: dijit.byId('accountingFdAmt').get('value'), advertisement: dijit.byId('accountingAdvtAmt').get('value'), 
-				misc: dijit.byId('accountingMiscAmt').get('value'), profit: dijit.byId('accountingProfitAmt').get('value') };
+				misc: dijit.byId('accountingMiscAmt').get('value'), profit: dijit.byId('accountingProfitAmt').get('value'), totalSales: dijit.byId('accountingProfitAmt').get('value'),
+				totalOpExp: dijit.byId('accountingTotalOpExp').get('value'), totalProfits: dijit.byId('accountingTotalProfits').get('value')};
 		registry.byId('accountsQuarterDetailsStandBy').show();
 		if(buttonPressed == 'save'){
 			ajaxRequest.post("/service/store/" + modifiedData.storeId + "/accounting/year/" + modifiedData.year + "/quarter/" + modifiedData.quarter, {
@@ -57,21 +58,24 @@ function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Me
         				if(accountUpdateResponse.success){
         					registry.byId('accountingUpdateBtn').set('disabled', false);
         					registry.byId('accountingSaveBtn').set('disabled', true);
-	        				console.log('Add Successful -->' + accountUpdateResponse.model.id);
+	        				//console.log('Add Successful -->' + accountUpdateResponse.model.id);
 	        				dom.byId('messages').innerHTML = 'Add Successful';
-	        				dom.byId('hiddenAccountingRecordId').value = accountUpdateResponse.model.id;
+	        				//dom.byId('hiddenAccountingRecordId').value = accountUpdateResponse.model.id;
+	        				registry.byId('hiddenAccountingRecordId').set('value', accountUpdateResponse.model.id);
         				}
         				registry.byId('accountsQuarterDetailsStandBy').hide();
         		}, function(error){
         			registry.byId('accountingUpdateBtn').set('disabled', true);
 					registry.byId('accountingSaveBtn').set('disabled', false);
     				console.log('Error while updating --> ' + error);
-        			dom.byId('hiddenAccountingRecordId').value = 0;
+        			//dom.byId('hiddenAccountingRecordId').value = 0;
+        			registry.byId('hiddenAccountingRecordId').set('value', 0);
         			dom.byId('messages').innerHTML = 'Error while Adding --> ' + error;
         			registry.byId('accountsQuarterDetailsStandBy').hide();
         		});
 		}else {
-			modifiedData.id = dom.byId('hiddenAccountingRecordId').value;
+			//modifiedData.id = dom.byId('hiddenAccountingRecordId').value;
+			modifiedData.id = registry.byId('hiddenAccountingRecordId').get('value');
 			ajaxRequest.put("/service/store/" + modifiedData.storeId + "/accounting/year/" + modifiedData.year + "/quarter/" + modifiedData.quarter, {
         		headers: { "Content-Type":"application/json"}, 
         		handleAs: 'json', data: json.stringify(modifiedData), timeout: 4000 
@@ -88,6 +92,38 @@ function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Me
         		});
 		}
 		
+	},
+	
+	fetchBlobsForAccounting = function(accId){
+		registry.byId('accMonthlyDocumentStandBy').show();
+    	ajaxRequest.get("/service/blobs/accMonthlyDocument/" + accId,{
+    		handleAs: 'json'
+    	}).then(function(blobsResponse){
+    		var uploadFilesNode = dom.byId('accMonthlyDocumentExisting');
+    		domConstruct.empty(uploadFilesNode);
+    		var fragment;
+    		var innerHTMLText = '';
+    		arrayUtils.forEach(blobsResponse.models, function(blob){
+    			fragment = document.createDocumentFragment();
+    			innerHTMLText = '&nbsp;&nbsp;&nbsp;<img src="resources/images/icon-pdf.png"/> &nbsp;'
+    				+ '<a target="_new" href="/service/getBlob/' + blob.blobKey + '">' 
+    				//+ ((blob.fileName.length > 20) ? (blob.fileName.substr(0, 20)+'...') : blob.fileName) 
+    				+  blob.fileName 
+    				+ '</a>'
+    				/*+ '&nbsp;&nbsp;' + '<img src="resources/images/delete-icon.png" onclick="javascript: deleteItem(' + "'blob','mgrContract','" + blob.id + "'" + ');"/>'*/
+    				+ '&nbsp;&nbsp;' + '<span onclick="javascript: deleteItem(' + "'blob','accMonthlyDocument','" + blob.id + "'" + ');"><i class="icon-remove"></i></span>'
+    				;
+    				//+ '&nbsp;<a target="_new" href="/service/getBlob/' + blob.blobKey + '">View/Download</a>';
+    			domConstruct.create("li", {
+                    innerHTML: innerHTMLText
+                }, fragment);
+	    		domConstruct.place(fragment, uploadFilesNode);
+    		});
+    		registry.byId('accMonthlyDocumentStandBy').hide();
+    	}, function(error){
+    		console.log('Error occurred while fetching store data ' + error);
+    		registry.byId('accMonthlyDocumentStandBy').hide();
+    	});
 	},
 	
 	populateQuartersList = function(domNode){
@@ -115,9 +151,13 @@ function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Me
              labelAttr: "label", style: "width: 100px; padding-left: 10px;" }, dom.byId("accountingQuartersList"));
 	
 		quartersList.on('change', function(newValue){
-			if(Number(newValue) > 0)
+			if(Number(newValue) > 0){
 				populateQuarterData(newValue);
-			else resetForm(true, true);
+			} else {
+				resetForm(true, true);
+				registry.byId('hiddenAccountingRecordId').set('value', 0);
+				fetchBlobsForAccounting(registry.byId('hiddenAccountingRecordId').get('value'));
+			}
 		});
 	},
 	
@@ -132,11 +172,15 @@ function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Me
     			var formData = quarterResponse.models[0];
     			resetForm(true, false);
     			registry.byId('accountingEntriesForm').set('value', {accountingLbrAmt: formData.labor, accountingFdAmt: formData.foodCost, 
-    					accountingAdvtAmt: formData.advertisement, accountingMiscAmt: formData.misc, accountingProfitAmt: formData.profit});
-    			dom.byId('hiddenAccountingRecordId').value = formData.id;
+    					accountingAdvtAmt: formData.advertisement, accountingMiscAmt: formData.misc, accountingProfitAmt: formData.profit, 
+    					accountingTotalSales: formData.totalSales, accountingTotalOpExp: formData.totalOpExp, accountingTotalProfits: formData.totalProfits});
+    			//dom.byId('hiddenAccountingRecordId').value = formData.id;
+    			registry.byId('hiddenAccountingRecordId').set('value', formData.id);
     		} else{
+    			registry.byId('hiddenAccountingRecordId').set('value', 0);
     			resetForm(false, true);
     		}
+    		fetchBlobsForAccounting(registry.byId('hiddenAccountingRecordId').get('value'));
     		registry.byId('accountsQuarterDetailsStandBy').hide();
     	}, function(error){
     		registry.byId('accountsQuarterDetailsStandBy').hide();
@@ -385,6 +429,7 @@ function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Me
 			refreshPieChartForQuarter();
 			document.getElementById('accountingMonthlyChartDiv').style.display='none';
 			//refreshColumnChartForYearlyData([]);
+			fetchBlobsForAccounting(0);
 		},
 		fetchAccDetailsForYear: function(year){
 			registry.byId('hiddenSelectedYear').set('value', year);
@@ -408,6 +453,9 @@ function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Me
 		},
 		updateAccountingData: function(formData, buttonPressed){
 			saveOrUpdateQuarterData(formData, buttonPressed);
-		}
+		},
+		fetchAccountingMonthlyBlobs: function(accId){
+			fetchBlobsForAccounting(accId);
+	    }
 	};
 });

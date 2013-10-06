@@ -66,9 +66,9 @@ public interface StoreDAO {
 	
 	List<StoreKey> getStoreKeyRecords(int storeId);*/
 	
-	int createStoreAccount(int storeId, int quarter, int year, double labor, double foodCost, double advertisement, double misc, double profit, Boolean active, int updatedBy);
+	int createStoreAccount(int storeId, int quarter, int year, double labor, double foodCost, double advertisement, double misc, double profit, double totalSales, double totalOpExp, double totalProfits, Boolean active, int updatedBy);
 	
-	boolean updateStoreAccount(int id, int storeId, int quarter, int year, double labor, double foodCost, double advertisement, double misc, double profit, Boolean active, int updatedBy);
+	boolean updateStoreAccount(int id, int storeId, int quarter, int year, double labor, double foodCost, double advertisement, double misc, double profit, double totalSales, double totalOpExp, double totalProfits, Boolean active, int updatedBy);
 	
 	//Store Inventory-tab related operations
 	List<StoreInvoice> getStoreInvoices(int storeId, String category);

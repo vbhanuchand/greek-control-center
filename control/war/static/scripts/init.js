@@ -321,6 +321,47 @@ require(["bootstrap", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/dijit", 
 			//Health Inspection File Upload Ends
 			
 			
+			//Accounting Documents File Upload
+			var fileUploadCompleteMgr = function(dataArray){
+				var progressMsgsNode = 'accMonthlyDocumentWidgetsProgressMsgs';
+				var widgetNode = 'accMonthlyDocumentWidgetsDiv';
+				var docUploadedNode = 'accMonthlyDocumentUploaded';
+					if(dataArray){
+						if(dataArray.status && dataArray.status == "success"){
+							dom.byId(progressMsgsNode).innerHTML = 'Upload Success..';
+							otherFx.wipeOut({node: dom.byId(widgetNode), duration: 1000, delay: 250, 
+								onEnd: function(node){
+									domStyle.set(this.node, {display: "none"});
+								}
+							}).play();
+							var uploadFilesNode = dom.byId(docUploadedNode);
+							domConstruct.empty(uploadFilesNode);
+							var fragment = document.createDocumentFragment();
+							var innerHTMLText = '&nbsp;&nbsp;&nbsp;<img src="resources/images/icon-pdf.png"/> &nbsp;' + dataArray.fileName + 
+												'&nbsp;<a href="javascript: saveFileRefToDB(\'accMonthlyDocument\', \'' + dataArray.fileName + '\', \'' + 
+												dataArray['blob-key'] + '\');">Save</a>';
+							domConstruct.create("li", {
+		                        innerHTML: innerHTMLText
+		                    }, fragment);
+							 domConstruct.place(fragment, uploadFilesNode);
+						}else{
+							console.log('error',data,ioArgs);
+						}
+					}else{
+						console.log('ugh?',arguments);
+					}
+				}, fileUploadStartMgr = function(dataArray){
+					var progressMsgsNode = 'accMonthlyDocumentWidgetsProgressMsgs';
+					this.set('url', window.blobStoreURL);
+					dom.byId(progressMsgsNode).innerHTML = 'Uploading ...';
+				};
+				
+			var myUploaderMgr = new dojox.form.Uploader({ name: "uploadedFile", multiple:false, showProgress:true, label: "Select File",
+					uploadOnSelect:true, url: blobStoreURL, onBegin: fileUploadStartMgr, onComplete: fileUploadCompleteMgr});
+			dojo.byId("accMonthlyDocumentWidgets").appendChild(myUploaderMgr.domNode);
+			//Accounting Documents File Upload Ends
+			
+			
 			
 			
 			

@@ -754,7 +754,7 @@ public class DataManagerImpl implements DataManager{
 		StoreAccountWrapper storeAccWrapper = null;
 		for(StoreAccount storeAccount: storeDAO.getStoreAccountsByYear(storeId, year)){
 			storeAccWrapper = new StoreAccountWrapper(storeAccount.getId(), storeAccount.getStoreId(), storeAccount.getQuarter(), storeAccount.getYear(), storeAccount.getLabor(), 
-					storeAccount.getFoodCost(), storeAccount.getAdvertisement(), storeAccount.getMisc(), storeAccount.getProfit(), storeAccount.getActive(), 
+					storeAccount.getFoodCost(), storeAccount.getAdvertisement(), storeAccount.getMisc(), storeAccount.getProfit(), storeAccount.getTotalSales(), storeAccount.getTotalOpExp(), storeAccount.getTotalProfits(), storeAccount.getActive(), 
 					storeAccount.getUpdated_by(), storeAccount.getUpdated_date());
 			storeAccountList.add(storeAccWrapper);
 		}
@@ -767,7 +767,7 @@ public class DataManagerImpl implements DataManager{
 		StoreAccountWrapper storeAccWrapper = null;
 		for(StoreAccount storeAccount: storeDAO.getStoreAccountByQuarter(storeId, year, quarter)){
 			storeAccWrapper = new StoreAccountWrapper(storeAccount.getId(), storeAccount.getStoreId(), storeAccount.getQuarter(), storeAccount.getYear(), storeAccount.getLabor(), 
-					storeAccount.getFoodCost(), storeAccount.getAdvertisement(), storeAccount.getMisc(), storeAccount.getProfit(), storeAccount.getActive(), 
+					storeAccount.getFoodCost(), storeAccount.getAdvertisement(), storeAccount.getMisc(), storeAccount.getProfit(), storeAccount.getTotalSales(), storeAccount.getTotalOpExp(), storeAccount.getTotalProfits(), storeAccount.getActive(), 
 					storeAccount.getUpdated_by(), storeAccount.getUpdated_date());
 			storeAccountList.add(storeAccWrapper);
 		}
@@ -778,14 +778,14 @@ public class DataManagerImpl implements DataManager{
 	@Transactional
 	public int insertStoreAccount(StoreAccountWrapper accDetails){
 		return storeDAO.createStoreAccount(accDetails.getStoreId(), accDetails.getQuarter(), accDetails.getYear(), accDetails.getLabor(), 
-				accDetails.getFoodCost(), accDetails.getAdvertisement(), accDetails.getMisc(), accDetails.getProfit(), true, 0);
+				accDetails.getFoodCost(), accDetails.getAdvertisement(), accDetails.getMisc(), accDetails.getProfit(), accDetails.getTotalSales(), accDetails.getTotalOpExp(), accDetails.getTotalProfits(), true, 0);
 	}
 	
 	@Override
 	@Transactional
 	public boolean updateStoreAccount(StoreAccountWrapper accDetails){
 		return storeDAO.updateStoreAccount(accDetails.getId(), accDetails.getStoreId(), accDetails.getQuarter(), accDetails.getYear(), accDetails.getLabor(), 
-				accDetails.getFoodCost(), accDetails.getAdvertisement(), accDetails.getMisc(), accDetails.getProfit(), true, 0);
+				accDetails.getFoodCost(), accDetails.getAdvertisement(), accDetails.getMisc(), accDetails.getProfit(), accDetails.getTotalSales(), accDetails.getTotalOpExp(), accDetails.getTotalProfits(), true, 0);
 	}
 	
 	@Override

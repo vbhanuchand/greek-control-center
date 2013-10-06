@@ -38,5 +38,6 @@
 	<classpathentry kind="lib" path="C:/Bhanu/jars/spring-tx-3.2.1.RELEASE.jar"/>
 	<classpathentry kind="lib" path="C:/Bhanu/jars/spring-web-3.2.1.RELEASE.jar"/>
 	<classpathentry kind="lib" path="C:/Bhanu/jars/spring-webmvc-3.2.1.RELEASE.jar"/>
+	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER/App Engine"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

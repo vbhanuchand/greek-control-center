@@ -5,16 +5,16 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
  		"dijit/Dialog", "dijit/form/DropDownButton", "dijit/form/Button", "dijit/form/DateTextBox", "dojox/grid/DataGrid", "dojox/grid/EnhancedGrid", "dojo/store/Memory", 
  		"dojo/query", "dojo/_base/declare", "dojo/has", "dojo/data/ObjectStore", "dojo/request", "dojox/form/Manager", "dojox/math/random/Simple", "dojox/lang/functional",
  		"dojo/data/ItemFileWriteStore", "dojox/grid/cells/dijit", "dijit/form/TimeTextBox", "dijit/form/ValidationTextBox",	"dijit/form/CurrencyTextBox", "dojo/store/Observable",  
- 		"dijit/TooltipDialog", "dijit/popup", "dojo/number", "dojox/grid/enhanced/plugins/exporter/CSVWriter", "dojox/grid/enhanced/plugins/NestedSorting", "dojox/grid/enhanced/plugins/Pagination", "dojox/grid/enhanced/plugins/IndirectSelection"],
+ 		"dijit/TooltipDialog", "dijit/popup", "dojo/number", "dijit/form/NumberTextBox", "dojox/grid/enhanced/plugins/exporter/CSVWriter", "dojox/grid/enhanced/plugins/NestedSorting", "dojox/grid/enhanced/plugins/Pagination", "dojox/grid/enhanced/plugins/IndirectSelection"],
  		function(declare, dijit, domForm, Select, registry, dom, domStyle, domClass, domConstruct, domGeometry, string, on, 
  				keys, lang, baseArray, event, json, djConfig, otherFx, ioQuery, win, aspect, 
  				locale, baseFx, Table, TextBox, ContentPane, SimpleTextArea, TextArea, 
  				BorderContainer, TabContainer, Calendar, TitlePane, FilteringSelect, Form, 
  				Dialog, DropDownButton, Button, DateTextBox, DataGrid, EnhancedGrid, Memory, 
  				query, declare, has, ObjectStore, ajaxRequest, dojoxFormManager, randomNumber, functional,
- 				itemFileWriteStore, gridDijit, TimeTextBox, ValidationTextBox, CurrencyTextBox, Observable, Tooltip, popup, DNumber){
+ 				itemFileWriteStore, gridDijit, TimeTextBox, ValidationTextBox, CurrencyTextBox, Observable, Tooltip, popup, DNumber, NumberTextBox){
 
-	var inventoryDetailsGrid=null, invoiceItemsGrid=null, inventoryInvoicesGrid=null, isInvoiceDetail = false, INVENTORY_ITEMS_INFO = {},
+	var inventoryDetailsGrid=null, invoiceItemsGrid=null, inventoryInvoicesGrid=null, isInvoiceDetail = false, /*INVENTORY_ITEMS_INFO = {},*/
 	refreshInvoiceDetails = function(){
 		registry.byId('inventoryInvoiceDetailsGrid').selection.clear();
 		dom.byId('createInvoiceLink').style.display = 'none';
@@ -35,12 +35,20 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 		var grid = registry.byId('inventoryInvoiceDetailsGrid');
 		dojo.connect(grid, 'onStyleRow', function(row){
 			var item = grid.getItem(row.index);
-			var nd = dojo.query('td[idx="1"]', row.node)[0];
+			
+			//var nd1 = dojo.query('td[idx="2"]', row.node)[0];
+			//if(nd1 && item){
+			//	nd1.style.backgroundColor = '#ffffff';
+			//	nd1.style.color = '#ffffff';
+			//}
+			
+			var nd = dojo.query('td[idx="3"]', row.node)[0];
 			if(nd && item){
 				nd.style.backgroundColor = '#' + INVENTORY_ITEMS_INFO[item['itemId'][0]]['itemColor'];
 				nd.style.color = '#ffffff';
 			}
 		});
+		attachGridCellClickEvent('inventoryInvoiceDetailsGrid');
 	},
 	destroyAndCreateSelectWidget = function(items){
 		if(registry.byId('inventoryStockItem')){
@@ -79,6 +87,62 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
         }, "inventoryStockItem");
 		selectWdgt.startup();
 	},
+	attachGridCellClickEvent = function(gridId){
+		registry.byId(gridId).on("CellClick", function(evt){
+			//console.log('Cell Clicked ', evt);
+			if((evt.grid.get('id') == 'inventoryInvoiceDetailsGrid') && (evt.cellIndex == 2)){
+				var standByWidgetId = evt.grid.get('id') + 'StandBy';
+				registry.byId(standByWidgetId).show();
+				var grid = evt.grid, serviceURL= evt.grid.getItem(evt.rowIndex)._self, editedItem = '{}';
+				var selectedItems = [];//grid.selection.getSelected();
+				selectedItems.push(evt.grid.getItem(evt.rowIndex));
+				var rowValid = true;
+				baseArray.forEach(evt.grid.layout.cells, function(cell){
+    				rowValid = rowValid && validateCell(evt.grid.getCell(cell.index).widget);
+	    		});
+				if(rowValid){
+    				dojo.forEach(selectedItems, function(selectedItem) {
+			    		editedItem = '{';
+			    		dojo.forEach(grid.store.getAttributes(selectedItem), function(attribute) {
+			    			if(!(attribute.substring(0,1) == '_'))
+			    				editedItem += '"' + attribute + '":"' + grid.store.getValues(selectedItem, attribute) + '",';
+			    		});
+			    		editedItem = editedItem.substring(0,(editedItem.length-1)) + '}';
+			    	});
+	    			//console.log('Edited Item ', editedItem);
+				    var jsonRowObject = json.parse(editedItem,false);
+				    ajaxRequest.put(serviceURL, {
+		        		headers: { "Content-Type":"application/json"}, 
+		        		handleAs: 'json', data: json.stringify(jsonRowObject), timeout: 10000 
+		        	}).then(function(updateResponse){
+		        			if(updateResponse.success){
+		        				console.log('Update Success ');
+		        				dom.byId('messages').innerHTML = 'Update Success';
+		        				if(evt.grid.get('id') == 'inventoryInvoiceDetailsGrid'){
+		        					
+		        				}
+		        			}
+		        			registry.byId(standByWidgetId).hide();
+		        	}, function(error){
+		        			console.log('Error while updating --> ' + error);
+		        			dom.byId('messages').innerHTML = 'Error while updating --> ' + error;
+		        			registry.byId(standByWidgetId).hide();
+		        	});
+			} else {
+				registry.byId(standByWidgetId).hide();
+			}
+		} else if((evt.grid.get('id') == 'inventoryInvoiceDetailsGrid') && (evt.cellIndex == 1)){
+			if((evt.grid.store.getValue(evt.grid.getItem(evt.rowIndex), '_self')+'').indexOf('/invoiceDetail') > 0)
+				deleteItem('invoice-item', '', evt.grid.store.getValue(evt.grid.getItem(evt.rowIndex), 'id'));
+			else
+				deleteItem('stock-item', '', evt.grid.store.getValue(evt.grid.getItem(evt.rowIndex), 'id'));
+		}});
+	},
+	validateCell = function(cellWidget){
+    	var returnValue = false;
+    	try{cellWidget.focus(); returnValue = cellWidget.validate();}catch(e){console.log('Error while Validating Cell --> ' + e);returnValue=true;}
+    	return returnValue;
+    },
 	fetchInvoiceGridData = function(storeId){
 		registry.byId('inventoryInvoicesGridStandBy').show();
 		ajaxRequest.get("/service/store/" + storeId + '/' + registry.byId('hiddenInvoiceCategory').get('value') + "/invoice",{
@@ -148,9 +212,9 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 		var gridDataStore = new itemFileWriteStore({data: tempStore});
 		
 		var formatItem = function(inVal, rowIndex){
-			if((isInvoiceDetail === true) || (isInvoiceDetail == 'true'))
-				return '<a href="javascript: editInvoiceItem(' + inVal[0] + ',' + rowIndex + ')">' + INVENTORY_ITEMS_INFO[inVal[1]]['itemName'] + '</a>';
-			else
+			//if((isInvoiceDetail === true) || (isInvoiceDetail == 'true'))
+			//	return '<a href="javascript: editInvoiceItem(' + inVal[0] + ',' + rowIndex + ')">' + INVENTORY_ITEMS_INFO[inVal[1]]['itemName'] + '</a>';
+			//else
 				return INVENTORY_ITEMS_INFO[inVal[1]]['itemName'];
 		};
 		
@@ -172,22 +236,46 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 			return inVal + ' %';
 		};
 		
+		var formatUpdate = function(inVal){
+			return '<span><i class="icon-save"></i></span>';
+		};
+		
+		var formatDelete = function(inVal){
+			return '<span><i class="icon-trash"></i></span>';
+		};
+		
 		if(!dijit.byId('inventoryInvoiceDetailsGrid')){
 			inventoryDetailsGrid = new EnhancedGrid({
 									store: gridDataStore,
 									query: { id: "*" },
 									structure: [{defaultCell: { width: "20%", type: dojox.grid.cells._Widget, styles: 'padding-left: 2px; text-align: left;', noresize: true, editable: false },
-										cells: [{ name: "Code", field: "itemId", width: "9%", noresize: true, styles: 'text-align: center;' },
-										        { name: "Stock Item", fields: ['id', "itemId"], width: "16%", noresize: true, formatter: formatItem },
-									            { name: "Par (Units)", field: "itemId", width: "15%", noresize: true, formatter: formatParUnits },
-												{ name: "In Stock", field: "itemStock", width: "12%", noresize: true },
-												{ name: "Order", field: "itemOrder", width: "10%", noresize: true },
-												{ name: "Per Unit", field: "itemPricePerUnit", width: "13%", noresize: true, formatter: formatToCurrency },
-												{ name: "GS Charge", field: "itemGSPercent", width: "16%", noresize: true, formatter: formatToPercent },
-												{ name: "Total", fields: ['itemOrder', 'itemPricePerUnit', 'itemGSPercent'], width: "9%", noresize: true, formatter: formatTotal }
+										cells: [{ name: "<span><i class='icon-trash'></i></span>", field: "id", width: "3%", noresize: true, styles: 'text-align: center;', formatter: formatDelete },
+										        { name: "<span><i class='icon-save'></i></span>", field: "id", width: "3%", noresize: true, styles: 'text-align: center;', formatter: formatUpdate },
+										        { name: "<b>Code</b>", field: "itemId", width: "7%", noresize: true, styles: 'text-align: center;' },
+										        { name: "<b>Stock Item</b>", fields: ['id', "itemId"], width: "16%", noresize: true, formatter: formatItem },
+									            { name: "<b>Par (Units)</b>", field: "itemId", width: "12%", noresize: true, formatter: formatParUnits },
+												{ name: "<b>In Stock</b>", field: "itemStock", width: "11%", noresize: true, editable: true, 
+										        	constraint:{required: false}, widgetProps: { promptMessage: 'Provide Stock Count', 
+										        	missingMessage: 'Please enter only Numbers', invalidMessage: 'Accepts only Numerics'}, 
+										        	widgetClass: NumberTextBox },
+												{ name: "<b>Order</b>", field: "itemOrder", width: "8%", noresize: true, editable: true, 
+										        	constraint:{required: false}, widgetProps: { promptMessage: 'Provide Order Count', 
+										        	missingMessage: 'Please enter only Numbers', invalidMessage: 'Accepts only Numerics'}, 
+										        	widgetClass: NumberTextBox },
+												/*{ name: "Per Unit ($)", field: "itemPricePerUnit", width: "11%", noresize: true, formatter: formatToCurrency },*/
+												{ name: "<b>Per Unit ($)</b>", field: "itemPricePerUnit", width: "12%", noresize: true, editable: true, 
+										        	constraint:{required: false}, widgetProps: { promptMessage: 'Provide Price Per Unit', 
+										        	missingMessage: 'Please enter only Numbers', invalidMessage: 'Accepts only Numerics'}, 
+										        	widgetClass: NumberTextBox },
+												/*{ name: "GS Charge %", field: "itemGSPercent", width: "13%", noresize: true, formatter: formatToPercent },*/
+												{ name: "<b>GS Charge %</b>", field: "itemGSPercent", width: "13%", noresize: true, editable: true, 
+										        	constraint:{required: false}, widgetProps: { promptMessage: 'Provide GS Charge %', 
+										        	missingMessage: 'Please enter only Numbers', invalidMessage: 'Accepts only Numerics'}, 
+										        	widgetClass: NumberTextBox },
+												{ name: "<b>Total</b>", fields: ['itemOrder', 'itemPricePerUnit', 'itemGSPercent'], width: "9%", noresize: true, formatter: formatTotal }
 												]}],
-									singleClickEdit: false,
-									editable: false,
+									singleClickEdit: true,
+									editable: true,
 									selectable: true,
 									rowsPerPage: 10,
 									loadingMessage: 'loadingMessage: Loading data from server..',
@@ -197,7 +285,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 									selectionMode: "multiple",
 									rowSelector: '0px;',
 									keepSelection: false,
-									plugins: {indirectSelection: {headerSelector:true, width:"25px", styles:"text-align: center;"}}
+									plugins: {indirectSelection: {headerSelector:true, width:"20px", styles:"text-align: center;"}}
 									}, "inventoryInvoiceDetailsGrid");
 			inventoryDetailsGrid.startup();
 		} else dijit.byId('inventoryInvoiceDetailsGrid').setStore(gridDataStore);
@@ -206,18 +294,18 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 			var selectedValue = registry.byId('invoiceCategorySelect').get('value');
 			switch(selectedValue){
 				case 'Distributor':
-					registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(6, false);
-					registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(7, false);
 					registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(8, false);
-					//registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(9, false);
-					//registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(10, false);
+					registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(9, false);
+					registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(10, false);
+					//registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(11, false);
+					//registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(12, false);
 					break;
 				case 'GS Kitchen':
-					registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(6, true);
-					registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(7, true);
 					registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(8, true);
-					//registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(9, true);
-					//registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(10, true);
+					registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(9, true);
+					registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(10, true);
+					//registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(11, true);
+					//registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(12, true);
 					break;
 			}
 		}
@@ -246,11 +334,11 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 									store: gridDataStore,
 									query: { id: "*" },
 									structure: [{defaultCell: { width: "20%", type: dojox.grid.cells._Widget, styles: 'text-align: left;', noresize: true, editable: false },
-									            cells: [{ name: "Date", field: "invoiceDate", width: "20%", noresize: true, styles: 'text-align: center;'},
-									            { name: "GS Invoice", field: "id", width: "20%", noresize: true, formatter: formatGSInvoice, styles: 'text-align: center;'},
-									            { name: "Inventory", field: "id", width: "20%", noresize: true, formatter: formatInventory, styles: 'text-align: center;'},
-												{ name: "GS Charges", field: "gsCharges", width: "20%", noresize: true, formatter: formatToCurrency},
-												{ name: "Total Charges", field: "totalCharges", width: "20%", noresize: true, formatter: formatToCurrency}
+									            cells: [{ name: "<b>Date</b>", field: "invoiceDate", width: "20%", noresize: true, styles: 'text-align: center;'},
+									            { name: "<b>Invoice</b>", field: "id", width: "19%", noresize: true, formatter: formatGSInvoice, styles: 'text-align: center;'},
+									            { name: "<b>Inventory</b>", field: "id", width: "19%", noresize: true, formatter: formatInventory, styles: 'text-align: center;'},
+												{ name: "<b>GS Charges($)</b>", field: "gsCharges", width: "26%", noresize: true, formatter: formatToCurrency},
+												{ name: "<b>Total</b>", field: "totalCharges", width: "16%", noresize: true, formatter: formatToCurrency}
 												]}],
 									singleClickEdit: false,
 									editable: false,
@@ -495,6 +583,9 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 			},
 			reset: function(){
 				resetScreen();
+			},
+			refreshSelectedInvoiceDetails: function(){
+				refreshInvoiceDetails();
 			},
 			createInvoiceAction: function(){
 				var grid = registry.byId('inventoryInvoiceDetailsGrid');
