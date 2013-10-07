@@ -380,4 +380,35 @@ public class StoreServiceController {
 		return new SingleModelResponse<UploadNotesWrapper>(execute, null);
 	}
 	
+	//Templates Tab related methods starts here
+	@RequestMapping(value = "/service/store/{storeId}/templates", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public MultipleModelResponse<UploadNotesWrapper> getStoreTemplatesDetails(@PathVariable int storeId)
+			throws IOException {
+		String tab = "store-template";
+		return new MultipleModelResponse<UploadNotesWrapper>(true, dataService.getHealthInspectionDetails(storeId, tab));
+	}
+	
+	@RequestMapping(value = "/service/store/{storeId}/templates", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public SingleModelResponse<UploadNotesWrapper> insertStoreTemplateDetails(@PathVariable int storeId, @RequestBody UploadNotesWrapper uploadNotesDetails)
+			throws IOException {
+		String tab = "store-template";
+		uploadNotesDetails.setLinkedId(storeId);
+		uploadNotesDetails.setPurpose(tab);
+		int id = dataService.insertHealthInspectionDetails(uploadNotesDetails);
+		return new SingleModelResponse<UploadNotesWrapper>(true, null);
+	}
+	
+	@RequestMapping(value = "/service/store/{storeId}/templates/{templateId}", method = RequestMethod.PUT, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public SingleModelResponse<UploadNotesWrapper> updateStoreTemplateDetails(@PathVariable int storeId, @PathVariable int templateId, @RequestBody UploadNotesWrapper uploadNotesDetails)
+			throws IOException {
+		uploadNotesDetails.setId(templateId);
+		uploadNotesDetails.setLinkedId(storeId);
+		uploadNotesDetails.setPurpose("store-template");
+		boolean execute = dataService.updateHealthInspectionDetails(uploadNotesDetails);
+		return new SingleModelResponse<UploadNotesWrapper>(execute, null);
+	}
+	
 }

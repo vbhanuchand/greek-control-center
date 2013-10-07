@@ -15,7 +15,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 				itemFileWriteStore, gridDijit, TimeTextBox, ValidationTextBox, CurrencyTextBox, Observable, Tooltip, popup) {
 			var employeesGrid = registry.byId('employeesGrid'), employeeSalaryDetailsGrid = registry.byId('employeeSalaryDetailsGrid'), 
 				employeeDisciplineGrid = registry.byId('employeeDisciplineGrid'), employeeDoingGoodGrid = registry.byId('employeeDoingGoodGrid'), 
-				employeeLeavesGrid=registry.byId('employeeLeavesGrid'), empLaborDetailsGrid=registry.byId('empLaborDetailsGrid'), 
+				employeeLeavesGrid=registry.byId('employeeLeavesGrid'), empLaborDetailsGrid=registry.byId('empLaborDetailsGrid'), employeeDocumentsGrid=registry.byId('empDocumentsGrid'),
 				storePattern = 'MM/DD/YYYY', storeTimePattern = 'HH:mm', displayPattern = 'd, MMMM yyyy', randomGen = new randomNumber(), blankArray=[],
 			formatDate = function(datum){
 				var d = locale.parse(datum, {selector: 'date', datePattern: storePattern});
@@ -40,6 +40,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 				updateEmployeeDoingGoodGrid(blankArray);
 				updateEmployeeLeavesGrid(blankArray);
 				updateEmployeeLaborDetailsGrid(blankArray);
+				updateEmployeeDocumentsGrid(blankArray);
 				updateMgrLeavesGrid(blankArray);
 				attachGridEvents('employeesGrid');
 				attachGridEvents('employeeSalaryDetailsGrid');
@@ -60,6 +61,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 				registry.byId('employeeDisciplineGridStandBy').show();
 				registry.byId('employeeDoingGoodGridStandBy').show();
 				registry.byId('employeeLeavesGridStandBy').show();
+				registry.byId('employeeDocumentsGridStandBy').show();
 				registry.byId('empLaborDetailsGridStandBy').show();
 		    },
 		    hideStandBy = function(){
@@ -68,6 +70,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 				registry.byId('employeeDisciplineGridStandBy').hide();
 				registry.byId('employeeDoingGoodGridStandBy').hide();
 				registry.byId('employeeLeavesGridStandBy').hide();
+				registry.byId('employeeDocumentsGridStandBy').hide();
 				registry.byId('empLaborDetailsGridStandBy').hide();
 		    },
 		    checkTitles = function(child){
@@ -85,31 +88,38 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 						case 'empLaborDetails':
 							child.set('title', child.get('title') + " &nbsp; <img align='top' src='resources/images/add-icon.png' onclick='javascript: addEmployeeLaborTabRecord(event);'/> &nbsp;");
 							break;
+						case 'empDocumentDetails':
+							child.set('title', child.get('title') + " &nbsp; <img align='top' src='resources/images/add-icon.png' onclick='javascript: addEmployeeDocumentsTabRecord(event);'/> &nbsp;");
+							break;
 					}
 		    },
 		    refreshSelectedPane = function(){
 		    	var employeeTabsContainer = registry.byId("employeeInfoTabContainer");
 		    	var child = employeeTabsContainer.selectedChildWidget;
 		    	switch(child.get('id')){
-				case 'empSalaryDetails':
-					if(getSelectedEmployeeId() > 0) fetchEmployeeSalaryData(getSelectedEmployeeId());
-					else updateEmployeeSalaryDetailsGrid(blankArray);
-		        	break;
-				case 'empDisciplineDetails':
-					if(getSelectedEmployeeId() > 0) fetchEmployeeDisciplineData(getSelectedEmployeeId());
-					else {
-						updateEmployeeDisciplinaryDetailsGrid(blankArray);
-						updateEmployeeDoingGoodGrid(blankArray);
-					}
-		        	break;
-				case 'empLeavesDetails':
-					if(getSelectedEmployeeId() > 0) fetchEmployeeLeavesData(getSelectedEmployeeId());
-					else updateEmployeeLeavesGrid(blankArray);
-					
-		        	break;
-				case 'empLaborDetails':
-					if(getSelectedEmployeeId() > 0) fetchEmployeeLaborData(getSelectedEmployeeId());
-					else updateEmployeeLaborDetailsGrid(blankArray);
+					case 'empSalaryDetails':
+						if(getSelectedEmployeeId() > 0) fetchEmployeeSalaryData(getSelectedEmployeeId());
+						else updateEmployeeSalaryDetailsGrid(blankArray);
+			        break;
+					case 'empDisciplineDetails':
+						if(getSelectedEmployeeId() > 0) fetchEmployeeDisciplineData(getSelectedEmployeeId());
+						else {
+							updateEmployeeDisciplinaryDetailsGrid(blankArray);
+							updateEmployeeDoingGoodGrid(blankArray);
+						}
+			        break;
+					case 'empLeavesDetails':
+						if(getSelectedEmployeeId() > 0) fetchEmployeeLeavesData(getSelectedEmployeeId());
+						else updateEmployeeLeavesGrid(blankArray);
+						
+			        break;
+					case 'empLaborDetails':
+						if(getSelectedEmployeeId() > 0) fetchEmployeeLaborData(getSelectedEmployeeId());
+						else updateEmployeeLaborDetailsGrid(blankArray);
+					break;
+					case 'empDocumentDetails':
+						if(getSelectedEmployeeId() > 0) fetchEmployeeDocumentsData(getSelectedEmployeeId());
+						else updateEmployeeDocumentsGrid(blankArray);
 					break;
 				}
 		    	checkTitles(child);
@@ -118,18 +128,21 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 		    	var employeeTabsContainer = registry.byId("employeeInfoTabContainer");
 		    	var child = employeeTabsContainer.selectedChildWidget;
 		    	switch(child.get('id')){
-				case 'empSalaryDetails':
-					updateEmployeeSalaryDetailsGrid(blankArray);
-		        	break;
-				case 'empDisciplineDetails':
-					updateEmployeeDisciplinaryDetailsGrid(blankArray);
-					updateEmployeeDoingGoodGrid(blankArray);
+					case 'empSalaryDetails':
+						updateEmployeeSalaryDetailsGrid(blankArray);
+			        break;
+					case 'empDisciplineDetails':
+						updateEmployeeDisciplinaryDetailsGrid(blankArray);
+						updateEmployeeDoingGoodGrid(blankArray);
 					break;
-				case 'empLeavesDetails':
-					updateEmployeeLeavesGrid(blankArray);
+					case 'empLeavesDetails':
+						updateEmployeeLeavesGrid(blankArray);
 					break;
-				case 'empLaborDetails':
-					updateEmployeeLaborDetailsGrid(blankArray);
+					case 'empLaborDetails':
+						updateEmployeeLaborDetailsGrid(blankArray);
+					break;
+					case 'empDocumentDetails':
+						updateEmployeeDocumentsGrid(blankArray);
 					break;
 				}
 		    	hideStandBy();
@@ -141,6 +154,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 		    	try{dijit.byId('employeeDoingGoodGrid').selection.clear();}catch(e){}
 		    	try{dijit.byId('employeeLeavesGrid').selection.clear();}catch(e){}
 		    	try{dijit.byId('empLaborDetailsGrid').selection.clear();}catch(e){}
+		    	try{dijit.byId('empDocumentsGrid').selection.clear();}catch(e){}
 		    },
 		    showMessages = function(storeId, tooltip, message){
 		    	if(tooltip){
@@ -658,6 +672,56 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 					employeeLeavesGrid.startup();
 				} else dijit.byId('mgrLeavesGrid').setStore(gridDataStore);
 		    },
+		    showEditLink = function(value, rowIndex){
+		    	return '<span style="text-align: center;"><a href="javascript: editEmployeeDocumentRecordByDialog(' + "'employee-docs', " + value + "," + rowIndex + ');">Edit</a></span>';
+		    },
+		    showDocumentLink = function(values, rowIndex){
+		    	if(values[0] != '&#/#&')
+		    		return '<a target="_new" href="/service/getBlob/' + values[1] + '">' + values[0] + '</a>';
+		    	else 
+		    		return '-- No Attachments --';
+		    },
+		    updateEmployeeDocumentsGrid = function(docsData){
+		    	var tempStore = {
+		    			"identifier" : "id",
+		    			"items" : []
+		    	};
+		    	tempStore.items = docsData;
+		    	var gridDataStore = new itemFileWriteStore({data: tempStore});
+				if(!dijit.byId('empDocumentsGrid')){
+					employeeDocumentsGrid = new EnhancedGrid({
+											store: gridDataStore,
+											query: { id: "*" },
+											structure: [{ name: "Edit", field: "id", editable: false, width: "5%", noresize: true, formatter: showEditLink, styles: 'text-align: center;'}, 
+											            { name: "Date", field: "purposeDate", editable: false, width: "10%", noresize: true, styles: 'text-align: center;'},
+											            { name: "Document", fields: ["fileName", "blobKey"], editable: false, formatter: showDocumentLink, width: "35%", noresize: true, styles: 'padding-left: 5px;'},
+											            { name: "Notes", field: "purposeNotes", editable: false, width: "40%", noresize: true, styles: 'padding-left: 5px'}],
+											singleClickEdit: false,
+											editable: false,
+											selectable: true,
+											rowsPerPage: 10,
+											loadingMessage: 'loadingMessage: Loading data from server..',
+									        errorMessage:   'Oops we could not retrive the requested data!',
+									        noDataMessage:	"<span class=\"dojoxGridNoData\"><font color='grey'><b>No Data to Display !!!<b></font></span>",
+									        onFetchError: function(error,ioargs){console.log('Error ocured: '+error+' ioargs: '+ioargs); return true;},
+									        selectionMode: "none",
+											plugins: {
+												nestedSorting: false,
+								                pagination: {
+													pageSizes: ["10", "50", "100", "All"],
+													description: true,
+													sizeSwitch: false,
+													pageStepper: true,
+													gotoButton: false,
+													maxPageStep: 4,
+													position: "bottom",
+													defaultPage: 1,
+						                            defaultPageSize: 10
+												}
+								        }}, "empDocumentsGrid");
+					employeeDocumentsGrid.startup();
+				} else dijit.byId('empDocumentsGrid').setStore(gridDataStore);
+		    },
 		    updateEmployeeLaborDetailsGrid = function(empLaborData){
 		    	var tempStore = {
 		    			"identifier" : "id",
@@ -812,6 +876,18 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 		    		console.error('Error occurred while fetching employees leaves data ' + error);
 		    		registry.byId('employeeLeavesGridStandBy').hide();
 		    		registry.byId('employeesGridStandBy').hide();
+		    	});
+		    },
+		    fetchEmployeeDocumentsData = function(empId) {
+		    	registry.byId('employeeDocumentsGridStandBy').show();
+		    	ajaxRequest.get("/service/employee/" + empId + "/documents",{
+		    		handleAs: 'json'
+		    	}).then(function(documentDetailsResponse){
+		    		updateEmployeeDocumentsGrid(documentDetailsResponse.models);
+	    			registry.byId('employeeDocumentsGridStandBy').hide();
+		    	}, function(error){
+		    		console.log('Error occurred while fetching Documents data ' + error);
+		    		registry.byId('employeeDocumentsGridStandBy').hide();
 		    	});
 		    },
 		    fetchMgrLeavesData = function(empId) {
@@ -985,6 +1061,9 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 									break;
 								case 'empLaborDetails':
 									child.set('title', child.get('title') + " &nbsp; <img align='top' src='resources/images/add-icon.png' onclick='javascript: addEmployeeLaborTabRecord(event);'/> &nbsp;");
+									break;
+								case 'empDocumentDetails':
+									child.set('title', child.get('title') + " &nbsp; <img align='top' src='resources/images/add-icon.png' onclick='javascript: addEmployeeDocumentsTabRecord(event);'/> &nbsp;");
 									break;
 							}
 							refreshSelectedPane();
