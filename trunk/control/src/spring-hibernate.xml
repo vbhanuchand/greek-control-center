@@ -23,22 +23,22 @@
 		value="3" /> <property name="minPoolSize" value="5" /> <property name="maxPoolSize" 
 		value="20" /> <property name="maxIdleTime" value="600" /> </bean> -->
 
-	<bean id="dataSource"
+	<!--<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName"
 			value="com.google.appengine.api.rdbms.AppEngineDriver" />
 		<property name="url"
 			value="jdbc:google:rdbms://bhanutestinstance:bhanucloudinstance/greekapp" />
 		<property name="username" value="root" />
-		<property name="password" value="" />
-	</bean>
+		<property name="password" value="" /> 
+	</bean>-->
 
 
-	<!--<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource"> 
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource"> 
 		<property name="driverClassName" value="com.google.appengine.api.rdbms.AppEngineDriver" 
 		/> <property name="url" value="jdbc:mysql://localhost:3306/controlcenter" 
 		/> <property name="username" value="root" /> <property name="password" value="password" 
-		/> </bean> -->
+		/> </bean>
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"></property>
