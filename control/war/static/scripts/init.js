@@ -69,6 +69,8 @@ require(["bootstrap", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/dijit", 
 			var tabContainer  = registry.byId("tabContainer");
 			var storeId = registry.byId('hiddenStoreId').get('value');
 			dojo.connect(tabContainer, "selectChild", function(child){
+				clearPlusIcon(registry.byId('templatesPane'));
+				clearPlusIcon(registry.byId('employeePane'));
 				switch(child.get('id')){
 					case 'storeInfo':
 						if(domStyle.get(dom.byId('laborPaneInfo'), 'display') != 'none')
@@ -123,6 +125,13 @@ require(["bootstrap", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/dijit", 
 						if(domStyle.get(dom.byId('calendarEntryTitlePane'), 'display') != 'none')
 							otherFx.wipeOut({node: dom.byId('calendarEntryTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
 						inventoryLayout.reset();
+						break;
+					case 'templatesPane':
+						if(domStyle.get(dom.byId('laborPaneInfo'), 'display') != 'none')
+							otherFx.wipeOut({node: dom.byId('laborPaneInfo'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+						if(domStyle.get(dom.byId('calendarEntryTitlePane'), 'display') != 'none')
+							otherFx.wipeOut({node: dom.byId('calendarEntryTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+						storeLayout.refreshTemplatesPane(registry.byId('hiddenStoreId').get('value'));
 						break;
 				}
 				empLayout.hidePhoto('employeePaneInfo');

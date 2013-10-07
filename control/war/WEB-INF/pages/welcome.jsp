@@ -567,6 +567,9 @@
 					<div id="empLeavesDetails" data-dojo-type="dijit/layout/ContentPane" class="nihilo" data-dojo-props="title:'Missed Shifts', style:'margin-top:1px;height:99%;width:100%;'">
 						<div id="employeeLeavesGrid" class="nihilo" align="center" style="height:98%;margin:2px; width:99%;vertical-align:top;"></div>
 					</div>
+					<div id="empDocumentDetails" data-dojo-type="dijit/layout/ContentPane" class="nihilo" data-dojo-props="title:'Documents', style:'margin-top:1px;height:99%;width:100%;'">
+						<div id="empDocumentsGrid" class="nihilo" align="center" style="height:98%;margin:2px; width:99%;vertical-align:top;"></div>
+					</div>
 					<div id="empLaborDetails" data-dojo-type="dijit/layout/ContentPane" class="nihilo" data-dojo-props="title:'Labor Entry', style:'margin-top:1px;height:99%;width:100%;'">
 						<div id="empLaborDetailsGrid" class="nihilo" align="center" style="height:98%;margin:2px; width:99%;vertical-align:top;"></div>
 					</div>
@@ -576,6 +579,7 @@
 				<div id="employeeDisciplineGridStandBy" data-dojo-id="employeeDisciplineGridStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'employeeDisciplineGrid', color:'white'"></div>
 				<div id="employeeDoingGoodGridStandBy" data-dojo-id="employeeDoingGoodGridStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'employeeDoingGoodGrid', color:'white'"></div>
 				<div id="employeeLeavesGridStandBy" data-dojo-id="employeeLeavesGridStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'employeeLeavesGrid', color:'white'"></div>
+				<div id="employeeDocumentsGridStandBy" data-dojo-id="employeeDocumentsGridStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'empDocumentsGrid', color:'white'"></div>
 				<div id="empLaborDetailsGridStandBy" data-dojo-id="empLaborDetailsGridStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'empLaborDetailsGrid', color:'white'"></div>
 			</div>
 			<div id="laborPane" class="claro" data-dojo-type="dijit/layout/ContentPane" title="Current Schedule" data-dojo-props="selected: false, style:'width:99%; height:99%;'">
@@ -798,66 +802,73 @@
 				<div id="accountsQuarterDetailsStandBy" data-dojo-id="accountsQuarterDetailsStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'accountsQuarterDetails', color:'white'"></div>
 			</div>
 			<div id="inventoryPane" data-dojo-type="dijit/layout/ContentPane" title="Inventory" data-dojo-props="selected:false" style="width: 99%; height: 99%;">
-					<table style="width: 99%; height: 99%;" id="inventoryPaneTable">
-						<tr valign="middle" style="width: 100%; height: 8%;">
-							<td style="text-align: left; border: .1em solid #ddd; padding: 2px 0px 2px 0px;" colspan="2"><!--
-								 --><div style="display: inline-block;">&nbsp;&nbsp;<font style="font-weight: normal; text-decoration: underline;">Select Category</font></div>:&nbsp;&nbsp;<!--   
-								--><div id="invoiceCategorySelect" name="invoiceCategorySelect" data-dojo-type="dijit/form/Select" style="width: 150px; text-align: center; display: inline-block;"><!-- 
-								     --><span value="Distributor" selected="selected"><b>Distributor</b></span><!-- 
-								     --><span value="GS Kitchen"><b>GS Kitchen</b></span><!--
-								 --></div><!--
-								 --><div style="display: inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;<font style="font-weight: normal; text-decoration: underline;">Choose Action</font></div>:&nbsp;&nbsp;<!--
-								--><div id="invoiceActionSelect" name="invoiceActionSelect" data-dojo-type="dijit/form/Select" style="width: 250px; text-align: center; display: inline-block;"><!--
-									--><span value="reset" selected="selected" style="font-style: italic;"><i><b>--Select Action--</b></i></span><!--
-								    --><span value="checkStock"><b>Check Stock</b></span><!-- 
-								    --><!-- <span value="updateStock"><b>Add/Update Item In Stock</b></span> --><!--
-								    --><span value="addInventoryItem"><b>Add Item to Inventory</b></span><!--
-								 --></div><!--
-								--><div align="right" style="float: right; vertical-align: baseline;"><u>Distributors</u>:&nbsp;&nbsp;<div style="display: inline-block;"><font style="color: whitesmoke; background-color: #2E2EFE; border: 1px solid black;">&nbsp;NICHOLAS&nbsp;</font></div>&nbsp;&nbsp;<!-- 
-								--><div style="display: inline-block;"><font style="color: whitesmoke; background-color: #8904B1; border: 1px solid black;">&nbsp;US FOODS&nbsp;</font></div>&nbsp;&nbsp;<!-- 
-								--><div style="display: inline-block;"><font style="color: whitesmoke; background-color: #B40431; border: 1px solid black;">&nbsp;SAMS CLUB&nbsp;</font></div>&nbsp;&nbsp;<!-- 
-								--><div style="display: inline-block;"><font style="color: whitesmoke; background-color: #21610B; border: 1px solid black;">&nbsp;GS KITCHEN&nbsp;</font></div>&nbsp;&nbsp;<!-- 
-								--></div>
-							</td>
-						</tr>
-						<tr valign="middle" style="width: 100%; height: 5%;">
-							<td style="text-align: center;"><!--
-								  --><div style="text-decoration:underline; display: inline-block; color: orange; font-weight: bolder; font-size: 100%;" id="inventoryTabTitle">Invoices</div>&nbsp;&nbsp;<!-- 
-								 --><div style="display: inline-block; color: orange; font-weight: bolder; font-size: 100%;" id="inventoryTabTitleCategory">(Distributor)</div><!--
-							 --></td>
-							<td style="text-align: center;"><!--
-								  --><div style="text-decoration:underline; display: inline-block; color: orange; font-weight: bolder; font-size: 100%;" id="inventoryTabTitle1">Stock</div>&nbsp;&nbsp;<!-- 
-								 --><div style="display: inline-block; color: orange; font-weight: bolder; font-size: 100%;" id="inventoryTabTitleCategory1">(Distributor)</div><!--
-								 --><div style="display: inline-block; float: right" id="createInvoiceLink"><!--
-									 --><a href='javascript:createInvoice();'>Create Invoice</a>&nbsp;&nbsp;</div><!--
-									 --><div style="display: inline-block; float: right"><a href="javascript: printInvoice('inventoryInvoiceDetailsGrid', 'inventoryTabTitleCategory');">Print Invoice</a>&nbsp;&nbsp;<!-- 
-								 --></div><!-- 
-							 --></td>
-						</tr>
-						<tr valign="top" style="width: 100%; height: 87%;">
-							<td align="left" style="height: 95%; width: 32%; border: .1em solid #ddd;">
-								<div id="inventoryInvoicesGrid" align="center" class="nihilo"
-									style="height: 100%; margin: 2px; width: 100%;">
-								</div>
-								<div id="inventoryInvoicesGridStandBy" data-dojo-id="inventoryInvoicesGridStandBy" data-dojo-type="dojox/widget/Standby" 
-										data-dojo-props="target:'inventoryInvoicesGrid', color:'white'">
-								</div>
-							</td>
-							<td align="left" style="height: 95%; width: 67%; border: .1em solid #ddd;">
-								<div id="inventoryInvoiceDetailsGrid" align="center"
-									style="height: 99%; margin: 2px; width: 99%;">
-								</div>
-								<div id="inventoryInvoiceDetailsGridStandBy" data-dojo-id="inventoryInvoiceDetailsGridStandBy" data-dojo-type="dojox/widget/Standby" 
-									data-dojo-props="target:'inventoryInvoiceDetailsGrid', color:'white'">
-								</div>
-							</td>
-						</tr>
-						
-					</table>
-					<div id="inventoryPaneStandBy" data-dojo-id="inventoryPaneStandBy" data-dojo-type="dojox/widget/Standby" 
-						data-dojo-props="target:'inventoryPane', color:'white'">
-					</div>
+				<table style="width: 99%; height: 99%;" id="inventoryPaneTable">
+					<tr valign="middle" style="width: 100%; height: 8%;">
+						<td style="text-align: left; border: .1em solid #ddd; padding: 2px 0px 2px 0px;" colspan="2"><!--
+							 --><div style="display: inline-block;">&nbsp;&nbsp;<font style="font-weight: normal; text-decoration: underline;">Select Category</font></div>:&nbsp;&nbsp;<!--   
+							--><div id="invoiceCategorySelect" name="invoiceCategorySelect" data-dojo-type="dijit/form/Select" style="width: 150px; text-align: center; display: inline-block;"><!-- 
+							     --><span value="Distributor" selected="selected"><b>Distributor</b></span><!-- 
+							     --><span value="GS Kitchen"><b>GS Kitchen</b></span><!--
+							 --></div><!--
+							 --><div style="display: inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;<font style="font-weight: normal; text-decoration: underline;">Choose Action</font></div>:&nbsp;&nbsp;<!--
+							--><div id="invoiceActionSelect" name="invoiceActionSelect" data-dojo-type="dijit/form/Select" style="width: 250px; text-align: center; display: inline-block;"><!--
+								--><span value="reset" selected="selected" style="font-style: italic;"><i><b>--Select Action--</b></i></span><!--
+							    --><span value="checkStock"><b>Check Stock</b></span><!-- 
+							    --><!-- <span value="updateStock"><b>Add/Update Item In Stock</b></span> --><!--
+							    --><span value="addInventoryItem"><b>Add Item to Inventory</b></span><!--
+							 --></div><!--
+							--><div align="right" style="float: right; vertical-align: baseline;"><u>Distributors</u>:&nbsp;&nbsp;<div style="display: inline-block;"><font style="color: whitesmoke; background-color: #2E2EFE; border: 1px solid black;">&nbsp;NICHOLAS&nbsp;</font></div>&nbsp;&nbsp;<!-- 
+							--><div style="display: inline-block;"><font style="color: whitesmoke; background-color: #8904B1; border: 1px solid black;">&nbsp;US FOODS&nbsp;</font></div>&nbsp;&nbsp;<!-- 
+							--><div style="display: inline-block;"><font style="color: whitesmoke; background-color: #B40431; border: 1px solid black;">&nbsp;SAMS CLUB&nbsp;</font></div>&nbsp;&nbsp;<!-- 
+							--><div style="display: inline-block;"><font style="color: whitesmoke; background-color: #21610B; border: 1px solid black;">&nbsp;GS KITCHEN&nbsp;</font></div>&nbsp;&nbsp;<!-- 
+							--></div>
+						</td>
+					</tr>
+					<tr valign="middle" style="width: 100%; height: 5%;">
+						<td style="text-align: center;"><!--
+							  --><div style="text-decoration:underline; display: inline-block; color: orange; font-weight: bolder; font-size: 100%;" id="inventoryTabTitle">Invoices</div>&nbsp;&nbsp;<!-- 
+							 --><div style="display: inline-block; color: orange; font-weight: bolder; font-size: 100%;" id="inventoryTabTitleCategory">(Distributor)</div><!--
+						 --></td>
+						<td style="text-align: center;"><!--
+							  --><div style="text-decoration:underline; display: inline-block; color: orange; font-weight: bolder; font-size: 100%;" id="inventoryTabTitle1">Stock</div>&nbsp;&nbsp;<!-- 
+							 --><div style="display: inline-block; color: orange; font-weight: bolder; font-size: 100%;" id="inventoryTabTitleCategory1">(Distributor)</div><!--
+							 --><div style="display: inline-block; float: right" id="createInvoiceLink"><!--
+								 --><a href='javascript:createInvoice();'>Create Invoice</a>&nbsp;&nbsp;</div><!--
+								 --><div style="display: inline-block; float: right"><a href="javascript: printInvoice('inventoryInvoiceDetailsGrid', 'inventoryTabTitleCategory');">Print Invoice</a>&nbsp;&nbsp;<!-- 
+							 --></div><!-- 
+						 --></td>
+					</tr>
+					<tr valign="top" style="width: 100%; height: 87%;">
+						<td align="left" style="height: 95%; width: 32%; border: .1em solid #ddd;">
+							<div id="inventoryInvoicesGrid" align="center" class="nihilo"
+								style="height: 100%; margin: 2px; width: 100%;">
+							</div>
+							<div id="inventoryInvoicesGridStandBy" data-dojo-id="inventoryInvoicesGridStandBy" data-dojo-type="dojox/widget/Standby" 
+									data-dojo-props="target:'inventoryInvoicesGrid', color:'white'">
+							</div>
+						</td>
+						<td align="left" style="height: 95%; width: 67%; border: .1em solid #ddd;">
+							<div id="inventoryInvoiceDetailsGrid" align="center"
+								style="height: 99%; margin: 2px; width: 99%;">
+							</div>
+							<div id="inventoryInvoiceDetailsGridStandBy" data-dojo-id="inventoryInvoiceDetailsGridStandBy" data-dojo-type="dojox/widget/Standby" 
+								data-dojo-props="target:'inventoryInvoiceDetailsGrid', color:'white'">
+							</div>
+						</td>
+					</tr>
+				</table>
+				<div id="inventoryPaneStandBy" data-dojo-id="inventoryPaneStandBy" data-dojo-type="dojox/widget/Standby" 
+					data-dojo-props="target:'inventoryPane', color:'white'">
 				</div>
+			</div>
+			<div id="templatesPane" data-dojo-type="dijit/layout/ContentPane" title="Templates" data-dojo-props="selected:false" style="width: 99%; height: 99%">
+				<div id="templatesGridContentPane" data-dojo-type="dijit/layout/ContentPane" class="nihilo" style="width:99%;height:99%; vertical-align:top;">
+					<div id="templatesGrid" align="center" class="nihilo" style="margin:2px;width:99%;height:99%; vertical-align:top;"></div>
+				</div>
+				<div id="templatesPaneStandBy" data-dojo-id="templatesPaneStandBy" data-dojo-type="dojox/widget/Standby" 
+					data-dojo-props="target:'templatesPane', color:'white'">
+				</div>
+			</div>
 		</div>
 	</div>
 
@@ -1040,6 +1051,7 @@
 									console.log('Form Validation ', healthInspectionForm.validate(), healthInspectionForm.get('value'));
 									var registry = require('dijit/registry');
 									var storeLayout = require('controls/StoreLayoutController');
+									var empLayout = require('controls/EmployeeLayoutController');
 									if(healthInspectionForm.validate()){
 										var formValues = healthInspectionForm.get('value');
 										var uploadNotesWrapper = {};
@@ -1057,16 +1069,30 @@
 										var dom = require('dojo/dom');
 										var standByWidgetId = 'healthInspectionFormStandBy';
 										registry.byId(standByWidgetId).show();
-																				
 										
+										var urlToUse = "/service/store/" + registry.byId('hiddenStoreId').get('value') + "/health";
+										var action = 'store';
+										if(registry.byId("tabContainer").selectedChildWidget.get('id') == 'employeePane'){
+											urlToUse = "/service/employee/" + empLayout.getEmployeeId() + "/documents";
+											action = 'employee';
+										} else if(registry.byId("tabContainer").selectedChildWidget.get('id') == 'templatesPane'){
+											urlToUse = "/service/store/" + registry.byId('hiddenStoreId').get('value') + "/templates";
+											action = 'templates';
+										}
+																				
 										if(Number(registry.byId('hiddenHealthId').get('value')) == 0){
-											ajaxRequest.post("/service/store/" + registry.byId('hiddenStoreId').get('value') + "/health", {
+											ajaxRequest.post(urlToUse, {
 				        							headers: { "Content-Type":"application/json"}, 
 				        							handleAs: 'json', data: json.stringify(uploadNotesWrapper), timeout: 10000 
 				        						}).then(function(healthDetailsResponse){
 				        								if(healthDetailsResponse.success){
 				        									dom.byId('messages').innerHTML = 'Add Successful';
-				        									storeLayout.refreshPane();
+				        									if(action == 'store')
+																storeLayout.refreshPane();
+															else if(action == 'employee')
+																empLayout.populateEmployeeDetails('');
+															else if(action == 'templates')
+																storeLayout.refreshTemplatesPane(registry.byId('hiddenStoreId').get('value'));
 				        								}
 														registry.byId(standByWidgetId).hide();
 														healthInspectionDialog.hide();
@@ -1076,13 +1102,18 @@
 				        							registry.byId(standByWidgetId).hide();
 				        						});
 										} else {
-											ajaxRequest.put("/service/store/" + registry.byId('hiddenStoreId').get('value') + "/health/" + registry.byId('hiddenHealthId').get('value'), {
+											ajaxRequest.put(urlToUse + '/' + registry.byId('hiddenHealthId').get('value'), {
 				        							headers: { "Content-Type":"application/json"}, 
 				        							handleAs: 'json', data: json.stringify(uploadNotesWrapper), timeout: 10000 
 				        						}).then(function(healthDetailsResponse){
 				        								if(healthDetailsResponse.success){
 				        									dom.byId('messages').innerHTML = 'Update Successful';
-				        									storeLayout.refreshPane();
+				        									if(action == 'store')
+																storeLayout.refreshPane();
+															else if(action == 'employee')
+																empLayout.populateEmployeeDetails('');
+															else if(action == 'templates')
+																storeLayout.refreshTemplatesPane(registry.byId('hiddenStoreId').get('value'));
 				        								}
 														registry.byId(standByWidgetId).hide();
 														healthInspectionDialog.hide();

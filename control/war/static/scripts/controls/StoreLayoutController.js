@@ -11,7 +11,7 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 				BorderContainer, TabContainer, Calendar, TitlePane, FilteringSelect, Form, ValidationTextBox, scrollPane,
 				Dialog, DropDownButton, Button, DataGrid, EnhancedGrid, Memory, ObjectStore, ajaxRequest, dojoFunctional, dojoCheckBox, dojoxFormManager, randomNumber, itemFileWriteStore, laborLayout) {
 			
-			var storeInfoTable = null, storeAlarmCodesGrid = null, storeKeysGrid = null, storeMaintenanceGrid = null, storeLaborGrid = null, storeHealthInspectionGrid=null,
+			var storeInfoTable = null, storeAlarmCodesGrid = null, storeKeysGrid = null, storeMaintenanceGrid = null, storeLaborGrid = null, storeHealthInspectionGrid=null, templatesGrid=null,
 			randomGen = new randomNumber(), loginQuery = djConfig.loginRequest || {}, blankArray=[],
 			
 			startup = function() {
@@ -20,6 +20,7 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 				updateStoreMaintenanceGrid(blankArray);
 				updateStoreLaborGrid(blankArray);
 				updateStoreHealthInspectionGrid(blankArray);
+				updateTemplatesGrid(blankArray);
 				attachGridEvents('storeAlarmCodesGrid');
 				attachGridEvents('storeKeysGrid');
 				attachGridEvents('storeMaintenanceGrid');
@@ -202,6 +203,9 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 		    	else 
 		    		return '-- No Attachments --';
 		    },
+		    showTemplateEditLink = function(value, rowIndex){
+		    	return '<span style="text-align: center;"><a href="javascript: editTemplatesTabRecord(' + "'templateDocs', " + value + "," + rowIndex + ');">Edit</a></span>';
+		    },
 		    fetchStoreData = function(storeId) {
 		    	registry.byId('storeInfoTitlePaneStandBy').show();
 		    	ajaxRequest.get("/service/store/storeId=" + storeId,{
@@ -280,6 +284,18 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 		    	}, function(error){
 		    		console.log('Error occurred while fetching Health Inspection data ' + error);
 		    		registry.byId('storeHealthInspectionGridStandBy').hide();
+		    	});
+		    },
+		    fetchStoreTemplatesData = function(storeId) {
+		    	registry.byId('templatesPaneStandBy').show();
+		    	ajaxRequest.get("/service/store/" + storeId + "/templates",{
+		    		handleAs: 'json'
+		    	}).then(function(templateDetailsResponse){
+		    		updateTemplatesGrid(templateDetailsResponse.models);
+	    			registry.byId('templatesPaneStandBy').hide();
+		    	}, function(error){
+		    		console.log('Error occurred while fetching Health Inspection data ' + error);
+		    		registry.byId('templatesPaneStandBy').hide();
 		    	});
 		    },
 		    fetchStoreLeaseBlobs = function(storeId){
@@ -642,6 +658,47 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 								        }}, "storeHealthInspectionGrid");
 					storeHealthInspectionGrid.startup();
 				} else dijit.byId('storeHealthInspectionGrid').setStore(gridDataStore);
+		    },
+		    updateTemplatesGrid = function(templatesData){
+		    	var tempStore = {
+		    			"identifier" : "id",
+		    			"items" : []
+		    	};
+		    	tempStore.items = templatesData;
+		    	var gridDataStore = new itemFileWriteStore({data: tempStore});
+				if(!dijit.byId('templatesGrid')){
+					templatesGrid = new EnhancedGrid({
+											store: gridDataStore,
+											query: { id: "*" },
+											structure: [{ name: "Edit", field: "id", editable: false, width: "5%", noresize: true, formatter: showTemplateEditLink, styles: 'text-align: center;'}, 
+											            { name: "Date", field: "purposeDate", editable: false, width: "10%", noresize: true, styles: 'text-align: center;'},
+											            { name: "Document", fields: ["fileName", "blobKey"], editable: false, formatter: showDocumentLink, width: "35%", noresize: true, styles: 'padding-left: 5px;'},
+											            { name: "Notes", field: "purposeNotes", editable: false, width: "40%", noresize: true, styles: 'padding-left: 5px'}],
+											singleClickEdit: false,
+											editable: false,
+											selectable: true,
+											rowsPerPage: 10,
+											loadingMessage: 'loadingMessage: Loading data from server..',
+									        errorMessage:   'Oops we could not retrive the requested data!',
+									        noDataMessage:	"<span class=\"dojoxGridNoData\"><font color='grey'><b>No Data to Display !!!<b></font></span>",
+									        onFetchError: function(error,ioargs){console.log('Error ocured: '+error+' ioargs: '+ioargs); return true;},
+									        selectionMode: "none",
+											plugins: {
+												nestedSorting: false,
+								                pagination: {
+													pageSizes: ["10", "50", "100", "All"],
+													description: true,
+													sizeSwitch: false,
+													pageStepper: true,
+													gotoButton: false,
+													maxPageStep: 4,
+													position: "bottom",
+													defaultPage: 1,
+						                            defaultPageSize: 10
+												}
+								        }}, "templatesGrid");
+					templatesGrid.startup();
+				} else dijit.byId('templatesGrid').setStore(gridDataStore);
 		    };
 		    
 		    return {
@@ -717,6 +774,14 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 		        },
 		        refreshStoreDates: function(storeId){
 		        	fetchStoreDates(storeId);
+		        },
+		        refreshTemplatesPane: function(storeId){
+		        	fetchStoreTemplatesData(storeId);
+		        	var child = registry.byId("tabContainer").selectedChildWidget;
+		        	
+		        	if(!(child.get('title').indexOf(' &nbsp; <img ') > 0)){
+		        		child.set('title', child.get('title') + " &nbsp; <img align='top' src='resources/images/add-icon.png' onclick='javascript: addTemplatesTabRecord(event);'/> &nbsp;");
+		        	}
 		        },
 		        populateUsersToManage: function(){
 		        	console.log('Populating Users to Manage');

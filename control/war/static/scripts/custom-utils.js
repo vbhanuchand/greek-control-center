@@ -332,6 +332,13 @@ function checkSelectedPane(trId, rightPane, storeId) {
 				otherFx.wipeOut({node: dom.byId('calendarEntryTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
 			inventoryLayout.reset();
 			break;
+        case 'templatesPane':
+			if(domStyle.get(dom.byId('laborPaneInfo'), 'display') != 'none')
+				otherFx.wipeOut({node: dom.byId('laborPaneInfo'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+			if(domStyle.get(dom.byId('calendarEntryTitlePane'), 'display') != 'none')
+				otherFx.wipeOut({node: dom.byId('calendarEntryTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+			storeLayout.refreshTemplatesPane(registry.byId('hiddenStoreId').get('value'));
+			break;
     }
 }
 
@@ -740,7 +747,7 @@ function applySecurityRoles(authoritiesData){
 	console.log('End of Apply ROles method');
 }
 
-
+//Health Inspection Tab related methods
 function addStoreInspectionRecord(evt){
 	var dialogName = 'healthInspection';
 	
@@ -762,6 +769,7 @@ function addStoreInspectionRecord(evt){
 		healthInspectionDialog.reset();
 		registry.byId('hiddenHealthId').set('value', 0);
 		//healthInspectionDialog.titleBar.style.display = 'none';
+		healthInspectionDialog.set('title', 'Health Inspection Details');
 		healthInspectionDialog.show();
 		domStyle.set(dom.byId('healthInspectionDialog'), {top:'40px', position: "absolute"});
 		break;
@@ -770,6 +778,7 @@ function addStoreInspectionRecord(evt){
 	}
 }
 
+//Health Inspection Tab related methods
 function editRecordByDialog(tab, id, rowIndex){
 	var registry = require('dijit/registry');
 	var dom = require('dojo/dom');
@@ -781,35 +790,173 @@ function editRecordByDialog(tab, id, rowIndex){
 	
 	var grid; 
 	switch(tab){
-	case 'healthInspection':
-		if(domStyle.getComputedStyle(dom.byId('healthInspectionWidgetsDiv')).display != 'none')
-			hideFileUploadDialog('healthInspection');
-		registry.byId('hiddenHealthId').set('value', id);
-		domConstruct.empty(dom.byId('healthInspectionUploaded'));
-		
-		grid = registry.byId('storeHealthInspectionGrid');
-		
-		var date = (grid.store.getValue(grid.getItem(rowIndex), 'purposeDate')+'').split('/');
-		date = '' + date[2] + '-' + date[0] + '-' + date[1];
-		registry.byId('healthInspectionDate').set('value', stamp.fromISOString(date));
-		
-		if(grid.store.getValue(grid.getItem(rowIndex), 'blobKey') != '&#/#&'){
-			var fragment = document.createDocumentFragment();
-			domConstruct.create("li", {
-	                innerHTML: '&nbsp;&nbsp;' + '<a target="_new" href="/service/getBlob/' + grid.store.getValue(grid.getItem(rowIndex), 'blobKey') + '">' 
-								+  grid.store.getValue(grid.getItem(rowIndex), 'fileName') + '</a>'
-	            }, fragment);
-			domConstruct.empty(dom.byId('healthInspectionExisting'));
-			domConstruct.place(fragment, dom.byId('healthInspectionExisting'));
-		}
-		
-		registry.byId('healthInspectionNotes').set('value', grid.store.getValue(grid.getItem(rowIndex), 'purposeNotes'));
-		
-		healthInspectionDialog.show();
+		case 'healthInspection':
+			if(domStyle.getComputedStyle(dom.byId('healthInspectionWidgetsDiv')).display != 'none')
+				hideFileUploadDialog('healthInspection');
+			registry.byId('hiddenHealthId').set('value', id);
+			domConstruct.empty(dom.byId('healthInspectionUploaded'));
+			
+			grid = registry.byId('storeHealthInspectionGrid');
+			
+			var date = (grid.store.getValue(grid.getItem(rowIndex), 'purposeDate')+'').split('/');
+			date = '' + date[2] + '-' + date[0] + '-' + date[1];
+			registry.byId('healthInspectionDate').set('value', stamp.fromISOString(date));
+			
+			if(grid.store.getValue(grid.getItem(rowIndex), 'blobKey') != '&#/#&'){
+				var fragment = document.createDocumentFragment();
+				domConstruct.create("li", {
+		                innerHTML: '&nbsp;&nbsp;' + '<a target="_new" href="/service/getBlob/' + grid.store.getValue(grid.getItem(rowIndex), 'blobKey') + '">' 
+									+  grid.store.getValue(grid.getItem(rowIndex), 'fileName') + '</a>'
+		            }, fragment);
+				domConstruct.empty(dom.byId('healthInspectionExisting'));
+				domConstruct.place(fragment, dom.byId('healthInspectionExisting'));
+			}
+			
+			registry.byId('healthInspectionNotes').set('value', grid.store.getValue(grid.getItem(rowIndex), 'purposeNotes'));
+			healthInspectionDialog.set('title', 'Health Inspection Details');
+			healthInspectionDialog.show();
 		break;
 	}
 }
 
+function addEmployeeDocumentsTabRecord(evt){
+	var dialogName = 'employeeDocs';//employee-docs
+	
+	try{if (!evt) var evt = window.event;
+	evt.preventDefault();
+	evt.stopPropagation();}catch(e){console.log('Error is --> ' + e);}
+	
+	var domStyle = require('dojo/dom-style');
+	var dom = require('dojo/dom');
+	var registry = require('dijit/registry');
+	var domConstruct = require('dojo/dom-construct');
+	switch(dialogName){
+	case 'employeeDocs':
+		if(domStyle.getComputedStyle(dom.byId('healthInspectionWidgetsDiv')).display != 'none')
+			hideFileUploadDialog('healthInspection');
+		domConstruct.empty(dom.byId('healthInspectionUploaded'));
+		domConstruct.empty(dom.byId('healthInspectionExisting'));
+		
+		healthInspectionDialog.reset();
+		registry.byId('hiddenHealthId').set('value', 0);
+		//healthInspectionDialog.titleBar.style.display = 'none';
+		healthInspectionDialog.set('title', 'Employee Documents');
+		healthInspectionDialog.show();
+		domStyle.set(dom.byId('healthInspectionDialog'), {top:'40px', position: "absolute"});
+		break;
+	default:
+		break;
+	}
+}
+
+function editEmployeeDocumentRecordByDialog(tab, id, rowIndex){
+	var registry = require('dijit/registry');
+	var dom = require('dojo/dom');
+	var domConstruct = require('dojo/dom-construct');
+	var baseArray = require('dojo/_base/array');
+	var stamp = require('dojo/date/stamp');
+	var domStyle = require('dojo/dom-style');
+	//console.log('Edit '+ tab + ' Id ' + id + ' rowIndex ', rowIndex);
+	
+	var grid; 
+	switch(tab){
+		case 'employee-docs':
+			if(domStyle.getComputedStyle(dom.byId('healthInspectionWidgetsDiv')).display != 'none')
+				hideFileUploadDialog('healthInspection');
+			registry.byId('hiddenHealthId').set('value', id);
+			domConstruct.empty(dom.byId('healthInspectionUploaded'));
+			
+			grid = registry.byId('empDocumentsGrid');
+			
+			var date = (grid.store.getValue(grid.getItem(rowIndex), 'purposeDate')+'').split('/');
+			date = '' + date[2] + '-' + date[0] + '-' + date[1];
+			registry.byId('healthInspectionDate').set('value', stamp.fromISOString(date));
+			
+			if(grid.store.getValue(grid.getItem(rowIndex), 'blobKey') != '&#/#&'){
+				var fragment = document.createDocumentFragment();
+				domConstruct.create("li", {
+		                innerHTML: '&nbsp;&nbsp;' + '<a target="_new" href="/service/getBlob/' + grid.store.getValue(grid.getItem(rowIndex), 'blobKey') + '">' 
+									+  grid.store.getValue(grid.getItem(rowIndex), 'fileName') + '</a>'
+		            }, fragment);
+				domConstruct.empty(dom.byId('healthInspectionExisting'));
+				domConstruct.place(fragment, dom.byId('healthInspectionExisting'));
+			}
+			
+			registry.byId('healthInspectionNotes').set('value', grid.store.getValue(grid.getItem(rowIndex), 'purposeNotes'));
+			healthInspectionDialog.set('title', 'Employee Documents');
+			healthInspectionDialog.show();
+		break;
+	}
+}
+function addTemplatesTabRecord(event){
+	var dialogName = 'templateDocs';//employee-docs
+	
+	try{if (!evt) var evt = window.event;
+	evt.preventDefault();
+	evt.stopPropagation();}catch(e){console.log('Error is --> ' + e);}
+	
+	var domStyle = require('dojo/dom-style');
+	var dom = require('dojo/dom');
+	var registry = require('dijit/registry');
+	var domConstruct = require('dojo/dom-construct');
+	switch(dialogName){
+		case 'templateDocs':
+			if(domStyle.getComputedStyle(dom.byId('healthInspectionWidgetsDiv')).display != 'none')
+				hideFileUploadDialog('healthInspection');
+			domConstruct.empty(dom.byId('healthInspectionUploaded'));
+			domConstruct.empty(dom.byId('healthInspectionExisting'));
+			
+			healthInspectionDialog.reset();
+			registry.byId('hiddenHealthId').set('value', 0);
+			//healthInspectionDialog.titleBar.style.display = 'none';
+			healthInspectionDialog.set('title', 'Store Templates');
+			healthInspectionDialog.show();
+			domStyle.set(dom.byId('healthInspectionDialog'), {top:'40px', position: "absolute"});
+			break;
+		default:
+			break;
+	}
+}
+
+function editTemplatesTabRecord(tab, id, rowIndex){
+	var registry = require('dijit/registry');
+	var dom = require('dojo/dom');
+	var domConstruct = require('dojo/dom-construct');
+	var baseArray = require('dojo/_base/array');
+	var stamp = require('dojo/date/stamp');
+	var domStyle = require('dojo/dom-style');
+	//console.log('Edit '+ tab + ' Id ' + id + ' rowIndex ', rowIndex);
+	
+	var grid; 
+	switch(tab){
+		case 'templateDocs':
+			if(domStyle.getComputedStyle(dom.byId('healthInspectionWidgetsDiv')).display != 'none')
+				hideFileUploadDialog('healthInspection');
+			registry.byId('hiddenHealthId').set('value', id);
+			domConstruct.empty(dom.byId('healthInspectionUploaded'));
+			
+			grid = registry.byId('templatesGrid');
+			
+			var date = (grid.store.getValue(grid.getItem(rowIndex), 'purposeDate')+'').split('/');
+			date = '' + date[2] + '-' + date[0] + '-' + date[1];
+			registry.byId('healthInspectionDate').set('value', stamp.fromISOString(date));
+			
+			if(grid.store.getValue(grid.getItem(rowIndex), 'blobKey') != '&#/#&'){
+				var fragment = document.createDocumentFragment();
+				domConstruct.create("li", {
+		                innerHTML: '&nbsp;&nbsp;' + '<a target="_new" href="/service/getBlob/' + grid.store.getValue(grid.getItem(rowIndex), 'blobKey') + '">' 
+									+  grid.store.getValue(grid.getItem(rowIndex), 'fileName') + '</a>'
+		            }, fragment);
+				domConstruct.empty(dom.byId('healthInspectionExisting'));
+				domConstruct.place(fragment, dom.byId('healthInspectionExisting'));
+			}
+			
+			registry.byId('healthInspectionNotes').set('value', grid.store.getValue(grid.getItem(rowIndex), 'purposeNotes'));
+			healthInspectionDialog.set('title', 'Store Templates');
+			healthInspectionDialog.show();
+		break;
+	}
+}
 
 /*function createInventoryItem(){
 	var registry = require('dijit/registry');
@@ -1126,4 +1273,10 @@ function printCalendar(){
 	w.document.write(html);
 	w.document.close();
 	w.print(); 
+}
+
+function clearPlusIcon(tabWidget){
+	if(tabWidget.get('title').lastIndexOf(' &nbsp; <img ') > 0){
+		tabWidget.set('title', tabWidget.get('title').substring(0, tabWidget.get('title').lastIndexOf(' &nbsp; <img ')));
+	}
 }

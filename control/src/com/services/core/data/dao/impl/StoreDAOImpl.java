@@ -390,11 +390,11 @@ public class StoreDAOImpl implements StoreDAO {
 	
 	@SuppressWarnings("rawtypes")
 	@Override
-	public List getStoreHealthInspectionDetails(int storeId, String tab){
+	public List getStoreHealthInspectionDetails(int linkedId, String tab){
 		String hql = "select un.id as id, un.purposeDate as purposeDate, un.purposeNotes as purposeNotes, b.fileName as fileName, b.blobKey as blobKey " +
-				"from UploadNotes un, Blobs b where b.linkedId = un.id and un.linkedId = :storeId and un.purpose = :tab and b.tab = :blobTab";
+				"from UploadNotes un, Blobs b where b.linkedId = un.id and un.linkedId = :linkedId and un.purpose = :tab and b.tab = :blobTab";
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
-		query.setParameter("storeId", storeId);
+		query.setParameter("linkedId", linkedId);
 		query.setParameter("tab", tab);
 		query.setParameter("blobTab", tab);
 		query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);

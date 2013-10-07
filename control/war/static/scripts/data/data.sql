@@ -379,8 +379,10 @@ alter table store_accounting add totalOpExp decimal(8,2);
 alter table store_accounting add totalProfits decimal(8,2);
 
 desc blobs;
+desc upload_docs_notes;
 
-alter table blobs modify tab enum('store-lease','photo','mgrContract','healthInspection','employee-docs', 'maintenance', 'accMonthlyDocument');       
+alter table blobs modify tab enum('store-lease','photo','mgrContract','healthInspection','employee-docs', 'maintenance', 'accMonthlyDocument', 'store-template');
+alter table upload_docs_notes modify purpose enum('healthInspection','employee-docs', 'store-template');
 select * from store_stock;
 select * from items;
 delete from store_stock where id in (9);

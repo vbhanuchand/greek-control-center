@@ -27,6 +27,7 @@ import com.services.core.view.wrappers.EmployeeWrapper;
 import com.services.core.view.wrappers.MultipleModelResponse;
 import com.services.core.view.wrappers.SimpleModel;
 import com.services.core.view.wrappers.SingleModelResponse;
+import com.services.core.view.wrappers.UploadNotesWrapper;
 
 @Controller
 //@RequestMapping("/service")
@@ -219,6 +220,40 @@ public class EmployeeServiceController {
 		boolean updateStatus = dataService.updateEmployeeLeaves(empLeaves);
 		return new SingleModelResponse<EmployeeWrapper>(updateStatus, null);
 	}
+	
+	
+	//Health Inspection Tab related methods starts here
+	@RequestMapping(value = "/service/employee/{empId}/documents", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public MultipleModelResponse<UploadNotesWrapper> getHealthInspectionDetails(@PathVariable int empId)
+			throws IOException {
+		String tab = "employee-docs";
+		return new MultipleModelResponse<UploadNotesWrapper>(true, dataService.getHealthInspectionDetails(empId, tab));
+	}
+	
+	@RequestMapping(value = "/service/employee/{empId}/documents", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public SingleModelResponse<UploadNotesWrapper> insertHealthInspectionDetails(@PathVariable int empId, @RequestBody UploadNotesWrapper uploadNotesDetails)
+			throws IOException {
+		String tab = "employee-docs";
+		uploadNotesDetails.setLinkedId(empId);
+		uploadNotesDetails.setPurpose(tab);
+		int id = dataService.insertHealthInspectionDetails(uploadNotesDetails);
+		return new SingleModelResponse<UploadNotesWrapper>(true, null);
+	}
+	
+	@RequestMapping(value = "/service/employee/{empId}/documents/{docId}", method = RequestMethod.PUT, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public SingleModelResponse<UploadNotesWrapper> updateHealthInspectionDetails(@PathVariable int empId, @PathVariable int docId, @RequestBody UploadNotesWrapper uploadNotesDetails)
+			throws IOException {
+		uploadNotesDetails.setId(docId);
+		uploadNotesDetails.setLinkedId(empId);
+		uploadNotesDetails.setPurpose("employee-docs");
+		boolean execute = dataService.updateHealthInspectionDetails(uploadNotesDetails);
+		return new SingleModelResponse<UploadNotesWrapper>(execute, null);
+	}
+	
+	
 	
 	@RequestMapping(value = "/service/store/{storeId}/employee/{empId}/labor", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
