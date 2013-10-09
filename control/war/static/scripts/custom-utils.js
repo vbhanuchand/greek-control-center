@@ -1242,10 +1242,10 @@ function printCalendar(){
 	var dom = require('dojo/dom');
 	var registry = require('dijit/registry');
 	dom.byId('noPrint1').style.display = 'none';
-	dom.byId('calendarSummaryDetails').style.width = '99%';
+	//dom.byId('calendarSummaryDetails').style.width = '99%';
 	var innerHTML = '<div style="display: block; font-size: 90% !important;" class="claro">' + dom.byId('laborPane').innerHTML + '</div>';
-	dom.byId('noPrint1').style.display = 'inline-block';
-	dom.byId('calendarSummaryDetails').style.width = '80%';
+	dom.byId('noPrint1').style.display = '';
+	//dom.byId('calendarSummaryDetails').style.width = '80%';
 	var html = '';
     html += '<html lang="en-us">';
     html += '<head>';

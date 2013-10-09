@@ -65,7 +65,7 @@ public class StoreServiceController {
 		return new MultipleModelResponse<StoreWrapper>(true, storeWrappers);
 	}
 	
-	@RequestMapping(value = "/service/store/storeId={storeId}", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/service/store/{storeId}", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public SingleModelResponse<StoreWrapper> getStoreInformation(@PathVariable int storeId) throws IOException {
 		logger.info("Getting Store Data --> " + storeId);

@@ -5,6 +5,7 @@ html, body {
     border: 0;
     padding: 0;
     margin: 0;
+    display: block;
 }
 
 #fmtCalendar {
@@ -598,7 +599,7 @@ table.laborTable td {
 table.laborTable td.laborDateTd{
 	font-weight: bolder;
 	font-size: 100%;
-	color: grey;
+	color: #000000;
 	border-width: 0.1em;
 	border-style: solid;
 	border-color: #000;
@@ -610,7 +611,7 @@ table.laborTable td.laborDateTd{
 table.laborTable td.laborMgrTd{
 	font-weight: bold;
 	font-size: 95%;
-	color: #eee;
+	color: #FFFFFF;
 	border-width: 0.1em;
 	border-style: solid;
 	border-color: inherit;
@@ -622,7 +623,7 @@ table.laborTable td.laborMgrTd{
 table.laborTable td.laborFrontTd{
 	font-weight: bold;
 	font-size: 95%;
-	color: #eee;
+	color: #FFFFFF;
 	border-width: 0.1em;
 	border-style: solid;
 	border-color: inherit;
@@ -634,7 +635,7 @@ table.laborTable td.laborFrontTd{
 table.laborTable td.laborCookTd{
 	font-weight: bold;
 	font-size: 95%;
-	color: #eee;
+	color: #FFFFFF;
 	border-width: 0.1em;
 	border-style: solid;
 	border-color: inherit;
@@ -673,6 +674,34 @@ table.laborTable td.laborCookTd{
 	font-weight: normal;
 }
 
+/*Labor Summary Details Table*/
+table.laborSummaryTable {
+	font-family: inherit;
+	font-size: inherit;
+	color: inherit;
+	border-width: 1px;
+	border-color: #000000;
+	border-collapse: collapse;
+	border-style: solid;
+	
+}
+table.laborSummaryTable th {
+	border-width: 1px;
+	border-style: solid;
+	border-color: #000000;
+	background-color: #cccccc;
+	text-align: center;
+	font-weight: bold;
+}
+table.laborSummaryTable td {
+	text-align:left;
+	padding-left: 10px;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #000000;
+}
+
+
 .dijitCalendar .Highlighted {
 	background-color: #fff0b4 !important;
 }
@@ -709,6 +738,10 @@ font-size: 85%;
 	font-size: 0.8em;
 }
 
+/* #calendarEntryTitlePane{
+	font-size: 0.8em;
+} */
+
 
 /* html {
 	overflow-y: auto;
@@ -737,7 +770,7 @@ body {
 }
 */
 
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
     width: 10px;
     height: 6px;
 }
@@ -764,4 +797,36 @@ body {
     width: 50px;
     background-color: #666;
     -webkit-border-radius: 3px;
-} 
+}  */
+
+::-webkit-scrollbar {
+	height: 16px;
+	overflow: visible;
+	width: 16px;
+}
+::-webkit-scrollbar-thumb {
+	background-color: rgba(0,0,0,.2);
+	background-clip: padding-box;
+	border: solid transparent;
+	border-width: 1px 1px 1px 6px;
+	min-height: 28px;
+	padding: 100px 0 0;
+	box-shadow: inset 1px 1px 0 rgba(0,0,0,.1),inset 0 -1px 0 rgba(0,0,0,.07);
+}
+
+::-webkit-scrollbar-button {
+	height: 0;
+	width: 0;
+}
+
+
+::-webkit-scrollbar-track {
+	background-clip: padding-box;
+	border: solid transparent;
+	border-width: 0 0 0 4px;
+}
+
+
+::-webkit-scrollbar-corner {
+	background: transparent;
+}

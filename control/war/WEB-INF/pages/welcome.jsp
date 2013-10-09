@@ -242,8 +242,8 @@
 				</div>
 				<div style="margin-top:10px"><span class="propertyTitle">Time:</span></div>
 				<div>
-					<div id="itemStartTimeEditor" data-dojo-attach-point="itemStartTimeEditor" data-dojo-type="dojox/form/TimeSpinner" style="width:45%;" data-dojo-props="disabled:false, pattern: 'HH:mm', smallDelta: 60, largeDelta: 60" ></div>
-					<div id="itemEndTimeEditor" data-dojo-attach-point="itemEndTimeEditor" data-dojo-type="dojox/form/TimeSpinner" style="width:45%;" data-dojo-props="disabled:false, pattern: 'HH:mm', smallDelta: 60, largeDelta: 60" ></div>
+					<div id="itemStartTimeEditor" data-dojo-attach-point="itemStartTimeEditor" data-dojo-type="dojox/form/TimeSpinner" style="font-size: 90%; width:45%;" data-dojo-props="disabled:false, pattern: 'HH:mm', smallDelta: 60, largeDelta: 60" ></div>
+					<div id="itemEndTimeEditor" data-dojo-attach-point="itemEndTimeEditor" data-dojo-type="dojox/form/TimeSpinner" style="font-size: 90%; width:45%;" data-dojo-props="disabled:false, pattern: 'HH:mm', smallDelta: 60, largeDelta: 60" ></div>
 				</div>
 				<div class="dijitHidden" data-dojo-type="dijit/form/TextBox" data-dojo-id="hiddenLaborItemId" id="hiddenLaborItemId"> </div>
 				<div style="margin-top:10px; text-align:left;">
@@ -256,9 +256,6 @@
 					</span>
 				</div>
 				<div id="calendarEntryTitlePaneStandBy" data-dojo-id="calendarEntryTitlePaneStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'calendarEntryTitlePane', color:'white'"></div>
-			</div>
-			<div id="laborPaneInfo" data-dojo-type="dijit/TitlePane" data-dojo-props="title:'Summary', style:'width:100%;font-size:90%; height: 10%;', open:true">
-				<div id="laborPaneInfoContent"></div>
 			</div>
 		</div>
 
@@ -582,11 +579,22 @@
 				<div id="employeeDocumentsGridStandBy" data-dojo-id="employeeDocumentsGridStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'empDocumentsGrid', color:'white'"></div>
 				<div id="empLaborDetailsGridStandBy" data-dojo-id="empLaborDetailsGridStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'empLaborDetailsGrid', color:'white'"></div>
 			</div>
-			<div id="laborPane" class="claro" data-dojo-type="dijit/layout/ContentPane" title="Current Schedule" data-dojo-props="selected: false, style:'width:99%; height:99%;'">
-				<div id="calendarSummaryDetails" style="display: inline-block; height: 4%; width: 80%;"></div><div id="noPrint1" style="vertical-align: top; font-weight: bold; display: inline-block; padding-left: 5px;" align="left"><a href="javascript: refreshCalendarForSelectedWeek();">Refresh</a>&nbsp;&nbsp;<a href="javascript: printCalendar();">Print</a></div>
-				<div data-dojo-type="dijit/layout/ContentPane" style="width:99%; height:94%; font-size: inherit;" class="claro">
-					<div id="labor-calendar" class="claro" data-dojo-type="dojox/calendar/Calendar" data-dojo-props="style: 'position:relative; width:99%; height:99%;'" style="font-size: inherit;"></div>
-				</div>
+			<div id="laborPane" data-dojo-type="dijit/layout/ContentPane" title="Current Schedule" data-dojo-props="selected: false, style:'width:100%; height:100%;'">
+				<table style="width: 100%; height: 100%;">
+					<tr style="width: 100%; height: 100%;">
+						<td style="width: 80%; height: 100%;">
+							<div data-dojo-type="dijit/layout/ContentPane" style="width:99%; height:99%; font-size: inherit;" class="claro">
+								<div id="labor-calendar" class="claro" data-dojo-type="dojox/calendar/Calendar" data-dojo-props="style: 'position:relative; width:100%; height:100%;'" style="font-size: inherit;"></div>
+							</div>
+						</td>
+						<td style="width: 20%; height: 100%;" valign="top">
+							<div id="laborPaneInfo" data-dojo-type="dijit/layout/ContentPane" style="margin-top: 5px; width:99%; height:98%; font-size: inherit;">
+								<div id="laborPaneInfoContent"></div>
+							</div>
+						</td>
+					</tr>
+				</table>
+				
 			</div>
 			<div id="accountingPane" data-dojo-type="dijit/layout/ContentPane" title="Accounting" data-dojo-props="selected:false" style="width: 99%; height: 99%">
 				<div data-dojo-type="dijit/layout/ContentPane" style="width: 99%; height: 60%;" align="center">
