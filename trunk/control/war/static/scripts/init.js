@@ -374,7 +374,7 @@ require(["bootstrap", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/dijit", 
 			
 			
 			
-			var empSelectWidget = new formSelect({style: {width: '75%'}}, dom.byId('itemSummaryEditor'));
+			var empSelectWidget = new formSelect({style: {'width': '95%', 'font-size': '95%'}}, dom.byId('itemSummaryEditor'));
 			empSelectWidget.startup();
 			empSelectWidget.on('change', function(){
 				//registry.byId('addItemButton').set('disabled', false);
@@ -389,11 +389,12 @@ require(["bootstrap", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/dijit", 
 			});
 			
 			
-			var dateTextBox = new DateTextBox({value: new Date(), style: {width: '70%'}}, dom.byId('itemStartDateEditor'));
+			var dateTextBox = new DateTextBox({value: new Date(), style: {'width': '95%', 'font-size': '90%'}}, dom.byId('itemStartDateEditor'));
 			dateTextBox.on('change', function(newValue){
 				var oldValue = dijit.byId('hiddenItemDate').get('value');
 				var oldWeek = locale.format(oldValue, {selector: 'date', datePattern: 'w', locale: 'en'});
 				var newWeek = locale.format(newValue, {selector: 'date', datePattern: 'w', locale: 'en'});
+				//console.log('oldWeek --> ' + oldWeek + ' newWeek--> ' + newWeek);
 				if(Math.abs(newWeek - oldWeek) > 0){
 					var currentYear = locale.format(newValue, {selector: 'date', datePattern: 'yyyy', locale: 'en'});
 					newWeek++;

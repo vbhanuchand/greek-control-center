@@ -14,9 +14,9 @@ define(["dijit/dijit", "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/fx", "do
     			var calendar = registry.byId('labor-calendar');
     			registry.byId('labor-calendar').set('date', registry.byId('itemStartDateEditor').get('value'));
     			calendar.set('store', new Observable(new Memory({data: []})));
-    			//registry.byId('labor-calendar').buttonContainer.innerHTML = 'Data Not Available !!!';
-    			registry.byId('labor-calendar').buttonContainer.style.display = 'none';
-    			dom.byId('calendarSummaryDetails').innerHTML = 'Data Not Available !!!';
+    			registry.byId('labor-calendar').buttonContainer.innerHTML = 'Data Not Available !!!';
+    			//registry.byId('labor-calendar').buttonContainer.style.display = 'none';
+    			//dom.byId('calendarSummaryDetails').innerHTML = 'Data Not Available !!!';
     			dojo.byId('laborPaneInfoContent').innerHTML = 'No Data !!!';
     			//calendar.set('startDate', registry.byId('itemStartTimeEditor').get('value'));
             	//calendar.set('endDate', date.add(registry.byId('itemStartTimeEditor').get('value'), 6, 'day'));
@@ -49,25 +49,26 @@ define(["dijit/dijit", "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/fx", "do
 			}
 		});
 		
-		var laborInfoTableHTML = '<div id="laborTitle" style="margin-left:6px;" align="left"><table class="laborTable" valign="top">' 
-				+ '<tr><td class="laborDateTd">Date: ' + skeleton + '</td>'
-				+ '<td class="laborMgrTd">Total Manager Hrs : ' + totalsMap.totalMgr + '</td>'
-				+ '<td class="laborFrontTd">Total Front Hrs : ' + totalsMap.totalFront + '</td>'
-				+ '<td class="laborCookTd">Total Cook Hrs : ' + totalsMap.totalCook + '</td>'
-				+ '<td class="laborDateTd">Total Hours (Manager Hrs not Included): ' + (totalsMap.totalFront + totalsMap.totalCook) + '</td>'
-				+ '</tr></table></div>';
+		var laborInfoTableHTML = '<table class="laborTable" valign="top" style="width: 100%; height: 100%;">' 
+				+ '<tr><td class="laborDateTd">' + skeleton + '</td>'
+				+ '<td class="laborMgrTd">Total Manager Hours : ' + totalsMap.totalMgr + '</td>'
+				+ '<td class="laborFrontTd">Total Front Hours : ' + totalsMap.totalFront + '</td>'
+				+ '<td class="laborCookTd">Total Cook Hours : ' + totalsMap.totalCook + '</td>'
+				+ '<td class="laborDateTd">Total Hours (Not Included Manager): ' + (totalsMap.totalFront + totalsMap.totalCook) + '</td>'
+				+ '<td><span id="noPrint1" style="font-weight: bold; padding-left: 2px; padding-right: 2px;" align="left"><a href="javascript: refreshCalendarForSelectedWeek();">Refresh</a>&nbsp;&nbsp;<a href="javascript: printCalendar();">Print</a></span></td>'
+				+ '</tr></table>';
 		
-		//registry.byId('labor-calendar').buttonContainer.innerHTML = laborInfoTableHTML;
-		registry.byId('labor-calendar').buttonContainer.style.display = 'none';
-		dom.byId('calendarSummaryDetails').innerHTML = laborInfoTableHTML;
-		var employeeDetailsPaneContent = '<table style="width: 100%; height: 100%; border: .1em solid #ddd;"><tbody>';
+		registry.byId('labor-calendar').buttonContainer.innerHTML = laborInfoTableHTML;
+		//registry.byId('labor-calendar').buttonContainer.style.display = 'none';
+		//dom.byId('calendarSummaryDetails').innerHTML = laborInfoTableHTML;
+		var employeeDetailsPaneContent = '<table class="laborSummaryTable" style="width: 100%; height: 100%; border: .1em solid #000;"><tbody><tr><th style="width: 50%;">Employee</th><th style="width: 50%;">Hours</th></tr>';
 		for(var key in employeeHrsMap){
 			empHrsArray.push(employeeHrsMap[key]);
 		}
 		empHrsArray.sort(function(a, b) { return parseFloat(b.time) - parseFloat(a.time);});
 		
 		arrayUtils.forEach(empHrsArray, function(item, index){
-			employeeDetailsPaneContent = employeeDetailsPaneContent + '<tr><td width="45%" class="' + item.position + '">' + item.name + '</td><td width="55%" class="itemTime">' + item.time + ' hrs' + '</td></tr>';
+			employeeDetailsPaneContent = employeeDetailsPaneContent + '<tr><td style="width: 50%;" class="' + item.position + '">' + item.name + '</td><td style="width: 50%;" class="itemTime">' + item.time + ' hrs' + '</td></tr>';
 		});
 		employeeDetailsPaneContent = employeeDetailsPaneContent + '</tbody></table>';
 		
@@ -215,7 +216,7 @@ define(["dijit/dijit", "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/fx", "do
 			initCalendar();
 			if(domStyle.get(dom.byId('calendarEntryTitlePane'), 'display') != 'none')
 				otherFx.wipeOut({node: dom.byId('calendarEntryTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
-			registry.byId('labor-calendar').buttonContainer.style.display = 'none';
+			//registry.byId('labor-calendar').buttonContainer.style.display = 'none';
 			console.log('Labor Layout Controller Initialized ()');
         },
         resetToCurrentWeek: function(fetchData){
