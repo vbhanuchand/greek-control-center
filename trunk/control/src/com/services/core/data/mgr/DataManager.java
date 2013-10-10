@@ -42,6 +42,8 @@ public interface DataManager {
 	
 	boolean updateEmployee(EmployeeWrapper empWrapper);
 	
+	boolean updateEmployeeRole(int empId, int storeId, boolean addRole, String roleName);
+	
 	List<EmployeeSalaryWrapper> getEmployeeSalary(int empId);
 	
 	boolean insertEmployeeSalary(EmployeeSalaryWrapper empSalary);

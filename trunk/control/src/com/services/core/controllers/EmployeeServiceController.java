@@ -67,6 +67,15 @@ public class EmployeeServiceController {
 		return temp;
 	}
 	
+	@RequestMapping(value = "/service/store/{storeId}/modifyRole/{empId}/{role}", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public SingleModelResponse<BaseModel> modifyRoles(@PathVariable int storeId, @PathVariable int empId, @PathVariable int role) throws IOException {
+		String roleName = "store-mgr";
+		boolean addRole = false;
+		if(role > 0) addRole = true;
+		return new SingleModelResponse<BaseModel>(dataService.updateEmployeeRole(empId, storeId, addRole, roleName), null);
+	}
+	
 	@RequestMapping(value = "/service/store/{storeId}/employees", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public MultipleModelResponse<EmployeeWrapper> getEmployeesByStore(@PathVariable int storeId)
@@ -102,6 +111,8 @@ public class EmployeeServiceController {
 		logger.info("Updating Employee Data For Emp Id --> " + empId);
 		empWrapper.setActive(true);
 		empWrapper.setStoreId(storeId);
+		empWrapper.setMgr(0);
+		empWrapper.setUpdatedBy(0);
 		//empWrapper.setUsername(empWrapper.getFname()+"."+empWrapper.getLname());
 		boolean updateStatus = dataService.insertEmployee(empWrapper);
 		return new MultipleModelResponse<EmployeeWrapper>(updateStatus, null);
@@ -112,9 +123,9 @@ public class EmployeeServiceController {
 	public MultipleModelResponse<EmployeeWrapper> updateEmployee(@PathVariable int storeId, @PathVariable int empId, @RequestBody EmployeeWrapper empWrapper)
 			throws IOException {
 		logger.info("Updating Employee Data For Emp Id --> " + empId);
-		//empWrapper.setActive(true);
-		boolean updateStatus = dataService.updateEmployee(empWrapper);
-		return new MultipleModelResponse<EmployeeWrapper>(updateStatus, null);
+		empWrapper.setMgr(0);
+		empWrapper.setUpdatedBy(0);
+		return new MultipleModelResponse<EmployeeWrapper>(dataService.updateEmployee(empWrapper), null);
 	}
 	
 	@RequestMapping(value = "/service/employee/{empId}/salary", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)

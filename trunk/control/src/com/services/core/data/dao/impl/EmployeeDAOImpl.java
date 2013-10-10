@@ -87,12 +87,38 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 					role.setRoleTab("store-tab");
 				break;
 			}
+			role.setActive(active);
 			sessionFactory.getCurrentSession().saveOrUpdate(role);
 		}
 		
 		return (result == 1);
 	}
 	
+	@Override
+	public boolean updateEmployeeRole(int employeeId, int storeId, boolean addRole, String roleName){
+		boolean returnVal = false;
+		if(addRole){
+			Role empRole = new Role(employeeId, storeId, 0);
+			empRole.setActive(true);
+			empRole.setRoleTab(roleName);
+			sessionFactory.getCurrentSession().saveOrUpdate(empRole);
+			returnVal = empRole.getId() > 0;
+		} else {
+			Query rolesQuery = sessionFactory.getCurrentSession().createQuery("from Role where employeeId=:employeeId and storeId = :storeId and roleTab = :roleTab and active = :active");
+			rolesQuery.setParameter("roleTab", roleName);
+			rolesQuery.setParameter("active", true);
+			rolesQuery.setParameter("employeeId", employeeId);
+			rolesQuery.setParameter("storeId", storeId);
+			List<Role> existingRoles = rolesQuery.list(); 
+			if(existingRoles.size() > 0){
+				Role firstRole = existingRoles.get(0);
+				firstRole.setActive(false);
+				sessionFactory.getCurrentSession().update(firstRole);
+				returnVal = true;
+			}
+		}
+		return returnVal;
+	}
 	
 	@Override
 	public List<Employee> getEmployeesByStoreId(int storeId, boolean getMgrOnly){
@@ -336,9 +362,10 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public List getAllStoreManagers() {
-		Query query = sessionFactory.getCurrentSession().createQuery("select e.id as empId, r.roleTab as role, e.fname as empFname, e.lname as empLname, r.storeId as storeId from Employee e, Role r " +
-				"where e.id = r.employeeId and e.position=:position order by e.id, r.storeId, r.roleTab");
+		Query query = sessionFactory.getCurrentSession().createQuery("select e.id as empId, r.roleTab as role, e.fname as empFname, e.lname as empLname, r.storeId as storeId, r.active as active from Employee e, Role r " +
+				"where e.id = r.employeeId and e.position=:position and r.roleTab <> :roleTab order by e.id, r.storeId, r.roleTab");
 		query.setParameter("position", "Manager");
+		query.setParameter("roleTab", "store-ownr");
 		query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
 		return query.list();
 	}

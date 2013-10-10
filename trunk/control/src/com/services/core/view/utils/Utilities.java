@@ -122,7 +122,7 @@ public class Utilities {
 			else if(hh == 12) strETime = hh + ":" + ((String.valueOf(mi).length() > 1) ? String.valueOf(mi) : ("0"+String.valueOf(mi))) + " PM";
 		}else strETime="12:00 AM";
 		
-		return fname + " (" + strFTime + "-" + strETime + ")";
+		return fname + "<br/><span style='font-size: 90%;'>(" + strFTime + "-" + strETime + ")</span>";
 	}
 	
 }
