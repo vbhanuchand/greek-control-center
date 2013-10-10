@@ -784,7 +784,7 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 		        	}
 		        },
 		        populateUsersToManage: function(){
-		        	console.log('Populating Users to Manage');
+		        	registry.byId('manageUsersRegionStandBy').show();
 		        	ajaxRequest.get("/service/managers",{
 			    		handleAs: 'json'
 			    	}).then(function(mgrResponse){
@@ -804,25 +804,31 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 				    		td = domConstruct.create("th", { 
 				    			innerHTML: "Downtown"
 				    			});
-					    	domStyle.set(td, 'width', '20%');
+					    	domStyle.set(td, 'width', '16%');
 				    		tableTR.appendChild(td);
 		    				
 				    		td = domConstruct.create("th", { 
 				    			innerHTML: "West Valley"
 				    			});
-					    	domStyle.set(td, 'width', '20%');
+					    	domStyle.set(td, 'width', '16%');
 				    		tableTR.appendChild(td);
 		    				
 				    		td = domConstruct.create("th", { 
 				    			innerHTML: "Murray"
 				    			});
-					    	domStyle.set(td, 'width', '20%');
+					    	domStyle.set(td, 'width', '16%');
 				    		tableTR.appendChild(td);
 		    				
 				    		td = domConstruct.create("th", { 
 				    			innerHTML: "South Jordan"
 				    			});
-					    	domStyle.set(td, 'width', '20%');
+					    	domStyle.set(td, 'width', '16%');
+				    		tableTR.appendChild(td);
+				    		
+				    		td = domConstruct.create("th", { 
+				    			innerHTML: "Airport"
+				    			});
+					    	domStyle.set(td, 'width', '16%');
 				    		tableTR.appendChild(td);
 				    		employeeList.appendChild(tableTR);
 				    		
@@ -835,29 +841,56 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 						    	domStyle.set(td, 'text-align', 'left');
 						    	domStyle.set(td, 'padding-left', '10px');
 						    	tableTR.appendChild(td);
-			    				var stores = [1,2,3,4];
-			    				var employeeStores = employee.stores.split(',');
+			    				var stores = [1,2,3,4,5];
+			    				var employeeStores = employee.stores ? employee.stores.split(',') : [];
 			    				baseArray.forEach(stores, function(store){
 			    					td = domConstruct.create("td", {});
 			    					var cbChecked = false;
-			    					for(var i=0; i<employeeStores.length; i++){
+			    					for(var i=0; i < employeeStores.length; i++){
 			    						if(employeeStores[i] == store)
 			    							cbChecked = true;
 			    					}
 			    					var cb = new dojoCheckBox({
 			    						checked: cbChecked,
 			    						onChange: function(){
-			    							console.log(store + ' --> ' + employee.empId + ' --> ' + this.get('value'));
+			    							var urlToPost = '/service/store/' + store + '/modifyRole/'+ employee.empId + '/';
+			    							switch(this.get('value')+''){
+			    								case 'on':
+			    									//Add Role
+			    									urlToPost += '1';
+			    									break;
+			    								case 'false':
+			    									//Remove Role
+			    									urlToPost += '0';
+			    									break;
+			    							}
+			    							//Post to URL
+			    							registry.byId('manageUsersRegionStandBy').show();
+			    					    	ajaxRequest.get(urlToPost,{
+			    					    		handleAs: 'json', sync: true
+			    					    	}).then(function(response){
+			    					    		if(response.success){
+			    					    			dom.byId('messages').innerHTML = 'Role Modified Successfully';
+			    					    			var storeLayout = require('controls/StoreLayoutController');
+			    					    			storeLayout.populateUsersToManage();
+			    					    		}
+			    					    		registry.byId('manageUsersRegionStandBy').hide();
+			    					    	}, function(error){
+			    					    		dom.byId('messages').innerHTML = 'Error occurred while Modifying Role ' + error;
+			    					    		registry.byId('manageUsersRegionStandBy').hide();
+			    					    	});
+			    							
 			    						}
 			    					});
 			    					td.appendChild(cb.domNode);
-			    					domStyle.set(td, 'width', '20%');
+			    					domStyle.set(td, 'width', '16%');
 							    	domStyle.set(td, 'text-align', 'center');
 							    	tableTR.appendChild(td);
 			    				});
 			    				employeeList.appendChild(tableTR);
 				    		});
 			    		}
+			    		registry.byId('manageUsersRegionStandBy').hide();
 			    	});
 		        }
 		    };

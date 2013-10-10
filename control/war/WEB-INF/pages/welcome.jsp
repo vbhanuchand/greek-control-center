@@ -264,23 +264,24 @@
 		<div data-dojo-id="tabContainer" id="tabContainer" data-dojo-type="dijit/layout/TabContainer" data-dojo-props="region:'center', tabStrip:true">
 			<div id="managePane" data-dojo-type="dijit/layout/ContentPane" title="Manage" data-dojo-props="selected:false" style="width: 99%; height: 99%">
 					<div id="manageUsersRegion" data-dojo-type="dijit/layout/ContentPane" style="width: 99%; height: 99%; border: .1em solid #ddd;" align="center">
-							<div id="manageUsersRegionContent" align="left">
-								<div align="center" style="padding: 2px;">
-									<table style="width: 99%; height: 99%;" class='dateTable' id="manageUsersRegionTable">
-										<tr>
-											<th width="20%">User</th>
-											<th width="20%">Downtown</th>
-											<th width="20%">West Valley</th>
-											<th width="20%">Murray</th>
-											<th width="20%">South Jordan</th>
-										</tr>
-									</table>
-								</div>
-							</div>
-							<div id="manageUsersRegionStandBy" data-dojo-id="manageUsersRegionStandBy" 
-									data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'manageUsersRegionContent', color:'lightgrey'">
+						<div id="manageUsersRegionContent" align="left">
+							<div align="center" style="padding: 2px;">
+								<table style="width: 99%; height: 99%;" class='dateTable' id="manageUsersRegionTable">
+									<tr>
+										<th width="20%">User</th>
+										<th width="20%">Downtown</th>
+										<th width="20%">West Valley</th>
+										<th width="20%">Murray</th>
+										<th width="20%">South Jordan</th>
+										<th width="20%">Airport</th>
+									</tr>
+								</table>
 							</div>
 						</div>
+						<div id="manageUsersRegionStandBy" data-dojo-id="manageUsersRegionStandBy" 
+								data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'manageUsersRegionContent', color:'lightgrey'">
+						</div>
+					</div>
 				</div>
 			<div id="storeInfo" data-dojo-type="dijit/layout/ContentPane" title="Store Info" data-dojo-props="selected:true" style="width: 99%; height: 99%">
 				<div data-dojo-type="dijit/TitlePane" id="storeInfoTitlePane" data-dojo-props="title:'Store Information', style:'width:99%;', open: false">
@@ -582,12 +583,12 @@
 			<div id="laborPane" data-dojo-type="dijit/layout/ContentPane" title="Current Schedule" data-dojo-props="selected: false, style:'width:100%; height:100%;'">
 				<table style="width: 100%; height: 100%;">
 					<tr style="width: 100%; height: 100%;">
-						<td style="width: 80%; height: 100%;">
+						<td style="width: 85%; height: 100%;">
 							<div data-dojo-type="dijit/layout/ContentPane" style="width:99%; height:99%; font-size: inherit;" class="claro">
 								<div id="labor-calendar" class="claro" data-dojo-type="dojox/calendar/Calendar" data-dojo-props="style: 'position:relative; width:100%; height:100%;'" style="font-size: inherit;"></div>
 							</div>
 						</td>
-						<td style="width: 20%; height: 100%;" valign="top">
+						<td style="width: 15%; height: 100%;" valign="top">
 							<div id="laborPaneInfo" data-dojo-type="dijit/layout/ContentPane" style="margin-top: 5px; width:99%; height:98%; font-size: inherit;">
 								<div id="laborPaneInfoContent"></div>
 							</div>

@@ -332,6 +332,7 @@ html, body {
   	text-decoration: underline;
   	font-weight: bold;
   	color: #243C5F;
+  	font-size: 90%;
 }
 
 .leaseInfo-labelsAndValues-labelCell .noLabelHeader{
@@ -587,11 +588,20 @@ table.laborTable {
 	border-spacing: 1px;
 }
 
+table.laborTable th {
+	border-width: 1px;
+	border-style: solid;
+	border-color: #000000;
+	background-color: #cccccc;
+	text-align: center;
+	font-weight: bold;
+}
+
 table.laborTable td {
 	border-width: 1px;
 	padding: 1px;
 	border-style: solid;
-	border-color: #eee;
+	border-color: #000000;
 	background-color: #ffffff;
 	text-align:left;
 }

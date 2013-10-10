@@ -153,10 +153,15 @@ public class DataManagerImpl implements DataManager{
 				empObject.put("empId", mapObject.get("empId").toString());
 			}
 			
-			if(empObject.containsKey("stores"))
-				empObject.put("stores", empObject.get("stores") + "," + mapObject.get("storeId").toString());
-			else
-				empObject.put("stores", mapObject.get("storeId").toString());
+			if(empObject.containsKey("stores")){
+				if(mapObject.get("active").toString() == "true"){
+					empObject.put("stores", empObject.get("stores") + "," + mapObject.get("storeId").toString());
+				}
+			} else{
+				if(mapObject.get("active").toString() == "true"){
+					empObject.put("stores", mapObject.get("storeId").toString());
+				}
+			}
 			
 			finalObject.put(mapObject.get("empId").toString(), empObject);
 		}
@@ -219,6 +224,12 @@ public class DataManagerImpl implements DataManager{
 	public boolean insertEmployeeSalary(EmployeeSalaryWrapper empSalary){
 		return employeeDAO.createEmployeeSalary(empSalary.getEmpId(), empSalary.getStoreId(), empSalary.getIncrement(), 
 				empSalary.getIncrementDate(), empSalary.getSalBefInc(), empSalary.getSalAftInc(), empSalary.getNotes(), empSalary.getUpdated_by());
+	}
+	
+	@Override
+	@Transactional
+	public boolean updateEmployeeRole(int empId, int storeId, boolean addRole, String roleName){
+		return employeeDAO.updateEmployeeRole(empId, storeId, addRole, roleName);
 	}
 	
 	@Override

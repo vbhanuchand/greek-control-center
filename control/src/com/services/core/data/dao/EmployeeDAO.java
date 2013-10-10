@@ -30,6 +30,8 @@ public interface EmployeeDAO {
 	
 	boolean updateEmployee(int id, String username, String fname, String lname, String phone,  String personalPhone, String emergencyContact, String address, boolean active, int manager, String position, Date hired_date, int updated_by);
 	
+	boolean updateEmployeeRole(int empId, int storeId, boolean addRole, String roleName);
+	
 	List<EmployeeSalary> getEmployeeSalary(int empId);
 	
 	boolean createEmployeeSalary(int empId, int storeId, double increment, Date incrementDate, double salBefInc, double salAftInc, String notes, int updated_by);

@@ -387,3 +387,13 @@ select * from store_stock;
 select * from items;
 delete from store_stock where id in (9);
 delete from items where id in (9);
+
+select * from employee_role;
+select * from employee;
+
+insert into employee_role(employee_id, store_id, active, role_tab, updated_by) values(4, 1, 'N', 'store-mgr', 0);
+update employee set position='Manager' where id=2;
+
+select employee0_.id as col_0_0_, role1_.role_tab as col_1_0_, employee0_.fname as col_2_0_, employee0_.lname as col_3_0_, role1_.store_id as col_4_0_ 
+from employee employee0_, employee_role role1_ where employee0_.id(+)=role1_.employee_id and employee0_.position='Manager' and 
+role1_.role_tab<>'store-ownr' order by employee0_.id, role1_.store_id, role1_.role_tab;

@@ -55,20 +55,24 @@ define(["dijit/dijit", "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/fx", "do
 				+ '<td class="laborFrontTd">Total Front Hours : ' + totalsMap.totalFront + '</td>'
 				+ '<td class="laborCookTd">Total Cook Hours : ' + totalsMap.totalCook + '</td>'
 				+ '<td class="laborDateTd">Total Hours (Not Included Manager): ' + (totalsMap.totalFront + totalsMap.totalCook) + '</td>'
-				+ '<td><span id="noPrint1" style="font-weight: bold; padding-left: 2px; padding-right: 2px;" align="left"><a href="javascript: refreshCalendarForSelectedWeek();">Refresh</a>&nbsp;&nbsp;<a href="javascript: printCalendar();">Print</a></span></td>'
+				+ '<td style="text-align: center;"><span id="noPrint1" style="font-weight: bold; padding-left: 2px; padding-right: 2px;" align="left"><a href="javascript: refreshCalendarForSelectedWeek();">Refresh</a>&nbsp;&nbsp;<a href="javascript: printCalendar();">Print</a></span></td>'
 				+ '</tr></table>';
 		
 		registry.byId('labor-calendar').buttonContainer.innerHTML = laborInfoTableHTML;
 		//registry.byId('labor-calendar').buttonContainer.style.display = 'none';
 		//dom.byId('calendarSummaryDetails').innerHTML = laborInfoTableHTML;
-		var employeeDetailsPaneContent = '<table class="laborSummaryTable" style="width: 100%; height: 100%; border: .1em solid #000;"><tbody><tr><th style="width: 50%;">Employee</th><th style="width: 50%;">Hours</th></tr>';
+		var employeeDetailsPaneContent = '<table class="laborTable" style="width: 100%; height: 100%; border: .1em solid #000;"><tbody><tr><th style="width: 50%;">Employee</th><th style="width: 50%;">Hours</th></tr>';
 		for(var key in employeeHrsMap){
 			empHrsArray.push(employeeHrsMap[key]);
 		}
 		empHrsArray.sort(function(a, b) { return parseFloat(b.time) - parseFloat(a.time);});
 		
 		arrayUtils.forEach(empHrsArray, function(item, index){
-			employeeDetailsPaneContent = employeeDetailsPaneContent + '<tr><td style="width: 50%;" class="' + item.position + '">' + item.name + '</td><td style="width: 50%;" class="itemTime">' + item.time + ' hrs' + '</td></tr>';
+			var cssClass = '';
+			if(item.position == 'Manager') cssClass = 'laborMgrTd';
+			else if(item.position == 'Front') cssClass = 'laborFrontTd';
+			else if(item.position == 'Cook') cssClass = 'laborCookTd';
+			employeeDetailsPaneContent = employeeDetailsPaneContent + '<tr><td style="width: 50%;" class="' + cssClass + '">' + item.name + '</td><td style="width: 50%;" class="itemTime">' + item.time + ' hrs' + '</td></tr>';
 		});
 		employeeDetailsPaneContent = employeeDetailsPaneContent + '</tbody></table>';
 		
@@ -132,7 +136,7 @@ define(["dijit/dijit", "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/fx", "do
 		calendar.set('startDate', new Date(2013, 4, 19));
 		calendar.set('endDate', new Date(2013, 4, 25));
 		calendar.set('dateIntervalSteps', 1);
-		calendar.set('percentOverlap', 70);
+		
 		
 		calendar.columnView.set('columnHeaderDatePattern', 'MMM dd (EEEE)');
 		calendar.columnView.set('rowHeaderTimePattern', '');
@@ -141,6 +145,7 @@ define(["dijit/dijit", "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/fx", "do
 		calendar.columnView.set('hourSize', 51);
 		calendar.columnView.set('timeSlotDuration', 60);
 		calendar.columnView.set('columnCount', 10);
+		calendar.columnView.set('percentOverlap', 60);
 		
 		calendar.set('store', new Observable(new Memory({data: someData})));
 		
