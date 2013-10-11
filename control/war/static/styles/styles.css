@@ -513,7 +513,7 @@ table.addRecordTable td {
 
 table.accountingTable {
 	font-family: inherit;
-	font-size: inherit;
+	font-size: 0.96em;
 	color: inherit;
 	border: none !important;
 	border-collapse: collapse;
@@ -746,6 +746,10 @@ font-size: 85%;
 
 #laborPane{
 	font-size: 0.8em;
+}
+
+#accountsYearlyDetails{
+	font-size: 0.9em !important;
 }
 
 /* #calendarEntryTitlePane{

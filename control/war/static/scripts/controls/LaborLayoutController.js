@@ -49,7 +49,7 @@ define(["dijit/dijit", "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/fx", "do
 			}
 		});
 		
-		var laborInfoTableHTML = '<table class="laborTable" valign="top" style="width: 100%; height: 100%;">' 
+		var laborInfoTableHTML = '<table class="laborTable" valign="top" style="width: 100%; height: 30px; overflow: auto;">' 
 				+ '<tr><td class="laborDateTd">' + skeleton + '</td>'
 				+ '<td class="laborMgrTd">Total Manager Hours : ' + totalsMap.totalMgr + '</td>'
 				+ '<td class="laborFrontTd">Total Front Hours : ' + totalsMap.totalFront + '</td>'
@@ -141,11 +141,11 @@ define(["dijit/dijit", "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/fx", "do
 		calendar.columnView.set('columnHeaderDatePattern', 'MMM dd (EEEE)');
 		calendar.columnView.set('rowHeaderTimePattern', '');
 		calendar.columnView.set('minHours', 8);
-		calendar.columnView.set('maxHours', 23);
-		calendar.columnView.set('hourSize', 51);
+		calendar.columnView.set('maxHours', 24);
 		calendar.columnView.set('timeSlotDuration', 60);
-		calendar.columnView.set('columnCount', 10);
-		calendar.columnView.set('percentOverlap', 60);
+		calendar.columnView.set('horizontalGap', 2);
+		calendar.columnView.set('percentOverlap', 70);
+		calendar.columnView.set('hourSize', 40);
 		
 		calendar.set('store', new Observable(new Memory({data: someData})));
 		

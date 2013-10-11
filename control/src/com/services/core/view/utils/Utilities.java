@@ -110,19 +110,19 @@ public class Utilities {
 		if(fTime > 0){
 			hh = fTime/100;
 			mi = fTime%100;
-			if(hh > 12) strFTime = hh-12 + ":" + ((String.valueOf(mi).length() > 1) ? String.valueOf(mi) : ("0"+String.valueOf(mi))) + " PM";
-			else if(hh < 12) strFTime = hh + ":" + ((String.valueOf(mi).length() > 1) ? String.valueOf(mi) : ("0"+String.valueOf(mi))) + " AM";
-			else if(hh == 12) strFTime = hh + ":" + ((String.valueOf(mi).length() > 1) ? String.valueOf(mi) : ("0"+String.valueOf(mi))) + " PM";
-		}else strFTime="12:00 AM";
+			if(hh > 12) strFTime = hh-12 + ":" + ((String.valueOf(mi).length() > 1) ? String.valueOf(mi) : ("0"+String.valueOf(mi)));// + " PM";
+			else if(hh < 12) strFTime = hh + ":" + ((String.valueOf(mi).length() > 1) ? String.valueOf(mi) : ("0"+String.valueOf(mi)));// + " AM";
+			else if(hh == 12) strFTime = hh + ":" + ((String.valueOf(mi).length() > 1) ? String.valueOf(mi) : ("0"+String.valueOf(mi)));// + " PM";
+		}else strFTime="12:00";// AM";
 		if(eTime > 0){
 			hh = eTime/100;
 			mi = eTime%100;
 			if(hh > 12) strETime = hh-12 + ":" + ((String.valueOf(mi).length() > 1) ? String.valueOf(mi) : ("0"+String.valueOf(mi))) + " PM";
 			else if(hh < 12) strETime = hh + ":" + ((String.valueOf(mi).length() > 1) ? String.valueOf(mi) : ("0"+String.valueOf(mi))) + " AM";
 			else if(hh == 12) strETime = hh + ":" + ((String.valueOf(mi).length() > 1) ? String.valueOf(mi) : ("0"+String.valueOf(mi))) + " PM";
-		}else strETime="12:00 AM";
+		}else strETime="12:00";// AM";
 		
-		return fname + "<br/><span style='font-size: 90%;'>(" + strFTime + "-" + strETime + ")</span>";
+		return "<span style='font-size: 90%;'>" + fname + "</span>&nbsp;<span style='font-size: 80%;'>" + strFTime + " - " + strETime + "</span>";
 	}
 	
 }
