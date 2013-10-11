@@ -68,7 +68,7 @@ public class FileServiceController {
         ImagesService imagesService = ImagesServiceFactory.getImagesService();
         String imgServingURL = null;
         if (!(blobInfo == null)) {
-        	if(blobInfo.getContentType().contains("jpeg") || blobInfo.getContentType().contains("png") || blobInfo.getContentType().contains("gif") || blobInfo.getContentType().contains("jpg"))
+        	if(blobInfo.getContentType().contains("jpeg") || blobInfo.getContentType().contains("png") || blobInfo.getContentType().contains("gif") || blobInfo.getContentType().contains("jpg") || blobInfo.getContentType().contains("webp") || blobInfo.getContentType().contains("bmp") || blobInfo.getContentType().contains("tiff") || blobInfo.getContentType().contains("ico"))
         	{
         		ServingUrlOptions options = ServingUrlOptions.Builder.withBlobKey(blobInfo.getBlobKey());
         		imgServingURL = imagesService.getServingUrl(options);
@@ -118,7 +118,7 @@ public class FileServiceController {
 	public SingleModelResponse<SimpleModel> getImage(@PathVariable int empId, final HttpServletResponse response) throws IOException {
 		try{
 		logger.info("Getting Blob --> " + empId);
-		String imgServingURL = "resources/images/no-photo.png";
+		String imgServingURL = "resources/images/no-photo.jpg";
 		List<BlobsWrapper> blobsList = dataService.getBlobs(empId, "photo");
 		if(blobsList.size() > 0){
 			ImagesService imagesService = ImagesServiceFactory.getImagesService();
@@ -129,7 +129,7 @@ public class FileServiceController {
 		returnModel.setImageURL(imgServingURL);
 		return new SingleModelResponse<SimpleModel>(true, returnModel);
 		} catch(Exception e){
-			String imgServingURL = "resources/images/no-photo.png";
+			String imgServingURL = "resources/images/no-photo.jpg";
 			SimpleModel returnModel = new SimpleModel();
 			returnModel.setImageURL(imgServingURL);
 			return new SingleModelResponse<SimpleModel>(true, returnModel);

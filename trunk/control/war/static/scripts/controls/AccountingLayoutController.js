@@ -36,8 +36,8 @@ function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Me
 		                                                  ['Misc', dijit.byId('accountingMiscAmt').get('value')], 
 		                                                  ['Profit', dijit.byId('accountingProfitAmt').get('value')]]);
 		var options = {	title: 'Sales Distribution Chart', titleTextStyle: {}, is3D: true,
-				 			chartArea: {left:2, top:20, width: '100%'},
-				 			legend: {position: 'bottom', textStyle: {color: 'black', fontSize: 11}, alignment: 'center'}
+				 			chartArea: {left:2, top:20, width: '99%'},
+				 			legend: {position: 'bottom', textStyle: {color: 'black'/*, fontSize: 11*/}, alignment: 'center'}
 		 			};
 		accountingChart.draw(data, options);
 	},
@@ -240,7 +240,7 @@ function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Me
     	ajaxRequest.get('/service/store/' + registry.byId('hiddenStoreId').get('value') + '/accounting/year/' + registry.byId('hiddenSelectedYear').get('value'),
     			{ handleAs: 'json'}).then(function(accountingYearsResponse){
     		if(accountingYearsResponse.success && (accountingYearsResponse.models.length > 0)){
-    			var labels = ['Total Sales', 'blank', 'Labor', 'Food Cost', 'Advertisement', 'Misc', 'blank', 'Profit'], quarters = [1, 2, 3, 4];
+    			var labels = ['<b>Total Sales</b>', /*'blank',*/ 'Labor', 'Food Cost', 'Advertisement', 'Misc', '<b>Profit</b>'], quarters = [1, 2, 3, 4];
     			var dataForTable = {}, sampleData = {}, quarterlyDataForTable = {};
     			arrayUtils.forEach(quarters, function(quarter){
     				dataForTable[quarter] = {'total': 0, 'labor': 0, 'foodCost': 0, 'advertisement': 0, 'misc': 0, 'profit': 0};
@@ -290,7 +290,7 @@ function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Me
 					tdTotal = 0;
 					arrayUtils.forEach(quarters, function(quarterlyIndex){
 						switch(label){
-							case 'Total Sales':
+							case '<b>Total Sales</b>':
 								tdValue = (dataForTable[quarterlyIndex+'']).total;
 								break;
 							case 'Labor':
@@ -305,7 +305,7 @@ function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Me
 							case 'Misc':
 								tdValue = (dataForTable[quarterlyIndex+'']).misc;
 								break;
-							case 'Profit':
+							case '<b>Profit</b>':
 								tdValue = (dataForTable[quarterlyIndex+'']).profit;
 								break;
 							case 'blank':
@@ -317,12 +317,15 @@ function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Me
 							tdTotal += DNumber.parse(tdValue, {places: 2, locale: 'en-us'});
 							tdValue = '$' + tdValue;
 						} else tdValue = '&nbsp;';
+						if((label == '<b>Total Sales</b>') || (label == '<b>Profit</b>')){
+							tdValue = '<b>' + tdValue + '</b>';
+						}
 	    				td = domConstruct.create("td", {innerHTML: tdValue});
 	    				tableTR.appendChild(td);
 	    			});
 					
 					switch(label){
-						case 'Total Sales':
+						case '<b>Total Sales</b>':
 							dataForGraph.totalSales = tdTotal;
 							break;
 						case 'Labor':
@@ -337,13 +340,16 @@ function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Me
 						case 'Misc':
 							dataForGraph.misc = tdTotal;
 							break;
-						case 'Profit':
+						case '<b>Profit</b>':
 							dataForGraph.profit = tdTotal;
 							break;
 					}
 					
 					if(label == 'blank') tdTotal = '';
 					else tdTotal = '$' + DNumber.format(tdTotal, {places: 2, locale: 'en-us'});
+					if((label == '<b>Total Sales</b>') || (label == '<b>Profit</b>')){
+						tdTotal = '<b>' + tdTotal + '</b>';
+					}
 					td = domConstruct.create("td", {innerHTML: tdTotal});
     				tableTR.appendChild(td);
 					tableDom.appendChild(tableTR);
@@ -376,8 +382,8 @@ function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Me
 		var windowBoxObj = window.getBox();
 		var chartHeight = parseInt(windowBoxObj.h - parseInt(32*(windowBoxObj.h/100)));
 		var options = {	title: 'Sales Distribution Chart', titleTextStyle: {}, is3D: true,
-				 			chartArea:{left:2, top:20, width: '100%'},
-				 			legend: {position: 'bottom', textStyle: {color: 'black', fontSize: 11}, alignment: 'center'}
+				 			chartArea:{left:2, top:20, width: '99%'/*, height: '90%'*/},
+				 			legend: {position: 'bottom', textStyle: {color: 'black'/*, fontSize: 11*/}, alignment: 'center'}
 		 			};
 		accountingChart.draw(data, options);
 	},
@@ -409,7 +415,7 @@ function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Me
 			var data = google.visualization.arrayToDataTable(googleData);
 			var windowBoxObj = window.getBox();
 			var chartWidth = parseInt(windowBoxObj.w - parseInt(25*(windowBoxObj.w/100)));
-			var chartHeight = parseInt(windowBoxObj.h - parseInt(60*(windowBoxObj.h/100)));
+			var chartHeight = parseInt(windowBoxObj.h - parseInt(70*(windowBoxObj.h/100)));
 			var options = { title: 'Monthly Stats', hAxis: {title: 'Month', titleTextStyle: {color: 'black'}}, width: chartWidth, height: chartHeight };
 			accountingMonthlyChart.draw(data, options);
 		//}
@@ -449,6 +455,7 @@ function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Me
 	    			}
 	    	});
 	    	otherFx.chain([wipeOut, wipeIn]).play();
+	    	//dom.byId('accountingYearButton').innerHTML = year;
 	    	populateAccountingYearlyDetails(year);
 		},
 		updateAccountingData: function(formData, buttonPressed){

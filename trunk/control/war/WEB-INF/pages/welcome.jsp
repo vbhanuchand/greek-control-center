@@ -218,7 +218,7 @@
 			</div>
 			<div id="employeePaneInfo" data-dojo-props="title:'Photograph', open:true" data-dojo-type="dijit/TitlePane" style="display: none; width:100%; font-size:90%; height: 25%;">
 				<div id="employeePaneInfoContent" align="center">
-					<img id="employeeImg" align='top' src='resources/images/no-photo.png' width="80%" height="75%"/>
+					<img id="employeeImg" align='top' src='resources/images/no-photo.jpg' width="150px;" height="150px;"/>
 					<div id="fileUploadWidgetsDivEmp" style="display: none;">
    						<span id="fileUploadWidgetsEmp"></span>
 	  					<span id="fileUploadProgressMsgsEmp"></span>
@@ -430,7 +430,7 @@
 				<div id="managerDetailsPane" style="display: block; width: 99%; height: 39%;" data-dojo-type="dijit/layout/ContentPane">
 						<div style="width: 15%; height: 99%; padding: 0px 2px 0px 2px !important; display: inline-block; vertical-align: middle;"><!--  
 						--><div id="mgrList" data-dojo-type="dijit/form/Select" style="display: block; width: 150px; height: 35px; vertical-align: top; padding-left: 10px;"></div><!--
-						--><div id="mgrPhotoPane" style="display: block; width: 100%; height: 100%;"><div style="display: block; text-decoration: underline; font-weight: bold;">Photograph</div><img id="managerPhoto" align="top" width="170px;" height="60%;"/></div><!-- 
+						--><div id="mgrPhotoPane" style="display: block; width: 100%; height: 100%;"><div style="display: block; text-decoration: underline; font-weight: bold;">Photograph</div><img id="managerPhoto" align="top" width="150px" height="150px;"/></div><!-- 
 					 --></div><!-- 
 					 --><div id="managerPersonalInfo" style="width: 30%; height: 99%; display: inline-block; vertical-align: top; padding-left: 20px;"><!-- 
 						 --><div style="display: block; text-decoration: underline; font-weight: bold;">Manager Details</div><ul id="mgrPaneInfoUl" style="vertical-align: top; list-style: none; height: 80%;"></ul><!-- 
@@ -599,111 +599,95 @@
 			</div>
 			<div id="accountingPane" data-dojo-type="dijit/layout/ContentPane" title="Accounting" data-dojo-props="selected:false" style="width: 99%; height: 99%">
 				<div data-dojo-type="dijit/layout/ContentPane" style="width: 99%; height: 60%;" align="center">
-					<table style="width: 100%; height: 100%;" class="dateTable">
-						<tr style="width: 100%; height: 60%;" valign="top">
-							<td style="width: 56%; height: 100%;" align="center" valign="top">
-								<div id="accountingDetailsPane" style="width: 99%; vertical-align: top; height: 100%; margin-top: 2px" align="center">
+					<table style="width: 100%; height: 99%;" class="dateTable">
+						<tr style="width: 100%; height: 99%;" valign="top">
+							<td style="width: 56%; height: 99%;" align="center" valign="top">
+								<div id="accountingDetailsPane" style="width: 99%; vertical-align: top; height: 99%;" align="center">
+									<form data-dojo-type="dijit/form/Form" data-dojo-id="accountingEntriesForm" id="accountingEntriesForm">
 									<table style="width: 100%; height: 100%; vertical-align: top;" id="accountsQuarterDetails">
 										<tr valign="top">
-											<td style="width: 75%; vertical-align: top;" valign="top" class="noBorder">
-												<form data-dojo-type="dijit/form/Form" data-dojo-id="accountingEntriesForm" id="accountingEntriesForm">	
-													<table style="width: 100%; height: 50%; vertical-align: top;" class="accountingTable">
-														<tr style="height: 10%;" valign="top"><td colspan="3" align="left"><b><u>Select Month</u></b>:&nbsp;&nbsp;&nbsp;<span id="accountingQuartersList"></span></td></tr>
-														<tr style="height: 5%;" valign="top">
-															<th style="width: 33%;">Distribution</th>
-															<th style="width: 34%;">Amount</th>
-															<th style="width: 33%;">%</th>
-														</tr>
-														<tr style="height: 5%;" valign="top">
-															<td style="width: 33%;">Labor</td>
-															<td style="width: 34%;" align="center">
-																<input style="width: 90%;" type="text" name="accountingLbrAmt" id="accountingLbrAmt" value="0" required="true" data-dojo-type="dijit/form/CurrencyTextBox" 
-																	data-dojo-props="constraints:{fractional:false}, currency:'USD', invalidMessage:'Invalid Amount.'" />
-															</td>
-															<td style="width: 33%; text-align: center;" id="accountingLbrAmtPercent"></td>
-														</tr>
-														<tr style="height: 5%;" valign="top">
-															<td style="width: 33%;">Food Cost</td>
-															<td style="width: 34%;" align="center">
-																<input style="width: 90%;" type="text" name="accountingFdAmt" id="accountingFdAmt" value="0" required="true" data-dojo-type="dijit/form/CurrencyTextBox" 
-																	data-dojo-props="constraints:{fractional:false}, currency:'USD', invalidMessage:'Invalid Amount.'" />
-															</td>
-															<td style="width: 33%; text-align: center;" id="accountingFdAmtPercent"></td>
-														</tr>
-														<tr style="height: 5%;" valign="top">
-															<td style="width: 33%;">Advertisement</td>
-															<td style="width: 34%;" align="center">
-																<input style="width: 90%;" type="text" name="accountingAdvtAmt" id="accountingAdvtAmt" value="0" required="true" data-dojo-type="dijit/form/CurrencyTextBox" 
-																	data-dojo-props="constraints:{fractional:false}, currency:'USD', invalidMessage:'Invalid Amount.'" />
-															</td>
-															<td style="width: 33%; text-align: center;" id="accountingAdvtAmtPercent"></td>
-														</tr>
-														<tr style="height: 5%;" valign="top">
-															<td style="width: 33%;">Misc.</td>
-															<td style="width: 34%;" align="center">
-																<input style="width: 90%;" type="text" name="accountingMiscAmt" id="accountingMiscAmt" value="0" required="true" data-dojo-type="dijit/form/CurrencyTextBox" 
-																	data-dojo-props="constraints:{fractional:false}, currency:'USD', invalidMessage:'Invalid Amount.'" />
-															</td>
-															<td style="width: 33%; text-align: center;" id="accountingMiscAmtPercent"></td>
-														</tr>
-														<tr style="height: 5%;" valign="top">
-															<td style="width: 33%;">Profit</td>
-															<td style="width: 34%;" align="center">
-																<input style="width: 90%;" type="text" name="accountingProfitAmt" id="accountingProfitAmt" value="0" required="true" data-dojo-type="dijit/form/CurrencyTextBox" 
-																	data-dojo-props="constraints:{fractional:false}, currency:'USD', invalidMessage:'Invalid Amount.'" />
-															</td>
-															<td style="width: 33%; text-align: center;" id="accountingProfitAmtPercent"></td>
-														</tr>
-														<!-- New Fields -->
-														<tr style="height: 5%;" valign="top">
-															<td style="width: 33%;">Total Sales</td>
-															<td style="width: 34%;" align="center">
-																<input style="width: 95%;" type="text" name="accountingTotalSales" id="accountingTotalSales" value="0" required="true" data-dojo-type="dijit/form/CurrencyTextBox" 
-																	data-dojo-props="constraints:{fractional:false}, currency:'USD', invalidMessage:'Invalid Amount.'" />
-															</td>
-															<td style="width: 33%; text-align: center;" id="accountingProfitAmtPercent"></td>
-														</tr>
-														<tr style="height: 5%;" valign="top">
-															<td style="width: 33%;">Total Operating Expenses</td>
-															<td style="width: 34%;" align="center">
-																<input style="width: 95%;" type="text" name="accountingTotalOpExp" id="accountingTotalOpExp" value="0" required="true" data-dojo-type="dijit/form/CurrencyTextBox" 
-																	data-dojo-props="constraints:{fractional:false}, currency:'USD', invalidMessage:'Invalid Amount.'" />
-															</td>
-															<td style="width: 33%; text-align: center;" id="accountingProfitAmtPercent"></td>
-														</tr>
-														<tr style="height: 5%;" valign="top">
-															<td style="width: 33%;">Total Profits</td>
-															<td style="width: 34%;" align="center">
-																<input style="width: 95%;" type="text" name="accountingTotalProfits" id="accountingTotalProfits" value="0" required="true" data-dojo-type="dijit/form/CurrencyTextBox" 
-																	data-dojo-props="constraints:{fractional:false}, currency:'USD', invalidMessage:'Invalid Amount.'" />
-															</td>
-															<td style="width: 33%; text-align: center;" id="accountingProfitAmtPercent"></td>
-														</tr>
-														<tr style="height: 5%;" valign="top">
-															<td colspan="3" class="noBorder">
-																<button id="accountingUpdateBtn" data-dojo-type="dijit/form/Button" disabled="disabled" type="submit" style="padding: 3px;" value="update">Update</button>
-																<button id="accountingSaveBtn" data-dojo-type="dijit/form/Button" disabled="disabled" type="submit" style="padding: 3px;" value="save">Save</button>
-															</td>
-														</tr>
-													</table>
-													<script type="dojo/on" data-dojo-event="submit" data-dojo-args="evt">
-														evt.preventDefault();
-														evt.stopPropagation();
-														var json = require('dojo/json');
-														var registry = require('dijit/registry');
-														var accLayout = require('controls/AccountingLayoutController');
-														var buttonValue = registry.byId('accountingUpdateBtn').get('disabled') ? 'save' : 'update';
-														if(this.validate() && (Number(registry.byId('accountingQuartersList').get('value')) > 0)){
-															accLayout.updateAccountingData(this.getValues(), buttonValue);
-														}
-														return false;
-													</script>
-												</form>
+											<td style="width: 50%; vertical-align: top;" valign="top" class="noBorder">
+												<table style="width: 100%; height: 50%; vertical-align: top;" class="accountingTable">
+													<tr style="height: 10%;" valign="top"><td colspan="3" align="left"><b><u>Select Month</u></b>:&nbsp;&nbsp;&nbsp;<span id="accountingQuartersList"></span></td></tr>
+													<tr style="height: 5%;" valign="top">
+														<th style="width: 35%;">Distribution</th>
+														<th style="width: 40%;">Amount</th>
+														<th style="width: 25%;">%</th>
+													</tr>
+													<tr style="height: 5%;" valign="top">
+														<td style="width: 35%;">Labor</td>
+														<td style="width: 40%;" align="center">
+															<input style="width: 90%;" type="text" name="accountingLbrAmt" id="accountingLbrAmt" value="0" required="true" data-dojo-type="dijit/form/CurrencyTextBox" 
+																data-dojo-props="constraints:{fractional:false}, currency:'USD', invalidMessage:'Invalid Amount.'" />
+														</td>
+														<td style="width: 25%; text-align: center;" id="accountingLbrAmtPercent"></td>
+													</tr>
+													<tr style="height: 5%;" valign="top">
+														<td style="width: 35%;">Food Cost</td>
+														<td style="width: 40%;" align="center">
+															<input style="width: 90%;" type="text" name="accountingFdAmt" id="accountingFdAmt" value="0" required="true" data-dojo-type="dijit/form/CurrencyTextBox" 
+																data-dojo-props="constraints:{fractional:false}, currency:'USD', invalidMessage:'Invalid Amount.'" />
+														</td>
+														<td style="width: 25%; text-align: center;" id="accountingFdAmtPercent"></td>
+													</tr>
+													<tr style="height: 5%;" valign="top">
+														<td style="width: 35%;">Advertisement</td>
+														<td style="width: 40%;" align="center">
+															<input style="width: 90%;" type="text" name="accountingAdvtAmt" id="accountingAdvtAmt" value="0" required="true" data-dojo-type="dijit/form/CurrencyTextBox" 
+																data-dojo-props="constraints:{fractional:false}, currency:'USD', invalidMessage:'Invalid Amount.'" />
+														</td>
+														<td style="width: 25%; text-align: center;" id="accountingAdvtAmtPercent"></td>
+													</tr>
+													<tr style="height: 5%;" valign="top">
+														<td style="width: 35%;">Misc.</td>
+														<td style="width: 40%;" align="center">
+															<input style="width: 90%;" type="text" name="accountingMiscAmt" id="accountingMiscAmt" value="0" required="true" data-dojo-type="dijit/form/CurrencyTextBox" 
+																data-dojo-props="constraints:{fractional:false}, currency:'USD', invalidMessage:'Invalid Amount.'" />
+														</td>
+														<td style="width: 25%; text-align: center;" id="accountingMiscAmtPercent"></td>
+													</tr>
+													<tr style="height: 5%;" valign="top">
+														<td style="width: 35%;">Profit</td>
+														<td style="width: 40%;" align="center">
+															<input style="width: 90%;" type="text" name="accountingProfitAmt" id="accountingProfitAmt" value="0" required="true" data-dojo-type="dijit/form/CurrencyTextBox" 
+																data-dojo-props="constraints:{fractional:false}, currency:'USD', invalidMessage:'Invalid Amount.'" />
+														</td>
+														<td style="width: 25%; text-align: center;" id="accountingProfitAmtPercent"></td>
+													</tr>
+													<tr style="height: 5%;" valign="top">
+														<td class="noBorder" colspan="3">
+															<button id="accountingUpdateBtn" data-dojo-type="dijit/form/Button" data-dojo-props="'class':'primary', disabled:true" disabled="disabled" type="submit" style="padding: 3px;" value="update">Update</button>
+															<button id="accountingSaveBtn" data-dojo-type="dijit/form/Button" data-dojo-props="'class':'primary', disabled:true" disabled="disabled" type="submit" style="padding: 3px;" value="save">Save</button>
+														</td>
+													</tr>
+												</table>
 											</td>
-											<td style="width: 25%; vertical-align: top;" valign="top" class="noBorder">
+											<td style="width: 50%; vertical-align: top;" valign="top" class="noBorder">
 												<table style="width: 100%; height: 20%; vertical-align: top;" class="accountingTable">
+													<!-- New Fields -->
 													<tr valign="top">
-														<td style="width: 100%;" align="left"><div id="accMonthlyDocument" style="display: block;"><div id="accMonthlyDocumentWidgetsDiv" style="display: none; padding-left: 10px;"><!--
+														<td style="width: 40%;">Total Sales</td>
+														<td style="width: 40%;" align="center">
+															<input style="width: 95%;" type="text" name="accountingTotalSales" id="accountingTotalSales" value="0" required="true" data-dojo-type="dijit/form/CurrencyTextBox" 
+																data-dojo-props="constraints:{fractional:false}, currency:'USD', invalidMessage:'Invalid Amount.'" />
+														</td>
+													</tr>
+													<tr valign="top">
+														<td style="width: 40%;">Total Operating Expenses</td>
+														<td style="width: 40%;" align="center">
+															<input style="width: 95%;" type="text" name="accountingTotalOpExp" id="accountingTotalOpExp" value="0" required="true" data-dojo-type="dijit/form/CurrencyTextBox" 
+																data-dojo-props="constraints:{fractional:false}, currency:'USD', invalidMessage:'Invalid Amount.'" />
+														</td>
+													</tr>
+													<tr valign="top">
+														<td style="width: 40%;">Total Profits</td>
+														<td style="width: 40%;" align="center">
+															<input style="width: 95%;" type="text" name="accountingTotalProfits" id="accountingTotalProfits" value="0" required="true" data-dojo-type="dijit/form/CurrencyTextBox" 
+																data-dojo-props="constraints:{fractional:false}, currency:'USD', invalidMessage:'Invalid Amount.'" />
+														</td>
+													</tr>
+													<tr valign="top">
+														<td style="width: 100%;" align="left" colspan="2"><div id="accMonthlyDocument" style="display: block;"><div id="accMonthlyDocumentWidgetsDiv" style="display: none; padding-left: 10px;"><!--
 															--><span id="accMonthlyDocumentWidgets"></span><span id="accMonthlyDocumentWidgetsProgressMsgs"></span><a href="javascript: hideFileUploadDialog('accMonthlyDocument');">Hide</a><!--
 															--></div><!--
 															--><div id="accMonthlyDocumentUpload" style="padding-left: 10px;"><!--
@@ -720,92 +704,75 @@
 											</td>
 										</tr>
 									</table>
-									<table style="width: 100%; height: 100%; display: none; vertical-align: top;" id="accountsYearlyDetails">
+									<script type="dojo/on" data-dojo-event="submit" data-dojo-args="evt">
+										evt.preventDefault();
+										evt.stopPropagation();
+										var json = require('dojo/json');
+										var registry = require('dijit/registry');
+										var accLayout = require('controls/AccountingLayoutController');
+										var buttonValue = registry.byId('accountingUpdateBtn').get('disabled') ? 'save' : 'update';
+										if(this.validate() && (Number(registry.byId('accountingQuartersList').get('value')) > 0)){
+											accLayout.updateAccountingData(this.getValues(), buttonValue);
+										}
+										return false;
+									</script>
+									</form>
+									<table style="width: 100%; height: 99%; display: none; vertical-align: top;" id="accountsYearlyDetails">
 										<tr valign="top">
-											<td colspan="5">
-												<div style="float: left;"><a href="javascript: returnToAccountsPane();">&lt;&lt;&nbsp;&nbsp;Return</a></div>
-												<div style="text-align: center;"><b>End of Year Statement</b></div>
-											</td>
+											<td colspan="5"><!-- 
+											--><div style="text-align: left; display: inline-block;"><!-- 
+												--><span style="text-align: left;">&nbsp;&nbsp;<i class="icon-chevron-left"></i><i class="icon-chevron-left"></i>&nbsp;&nbsp;<a href="javascript: returnToAccountsPane();">Return</a></span></div><!-- 
+											--><div style="text-align: center; display: inline-block; padding-left: 10px; float: right;" align="center"><b>End of Year Statement</b></div><!-- 
+										--></td>
 										</tr>
 										<tr valign="top">
 											<td style="width: 15%" class="noBorder">
 												<table class="accountingTable" style="width: 100%; height: 100%;">
-													<tr>
-														<th>Total Sales</th>
-													</tr>
-													<tr>
-														<td id="totalYearlySalesAmt"></td>
-													</tr>
+													<tr><th>Total Sales</th></tr>
+													<tr><td id="totalYearlySalesAmt"></td></tr>
 												</table>
 											</td>
-											<td style="width: 8%" class="noBorder">
-												&nbsp;
+											<td style="width: 8%" class="noBorder">&nbsp;</td>
+											<td style="width: 41%" class="noBorder">
+												<table class="accountingTable" style="width: 100%; height: 100%;">
+													<tr><th width="90%">Total Operating Expenses</th><th width="10%">%</th></tr>
+													<tr><td id="totalOperatingExpensesAmt" width="90%"></td><td id="totalOperatingExpensesPercent" width="10%"></td></tr>
+												</table>
 											</td>
-													<td style="width: 30%" class="noBorder">
-														<table class="accountingTable" style="width: 100%; height: 100%;">
-															<tr>
-																<th width="70%">Total Operating Expenses</th>
-																<th width="30%">%</th>
-															</tr>
-															<tr>
-																<td id="totalOperatingExpensesAmt" width="70%"></td>
-																<td id="totalOperatingExpensesPercent" width="30%"></td>
-															</tr>
-														</table>
-													</td>
-													<td style="width: 6%" class="noBorder">
-														&nbsp;
-													</td>
-													<td style="width: 41%" class="noBorder">
-														<table class="accountingTable" style="width: 100%; height: 100%;">
-															<tr>
-																<th>Total Profits</th>
-																<th>%</th>
-															</tr>
-															<tr>
-																<td id="totalProfitsAmt"></td>
-																<td id="totalProfitsPercent"></td>
-															</tr>
-														</table>
-													</td>
-												</tr>
-												<tr>
-													<td colspan="5" style="width: 100%; height: 100%; padding: 10px 2px 10px 2px;">
-														<table style="width: 100%; height: 100%;" class="accountingTable">
-															<tr>
-																<th style="width: 16%"></th>
-																<th style="width: 16%">Quarter 1</th>
-																<th style="width: 16%">Quarter 2</th>
-																<th style="width: 16%">Quarter 3</th>
-																<th style="width: 16%">Quarter 4</th>
-																<th style="width: 20%">End of Year</th>
-															</tr>
-															<tbody id="yearlyAccountingDetailsTable">
-															</tbody>
-														</table>
-													</td>
-												</tr>
-											</table>
-										</div>
-									</td>
-									<td style="width: 34%; height: 100%;" align="center" valign="top">
-										<div id="accountingChartDiv" style="width: 100%; height: 90%;"></div>
-									</td>
-									<td style="text-align: center; width: 10%; height: 100%;" align="center" valign="top" id="accountingYearsTd">
-										<font style="text-align: center; font-weight: bold;"><u>End of Year</u></font>
-										<div align="center" style="padding-top: 5px;">
-											<table id="accountingYearlyTable" style="width: 40%; text-align: center;" class='storeInfoTable' align="center">
-			  										<tr><td>No Data Available !!!</td></tr>
-			  								</table>
-			  							</div>
-									</td>
-								</tr>
-							</table>
-						</div>
-						<div data-dojo-type="dijit/layout/ContentPane" style="width: 99%; height: 38%;" align="center">
-							<div id="accountingMonthlyChartDiv" style="width: 100%; height: 100%;"></div>
-						</div>
-					
+											<td style="width: 6%" class="noBorder">&nbsp;</td>
+											<td style="width: 30%" class="noBorder">
+												<table class="accountingTable" style="width: 100%; height: 100%;">
+													<tr><th>Total Profits</th><th>%</th></tr>
+													<tr><td id="totalProfitsAmt"></td><td id="totalProfitsPercent"></td></tr>
+												</table>
+											</td>
+										</tr>
+										<tr><td colspan="5" style="width: 100%; height: 100%; padding: 10px 2px 10px 2px;">
+											<table style="width: 100%; height: 100%;" class="accountingTable">
+												<tr><th style="width: 16%"></th><th style="width: 16%">Quarter 1</th><th style="width: 16%">Quarter 2</th><th style="width: 16%">Quarter 3</th><th style="width: 16%">Quarter 4</th><th style="width: 20%">End of Year</th></tr>
+												<tbody id="yearlyAccountingDetailsTable"></tbody>
+											</table></td>
+										</tr>
+									</table>
+								</div>
+							</td>
+							<td style="width: 34%; height: 100%;" align="center" valign="top">
+								<div id="accountingChartDiv" style="width: 100%; height: 90%;"></div>
+							</td>
+							<td style="text-align: center; width: 10%; height: 100%;" align="center" valign="top" id="accountingYearsTd">
+								<font style="text-align: center; font-weight: bold;"><u>End of Year</u></font>
+								<div align="center" style="padding-top: 5px;">
+									<table id="accountingYearlyTable" style="width: 40%; text-align: center;" class='storeInfoTable' align="center">
+			  							<tr><td>No Data Available !!!</td></tr>
+			  						</table>
+			  					</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div data-dojo-type="dijit/layout/ContentPane" style="width: 99%; height: 38%;" align="center">
+					<div id="accountingMonthlyChartDiv" style="width: 99%; height: 99%;"></div>
+				</div>
 				<div id="accountsYearlyDetailsStandBy" data-dojo-id="accountsYearlyDetailsStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'accountsYearlyDetails', color:'white'"></div>
 				<div id="accountingYearsStandBy" data-dojo-id="accountingYearsStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'accountingYearsTd', color:'white'"></div>
 				<div id="accountsQuarterDetailsStandBy" data-dojo-id="accountsQuarterDetailsStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'accountsQuarterDetails', color:'white'"></div>

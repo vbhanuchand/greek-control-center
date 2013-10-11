@@ -398,6 +398,7 @@ require(["bootstrap", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/dijit", 
 				if(Math.abs(newWeek - oldWeek) > 0){
 					var currentYear = locale.format(newValue, {selector: 'date', datePattern: 'yyyy', locale: 'en'});
 					newWeek++;
+					globalYearWeekForRefresh = currentYear+'-'+newWeek;
 					laborLayout.populateData(registry.byId('hiddenStoreId').get('value'), currentYear+'-'+newWeek);
 				}
 				dijit.byId('hiddenItemDate').set('value', newValue);
