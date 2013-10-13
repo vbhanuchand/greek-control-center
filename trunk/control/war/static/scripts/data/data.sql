@@ -379,12 +379,23 @@ alter table store_accounting add totalOpExp decimal(8,2);
 alter table store_accounting add totalProfits decimal(8,2);
 
 desc blobs;
+desc items;
 desc upload_docs_notes;
 
 alter table blobs modify tab enum('store-lease','photo','mgrContract','healthInspection','employee-docs', 'maintenance', 'accMonthlyDocument', 'store-template');
 alter table upload_docs_notes modify purpose enum('healthInspection','employee-docs', 'store-template');
-select * from store_stock;
+
+alter table items modify item_color varchar(10);
+alter table items add item_category varchar(10) after id;
+alter table store_stock drop item_cat_id;
+alter table store_invoice_details drop item_cat_id;
+
+
 select * from items;
+select * from store_stock;
+select * from store_invoice;
+select * from store_invoice_details;
+
 delete from store_stock where id in (9);
 delete from items where id in (9);
 

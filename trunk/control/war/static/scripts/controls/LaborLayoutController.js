@@ -49,19 +49,19 @@ define(["dijit/dijit", "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/fx", "do
 			}
 		});
 		
-		var laborInfoTableHTML = '<table class="laborTable" valign="top" style="width: 100%; height: 30px; overflow: auto;">' 
+		var laborInfoTableHTML = '<table class="laborTable" valign="top" style="width: 100%; overflow: auto;">' 
 				+ '<tr><td class="laborDateTd">' + skeleton + '</td>'
 				+ '<td class="laborMgrTd">Total Manager Hours : ' + totalsMap.totalMgr + '</td>'
 				+ '<td class="laborFrontTd">Total Front Hours : ' + totalsMap.totalFront + '</td>'
 				+ '<td class="laborCookTd">Total Cook Hours : ' + totalsMap.totalCook + '</td>'
 				+ '<td class="laborDateTd">Total Hours (Not Included Manager): ' + (totalsMap.totalFront + totalsMap.totalCook) + '</td>'
-				+ '<td style="text-align: center;"><span id="noPrint1" style="font-weight: bold; padding-left: 2px; padding-right: 2px;" align="left"><a href="javascript: refreshCalendarForSelectedWeek();">Refresh</a>&nbsp;&nbsp;<a href="javascript: printCalendar();">Print</a></span></td>'
+				+ '<td style="text-align: center;"><span id="noPrint1" style="font-weight: bold;" align="left"><a href="javascript: refreshCalendarForSelectedWeek();">Refresh</a>&nbsp;&nbsp;<a href="javascript: printCalendar();">Print</a></span></td>'
 				+ '</tr></table>';
 		
 		registry.byId('labor-calendar').buttonContainer.innerHTML = laborInfoTableHTML;
 		//registry.byId('labor-calendar').buttonContainer.style.display = 'none';
 		//dom.byId('calendarSummaryDetails').innerHTML = laborInfoTableHTML;
-		var employeeDetailsPaneContent = '<table class="laborTable" style="width: 100%; height: 100%; border: .1em solid #000;"><tbody><tr><th style="width: 50%;">Employee</th><th style="width: 50%;">Hours</th></tr>';
+		var employeeDetailsPaneContent = '<table class="laborTable" style="width: 100%; height: 100%; border: .1em solid #000;"><tr><th style="width: 50%;">Employee</th><th style="width: 50%;">Hours</th></tr><tbody>';
 		for(var key in employeeHrsMap){
 			empHrsArray.push(employeeHrsMap[key]);
 		}

@@ -19,7 +19,16 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 		registry.byId('inventoryInvoiceDetailsGrid').selection.clear();
 		dom.byId('createInvoiceLink').style.display = 'none';
 		var selectedRow = registry.byId('inventoryInvoicesGrid').selection.getSelected()[0];
-		dom.byId('inventoryTabTitle1').innerHTML = 'Invoice Details';
+		var selectedValue = registry.byId('invoiceCategorySelect').get('value');
+		switch(selectedValue){
+			case 'Distributor':
+				dom.byId('inventoryTabTitle1').innerHTML = 'Inventory Details';
+				break;
+			case 'GS Kitchen':
+				dom.byId('inventoryTabTitle1').innerHTML = 'Invoice Details';
+				break;
+		}
+		
 		fetchInvoiceDetails(selectedRow['id'][0]);
 	},
 	initInventory = function(){
@@ -35,16 +44,9 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 		var grid = registry.byId('inventoryInvoiceDetailsGrid');
 		dojo.connect(grid, 'onStyleRow', function(row){
 			var item = grid.getItem(row.index);
-			
-			//var nd1 = dojo.query('td[idx="2"]', row.node)[0];
-			//if(nd1 && item){
-			//	nd1.style.backgroundColor = '#ffffff';
-			//	nd1.style.color = '#ffffff';
-			//}
-			
 			var nd = dojo.query('td[idx="3"]', row.node)[0];
 			if(nd && item){
-				nd.style.backgroundColor = '#' + INVENTORY_ITEMS_INFO[item['itemId'][0]]['itemColor'];
+				nd.style.backgroundColor = INVENTORY_ITEMS_INFO[item['itemId'][0]]['itemColor'];
 				nd.style.color = '#ffffff';
 			}
 		});
@@ -211,6 +213,10 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 		tempStore.items = inventoryData;
 		var gridDataStore = new itemFileWriteStore({data: tempStore});
 		
+		var formatCode = function(inVal, rowIndex){
+			return INVENTORY_ITEMS_INFO[inVal[1]]['itemCode'];
+		};
+		
 		var formatItem = function(inVal, rowIndex){
 			//if((isInvoiceDetail === true) || (isInvoiceDetail == 'true'))
 			//	return '<a href="javascript: editInvoiceItem(' + inVal[0] + ',' + rowIndex + ')">' + INVENTORY_ITEMS_INFO[inVal[1]]['itemName'] + '</a>';
@@ -219,7 +225,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 		};
 		
 		var formatParUnits = function(inVal){
-			return INVENTORY_ITEMS_INFO[inVal]['itemPar'] + ' ' + INVENTORY_ITEMS_INFO[inVal]['itemUnits'];
+			return INVENTORY_ITEMS_INFO[inVal[1]]['itemPar'] + ' ' + INVENTORY_ITEMS_INFO[inVal[1]]['itemUnits'];
 		};
 		
 		var formatTotal = function(inVal){
@@ -251,9 +257,9 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 									structure: [{defaultCell: { width: "20%", type: dojox.grid.cells._Widget, styles: 'padding-left: 2px; text-align: left;', noresize: true, editable: false },
 										cells: [{ name: "<span><i class='icon-trash'></i></span>", field: "id", width: "3%", noresize: true, styles: 'text-align: center;', formatter: formatDelete },
 										        { name: "<span><i class='icon-save'></i></span>", field: "id", width: "3%", noresize: true, styles: 'text-align: center;', formatter: formatUpdate },
-										        { name: "<b>Code</b>", field: "itemId", width: "7%", noresize: true, styles: 'text-align: center;' },
-										        { name: "<b>Stock Item</b>", fields: ['id', "itemId"], width: "16%", noresize: true, formatter: formatItem },
-									            { name: "<b>Par (Units)</b>", field: "itemId", width: "12%", noresize: true, formatter: formatParUnits },
+										        { name: "<b>Code</b>", fields: ["id", "itemId"], width: "7%", noresize: true, styles: 'text-align: center;', formatter: formatCode },
+										        { name: "<b>Stock Item</b>", fields: ["id", "itemId"], width: "16%", noresize: true, formatter: formatItem },
+									            { name: "<b>Par (Units)</b>", fields: ["id", "itemId"], width: "12%", noresize: true, formatter: formatParUnits },
 												{ name: "<b>In Stock</b>", field: "itemStock", width: "11%", noresize: true, editable: true, 
 										        	constraint:{required: false}, widgetProps: { promptMessage: 'Provide Stock Count', 
 										        	missingMessage: 'Please enter only Numbers', invalidMessage: 'Accepts only Numerics'}, 
@@ -448,7 +454,6 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 		//selectWdgt.set('value', '703');
 	},
 	resetScreen = function(){
-		dom.byId('inventoryTabTitle').innerHTML = 'Invoices';
 		dom.byId('inventoryTabTitle1').innerHTML = 'Items in Stock';
 		dom.byId('createInvoiceLink').style.display = '';
 		registry.byId('inventoryInvoicesGrid').selection.clear();
@@ -462,10 +467,9 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 			if(response.success){
 				var codesData = new Array();
 				baseArray.forEach(response.models, function(stockItem){
-					INVENTORY_ITEMS_INFO[stockItem.itemCode] = dojo.clone(stockItem);
-					var stockItemCategory = parseInt(stockItem.itemCode/100) * 100;
+					INVENTORY_ITEMS_INFO[stockItem.id] = dojo.clone(stockItem);
 					codesData.push({'code': stockItem.itemCode+'', 'par': stockItem.itemPar, 
-						'units': stockItem.itemUnits, 'category': stockItemCategory,
+						'units': stockItem.itemUnits, 'category': stockItem.itemCategory,
 						'name': '&nbsp;<span style="background-color: #' + stockItem.itemColor + '; color: #fff;">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;' + stockItem.itemName
 						});
 				});
@@ -529,6 +533,9 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 				    		dom.byId('inventoryTabTitleCategory1').innerHTML = '(GS Kitchen)';
 				    		dom.byId('invoiceItemPPURow').style.display='';
 				    		dom.byId('invoiceItemGSChargeRow').style.display='';
+				    		dom.byId('printTitle').innerHTML = 'Print Invoice';
+				    		dom.byId('createTitle').innerHTML = 'Create Invoice';
+				    		dom.byId('inventoryTabTitle').innerHTML = 'Invoices';
 				    		break;
 				    	case 'Distributor':
 				    		registry.byId("hiddenInvoiceCategory").set('value', 'd');
@@ -536,6 +543,9 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 				    		dom.byId('inventoryTabTitleCategory1').innerHTML = '(Distributor)';
 				    		dom.byId('invoiceItemPPURow').style.display='none';
 				    		dom.byId('invoiceItemGSChargeRow').style.display='none';
+				    		dom.byId('printTitle').innerHTML = 'Print Inventory';
+				    		dom.byId('createTitle').innerHTML = 'Create Inventory';
+				    		dom.byId('inventoryTabTitle').innerHTML = 'Inventories';
 				    		break;
 					}
 					resetScreen();
@@ -544,6 +554,9 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 				registry.byId("hiddenInvoiceCategory").set('value', 'd');
 				dom.byId('invoiceItemPPURow').style.display='none';
 	    		dom.byId('invoiceItemGSChargeRow').style.display='none';
+	    		dom.byId('printTitle').innerHTML = 'Print Inventory';
+	    		dom.byId('createTitle').innerHTML = 'Create Inventory';
+	    		dom.byId('inventoryTabTitle').innerHTML = 'Inventories';
 				
 				on(registry.byId("invoiceActionSelect"), "change", function(){
 					var newVal = this.get('value');
@@ -594,7 +607,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 				if(selectedItems.length > 0){
 					baseArray.forEach(selectedItems, function(selItem){
 						storeId = selItem.storeId[0];
-						invoiceDetails.push({'itemId': selItem.itemId[0], 'itemCategory': selItem.itemCategory[0], 'itemStock': selItem.itemStock[0],   
+						invoiceDetails.push({'itemId': selItem.itemId[0], /*'itemCategory': selItem.itemCategory[0], */'itemStock': selItem.itemStock[0],   
 							'itemOrder': selItem.itemOrder[0], 'itemGSPercent': selItem.itemGSPercent[0], 'itemPricePerUnit': selItem.itemPricePerUnit[0]
 							});
 					});

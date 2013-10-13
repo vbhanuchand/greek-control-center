@@ -300,15 +300,15 @@ public class StoreDAOImpl implements StoreDAO {
 	}
 	
 	@Override
-	public int insertStoreInvoiceDetails(int invoiceId, int itemId, int itemCategory, int itemStock, int itemOrder, double itemPricePerUnit, 
+	public int insertStoreInvoiceDetails(int invoiceId, int itemId, int itemStock, int itemOrder, double itemPricePerUnit, 
 			double itemGSPercent, int updatedBy){
-		StoreInvoiceDetails storeInv = new StoreInvoiceDetails(invoiceId, itemId, itemCategory, itemStock, itemOrder, itemPricePerUnit, itemGSPercent, updatedBy);
+		StoreInvoiceDetails storeInv = new StoreInvoiceDetails(invoiceId, itemId, itemStock, itemOrder, itemPricePerUnit, itemGSPercent, updatedBy);
 		sessionFactory.getCurrentSession().save(storeInv);
 		return storeInv.getId();
 	}
 	
 	@Override
-	public boolean updateStoreInvoiceDetails(int id, int invoiceId, int itemId, int itemCategory, int itemStock, int itemOrder, 
+	public boolean updateStoreInvoiceDetails(int id, int invoiceId, int itemId, int itemStock, int itemOrder, 
 			double itemPricePerUnit, double itemGSPercent, int updatedBy){
 		String hql = "UPDATE StoreInvoiceDetails si set si.itemStock=:itemStock, " 
 				+ "si.itemOrder=:itemOrder, si.itemPricePerUnit=:itemPricePerUnit, si.itemGSPercent=:itemGSPercent, "
@@ -342,7 +342,7 @@ public class StoreDAOImpl implements StoreDAO {
 	}
 	
 	@Override
-	public int insertStoreStock(int storeId, int itemId, int itemCategory, int itemStock, int itemOrder, double itemPricePerUnit, 
+	public int insertStoreStock(int storeId, int itemId, int itemStock, int itemOrder, double itemPricePerUnit, 
 			double itemGSPercent, int updatedBy, String category){
 		Query query = sessionFactory.getCurrentSession().createQuery(
 				"from StoreStock where storeId = :storeId and itemId = :itemId and category = :category");
@@ -361,7 +361,7 @@ public class StoreDAOImpl implements StoreDAO {
 			sessionFactory.getCurrentSession().saveOrUpdate(existingItem);
 			storeStock = existingItem;
 		} else {
-			storeStock = new StoreStock(storeId, itemId, itemCategory, itemStock, itemOrder, itemPricePerUnit, itemGSPercent, updatedBy);
+			storeStock = new StoreStock(storeId, itemId, itemStock, itemOrder, itemPricePerUnit, itemGSPercent, updatedBy);
 			storeStock.setCategory(category);
 			sessionFactory.getCurrentSession().save(storeStock);
 		}
@@ -369,16 +369,15 @@ public class StoreDAOImpl implements StoreDAO {
 	}
 	
 	@Override
-	public boolean updateStoreStock(int id, int storeId, int itemId, int itemCategory, int itemStock, int itemOrder, double itemPricePerUnit, 
+	public boolean updateStoreStock(int id, int storeId, int itemId, int itemStock, int itemOrder, double itemPricePerUnit, 
 			double itemGSPercent, int updatedBy, String category){
-		String hql = "UPDATE StoreStock si set si.itemId=:itemId, si.storeId=:storeId, si.itemCategory=:itemCategory, si.itemStock=:itemStock, " 
+		String hql = "UPDATE StoreStock si set si.itemId=:itemId, si.storeId=:storeId, si.itemStock=:itemStock, " 
 				+ "si.itemOrder=:itemOrder, si.itemPricePerUnit=:itemPricePerUnit, si.itemGSPercent=:itemGSPercent, "
 				+ "si.updatedBy=:updatedBy WHERE si.id=:id";
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
 		query.setParameter("id", id);
 		query.setParameter("storeId", storeId);
 		query.setParameter("itemId", itemId);
-		query.setParameter("itemCategory", itemCategory);
 		query.setParameter("itemStock", itemStock);
 		query.setParameter("itemOrder", itemOrder);
 		query.setParameter("itemPricePerUnit", itemPricePerUnit);
@@ -459,8 +458,8 @@ public class StoreDAOImpl implements StoreDAO {
 	}
 	
 	@Override
-	public int insertStoreItem(int itemCode, String itemColor, String itemName, int itemPar, String itemUnits, int storeId, int updatedBy, String category){
-		String hql = "select i from Item i where i.storeId = :istoreId and i.itemType = :itemType and i.category = :icategory and i.itemCode = (select max(ii.itemCode) from Item ii " +
+	public int insertStoreItem(int itemCode, int itemCategory, String itemColor, String itemName, int itemPar, String itemUnits, int storeId, int updatedBy, String category){
+		/*String hql = "select i from Item i where i.storeId = :istoreId and i.itemType = :itemType and i.category = :icategory and i.itemCode = (select max(ii.itemCode) from Item ii " +
 				"where ii.storeId = :iistoreId and ii.itemType=:iiitemType and ii.itemCode > :minItemCode and ii.itemCode < :maxItemCode and ii.category = :iicategory)";
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
 		query.setParameter("istoreId", storeId);
@@ -479,14 +478,15 @@ public class StoreDAOImpl implements StoreDAO {
 		List<Item> itemsList = query.list();
 		Item item;
 		if(itemsList.size() > 0){
-			item = new Item(itemsList.get(0).getItemCode() + 1, itemColor, itemName, itemPar, itemUnits, "stock-item", storeId, updatedBy);
+			item = new Item(itemsList.get(0).getItemCode() + 1, 0, itemColor, itemName, itemPar, itemUnits, "stock-item", storeId, updatedBy);
 		} else {
-			item = new Item(itemCode + 1, itemColor, itemName, itemPar, itemUnits, "stock-item", storeId, updatedBy);
-		}
+			item = new Item(itemCode + 1, 0, itemColor, itemName, itemPar, itemUnits, "stock-item", storeId, updatedBy);
+		}*/
+		Item item = new Item(itemCode, itemCategory, itemColor, itemName, itemPar, itemUnits, "stock-item", storeId, updatedBy);
 		item.setCategory(category);
 		sessionFactory.getCurrentSession().save(item);
 		
-		StoreStock stockItem = new StoreStock(item.getStoreId(), item.getItemCode(), ((item.getItemCode()/100) * 100), 0, 0, 0.00, 0.00, updatedBy);
+		StoreStock stockItem = new StoreStock(item.getStoreId(), item.getId(), 0, 0, 0.00, 0.00, updatedBy);
 		stockItem.setCategory(category);
 		sessionFactory.getCurrentSession().save(stockItem);
 		

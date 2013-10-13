@@ -1,13 +1,13 @@
-var INVENTORY_DISTRIBUTORS = [{id: '400', name: 'NICHOLAS', color: '#2E2EFE'},
-	                             {id: '500', name: 'US FOODS', color: '#8904B1'},
-	                             {id: '600', name: 'SAMS CLUB', color: '#B40431'},
-	                             {id: '700', name: 'GS KITCHEN', color: '#21610B'}];
+var INVENTORY_DISTRIBUTORS = [{id: '400', name: 'FREEZER', color: '#2E2EFE'},
+	                             {id: '500', name: 'FRIDGE', color: '#8904B1'},
+	                             {id: '600', name: 'DRY GOODS', color: '#B40431'},
+	                             {id: '700', name: 'PAPER/CLEANING', color: '#21610B'}];
 
 var INVENTORY_DISTRIBUTORS_MAP = {
-									'400': {id: '400', name: 'NICHOLAS', color: '#2E2EFE'},
-									'500': {id: '500', name: 'US FOODS', color: '#8904B1'},
-									'600': {id: '600', name: 'SAMS CLUB', color: '#B40431'},
-									'700': {id: '700', name: 'GS KITCHEN', color: '#21610B'}
+									'400': {id: '400', name: 'FREEZER', color: '#2E2EFE'},
+									'500': {id: '500', name: 'FRIDGE', color: '#8904B1'},
+									'600': {id: '600', name: 'DRY GOODS', color: '#B40431'},
+									'700': {id: '700', name: 'PAPER/CLEANING', color: '#21610B'}
 								};
 var INVENTORY_ITEMS_INFO = {};
 
@@ -1177,7 +1177,7 @@ function printInvoice(gridId, title){
 	finalHTML += "<body class='dbootstrap' style='width: 100%; height: 100%;color: #000000; background: #ffffff; font-family: \"Times New Roman\", Times, serif; font-size: 12pt;'>";
 	var strTitle = dom.byId(title).innerHTML + '';
     var titleToPrint = strTitle.substr(1, strTitle.length - 2);
-    finalHTML += '<div style="display: block; width: 100%; height: 20px;" align="center"><h4>' + titleToPrint.toUpperCase() + ' INVOICE </h4></div>';
+    finalHTML += '<div style="display: block; width: 100%; height: 20px;" align="center"><h4>' + titleToPrint.toUpperCase() + ' ' + ((selectedOption != 'Distributor') ? 'INVOICE' : ' INVENTORY') + '</h4></div>';
     finalHTML += '<br/><br/>';
     
 	var table = '<table style="width: 100%; vertical-align: top;" class="printTable">';
@@ -1188,8 +1188,9 @@ function printInvoice(gridId, title){
 			baseArray.forEach(items, function(item, index){
 				table += '<tr style="height: 10px;">';
 				var gridStore = registry.byId('inventoryInvoiceDetailsGrid').store;
-				bgColor = INVENTORY_DISTRIBUTORS_MAP[gridStore.getValue(item, 'itemCategory')+'']['color'];
-				table += '<td style="text-align: center; width: 10px; color: #ffffff; background-color: ' + bgColor + '">' + gridStore.getValue(item, 'itemId') + '</td>';
+				bgColor = INVENTORY_ITEMS_INFO[gridStore.getValue(item, 'itemId')+'']['itemColor'];
+				//INVENTORY_ITEMS_INFO[item['itemId'][0]]['itemColor']
+				table += '<td style="text-align: center; width: 10px; color: #ffffff; background-color: ' + bgColor + '">' + INVENTORY_ITEMS_INFO[gridStore.getValue(item, 'itemId')+'']['itemCode'] + '</td>';
 				table += '<td>' + INVENTORY_ITEMS_INFO[gridStore.getValue(item, 'itemId')+'']['itemName'] + '</td>';
 				table += '<td>' + INVENTORY_ITEMS_INFO[gridStore.getValue(item, 'itemId')+'']['itemPar'] + ' ' + INVENTORY_ITEMS_INFO[gridStore.getValue(item, 'itemId')+'']['itemUnits']  + '</td>';
 				table += '<td>' + gridStore.getValue(item, 'itemStock') + '</td>';
@@ -1239,33 +1240,177 @@ function refreshCalendarForSelectedWeek(){
 }
 
 function printCalendar(){
+	//Cook --> #F77878
+	//Front --> #60C46E
+	//Manager --> #0753EB
 	var dom = require('dojo/dom');
 	var registry = require('dijit/registry');
-	dom.byId('noPrint1').style.display = 'none';
-	//dom.byId('calendarSummaryDetails').style.width = '99%';
-	var innerHTML = '<div style="display: block; font-size: 90% !important;" class="claro">' + dom.byId('laborPane').innerHTML + '</div>';
-	dom.byId('noPrint1').style.display = '';
-	//dom.byId('calendarSummaryDetails').style.width = '80%';
+	var baseArray = require('dojo/_base/array');
+	var dojoDate = require('dojo/date');
+	var dojoDateLocale = require('dojo/date/locale');
+	
+	var allCalendarEntries = registry.byId('labor-calendar').store.query(function(object){return object.id > 0;});
+	var mgrEntries = registry.byId('labor-calendar').store.query(function(object){return object.position == 'Manager';});
+	var frontEntries = registry.byId('labor-calendar').store.query(function(object){return object.position == 'Front';});
+	var cookEntries = registry.byId('labor-calendar').store.query(function(object){return object.position == 'Cook';});
+	
+	var totalsMap = {total: 0, totalMgr: 0, totalCook: 0, totalFront: 0};
+	var skeleton = '';
+	baseArray.forEach(allCalendarEntries, function(item, index){
+		skeleton = item.startDate + ' - ' + item.endDate;
+		if(item.position == "Manager") totalsMap.totalMgr = totalsMap.totalMgr + item.totalTime;
+		if(item.position == "Front") totalsMap.totalFront = totalsMap.totalFront + item.totalTime;
+		if(item.position == "Cook") totalsMap.totalCook = totalsMap.totalCook + item.totalTime;
+		totalsMap.total = totalsMap.total + item.totalTime;
+	});
+	
+	var laborInfoTableHTML = '<table class="laborTablePrint" valign="top" style="width: 100%; overflow: auto;">' 
+		+ '<tr><td class="laborDateTd" style="font-size: 90% !important;">' + skeleton + '</td>'
+		+ '<td class="laborMgrTd" style="font-size: 90% !important;">Total Manager Hours : ' + totalsMap.totalMgr + '</td>'
+		+ '<td class="laborFrontTd" style="font-size: 90% !important;">Total Front Hours : ' + totalsMap.totalFront + '</td>'
+		+ '<td class="laborCookTd" style="font-size: 90% !important;">Total Cook Hours : ' + totalsMap.totalCook + '</td>'
+		+ '<td class="laborDateTd" style="font-size: 90% !important;">Total Hours (Not Included Manager): ' + (totalsMap.totalFront + totalsMap.totalCook) + '</td>'
+		+ '</tr></table>';
+
+	
+	var htmlForCalendar = laborInfoTableHTML + '<div><table style="width: 100%;"><tr><td style="width:80%" valign="top">' + '<table class="laborTablePrint" style="border: .1em solid #000;">';
+	var thForCalendar = '';
+	var tbodyForCalendar = '';
+	var cssClass = '';
+	
+	var maxEntriesForMgr = 0, maxEntriesForFront = 0, maxEntriesForCook = 0;
+	var temp = [];
+	baseArray.forEach(mgrEntries, function(item){
+		temp = registry.byId('labor-calendar').store.query({'position': 'Manager', 'dd': item.dd});
+		if(temp.length > maxEntriesForMgr) maxEntriesForMgr = temp.length;
+	});
+	baseArray.forEach(frontEntries, function(item){
+		temp = registry.byId('labor-calendar').store.query({'position': 'Front', 'dd': item.dd});
+		if(temp.length > maxEntriesForFront) maxEntriesForFront = temp.length;
+	});
+	baseArray.forEach(cookEntries, function(item){
+		temp = registry.byId('labor-calendar').store.query({'position': 'Cook', 'dd': item.dd});
+		if(temp.length > maxEntriesForCook) maxEntriesForCook = temp.length;
+	});
+	//console.log('maxEntriesForMgr --> ' + maxEntriesForMgr + ' maxEntriesForFront--> ' + maxEntriesForFront + ' maxEntriesForCook--> ' + maxEntriesForCook);
+	if(allCalendarEntries.length > 0){
+		var item = allCalendarEntries[0];
+		var startDateStr = item.startDate;
+		var endDateStr = item.endDate;
+		var startDateStrArray = startDateStr.split('/');
+		var endDateStrArray = endDateStr.split('/');
+		var startDate = new Date(startDateStrArray[2], parseInt(startDateStrArray[0])-1, startDateStrArray[1]);
+		var endDate = new Date(endDateStrArray[2], parseInt(endDateStrArray[0])-1, endDateStrArray[1]);
+		var daysDifference = dojoDate.difference(startDate, endDate, "day") + 1;
+		var iterDate = startDate;
+		thForCalendar += '<tr>';
+		for(var i=1; i<=daysDifference; i++){
+			thForCalendar += '<th>' + dojoDateLocale.format(iterDate, { selector:"date", datePattern: 'MMM dd (EEEE)' }) + '</th>';
+			iterDate = dojoDate.add(startDate, 'day', i);
+		}
+		thForCalendar += '</tr>';
+	}
+	
+	var anythingAdded = false;
+	//Build the tbody section by iterating over the dates (For Manager)
+	for(var j=0; j<maxEntriesForMgr; j++){
+		anythingAdded = true;
+		var item = allCalendarEntries[0];
+		var startDateStr = item.startDate;
+		var endDateStr = item.endDate;
+		var startDateStrArray = startDateStr.split('/');
+		var endDateStrArray = endDateStr.split('/');
+		var startDate = new Date(startDateStrArray[2], parseInt(startDateStrArray[0])-1, startDateStrArray[1]);
+		var endDate = new Date(endDateStrArray[2], parseInt(endDateStrArray[0])-1, endDateStrArray[1]);
+		var daysDifference = dojoDate.difference(startDate, endDate, "day") + 1;
+		var iterDate = startDate;
+		tbodyForCalendar += '<tr>';
+		for(var i=1; i<=daysDifference; i++){
+			var storeItem = registry.byId('labor-calendar').store.query({'position': 'Manager', 'dd': iterDate.getDate()});
+			if((storeItem.length > 0) && storeItem[j]){
+				if(storeItem[j].position == 'Manager') cssClass = 'laborMgrTd';
+				else if(storeItem[j].position == 'Front') cssClass = 'laborFrontTd';
+				else if(storeItem[j].position == 'Cook') cssClass = 'laborCookTd';
+				tbodyForCalendar += '<td class="' + cssClass + '">' + storeItem[j].summary + '</td>';
+			} else{
+				tbodyForCalendar += '<td></td>';
+			}
+			iterDate = dojoDate.add(startDate, 'day', i);
+		}
+		tbodyForCalendar += '</tr>';
+	}
+	if(!anythingAdded) 
+		tbodyForCalendar += '<tr><td colspan="7"></td></tr>';
+	anythingAdded = false;
+	//Build the tbody section by iterating over the dates (For Front)
+	for(var j=0; j<maxEntriesForFront; j++){
+		anythingAdded = true;
+		var item = allCalendarEntries[0];
+		var startDateStr = item.startDate;
+		var endDateStr = item.endDate;
+		var startDateStrArray = startDateStr.split('/');
+		var endDateStrArray = endDateStr.split('/');
+		var startDate = new Date(startDateStrArray[2], parseInt(startDateStrArray[0])-1, startDateStrArray[1]);
+		var endDate = new Date(endDateStrArray[2], parseInt(endDateStrArray[0])-1, endDateStrArray[1]);
+		var daysDifference = dojoDate.difference(startDate, endDate, "day") + 1;
+		var iterDate = startDate;
+		tbodyForCalendar += '<tr>';
+		for(var i=1; i<=daysDifference; i++){
+			var storeItem = registry.byId('labor-calendar').store.query({'position': 'Front', 'dd': iterDate.getDate()});
+			if((storeItem.length > 0) && storeItem[j]){
+				if(storeItem[j].position == 'Manager') cssClass = 'laborMgrTd';
+				else if(storeItem[j].position == 'Front') cssClass = 'laborFrontTd';
+				else if(storeItem[j].position == 'Cook') cssClass = 'laborCookTd';
+				tbodyForCalendar += '<td class="' + cssClass + '">' + storeItem[j].summary + '</td>';
+			} else{
+				tbodyForCalendar += '<td></td>';
+			}
+			iterDate = dojoDate.add(startDate, 'day', i);
+		}
+		tbodyForCalendar += '</tr>';
+	}
+	if(!anythingAdded) 
+		tbodyForCalendar += '<tr><td colspan="7"></td></tr>';
+	//Build the tbody section by iterating over the dates (For Cook)
+	for(var j=0; j<maxEntriesForCook; j++){
+		var item = allCalendarEntries[0];
+		var startDateStr = item.startDate;
+		var endDateStr = item.endDate;
+		var startDateStrArray = startDateStr.split('/');
+		var endDateStrArray = endDateStr.split('/');
+		var startDate = new Date(startDateStrArray[2], parseInt(startDateStrArray[0])-1, startDateStrArray[1]);
+		var endDate = new Date(endDateStrArray[2], parseInt(endDateStrArray[0])-1, endDateStrArray[1]);
+		var daysDifference = dojoDate.difference(startDate, endDate, "day") + 1;
+		var iterDate = startDate;
+		tbodyForCalendar += '<tr>';
+		for(var i=1; i<=daysDifference; i++){
+			var storeItem = registry.byId('labor-calendar').store.query({'position': 'Cook', 'dd': iterDate.getDate()});
+			if((storeItem.length > 0) && storeItem[j]){
+				if(storeItem[j].position == 'Manager') cssClass = 'laborMgrTd';
+				else if(storeItem[j].position == 'Front') cssClass = 'laborFrontTd';
+				else if(storeItem[j].position == 'Cook') cssClass = 'laborCookTd';
+				tbodyForCalendar += '<td class="' + cssClass + '">' + storeItem[j].summary + '</td>';
+			} else{
+				tbodyForCalendar += '<td></td>';
+			}
+			iterDate = dojoDate.add(startDate, 'day', i);
+		}
+		tbodyForCalendar += '</tr>';
+	}
+	
+	htmlForCalendar += thForCalendar;
+	htmlForCalendar += tbodyForCalendar;
+	htmlForCalendar += '</table></td><td style="width: 20%;" valign="top">' + dom.byId('laborPaneInfoContent').innerHTML + '</td></tr></table></div>';
+	
 	var html = '';
     html += '<html lang="en-us">';
     html += '<head>';
-    html += '<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/resources/dojo.css" />';
-    html += '<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dijit/themes/claro/claro.css">';
-    html += '<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/calendar/themes/claro/Calendar.css" />';
-    html += '<link rel="stylesheet" type="text/css" href="resources/themes/bootstrap/theme/dbootstrap/dbootstrap.css"/>';
-    html += '<link rel="stylesheet" type="text/css" href="resources/themes/bootstrap/theme/dbootstrap/dijit.css"/>';
     html += '<link rel="stylesheet" href="resources/styles/styles.css"/>'; 
-    html += '<link rel="stylesheet" href="resources/styles/print.css"/>';
     html += '</head>';
     
-    html += "<body class='dbootstrap' style='width: 100%; height: 100%; color: #000000; background: #ffffff; font-family: \"Times New Roman\", Times, serif; font-size: 12pt;'>";
-    html += '<div style="display: block;" align="center"><h4>' + ' Schedule' + '</h4></div>';
-    //html += '<br/><br/>';
-    //innerHTML += '<br/><br/>';
-    //innerHTML += '<div align="left" style="position: absolute; bottom: 20px; left: 10px;"><table style="width: 100%;" class="dateTable"><tr><th style="width: 25%;">Manager Signature</th><th style="width: 30%;" class="noBorder"></th><th style="width: 20%;">GS CHARGES</th><th style="width: 20%;">TOTAL CHARGES</th></tr>';
-    //innerHTML += '<tr><td style="width: 25%;"></td><td style="width: 30%;" class="noBorder"></td><td style="width: 20%;">&nbsp;&nbsp;$84.30</td><td style="width: 20%;">&nbsp;&nbsp;$843.00</td></tr>';
-    //innerHTML += '</table></div>';
-    html += innerHTML;
+    html += "<body style='width: 100%; height: 100%; color: #000000; background: #ffffff; font-family: \"Times New Roman\", Times, serif; font-size: 12pt;'>";
+    html += '<div style="height: 5%; display: block;" align="center"><h2>' + ' Current Schedule' + '</h2></div>';
+    html += htmlForCalendar;
 	html += "</body>";
 	html += "</html>";
 	
