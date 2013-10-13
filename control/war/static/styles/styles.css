@@ -656,6 +656,79 @@ table.laborTable td.laborCookTd{
 
 /* Labor Header (Summary) Table End here*/
 
+
+/* Labor Header (Summary) Table Styles (Print)*/
+
+table.laborTablePrint {
+	font-family: inherit;
+	font-size: inherit;
+	color: inherit;
+	border-width: 1px;
+	border-color: #eee;
+	border-collapse: collapse;
+	border-spacing: 0px;
+}
+
+table.laborTablePrint th {
+	border-width: 1px;
+	border-style: solid;
+	border-color: #000000;
+	background-color: #cccccc;
+	text-align: center;
+	font-weight: bold;
+}
+
+table.laborTablePrint td {
+	border-width: 1px;
+	border-style: solid;
+	border-color: #000000;
+	background-color: #ffffff;
+	text-align:center;
+}
+
+table.laborTablePrint td.laborDateTd{
+	font-weight: bolder;
+	font-size: 100%;
+	color: #000000;
+	border-width: 0.1em;
+	border-style: solid;
+	border-color: #000;
+	background-color: #fff;
+}
+
+table.laborTablePrint td.laborMgrTd{
+	font-weight: bold;
+	font-size: 90%;
+	color: #FFFFFF;
+	border-width: 0.1em;
+	border-style: solid;
+	border-color: inherit;
+	background-color: #0000AA;
+}
+
+table.laborTablePrint td.laborFrontTd{
+	font-weight: bold;
+	font-size: 90%;
+	color: #FFFFFF;
+	border-width: 0.1em;
+	border-style: solid;
+	border-color: inherit;
+	background-color: #00AA00;
+}
+
+table.laborTablePrint td.laborCookTd{
+	font-weight: bold;
+	font-size: 90%;
+	color: #FFFFFF;
+	border-width: 0.1em;
+	border-style: solid;
+	border-color: inherit;
+	background-color: #AA0000;
+}
+
+/* Labor Header (Summary) Table End here*/
+
+
 .Manager{
 	color: #ffffff;
 	background-color: #0000FF;

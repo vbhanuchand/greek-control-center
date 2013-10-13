@@ -782,35 +782,35 @@
 					<tr valign="middle" style="width: 100%; height: 8%;">
 						<td style="text-align: left; border: .1em solid #ddd; padding: 2px 0px 2px 0px;" colspan="2"><!--
 							 --><div style="display: inline-block;">&nbsp;&nbsp;<font style="font-weight: normal; text-decoration: underline;">Select Category</font></div>:&nbsp;&nbsp;<!--   
-							--><div id="invoiceCategorySelect" name="invoiceCategorySelect" data-dojo-type="dijit/form/Select" style="width: 150px; text-align: center; display: inline-block;"><!-- 
+							--><div id="invoiceCategorySelect" name="invoiceCategorySelect" data-dojo-type="dijit/form/Select" style="text-align: center; display: inline-block;"><!-- 
 							     --><span value="Distributor" selected="selected"><b>Distributor</b></span><!-- 
 							     --><span value="GS Kitchen"><b>GS Kitchen</b></span><!--
 							 --></div><!--
 							 --><div style="display: inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;<font style="font-weight: normal; text-decoration: underline;">Choose Action</font></div>:&nbsp;&nbsp;<!--
-							--><div id="invoiceActionSelect" name="invoiceActionSelect" data-dojo-type="dijit/form/Select" style="width: 250px; text-align: center; display: inline-block;"><!--
+							--><div id="invoiceActionSelect" name="invoiceActionSelect" data-dojo-type="dijit/form/Select" style="text-align: center; display: inline-block;"><!--
 								--><span value="reset" selected="selected" style="font-style: italic;"><i><b>--Select Action--</b></i></span><!--
-							    --><span value="checkStock"><b>Check Stock</b></span><!-- 
+							    --><span value="checkStock"><b>Master Inventory</b></span><!-- 
 							    --><!-- <span value="updateStock"><b>Add/Update Item In Stock</b></span> --><!--
 							    --><span value="addInventoryItem"><b>Add Item to Inventory</b></span><!--
 							 --></div><!--
-							--><div align="right" style="float: right; vertical-align: baseline;"><u>Distributors</u>:&nbsp;&nbsp;<div style="display: inline-block;"><font style="color: whitesmoke; background-color: #2E2EFE; border: 1px solid black;">&nbsp;NICHOLAS&nbsp;</font></div>&nbsp;&nbsp;<!-- 
-							--><div style="display: inline-block;"><font style="color: whitesmoke; background-color: #8904B1; border: 1px solid black;">&nbsp;US FOODS&nbsp;</font></div>&nbsp;&nbsp;<!-- 
-							--><div style="display: inline-block;"><font style="color: whitesmoke; background-color: #B40431; border: 1px solid black;">&nbsp;SAMS CLUB&nbsp;</font></div>&nbsp;&nbsp;<!-- 
-							--><div style="display: inline-block;"><font style="color: whitesmoke; background-color: #21610B; border: 1px solid black;">&nbsp;GS KITCHEN&nbsp;</font></div>&nbsp;&nbsp;<!-- 
+							--><div align="right" style="float: right; vertical-align: baseline;"><!-- <u>Categories</u>:&nbsp;&nbsp; --><div style="display: inline-block;"><font style="color: whitesmoke; background-color: #2E2EFE; border: 1px solid black;">&nbsp;FREEZER&nbsp;</font></div>&nbsp;&nbsp;<!-- 
+							--><div style="display: inline-block;"><font style="color: whitesmoke; background-color: #8904B1; border: 1px solid black;">&nbsp;FRIDGE&nbsp;</font></div>&nbsp;&nbsp;<!-- 
+							--><div style="display: inline-block;"><font style="color: whitesmoke; background-color: #B40431; border: 1px solid black;">&nbsp;DRY GOODS&nbsp;</font></div>&nbsp;&nbsp;<!-- 
+							--><div style="display: inline-block;"><font style="color: whitesmoke; background-color: #21610B; border: 1px solid black;">&nbsp;PAPER/CLEANING&nbsp;</font></div>&nbsp;&nbsp;<!-- 
 							--></div>
 						</td>
 					</tr>
 					<tr valign="middle" style="width: 100%; height: 5%;">
 						<td style="text-align: center;"><!--
-							  --><div style="text-decoration:underline; display: inline-block; color: orange; font-weight: bolder; font-size: 100%;" id="inventoryTabTitle">Invoices</div>&nbsp;&nbsp;<!-- 
+							  --><div style="text-decoration:underline; display: inline-block; color: orange; font-weight: bolder; font-size: 100%;" id="inventoryTabTitle">Inventories</div>&nbsp;&nbsp;<!-- 
 							 --><div style="display: inline-block; color: orange; font-weight: bolder; font-size: 100%;" id="inventoryTabTitleCategory">(Distributor)</div><!--
 						 --></td>
 						<td style="text-align: center;"><!--
 							  --><div style="text-decoration:underline; display: inline-block; color: orange; font-weight: bolder; font-size: 100%;" id="inventoryTabTitle1">Stock</div>&nbsp;&nbsp;<!-- 
 							 --><div style="display: inline-block; color: orange; font-weight: bolder; font-size: 100%;" id="inventoryTabTitleCategory1">(Distributor)</div><!--
 							 --><div style="display: inline-block; float: right" id="createInvoiceLink"><!--
-								 --><a href='javascript:createInvoice();'>Create Invoice</a>&nbsp;&nbsp;</div><!--
-								 --><div style="display: inline-block; float: right"><a href="javascript: printInvoice('inventoryInvoiceDetailsGrid', 'inventoryTabTitleCategory');">Print Invoice</a>&nbsp;&nbsp;<!-- 
+								 --><a href='javascript:createInvoice();'><span id="createTitle">Create Invoice</span></a>&nbsp;&nbsp;</div><!--
+								 --><div style="display: inline-block; float: right"><a href="javascript: printInvoice('inventoryInvoiceDetailsGrid', 'inventoryTabTitleCategory');"><span id="printTitle">Print Invoice</span></a>&nbsp;&nbsp;<!-- 
 							 --></div><!-- 
 						 --></td>
 					</tr>
@@ -1140,33 +1140,32 @@
 							</td>
 						</tr>
 						<tr>
+							<td width="25%"><b>Item Code:</b></td>
+							<td width="75%">
+								<input data-dojo-type="dijit/form/NumberTextBox" data-dojo-props="style: 'width: 100px; font-size: 90%;', required: 'true', trim: 'true', invalidMessage : 'Item is Invalid'" id="inventoryItemCode" name="inventoryItemCode"/>
+							</td>
+						</tr>
+						<tr>
 							<td width="25%"><b>Item Name:</b></td>
 							<td width="75%">
-								<input data-dojo-type="dijit/form/TextBox"
-									data-dojo-props="style: 'width: 200px; font-size: 90%;', required: 'true', trim: 'true'"
-									id="inventoryItemName" name="inventoryItemName"/>
+								<input data-dojo-type="dijit/form/TextBox" data-dojo-props="style: 'width: 200px; font-size: 90%;', required: 'true', trim: 'true'" id="inventoryItemName" name="inventoryItemName"/>
 							</td>
 						</tr>
 						<tr>
 							<td width="25%"><b>Item Par:</b></td>
 							<td width="75%">
-								<input data-dojo-type="dijit/form/NumberTextBox"
-							data-dojo-props="style: 'width: 50px; font-size: 90%;', required: 'true', trim: 'true', invalidMessage : 'Item is Invalid'"
-							id="inventoryItemPar" name="inventoryItemPar"/>
+								<input data-dojo-type="dijit/form/NumberTextBox" data-dojo-props="style: 'width: 100px; font-size: 90%;', required: 'true', trim: 'true', invalidMessage : 'Item is Invalid'" id="inventoryItemPar" name="inventoryItemPar"/>
 							</td>
 						</tr>
 						<tr>
-							<td width="25%"><b>Item Units:</b></td>
+							<td width="25%"><b>Packaging:</b></td>
 							<td width="75%">
-								<input data-dojo-type="dijit/form/TextBox"
-									data-dojo-props="style: 'width: 50px; font-size: 90%;', required: 'true', trim: 'true'"
-									id="inventoryItemUnits" name="inventoryItemUnits"/>
+								<input data-dojo-type="dijit/form/TextBox" data-dojo-props="style: 'width: 100px; font-size: 90%;', required: 'true', trim: 'true'" id="inventoryItemUnits" name="inventoryItemUnits"/>
 							</td>
 						</tr>
 					</table>
 				</form>
-				<div id="inventoryItemFormStandBy" data-dojo-id="inventoryItemFormStandBy" 
-						data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'inventoryItemForm', color:'lightgrey'">
+				<div id="inventoryItemFormStandBy" data-dojo-id="inventoryItemFormStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'inventoryItemForm', color:'lightgrey'">
 				</div>
 			</fieldset>
 		</div>
@@ -1182,13 +1181,14 @@
 					if(inventoryItemForm.validate()){
 						var formValues = inventoryItemForm.get('value');
 						var itemWrapper = {};
+						itemWrapper['id'] = formValues['inventoryItemDistributor'];
+						itemWrapper['itemCode'] = formValues['inventoryItemCode'];
+						itemWrapper['itemCategory'] = formValues['inventoryItemDistributor'];
 						itemWrapper['itemColor'] = INVENTORY_DISTRIBUTORS_MAP[formValues['inventoryItemDistributor']]['color'];
 						itemWrapper['itemName'] = formValues['inventoryItemName'];
 						itemWrapper['itemPar'] = formValues['inventoryItemPar'];
 						itemWrapper['itemUnits'] = formValues['inventoryItemUnits'];
 						itemWrapper['storeId'] = registry.byId('hiddenStoreId').get('value');
-						itemWrapper['id'] = formValues['inventoryItemDistributor'];
-						itemWrapper['itemCode'] = formValues['inventoryItemDistributor'];
 						var ajaxRequest = require("dojo/request");
 						var json = require('dojo/json');
 						var dom = require('dojo/dom');

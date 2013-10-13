@@ -9,7 +9,6 @@ public class StoreInvoiceDetailsWrapper extends BaseModel{
 	private Integer id;
 	private Integer invoiceId;
 	private Integer itemId;
-	private Integer itemCategory;
 	private Integer itemStock;
 	private Integer itemOrder;
 	private Double itemPricePerUnit;
@@ -22,14 +21,13 @@ public class StoreInvoiceDetailsWrapper extends BaseModel{
 	}
 	
 	public StoreInvoiceDetailsWrapper(Integer id, Integer invoiceId,
-			Integer itemId, Integer itemCategory, Integer itemStock,
+			Integer itemId, Integer itemStock,
 			Integer itemOrder, Double itemPricePerUnit, Double itemGSPercent,
 			Integer updatedBy, Date updatedDate) {
 		super();
 		this.id = id;
 		this.invoiceId = invoiceId;
 		this.itemId = itemId;
-		this.itemCategory = itemCategory;
 		this.itemStock = itemStock;
 		this.itemOrder = itemOrder;
 		this.itemPricePerUnit = itemPricePerUnit;
@@ -60,14 +58,6 @@ public class StoreInvoiceDetailsWrapper extends BaseModel{
 
 	public void setItemId(Integer itemId) {
 		this.itemId = itemId;
-	}
-
-	public Integer getItemCategory() {
-		return itemCategory;
-	}
-
-	public void setItemCategory(Integer itemCategory) {
-		this.itemCategory = itemCategory;
 	}
 
 	public Integer getItemStock() {
@@ -121,7 +111,7 @@ public class StoreInvoiceDetailsWrapper extends BaseModel{
 	@Override
 	public String toString() {
 		return "StoreInvoiceDetailsWrapper [invoiceId=" + invoiceId
-				+ ", itemId=" + itemId + ", itemCategory=" + itemCategory
+				+ ", itemId=" + itemId
 				+ ", itemStock=" + itemStock + ", itemOrder=" + itemOrder
 				+ ", itemPricePerUnit=" + itemPricePerUnit + ", itemGSPercent="
 				+ itemGSPercent + ", updatedBy=" + updatedBy + ", updatedDate="

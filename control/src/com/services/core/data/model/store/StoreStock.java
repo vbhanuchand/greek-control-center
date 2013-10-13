@@ -32,9 +32,6 @@ public class StoreStock implements Serializable {
 	@Column(name = "item_id")
 	private Integer itemId;
 
-	@Column(name = "item_cat_id")
-	private Integer itemCategory;
-
 	@Column(name = "item_stock")
 	private Integer itemStock;
 
@@ -59,12 +56,11 @@ public class StoreStock implements Serializable {
 	}
 
 	public StoreStock(Integer storeId, Integer itemId,
-			Integer itemCategory, Integer itemStock, Integer itemOrder,
+			Integer itemStock, Integer itemOrder,
 			Double itemPricePerUnit, Double itemGSPercent, Integer updatedBy) {
 		super();
 		this.storeId = storeId;
 		this.itemId = itemId;
-		this.itemCategory = itemCategory;
 		this.itemStock = itemStock;
 		this.itemOrder = itemOrder;
 		this.itemPricePerUnit = itemPricePerUnit;
@@ -94,14 +90,6 @@ public class StoreStock implements Serializable {
 
 	public void setItemId(Integer itemId) {
 		this.itemId = itemId;
-	}
-
-	public Integer getItemCategory() {
-		return itemCategory;
-	}
-
-	public void setItemCategory(Integer itemCategory) {
-		this.itemCategory = itemCategory;
 	}
 
 	public Integer getItemStock() {

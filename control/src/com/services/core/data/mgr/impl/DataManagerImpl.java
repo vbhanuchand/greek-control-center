@@ -825,7 +825,7 @@ public class DataManagerImpl implements DataManager{
 		for(StoreInvoiceDetailsWrapper storeInvDetails: storeInv.getInvoiceDetails())
 		{
 			storeInvDetails.setInvoiceId(invoiceId);
-			storeDAO.insertStoreInvoiceDetails(storeInvDetails.getInvoiceId(), storeInvDetails.getItemId(), storeInvDetails.getItemCategory(), storeInvDetails.getItemStock(), 
+			storeDAO.insertStoreInvoiceDetails(storeInvDetails.getInvoiceId(), storeInvDetails.getItemId(), storeInvDetails.getItemStock(), 
 					storeInvDetails.getItemOrder(), storeInvDetails.getItemPricePerUnit(), storeInvDetails.getItemGSPercent(), 0);
 		}
 		return invoiceId;
@@ -842,7 +842,7 @@ public class DataManagerImpl implements DataManager{
 	public List<StoreInvoiceDetailsWrapper> getInvoiceDetails(int invoiceId){
 		List<StoreInvoiceDetailsWrapper> returnList = new ArrayList<StoreInvoiceDetailsWrapper>();
 		for(StoreInvoiceDetails tempStock: storeDAO.getInvoiceDetails(invoiceId)){
-			returnList.add(new StoreInvoiceDetailsWrapper(tempStock.getId(), tempStock.getInvoiceId(), tempStock.getItemId(), tempStock.getItemCategory(), tempStock.getItemStock(), 
+			returnList.add(new StoreInvoiceDetailsWrapper(tempStock.getId(), tempStock.getInvoiceId(), tempStock.getItemId(), tempStock.getItemStock(), 
 					tempStock.getItemOrder(), tempStock.getItemPricePerUnit(), tempStock.getItemGSPercent(), tempStock.getUpdatedBy(), tempStock.getUpdatedDate()));
 		}
 		return returnList;
@@ -851,14 +851,14 @@ public class DataManagerImpl implements DataManager{
 	@Override
 	@Transactional
 	public int insertStoreInvoiceDetails(StoreInvoiceDetailsWrapper storeInvDetails){
-		return storeDAO.insertStoreInvoiceDetails(storeInvDetails.getInvoiceId(), storeInvDetails.getItemId(), storeInvDetails.getItemCategory(), storeInvDetails.getItemStock(), 
+		return storeDAO.insertStoreInvoiceDetails(storeInvDetails.getInvoiceId(), storeInvDetails.getItemId(), storeInvDetails.getItemStock(), 
 				storeInvDetails.getItemOrder(), storeInvDetails.getItemPricePerUnit(), storeInvDetails.getItemGSPercent(), 0);
 	}
 	
 	@Override
 	@Transactional
 	public boolean updateStoreInvoiceDetails(StoreInvoiceDetailsWrapper storeInvDetails){
-		return storeDAO.updateStoreInvoiceDetails(storeInvDetails.getId(), storeInvDetails.getInvoiceId(), storeInvDetails.getItemId(), storeInvDetails.getItemCategory(), storeInvDetails.getItemStock(), 
+		return storeDAO.updateStoreInvoiceDetails(storeInvDetails.getId(), storeInvDetails.getInvoiceId(), storeInvDetails.getItemId(), storeInvDetails.getItemStock(), 
 				storeInvDetails.getItemOrder(), storeInvDetails.getItemPricePerUnit(), storeInvDetails.getItemGSPercent(), 0);
 	}
 	
@@ -866,7 +866,7 @@ public class DataManagerImpl implements DataManager{
 	public List<StoreStockWrapper> getStoreStock(int storeId, String category){
 		List<StoreStockWrapper> returnList = new ArrayList<StoreStockWrapper>();
 		for(StoreStock tempStock: storeDAO.getStoreStock(storeId, category)){
-			returnList.add(new StoreStockWrapper(tempStock.getId(), tempStock.getStoreId(), tempStock.getItemId(), tempStock.getItemCategory(), tempStock.getItemStock(), 
+			returnList.add(new StoreStockWrapper(tempStock.getId(), tempStock.getStoreId(), tempStock.getItemId(), tempStock.getItemStock(), 
 					tempStock.getItemOrder(), tempStock.getItemPricePerUnit(), tempStock.getItemGSPercent(), tempStock.getUpdatedBy(), tempStock.getUpdatedDate()));
 		}
 		return returnList;
@@ -876,14 +876,14 @@ public class DataManagerImpl implements DataManager{
 	@Override
 	@Transactional
 	public int insertStoreStock(StoreStockWrapper storeInvDetails, String category){
-		return storeDAO.insertStoreStock(storeInvDetails.getStoreId(), storeInvDetails.getItemId(), storeInvDetails.getItemCategory(), storeInvDetails.getItemStock(), 
+		return storeDAO.insertStoreStock(storeInvDetails.getStoreId(), storeInvDetails.getItemId(), storeInvDetails.getItemStock(), 
 				storeInvDetails.getItemOrder(), storeInvDetails.getItemPricePerUnit(), storeInvDetails.getItemGSPercent(), 0, category);
 	}
 	
 	@Override
 	@Transactional
 	public boolean updateStoreStock(StoreStockWrapper storeInvDetails, String category){
-		return storeDAO.updateStoreStock(storeInvDetails.getId(), storeInvDetails.getStoreId(), storeInvDetails.getItemId(), storeInvDetails.getItemCategory(), storeInvDetails.getItemStock(), 
+		return storeDAO.updateStoreStock(storeInvDetails.getId(), storeInvDetails.getStoreId(), storeInvDetails.getItemId(), storeInvDetails.getItemStock(), 
 				storeInvDetails.getItemOrder(), storeInvDetails.getItemPricePerUnit(), storeInvDetails.getItemGSPercent(), 0, category);
 	}
 	
@@ -926,15 +926,14 @@ public class DataManagerImpl implements DataManager{
 		for(Item tempItem: storeDAO.getStoreDistributors(storeId, category)){
 			item = new ItemWrapper();
 			item.setId(tempItem.getId());
+			item.setItemCategory(tempItem.getItemCategory());
 			item.setItemCode(tempItem.getItemCode());
 			item.setItemColor(tempItem.getItemColor());
 			item.setItemName(tempItem.getItemName());
 			item.setStoreId(tempItem.getStoreId());
-			
 			item.setItemType(tempItem.getItemType());
 			item.setItemPar(tempItem.getItemPar());
 			item.setItemUnits(tempItem.getItemUnits());
-			
 			returnList.add(item);
 		}
 		return returnList;
@@ -943,7 +942,7 @@ public class DataManagerImpl implements DataManager{
 	@Override
 	@Transactional
 	public int insertStoreItem(ItemWrapper item, String category){
-		return storeDAO.insertStoreItem(item.getItemCode(), item.getItemColor(), item.getItemName(), item.getItemPar(), item.getItemUnits(), item.getStoreId(), item.getUpdatedBy(), category);
+		return storeDAO.insertStoreItem(item.getItemCode(), item.getItemCategory() , item.getItemColor(), item.getItemName(), item.getItemPar(), item.getItemUnits(), item.getStoreId(), item.getUpdatedBy(), category);
 	}
 	
 }

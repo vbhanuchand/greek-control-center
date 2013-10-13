@@ -77,17 +77,17 @@ public interface StoreDAO {
 	
 	boolean updateStoreInvoice(int id, int storeId, Date invoiceDate, boolean locked, boolean active, int updatedBy);
 	
-	int insertStoreInvoiceDetails(int invoiceId, int itemId, int itemCategory, int itemStock, int itemOrder, double itemPricePerUnit, double itemGSPercent, int updatedBy);
+	int insertStoreInvoiceDetails(int invoiceId, int itemId, int itemStock, int itemOrder, double itemPricePerUnit, double itemGSPercent, int updatedBy);
 	
-	boolean updateStoreInvoiceDetails(int id, int invoiceId, int itemId, int itemCategory, int itemStock, int itemOrder, double itemPricePerUnit, double itemGSPercent, int updatedBy);
+	boolean updateStoreInvoiceDetails(int id, int invoiceId, int itemId, int itemStock, int itemOrder, double itemPricePerUnit, double itemGSPercent, int updatedBy);
 	
 	List<StoreInvoiceDetails> getInvoiceDetails(int invoiceId);
 	
 	List<StoreStock> getStoreStock(int storeId, String category);
 	
-	int insertStoreStock(int storeId, int itemId, int itemCategory, int itemStock, int itemOrder, double itemPricePerUnit, double itemGSPercent, int updatedBy, String category);
+	int insertStoreStock(int storeId, int itemId, int itemStock, int itemOrder, double itemPricePerUnit, double itemGSPercent, int updatedBy, String category);
 	
-	boolean updateStoreStock(int id, int storeId, int itemId, int itemCategory, int itemStock, int itemOrder, double itemPricePerUnit, double itemGSPercent, int updatedBy, String category);
+	boolean updateStoreStock(int id, int storeId, int itemId, int itemStock, int itemOrder, double itemPricePerUnit, double itemGSPercent, int updatedBy, String category);
 	
 	@SuppressWarnings("rawtypes")
 	List getStoreHealthInspectionDetails(int storeId, String tab); 
@@ -98,5 +98,5 @@ public interface StoreDAO {
 	
 	List<Item> getStoreDistributors(int storeId, String category);
 	
-	int insertStoreItem(int itemCode, String itemColor, String itemName, int itemPar, String itemUnits, int storeId, int updatedBy, String category);
+	int insertStoreItem(int itemCode, int itemCategory, String itemColor, String itemName, int itemPar, String itemUnits, int storeId, int updatedBy, String category);
 }

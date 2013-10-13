@@ -8,7 +8,6 @@ public class StoreStockWrapper extends BaseModel{
 	private Integer id;
 	private Integer storeId;
 	private Integer itemId;
-	private Integer itemCategory;
 	private Integer itemStock;
 	private Integer itemOrder;
 	private Double itemPricePerUnit;
@@ -21,14 +20,13 @@ public class StoreStockWrapper extends BaseModel{
 	}
 
 	public StoreStockWrapper(Integer id, Integer storeId, Integer itemId,
-			Integer itemCategory, Integer itemStock, Integer itemOrder,
+			Integer itemStock, Integer itemOrder,
 			Double itemPricePerUnit, Double itemGSPercent, Integer updatedBy,
 			Date updatedDate) {
 		super();
 		this.id = id;
 		this.storeId = storeId;
 		this.itemId = itemId;
-		this.itemCategory = itemCategory;
 		this.itemStock = itemStock;
 		this.itemOrder = itemOrder;
 		this.itemPricePerUnit = itemPricePerUnit;
@@ -59,14 +57,6 @@ public class StoreStockWrapper extends BaseModel{
 
 	public void setItemId(Integer itemId) {
 		this.itemId = itemId;
-	}
-
-	public Integer getItemCategory() {
-		return itemCategory;
-	}
-
-	public void setItemCategory(Integer itemCategory) {
-		this.itemCategory = itemCategory;
 	}
 
 	public Integer getItemStock() {

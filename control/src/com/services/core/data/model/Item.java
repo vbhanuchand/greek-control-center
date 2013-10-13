@@ -23,6 +23,9 @@ public class Item implements Serializable {
 	@Column(name = "id", nullable = false)
 	private Integer id;
 	
+	@Column(name = "item_category")
+	private Integer itemCategory;
+	
 	@Column(name = "item_code")
 	private Integer itemCode;
 	
@@ -58,11 +61,12 @@ public class Item implements Serializable {
 		super();
 	}
 	
-	public Item(Integer itemCode, String itemColor, String itemName,
+	public Item(Integer itemCode, Integer itemCategory, String itemColor, String itemName,
 			Integer itemPar, String itemUnits, String itemType, Integer storeId,
 			Integer updatedBy) {
 		super();
 		this.itemCode = itemCode;
+		this.itemCategory = itemCategory;
 		this.itemColor = itemColor;
 		this.itemName = itemName;
 		this.itemPar = itemPar;
@@ -70,6 +74,14 @@ public class Item implements Serializable {
 		this.itemType = itemType;
 		this.storeId = storeId;
 		this.updatedBy = updatedBy;
+	}
+
+	public Integer getItemCategory() {
+		return itemCategory;
+	}
+
+	public void setItemCategory(Integer itemCategory) {
+		this.itemCategory = itemCategory;
 	}
 
 	public Integer getItemCode() {

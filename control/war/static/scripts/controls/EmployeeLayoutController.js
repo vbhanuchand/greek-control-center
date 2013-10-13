@@ -382,10 +382,10 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 											            { name: "Active", field: 'active', width: "4%", noresize: true, type: dojox.grid.cells.Bool, editable: true},
 											            { name: "Store", field: "storeId", width: "0%", editable: true, noresize: true, hidden: true}]}],
 											singleClickEdit: true,
-											sortInfo: -1,
+											//sortInfo: -1,
 											editable: true,
 											selectable: true,
-											rowsPerPage: 10,
+											//rowsPerPage: 10,
 											loadingMessage: 'loadingMessage: Loading data from server..',
 										    errorMessage:   'Oops we could not retrive the requested data!',
 										    noDataMessage:	"<span class=\"dojoxGridNoData\"><font color='grey'>No Data to Display !!!</font></span>",
@@ -395,15 +395,15 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 											plugins: {
 														nestedSorting: false,
 										                pagination: {
-															pageSizes: ["10", "50", "100", "All"],
+															pageSizes: ["5", "10", "50", "100", "All"],
 															description: true,
 															sizeSwitch: false,
 															pageStepper: true,
 															gotoButton: false,
-															maxPageStep: 4,
+															maxPageStep: 5,
 															position: "bottom",
 															defaultPage: 1,
-								                            defaultPageSize: 10
+								                            defaultPageSize: 5
 														},
 							                            exporter: true
 										        }}, "employeesGrid");
@@ -457,8 +457,8 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 											            singleClickEdit: true,
 											            editable: true,
 											            selectable: true,
-											            sortInfo: -1,
-														rowsPerPage: 10,
+											            //sortInfo: -1,
+														//rowsPerPage: 10,
 														loadingMessage: 'loadingMessage: Loading data from server..',
 													    errorMessage:   'Oops we could not retrive the requested data!',
 													    noDataMessage:	"<span class=\"dojoxGridNoData\"><font color='grey'>Salary Details not available. Please Enter !!!</font></span>",
@@ -467,7 +467,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 													    plugins: {
 															nestedSorting: false,
 											                pagination: {
-																pageSizes: ["10", "50", "100", "All"],
+																pageSizes: ["5", "10", "50", "100", "All"],
 																description: true,
 																sizeSwitch: false,
 																pageStepper: true,
@@ -475,7 +475,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 																maxPageStep: 4,
 																position: "bottom",
 																defaultPage: 1,
-									                            defaultPageSize: 10
+									                            defaultPageSize: 5
 															},
 								                            exporter: true
 											        }}, "employeeSalaryDetailsGrid");
@@ -506,8 +506,8 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 											singleClickEdit: true,
 											editable: true,
 											selectable: true,
-											sortInfo: -1,
-											rowsPerPage: 10,
+											//sortInfo: -1,
+											//rowsPerPage: 10,
 											loadingMessage: 'loadingMessage: Loading data from server..',
 										    errorMessage:   'Oops we could not retrive the requested data!',
 										    noDataMessage:	"<span class=\"dojoxGridNoData\"><font color='grey'>Disciplinary Details not available. Please Enter !!!</font></span>",
@@ -516,7 +516,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 										    plugins: {
 												nestedSorting: false,
 								                pagination: {
-													pageSizes: ["10", "50", "100", "All"],
+													pageSizes: ["5", "10", "50", "100", "All"],
 													description: true,
 													sizeSwitch: false,
 													pageStepper: true,
@@ -524,7 +524,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 													maxPageStep: 4,
 													position: "bottom",
 													defaultPage: 1,
-						                            defaultPageSize: 10
+						                            defaultPageSize: 5
 												},
 					                            exporter: true
 								        }}, "employeeDisciplineGrid");
@@ -555,8 +555,8 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 											singleClickEdit: true,
 											editable: true,
 											selectable: true,
-											sortInfo: -1,
-											rowsPerPage: 10,
+											//sortInfo: -1,
+											//rowsPerPage: 10,
 											loadingMessage: 'loadingMessage: Loading data from server..',
 											errorMessage:   'Oops we could not retrive the requested data!',
 											noDataMessage:	"<span class=\"dojoxGridNoData\"><font color='grey'>Doing Good Details not available. Please Enter !!!</font></span>",
@@ -565,7 +565,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 											plugins: {
 												nestedSorting: false,
 								                pagination: {
-													pageSizes: ["10", "50", "100", "All"],
+													pageSizes: ["5", "10", "50", "100", "All"],
 													description: true,
 													sizeSwitch: false,
 													pageStepper: true,
@@ -573,7 +573,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 													maxPageStep: 4,
 													position: "bottom",
 													defaultPage: 1,
-						                            defaultPageSize: 10
+						                            defaultPageSize: 5
 												},
 					                            exporter: true
 								        }}, "employeeDoingGoodGrid");
@@ -610,8 +610,8 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 											singleClickEdit: true,
 											editable: true,
 											selectable: true,
-											sortInfo: -1,
-											rowsPerPage: 10,
+											//sortInfo: -1,
+											//rowsPerPage: 10,
 											loadingMessage: 'loadingMessage: Loading data from server..',
 											errorMessage:   'Oops we could not retrive the requested data!',
 											noDataMessage:	"<span class=\"dojoxGridNoData\"><font color='grey'>Leaves Details not available. Please Enter !!!</font></span>",
@@ -620,7 +620,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 											plugins: {
 												nestedSorting: false,
 								                pagination: {
-													pageSizes: ["10", "50", "100", "All"],
+													pageSizes: ["5", "10", "50", "100", "All"],
 													description: true,
 													sizeSwitch: false,
 													pageStepper: true,
@@ -628,7 +628,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 													maxPageStep: 4,
 													position: "bottom",
 													defaultPage: 1,
-						                            defaultPageSize: 10
+						                            defaultPageSize: 5
 												},
 					                            exporter: true
 								        }}, "employeeLeavesGrid");
@@ -659,7 +659,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 											        	   				promptMessage: 'Provide Notes in not more than 100 characters', 
 											        	   				missingMessage: 'Please provide Notes for Leave' }, widgetClass: ValidationTextBox}]}],
 											singleClickEdit: true,
-											sortInfo: -1,
+											//sortInfo: -1,
 											editable: true,
 											selectable: true,
 											rowsPerPage: 20,
@@ -699,7 +699,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 											singleClickEdit: false,
 											editable: false,
 											selectable: true,
-											rowsPerPage: 10,
+											//rowsPerPage: 10,
 											loadingMessage: 'loadingMessage: Loading data from server..',
 									        errorMessage:   'Oops we could not retrive the requested data!',
 									        noDataMessage:	"<span class=\"dojoxGridNoData\"><font color='grey'><b>No Data to Display !!!<b></font></span>",
@@ -708,7 +708,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 											plugins: {
 												nestedSorting: false,
 								                pagination: {
-													pageSizes: ["10", "50", "100", "All"],
+													pageSizes: ["5", "10", "50", "100", "All"],
 													description: true,
 													sizeSwitch: false,
 													pageStepper: true,
@@ -716,7 +716,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 													maxPageStep: 4,
 													position: "bottom",
 													defaultPage: 1,
-						                            defaultPageSize: 10
+						                            defaultPageSize: 5
 												}
 								        }}, "empDocumentsGrid");
 					employeeDocumentsGrid.startup();
@@ -747,8 +747,8 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 											singleClickEdit: true,
 											editable: true,
 											selectable: true,
-											sortInfo: -1,
-											rowsPerPage: 10,
+											//sortInfo: -1,
+											//rowsPerPage: 10,
 											loadingMessage: 'loadingMessage: Loading data from server..',
 											errorMessage:   'Oops we could not retrive the requested data!',
 											noDataMessage:	"<span class=\"dojoxGridNoData\"><font color='grey'>Labor Details not available. Please Enter !!!</font></span>",
@@ -757,7 +757,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 											plugins: {
 												nestedSorting: false,
 								                pagination: {
-													pageSizes: ["10", "50", "100", "All"],
+													pageSizes: ["5", "10", "50", "100", "All"],
 													description: true,
 													sizeSwitch: false,
 													pageStepper: true,
@@ -765,7 +765,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 													maxPageStep: 4,
 													position: "bottom",
 													defaultPage: 1,
-						                            defaultPageSize: 10
+						                            defaultPageSize: 5
 												},
 					                            exporter: true
 								        }}, "empLaborDetailsGrid");
