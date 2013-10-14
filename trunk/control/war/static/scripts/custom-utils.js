@@ -1169,6 +1169,25 @@ function printInvoice(gridId, title){
 	var totalUnitsCost=0, totalGsPercent=0, totalTotalCost=0;
 	
 	var selectedOption = registry.byId('invoiceCategorySelect').get('value');
+	var storeName = '';
+	switch(registry.byId('hiddenStoreId').get('value')){
+		case '1':
+			storeName='Downtown';
+			break;
+		case '2':
+			storeName='West Valley';
+			break;
+		case '3':
+			storeName='Murray';
+			break;
+		case '4':
+			storeName='South Jordan';
+			break;
+		case '5':
+			storeName='Airport';
+			break;
+	}
+	
 	var finalHTML = '';
 	finalHTML += '<html lang="en-us">';
 	finalHTML += '<head>';
@@ -1177,7 +1196,7 @@ function printInvoice(gridId, title){
 	finalHTML += "<body class='dbootstrap' style='width: 100%; height: 100%;color: #000000; background: #ffffff; font-family: \"Times New Roman\", Times, serif; font-size: 12pt;'>";
 	var strTitle = dom.byId(title).innerHTML + '';
     var titleToPrint = strTitle.substr(1, strTitle.length - 2);
-    finalHTML += '<div style="display: block; width: 100%; height: 20px;" align="center"><h4>' + titleToPrint.toUpperCase() + ' ' + ((selectedOption != 'Distributor') ? 'INVOICE' : ' INVENTORY') + '</h4></div>';
+    finalHTML += '<div style="display: block; width: 100%; height: 20px;" align="center"><h4>' + titleToPrint.toUpperCase() + ' ' + ((selectedOption != 'Distributor') ? 'INVOICE' : ' INVENTORY') + ' ( ' + storeName.toUpperCase() + ' )</h4></div>';
     finalHTML += '<br/><br/>';
     
 	var table = '<table style="width: 100%; vertical-align: top;" class="printTable">';
