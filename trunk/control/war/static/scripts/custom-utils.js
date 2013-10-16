@@ -143,6 +143,10 @@ function saveFileRefToDB(tab, fileName, blobKey){
 			linkedId = Number(accRecId);
 			standByWidget = 'accMonthlyDocumentStandBy';
 			break;
+		/*case 'airportSectionDocs': 
+			linkedId = 5;
+			standByWidget = 'airportSectionDocsStandBy';
+			break;*/
 	}
 	
 	var jsonData = {};
@@ -159,25 +163,30 @@ function saveFileRefToDB(tab, fileName, blobKey){
 	}).then(function(uploadBlobData){
 		if(uploadBlobData.success){
 			switch(tab){
-			case 'store-lease': 
-				domConstruct.empty(dom.byId('storeInfoUploadedDocument'));
-				registry.byId(standByWidget).hide();
-				storeLayout.fetchStoreLeaseBlobs(linkedId);
-				break;
-			case 'photo': 
-				domConstruct.empty(dom.byId('empPhotoUploadOptions'));
-				registry.byId(standByWidget).hide();
-				break;
-			case 'mgrContract':
-				domConstruct.empty(dom.byId('mgrContractUploaded'));
-				registry.byId(standByWidget).hide();
-				empLayout.fetchManagerContractBlobs(linkedId);
-				break;
-			case 'accMonthlyDocument': 
-				domConstruct.empty(dom.byId('accMonthlyDocumentUploaded'));
-				registry.byId(standByWidget).hide();
-				accLayout.fetchAccountingMonthlyBlobs(linkedId);
-				break;
+				case 'store-lease': 
+					domConstruct.empty(dom.byId('storeInfoUploadedDocument'));
+					registry.byId(standByWidget).hide();
+					storeLayout.fetchStoreLeaseBlobs(linkedId);
+					break;
+				case 'photo': 
+					domConstruct.empty(dom.byId('empPhotoUploadOptions'));
+					registry.byId(standByWidget).hide();
+					break;
+				case 'mgrContract':
+					domConstruct.empty(dom.byId('mgrContractUploaded'));
+					registry.byId(standByWidget).hide();
+					empLayout.fetchManagerContractBlobs(linkedId);
+					break;
+				case 'accMonthlyDocument': 
+					domConstruct.empty(dom.byId('accMonthlyDocumentUploaded'));
+					registry.byId(standByWidget).hide();
+					accLayout.fetchAccountingMonthlyBlobs(linkedId);
+					break;
+				/*case 'airportSectionDocs': 
+					domConstruct.empty(dom.byId('airportSectionDocsUploaded'));
+					registry.byId(standByWidget).hide();
+					storeLayout.fetchAirportLeaseBlobs(linkedId);
+					break;*/
 			}
 		}
 	}, function(error){
@@ -222,6 +231,11 @@ function showFileUploadDialog(domNode){
 			if(!(registry.byId('accountingQuartersList').get('value') > 0))
 				return;
 			break;
+		/*case 'airportSectionDocs':
+			standByWidget = 'airportSectionDocsStandBy';
+			fileUploadWidget = 'airportSectionDocsWidgetsDiv';
+			progressMsg = 'airportSectionDocsWidgetsProgressMsgs';
+			break;*/
 	}
 	
 	registry.byId(standByWidget).show();
@@ -266,6 +280,9 @@ function hideFileUploadDialog(domNode){
 		case 'accMonthlyDocument':
 			fileUploadWidget = 'accMonthlyDocumentWidgetsDiv';
 			break;
+		/*case 'airportSectionDocs':
+			fileUploadWidget = 'airportSectionDocsWidgetsDiv';
+			break;*/
 	}
 	otherFx.wipeOut({node: dom.byId(fileUploadWidget), duration: 1000, delay: 250, 
 		onEnd: function(node){
@@ -298,47 +315,67 @@ function checkSelectedPane(trId, rightPane, storeId) {
     //domClass.add(trId, 'dijitTabChecked');
     registry.byId('hiddenStoreId').set('value', storeId);
     storeId = registry.byId('hiddenStoreId').get('value');
-    var child = registry.byId('tabContainer').selectedChildWidget;
-    switch (child.get('id')) {
-        case 'storeInfo':
-            storeLayout.populateStoreData(storeId);
-            break;
-        case 'employeePane':
-            empLayout.populateEmployeesData(storeId);
-            break;
-        case 'laborPane':
-        	if(domStyle.get(dom.byId('employeePaneInfo'), 'display') != 'none')
-				otherFx.wipeOut({node: dom.byId('employeePaneInfo'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
-			laborLayout.resetToCurrentWeek(true);
-			if(domStyle.get(dom.byId('calendarEntryTitlePane'), 'display') == 'none')
-				otherFx.wipeIn({node: dom.byId('calendarEntryTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "block"});}}).play();
-			break;
-        case 'managerPane':
-        	empLayout.populateManagerTabDetails(registry.byId('hiddenStoreId').get('value'));
-			if(domStyle.get(dom.byId('calendarEntryTitlePane'), 'display') != 'none')
-				otherFx.wipeOut({node: dom.byId('calendarEntryTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
-			break;
-        case 'accountingPane':
-			if(domStyle.get(dom.byId('laborPaneInfo'), 'display') != 'none')
-				otherFx.wipeOut({node: dom.byId('laborPaneInfo'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
-			if(domStyle.get(dom.byId('calendarEntryTitlePane'), 'display') != 'none')
-				otherFx.wipeOut({node: dom.byId('calendarEntryTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
-			accLayout.reset();
-			break;
-        case 'inventoryPane':
-			if(domStyle.get(dom.byId('laborPaneInfo'), 'display') != 'none')
-				otherFx.wipeOut({node: dom.byId('laborPaneInfo'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
-			if(domStyle.get(dom.byId('calendarEntryTitlePane'), 'display') != 'none')
-				otherFx.wipeOut({node: dom.byId('calendarEntryTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
-			inventoryLayout.reset();
-			break;
-        case 'templatesPane':
-			if(domStyle.get(dom.byId('laborPaneInfo'), 'display') != 'none')
-				otherFx.wipeOut({node: dom.byId('laborPaneInfo'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
-			if(domStyle.get(dom.byId('calendarEntryTitlePane'), 'display') != 'none')
-				otherFx.wipeOut({node: dom.byId('calendarEntryTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
-			storeLayout.refreshTemplatesPane(registry.byId('hiddenStoreId').get('value'));
-			break;
+    
+    if((storeId == 5) || (storeId == '5')){
+    	toggleAirportSection();
+    } else {
+    	toggleAirportSection();
+	    var child = registry.byId('tabContainer').selectedChildWidget;
+	    switch (child.get('id')) {
+	        case 'storeInfo':
+	            storeLayout.populateStoreData(storeId);
+	            if(domStyle.get(dom.byId('inventoryLegendTitlePane'), 'display') != 'none')
+					otherFx.wipeOut({node: dom.byId('inventoryLegendTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+	            break;
+	        case 'employeePane':
+	            empLayout.populateEmployeesData(storeId);
+	            if(domStyle.get(dom.byId('inventoryLegendTitlePane'), 'display') != 'none')
+					otherFx.wipeOut({node: dom.byId('inventoryLegendTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+	            break;
+	        case 'laborPane':
+	        	if(domStyle.get(dom.byId('employeePaneInfo'), 'display') != 'none')
+					otherFx.wipeOut({node: dom.byId('employeePaneInfo'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+				laborLayout.resetToCurrentWeek(true);
+				if(domStyle.get(dom.byId('calendarEntryTitlePane'), 'display') == 'none')
+					otherFx.wipeIn({node: dom.byId('calendarEntryTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "block"});}}).play();
+				if(domStyle.get(dom.byId('inventoryLegendTitlePane'), 'display') != 'none')
+					otherFx.wipeOut({node: dom.byId('inventoryLegendTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+				break;
+	        case 'managerPane':
+	        	empLayout.populateManagerTabDetails(registry.byId('hiddenStoreId').get('value'));
+				if(domStyle.get(dom.byId('calendarEntryTitlePane'), 'display') != 'none')
+					otherFx.wipeOut({node: dom.byId('calendarEntryTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+				if(domStyle.get(dom.byId('inventoryLegendTitlePane'), 'display') != 'none')
+					otherFx.wipeOut({node: dom.byId('inventoryLegendTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+				break;
+	        case 'accountingPane':
+				if(domStyle.get(dom.byId('laborPaneInfo'), 'display') != 'none')
+					otherFx.wipeOut({node: dom.byId('laborPaneInfo'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+				if(domStyle.get(dom.byId('calendarEntryTitlePane'), 'display') != 'none')
+					otherFx.wipeOut({node: dom.byId('calendarEntryTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+				if(domStyle.get(dom.byId('inventoryLegendTitlePane'), 'display') != 'none')
+					otherFx.wipeOut({node: dom.byId('inventoryLegendTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+				accLayout.reset();
+				break;
+	        case 'inventoryPane':
+				if(domStyle.get(dom.byId('laborPaneInfo'), 'display') != 'none')
+					otherFx.wipeOut({node: dom.byId('laborPaneInfo'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+				if(domStyle.get(dom.byId('calendarEntryTitlePane'), 'display') != 'none')
+					otherFx.wipeOut({node: dom.byId('calendarEntryTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+				inventoryLayout.reset();
+				if(domStyle.get(dom.byId('inventoryLegendTitlePane'), 'display') == 'none')
+					otherFx.wipeIn({node: dom.byId('inventoryLegendTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "block"});}}).play();
+				break;
+	        case 'templatesPane':
+				if(domStyle.get(dom.byId('laborPaneInfo'), 'display') != 'none')
+					otherFx.wipeOut({node: dom.byId('laborPaneInfo'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+				if(domStyle.get(dom.byId('calendarEntryTitlePane'), 'display') != 'none')
+					otherFx.wipeOut({node: dom.byId('calendarEntryTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+				if(domStyle.get(dom.byId('inventoryLegendTitlePane'), 'display') != 'none')
+					otherFx.wipeOut({node: dom.byId('inventoryLegendTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+				storeLayout.refreshTemplatesPane(registry.byId('hiddenStoreId').get('value'));
+				break;
+	    }
     }
 }
 
@@ -1443,4 +1480,66 @@ function clearPlusIcon(tabWidget){
 	if(tabWidget.get('title').lastIndexOf(' &nbsp; <img ') > 0){
 		tabWidget.set('title', tabWidget.get('title').substring(0, tabWidget.get('title').lastIndexOf(' &nbsp; <img ')));
 	}
+}
+
+function toggleAirportSection(){
+	var query = require("dojo/query");
+    var domClass = require("dojo/dom-class");
+    var registry = require("dijit/registry");
+    var dijit = require("dijit/dijit");
+    var storeLayout = require("controls/StoreLayoutController");
+    var empLayout = require("controls/EmployeeLayoutController");
+    var laborLayout = require("controls/LaborLayoutController");
+    var accLayout = require("controls/AccountingLayoutController");
+    var inventoryLayout = require("controls/InventoryLayoutController");
+    var domStyle = require('dojo/dom-style');
+    var otherFx = require('dojo/fx');
+    var dom = require('dojo/dom');
+    var baseArray = require("dojo/_base/array");
+    var domConstruct = require('dojo/dom-construct');
+    var contentPane = require("dijit/layout/ContentPane");
+	if((registry.byId('hiddenStoreId').get('value') == 5) || (registry.byId('hiddenStoreId').get('value') == '5')){
+		baseArray.forEach(registry.byId('storeInfoTabContainer').getChildren(), function(storeTab){
+			if((storeTab.get('id') == 'storeMaintenance') || (storeTab.get('id') == 'storeHealthInspection') || (storeTab.get('id') == 'storeAlarms') || (storeTab.get('id') == 'storeKeys') || (storeTab.get('id') == 'storeLabor') )
+				storeTab.set('disabled', true);
+		});
+		baseArray.forEach(registry.byId('tabContainer').getChildren(), function(storeTab){
+			if((storeTab.get('id') == 'managerPane') || (storeTab.get('id') == 'employeePane') || (storeTab.get('id') == 'accountingPane') || (storeTab.get('id') == 'laborPane') || (storeTab.get('id') == 'inventoryPane') || (storeTab.get('id') == 'templatesPane'))
+				storeTab.set('disabled', true);
+			
+		});
+		
+		dijit.byId('tabContainer').selectChild(dijit.byId('storeInfo'));
+		var tabContainer = registry.byId('storeInfoTabContainer');
+		var accountingPane = new contentPane({ title:"Accounting", style: 'width: 99%; height: 99%', 'class': 'nihilo' });
+		var gridNode = domConstruct.create("div", { id: "airportAccountingGrid", style: {width: '99%', height: '99%'}});
+		console.log('Grid Node created --> ', gridNode, gridNode.id);
+		accountingPane.domNode.appendChild(gridNode);
+		tabContainer.addChild(accountingPane);
+		tabContainer.selectChild(accountingPane);
+		storeLayout.initAirportSection(gridNode.id, []);
+		
+	} else {
+		baseArray.forEach(registry.byId('storeInfoTabContainer').getChildren(), function(storeTab){
+			if((storeTab.get('id') == 'storeMaintenance') || (storeTab.get('id') == 'storeHealthInspection') || (storeTab.get('id') == 'storeAlarms') || (storeTab.get('id') == 'storeKeys') || (storeTab.get('id') == 'storeLabor') )
+				storeTab.set('disabled', false);
+			if(storeTab.get('title') == 'Accounting'){
+				registry.byId('storeInfoTabContainer').removeChild(storeTab);
+				storeTab.destroy();
+			}
+		});
+		baseArray.forEach(registry.byId('tabContainer').getChildren(), function(storeTab){
+			if((storeTab.get('id') == 'managerPane') || (storeTab.get('id') == 'employeePane') || (storeTab.get('id') == 'accountingPane') || (storeTab.get('id') == 'laborPane') || (storeTab.get('id') == 'inventoryPane') || (storeTab.get('id') == 'templatesPane'))
+				storeTab.set('disabled', false);
+		});
+	}
+}
+
+
+function showAirportSection(){
+	airportSectionDialog.show();
+	airportSectionDialog.containerNode.style.width = '99%';
+	airportSectionDialog.containerNode.style.height = '90%';
+	airportSectionDialog.containerNode.align = 'center';
+	//console.log('Container Node ', airportSectionDialog.containerNode);
 }

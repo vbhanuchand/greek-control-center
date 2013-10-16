@@ -382,7 +382,7 @@ desc blobs;
 desc items;
 desc upload_docs_notes;
 
-alter table blobs modify tab enum('store-lease','photo','mgrContract','healthInspection','employee-docs', 'maintenance', 'accMonthlyDocument', 'store-template');
+alter table blobs modify tab enum('store-lease','photo','mgrContract','healthInspection','employee-docs', 'maintenance', 'accMonthlyDocument', 'store-template', 'airportSectionDocs');
 alter table upload_docs_notes modify purpose enum('healthInspection','employee-docs', 'store-template');
 
 alter table items modify item_color varchar(10);

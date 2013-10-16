@@ -917,3 +917,10 @@ body {
 ::-webkit-scrollbar-corner {
 	background: transparent;
 }
+
+.dijitDialogPaneContent .dijitDialogSingleChild{
+	font: inherit;
+	width: 99%;
+	height: 90%;
+	text-align: center;
+}
