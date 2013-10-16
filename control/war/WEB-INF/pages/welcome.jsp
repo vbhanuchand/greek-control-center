@@ -185,6 +185,7 @@
 	        <div data-dojo-type="dijit/PopupMenuBarItem" id="adminPopupMenu">
 	            <span>Administrator</span>
 	            <div data-dojo-type="dijit/Menu">
+	            	<!-- <div data-dojo-type="dijit/MenuItem" data-dojo-props="onClick: showAirportSection">Airport Section</div> -->
 	                <div data-dojo-type="dijit/MenuItem" data-dojo-props="onClick: callManageUsers">View Managers</div>
 	            </div>
 	        </div>
@@ -257,32 +258,42 @@
 				</div>
 				<div id="calendarEntryTitlePaneStandBy" data-dojo-id="calendarEntryTitlePaneStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'calendarEntryTitlePane', color:'white'"></div>
 			</div>
+			<div id="inventoryLegendTitlePane" style="font-size: 90% !important; width: 100%; display: none;" data-dojo-type="dijit/TitlePane" data-dojo-props="title:'Distributor Codes', open:true" >
+				<table class="laborTable" style="width: 100%; height: 100%; border: .1em solid #000;">
+					<tr><th style="width: 50%;">Distributor</th><th style="width: 50%;">Code</th></tr>
+					<tr><td style="width: 50%; padding-left: 3px !important;">NICHOLAS</td><td style="width: 50%; text-align: center !important;">1000</td></tr>
+					<tr><td style="width: 50%; padding-left: 3px !important;">US FOODS</td><td style="width: 50%; text-align: center !important;">2000</td></tr>
+					<tr><td style="width: 50%; padding-left: 3px !important;">SAMS CLUB</td><td style="width: 50%; text-align: center !important;">3000</td></tr>
+					<tr><td style="width: 50%; padding-left: 3px !important;">GS KITCHEN</td><td style="width: 50%; text-align: center !important;">4000</td></tr>
+					<tr><td style="width: 50%; padding-left: 3px !important;">Others</td><td style="width: 50%; text-align: center !important;">5000</td></tr>
+				</table>
+			</div>
 		</div>
 
 
 
 		<div data-dojo-id="tabContainer" id="tabContainer" data-dojo-type="dijit/layout/TabContainer" data-dojo-props="region:'center', tabStrip:true">
 			<div id="managePane" data-dojo-type="dijit/layout/ContentPane" title="Manage" data-dojo-props="selected:false" style="width: 99%; height: 99%">
-					<div id="manageUsersRegion" data-dojo-type="dijit/layout/ContentPane" style="width: 99%; height: 99%; border: .1em solid #ddd;" align="center">
-						<div id="manageUsersRegionContent" align="left">
-							<div align="center" style="padding: 2px;">
-								<table style="width: 99%; height: 99%;" class='dateTable' id="manageUsersRegionTable">
-									<tr>
-										<th width="20%">User</th>
-										<th width="20%">Downtown</th>
-										<th width="20%">West Valley</th>
-										<th width="20%">Murray</th>
-										<th width="20%">South Jordan</th>
-										<th width="20%">Airport</th>
-									</tr>
-								</table>
-							</div>
-						</div>
-						<div id="manageUsersRegionStandBy" data-dojo-id="manageUsersRegionStandBy" 
-								data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'manageUsersRegionContent', color:'lightgrey'">
+				<div id="manageUsersRegion" data-dojo-type="dijit/layout/ContentPane" style="width: 99%; height: 99%; border: .1em solid #ddd;" align="center">
+					<div id="manageUsersRegionContent" align="left">
+						<div align="center" style="padding: 2px;">
+							<table style="width: 99%; height: 99%;" class='dateTable' id="manageUsersRegionTable">
+								<tr>
+									<th width="20%">User</th>
+									<th width="20%">Downtown</th>
+									<th width="20%">West Valley</th>
+									<th width="20%">Murray</th>
+									<th width="20%">South Jordan</th>
+									<th width="20%">Airport</th>
+								</tr>
+							</table>
 						</div>
 					</div>
+					<div id="manageUsersRegionStandBy" data-dojo-id="manageUsersRegionStandBy" 
+							data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'manageUsersRegionContent', color:'lightgrey'">
+					</div>
 				</div>
+			</div>
 			<div id="storeInfo" data-dojo-type="dijit/layout/ContentPane" title="Store Info" data-dojo-props="selected:true" style="width: 99%; height: 99%">
 				<div data-dojo-type="dijit/TitlePane" id="storeInfoTitlePane" data-dojo-props="title:'Store Information', style:'width:99%;', open: false">
 					<form data-dojo-type="dijit/form/Form" data-dojo-id="storeInfoForm" id="storeInfoForm">	
@@ -315,12 +326,12 @@
 									</tr>
 								</table>
 							</div>
-							<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'Property Info'" style="border: .1em solid #ddd; width: 99%; font-size: 96%; padding: 0px 2px 0px 2px !important;">
+							<div id="storeInfoPropertyPane" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'Property Info'" style="border: .1em solid #ddd; width: 99%; font-size: 96%; padding: 0px 2px 0px 2px !important;">
 								<div style="padding: 2px 0px 2px 0px;"><span id="store-info-property-mgr-info" data-dojo-type="dijit/InlineEditBox" 
 									data-dojo-props="editor: dijit.form.Textarea, editorParams: { rows:2, cols:90, maxLength: 100 }" 
 									width="350px"></span></div>
 							</div>
-							<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'Store Notes'" style="border: .1em solid #ddd; width: 99%; font-size: 96%; padding: 0px 2px 0px 2px !important;">
+							<div id="storeInfoNotesPane" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'Store Notes'" style="border: .1em solid #ddd; width: 99%; font-size: 96%; padding: 0px 2px 0px 2px !important;">
 								<div style="padding: 2px 0px 2px 0px;"><span id="store-info-notes" data-dojo-type="dijit/InlineEditBox" 
 									data-dojo-props="editor: dijit.form.Textarea, editorParams: { rows:2, cols:90, maxLength: 100 }" 
 									width="350px"></span></div>
@@ -346,7 +357,7 @@
 										data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'store-info-important-dates', color:'white'">
 								</div>
 	  						</div>
-							<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'Lease/ Mortgage/ Loan Info'" style="border: .1em solid #ddd; width: 99%; font-size: 96%; padding: 0px 2px 0px 2px !important;">
+							<div id="storeInfoMortgagePane" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'Lease/ Mortgage/ Loan Info'" style="border: .1em solid #ddd; width: 99%; font-size: 96%; padding: 0px 2px 0px 2px !important;">
 								<div style="padding: 2px 0px 2px 0px;"><span id="store-mortgage-info" data-dojo-type="dijit/InlineEditBox" data-dojo-props="editor: dijit.form.Textarea, editorParams: { rows:2, cols:90, maxLength: 100 }" 
 									width="350px"></span></div>
 							</div>
@@ -1229,5 +1240,102 @@
 	</div>
 </div>
 <!-- Inventory Items Dialog ends here -->
+
+<!-- Airport Section Dialog 
+<div class="dijitHidden">
+	<div class="application" data-dojo-type="dijit/Dialog" data-dojo-props="title:'Airport Section', loadingMessage:'Loading ...', style: 'font-size: 90% !important; height: 90%; width: 95%;'" data-dojo-id="airportSectionDialog" id="airportSectionDialog">
+		<div align="center" data-dojo-type="dijit/layout/TabContainer" data-dojo-props="tabPosition: 'top', style:'margin-top:1px;height:99%;width:99%;'">
+			<div align="center" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'Store Info', style:'margin-top:1px;height:99%;width:99%;'">
+				<form data-dojo-type="dijit/form/Form" data-dojo-id="airportSectionForm" id="airportSectionForm" style="width: 100%; height: 100%;">
+					<table style="width: 100%; height: 100%;">
+						<tr style="width: 99%; height: 49%;">
+							<td style="width: 33%; height: 100%;"><div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'Contact Info'" style="border: .1em solid #ddd; width: 99%; height: 99%;"><table class="storeInfoTable" style="width: 100%; height: 100%;">
+								<tr>
+									<td width="30%"><b>Address:</b></td>
+									<td width="70%">
+										<span id="airport-section-mailing-address" data-dojo-type="dijit/InlineEditBox" 
+											data-dojo-props="editor: dijit.form.Textarea, editorParams: { rows:2, cols:20, maxLength: 100 }" 
+											width="250px"></span>
+									</td>
+								</tr>
+								<tr>
+									<td width="30%"><b>Phone Numbers:</b></td>
+									<td width="70%">
+										<span id="airport-section-phone-numbers" data-dojo-type="dijit/InlineEditBox" 
+											data-dojo-props="editor: dijit.form.Textarea, editorParams: { rows:2, cols:20, maxLength: 100 }" 
+											width="250px"></span>
+									</td>
+								</tr>
+								<tr>
+									<td width="30%"><b>Operating Hours:</b></td>
+									<td width="70%">
+										<span id="airport-section-operating-hrs" data-dojo-type="dijit/InlineEditBox" 
+											data-dojo-props="editor: dijit.form.Textarea, editorParams: { rows:2, cols:20, maxLength: 100 }" 
+											width="250px"></span>
+									</td>
+								</tr>
+							</table></div></td>
+							<td style="width: 34%; height: 100%;"><div id="airportsectionHostInfo" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'HMS Host Contact Info'" style="border: .1em solid #ddd; width: 99%; height: 99%; font-size: 96%; padding: 0px 2px 0px 2px !important;"><div style="padding: 2px 0px 2px 0px;"><span id="airport-section-host-contact-info" data-dojo-type="dijit/InlineEditBox" 
+								data-dojo-props="editor: dijit.form.Textarea, editorParams: { rows:2, cols:90, maxLength: 100 }" 
+								width="350px"></span></div></div></td>
+							<td style="width: 33%; height: 100%;"><div id="airportSectionNotesPane" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'Store Notes'" style="border: .1em solid #ddd; width: 99%; height: 99%; font-size: 96%; padding: 0px 2px 0px 2px !important;"><div style="padding: 2px 0px 2px 0px;"><span id="airport-section-notes" data-dojo-type="dijit/InlineEditBox" 
+								data-dojo-props="editor: dijit.form.Textarea, editorParams: { rows:2, cols:90, maxLength: 100 }" 
+								width="350px"></span></div></div></td>
+						</tr>
+						<tr style="width: 99%; height: 49%;">
+							<td style="width: 33%; height: 100%;"><div id="airport-section-important-dates" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'Important Dates'" style="border: .1em none #ddd; width: 99%; height: 99%; font-size: 96%; padding: 0px 2px 0px 2px !important;"><div id="airport-section-important-dates-content-new" style="display: none;">
+		  						<div style="padding: 1px 0px 4px 0px;">
+		  							<input data-dojo-type="dijit/form/DateTextBox" type="text" name="airportSectionImpDateInput" id="airportSectionImpDateInput" style="width: 30%;"/>
+		  							<input name="airportSectionImpDateNotes" id="airportSectionImpDateNotes" type="text" data-dojo-type="dijit/form/TextBox" style="width: 40%;"/>
+		  								<a href="javascript: saveImpDateAirportSection();">Save</a>&nbsp;&nbsp;<a href="javascript: hideImportantDateAirportSection();">Hide</a>
+		  						</div>
+		  					</div>
+		  					<div id="airport-section-important-dates-content" align="left">
+		  						<table id="airportSectionImpDatesTable" style="width: 80%; height: 100%;" class='storeInfoTable'>
+		  							<tr><td width="30%"></td><td width="70%"></td></tr>
+		  							<tr><td width="30%"></td><td width="70%"></td></tr>
+		  							<tr><td width="30%"></td><td width="70%"></td></tr>
+		  						</table>
+		  					</div>
+		  					<div id="airportSectionImpDatesStandBy" data-dojo-id="storeInfoImpDatesStandBy" 
+									data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'airport-section-important-dates', color:'white'">
+							</div></div></td>
+							<td style="width: 34%; height: 100%;"><div id="airportSectionDocs" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'Documents'" style="border: .1em solid #ddd; width: 99%; height: 99%; font-size: 96%; padding: 0px 2px 0px 2px !important;"><div id="airportSectionDocsWidgetsDiv" style="display: none;">
+								<span id="airportSectionDocsWidgets"></span>
+								<span id="airportSectionDocsWidgetsProgressMsgs"></span>
+								<a href="javascript: hideFileUploadDialog('airportSectionDocs');">Hide</a>
+							</div>
+							<div id="airportSectionDocsUpload">
+							  	<img align='top' src='resources/images/file-upload.png'/>
+							  	<a href="javascript: showFileUploadDialog('airportSectionDocs');">Upload Document</a>
+							</div>
+							<div>
+								<ul id="airportSectionDocsUploaded"></ul>
+							  	<ol id="airportSectionDocsExisting"></ol>
+							</div>
+							<div id="airportSectionDocsStandBy" data-dojo-id="airportSectionDocsStandBy" 
+								data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'airportSectionDocs', color:'lightgrey'">
+							</div></div></td>
+							<td style="width: 33%; height: 100%;"><button data-dojo-type="dijit/form/Button" type="submit" data-dojo-props="'class':'primary'">Save Changes</button></td>
+						</tr>
+					</table>
+		  			<script type="dojo/on" data-dojo-event="submit" data-dojo-args="evt">
+						evt.preventDefault();
+						evt.stopPropagation();
+						var storeLayout = require("controls/StoreLayoutController");
+						storeLayout.saveStoreInfoData();
+						return false;
+					</script>
+				</form>
+			</div>
+			<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'Accounting'" style="width:100%; height:100%;">
+			</div>
+		</div>
+		<div id="airportSectionTitlePaneStandBy" data-dojo-id="airportSectionTitlePaneStandBy" 
+			data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'airportSectionForm', color:'white'">
+		</div>
+	</div>
+<!-- </div> -->
+<!-- Airport Section Dialog Ends here -->
 </body>
 </html>

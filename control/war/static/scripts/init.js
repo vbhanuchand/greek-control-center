@@ -79,6 +79,8 @@ require(["bootstrap", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/dijit", 
 							otherFx.wipeOut({node: dom.byId('calendarEntryTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
 						if(domStyle.get(dom.byId('employeePaneInfo'), 'display') != 'none')
 							otherFx.wipeOut({node: dom.byId('employeePaneInfo'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+						if(domStyle.get(dom.byId('inventoryLegendTitlePane'), 'display') != 'none')
+							otherFx.wipeOut({node: dom.byId('inventoryLegendTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
 						storeLayout.populateStoreData(registry.byId('hiddenStoreId').get('value'));
 						break;
 					case 'employeePane':
@@ -86,12 +88,16 @@ require(["bootstrap", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/dijit", 
 							otherFx.wipeOut({node: dom.byId('laborPaneInfo'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
 						if(domStyle.get(dom.byId('calendarEntryTitlePane'), 'display') != 'none')
 							otherFx.wipeOut({node: dom.byId('calendarEntryTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+						if(domStyle.get(dom.byId('inventoryLegendTitlePane'), 'display') != 'none')
+							otherFx.wipeOut({node: dom.byId('inventoryLegendTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
 						empLayout.populateEmployeesData(registry.byId('hiddenStoreId').get('value'));
 						child.set('title', checkAndAddMainTabPlus('employeePane', child.get('title')));
 						break;
 					case 'laborPane':
 						if(domStyle.get(dom.byId('employeePaneInfo'), 'display') != 'none')
 							otherFx.wipeOut({node: dom.byId('employeePaneInfo'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+						if(domStyle.get(dom.byId('inventoryLegendTitlePane'), 'display') != 'none')
+							otherFx.wipeOut({node: dom.byId('inventoryLegendTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
 						laborLayout.resetToCurrentWeek(true);
 						if(domStyle.get(dom.byId('calendarEntryTitlePane'), 'display') == 'none')
 							otherFx.wipeIn({node: dom.byId('calendarEntryTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "block"});}}).play();
@@ -100,6 +106,8 @@ require(["bootstrap", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/dijit", 
 						empLayout.populateManagerTabDetails(registry.byId('hiddenStoreId').get('value'));
 						if(domStyle.get(dom.byId('calendarEntryTitlePane'), 'display') != 'none')
 							otherFx.wipeOut({node: dom.byId('calendarEntryTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+						if(domStyle.get(dom.byId('inventoryLegendTitlePane'), 'display') != 'none')
+							otherFx.wipeOut({node: dom.byId('inventoryLegendTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
 						registry.byId('reviewUpdateBtn').set('disabled', true);
 						registry.byId('reviewSaveBtn').set('disabled', true);
 						registry.byId('quartersList').set('disabled', true);
@@ -110,6 +118,8 @@ require(["bootstrap", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/dijit", 
 							otherFx.wipeOut({node: dom.byId('laborPaneInfo'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
 						if(domStyle.get(dom.byId('calendarEntryTitlePane'), 'display') != 'none')
 							otherFx.wipeOut({node: dom.byId('calendarEntryTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+						if(domStyle.get(dom.byId('inventoryLegendTitlePane'), 'display') != 'none')
+							otherFx.wipeOut({node: dom.byId('inventoryLegendTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
 						storeLayout.populateUsersToManage();
 						break;
 					case 'accountingPane':
@@ -117,6 +127,8 @@ require(["bootstrap", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/dijit", 
 							otherFx.wipeOut({node: dom.byId('laborPaneInfo'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
 						if(domStyle.get(dom.byId('calendarEntryTitlePane'), 'display') != 'none')
 							otherFx.wipeOut({node: dom.byId('calendarEntryTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+						if(domStyle.get(dom.byId('inventoryLegendTitlePane'), 'display') != 'none')
+							otherFx.wipeOut({node: dom.byId('inventoryLegendTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
 						accLayout.reset();
 						break;
 					case 'inventoryPane':
@@ -124,6 +136,8 @@ require(["bootstrap", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/dijit", 
 							otherFx.wipeOut({node: dom.byId('laborPaneInfo'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
 						if(domStyle.get(dom.byId('calendarEntryTitlePane'), 'display') != 'none')
 							otherFx.wipeOut({node: dom.byId('calendarEntryTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+						if(domStyle.get(dom.byId('inventoryLegendTitlePane'), 'display') == 'none')
+							otherFx.wipeIn({node: dom.byId('inventoryLegendTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "block"});}}).play();
 						inventoryLayout.reset();
 						break;
 					case 'templatesPane':
@@ -131,10 +145,13 @@ require(["bootstrap", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/dijit", 
 							otherFx.wipeOut({node: dom.byId('laborPaneInfo'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
 						if(domStyle.get(dom.byId('calendarEntryTitlePane'), 'display') != 'none')
 							otherFx.wipeOut({node: dom.byId('calendarEntryTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+						if(domStyle.get(dom.byId('inventoryLegendTitlePane'), 'display') != 'none')
+							otherFx.wipeOut({node: dom.byId('inventoryLegendTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
 						storeLayout.refreshTemplatesPane(registry.byId('hiddenStoreId').get('value'));
 						break;
 				}
 				empLayout.hidePhoto('employeePaneInfo');
+				//toggleAirportSection();
 			});
 			
 			var fileUploadComplete = function(dataArray){
@@ -371,8 +388,46 @@ require(["bootstrap", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/dijit", 
 			//Accounting Documents File Upload Ends
 			
 			
-			
-			
+			/*//Airport Section File Upload
+			var fileUploadCompleteAirport = function(dataArray){
+				var progressMsgsNode = 'airportSectionDocsWidgetsProgressMsgs';
+				var widgetNode = 'airportSectionDocsWidgetsDiv';
+				var docUploadedNode = 'airportSectionDocsUploaded';
+					if(dataArray){
+						if(dataArray.status && dataArray.status == "success"){
+							dom.byId(progressMsgsNode).innerHTML = 'Upload Success..';
+							otherFx.wipeOut({node: dom.byId(widgetNode), duration: 1000, delay: 250, 
+								onEnd: function(node){
+									domStyle.set(this.node, {display: "none"});
+								}
+							}).play();
+							var uploadFilesNode = dom.byId(docUploadedNode);
+							domConstruct.empty(uploadFilesNode);
+							var fragment = document.createDocumentFragment();
+							var innerHTMLText = '&nbsp;&nbsp;&nbsp;<img src="resources/images/icon-pdf.png"/> &nbsp;' + dataArray.fileName + 
+												'&nbsp;<a href="javascript: saveFileRefToDB(\'airportSectionDocs\', \'' + dataArray.fileName + '\', \'' + 
+												dataArray['blob-key'] + '\');">Save</a>';
+							domConstruct.create("li", {
+		                        innerHTML: innerHTMLText
+		                    }, fragment);
+							 domConstruct.place(fragment, uploadFilesNode);
+						}else{
+							console.log('error',data,ioArgs);
+						}
+					}else{
+						console.log('ugh?',arguments);
+					}
+				}, fileUploadStartAirport = function(dataArray){
+					var progressMsgsNode = 'airportSectionDocsWidgetsProgressMsgs';
+					this.set('url', window.blobStoreURL);
+					dom.byId(progressMsgsNode).innerHTML = 'Uploading ...';
+				};
+				
+			var myUploaderAirport = new dojox.form.Uploader({ name: "uploadedFile", multiple:false, showProgress:true, label: "Select File",
+					uploadOnSelect:true, url: blobStoreURL, onBegin: fileUploadStartAirport, onComplete: fileUploadCompleteAirport});
+			dojo.byId("airportSectionDocsWidgets").appendChild(myUploaderAirport.domNode);
+			//Airport Section File Upload Ends
+*/			
 			
 			var empSelectWidget = new formSelect({style: {'width': '95%', 'font-size': '95%'}}, dom.byId('itemSummaryEditor'));
 			empSelectWidget.startup();

@@ -4,12 +4,12 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 		"dijit/layout/BorderContainer", "dijit/layout/TabContainer", "dijit/Calendar", "dijit/TitlePane", "dijit/form/FilteringSelect",	"dijit/form/Form", "dijit/form/ValidationTextBox",	
 		"dojox/layout/ScrollPane", "dijit/Dialog", "dijit/form/DropDownButton", "dijit/form/Button", "dojox/grid/DataGrid", "dojox/grid/EnhancedGrid", "dojo/store/Memory", 
 		"dojo/data/ObjectStore", "dojo/request", "dojox/lang/functional", "dijit/form/CheckBox", "dojox/form/Manager", "dojox/math/random/Simple", "dojo/data/ItemFileWriteStore", "controls/LaborLayoutController",
-		"dojox/grid/enhanced/plugins/exporter/CSVWriter", "dojox/grid/enhanced/plugins/NestedSorting", "dojox/grid/enhanced/plugins/Pagination", "dojo/date/stamp"],
+		"dijit/form/NumberTextBox", "dojox/grid/enhanced/plugins/exporter/CSVWriter", "dojox/grid/enhanced/plugins/NestedSorting", "dojox/grid/enhanced/plugins/Pagination", "dojo/date/stamp"],
 		function(dijit, registry, query, dom, domStyle, domClass, domConstruct, domGeometry, string, on, 
 				keys, lang, baseArray, event, json, djConfig, ioQuery, win, aspect, 
 				locale, baseFx, Table, TextBox, ContentPane, SimpleTextArea, TextArea, 
 				BorderContainer, TabContainer, Calendar, TitlePane, FilteringSelect, Form, ValidationTextBox, scrollPane,
-				Dialog, DropDownButton, Button, DataGrid, EnhancedGrid, Memory, ObjectStore, ajaxRequest, dojoFunctional, dojoCheckBox, dojoxFormManager, randomNumber, itemFileWriteStore, laborLayout) {
+				Dialog, DropDownButton, Button, DataGrid, EnhancedGrid, Memory, ObjectStore, ajaxRequest, dojoFunctional, dojoCheckBox, dojoxFormManager, randomNumber, itemFileWriteStore, laborLayout, NumberTextBox) {
 			
 			var storeInfoTable = null, storeAlarmCodesGrid = null, storeKeysGrid = null, storeMaintenanceGrid = null, storeLaborGrid = null, storeHealthInspectionGrid=null, templatesGrid=null,
 			randomGen = new randomNumber(), loginQuery = djConfig.loginRequest || {}, blankArray=[],
@@ -329,6 +329,34 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 		    		registry.byId('storeInfoLeaseDocumentsStandBy').hide();
 		    	});
 		    },
+		    /*fetchAirportLeaseBlobs = function(storeId){
+		    	registry.byId('airportSectionDocsStandBy').show();
+		    	ajaxRequest.get("/service/blobs/airportSectionDocs/" + storeId,{
+		    		handleAs: 'json'
+		    	}).then(function(storeBlobsResponse){
+		    		var uploadFilesNode = dom.byId('airportSectionDocsExisting');
+		    		domConstruct.empty(uploadFilesNode);
+		    		var fragment;
+		    		var innerHTMLText = '';
+		    		baseArray.forEach(storeBlobsResponse.models, function(blob){
+		    			fragment = document.createDocumentFragment();
+		    			innerHTMLText = '&nbsp;&nbsp;&nbsp;<img src="resources/images/icon-pdf.png"/> &nbsp;'
+		    				+ '<a target="_new" href="/service/getBlob/' + blob.blobKey + '">' 
+		    				+  blob.fileName
+		    				+ '</a>'
+		    				+ '&nbsp;&nbsp;' + '<span onclick="javascript: deleteItem(' + "'blob','airportSectionDocs','" + blob.id + "'" + ');"><i class="icon-remove"></i></span>'
+		    				;
+		    			domConstruct.create("li", {
+	                        innerHTML: innerHTMLText
+	                    }, fragment);
+			    		domConstruct.place(fragment, uploadFilesNode);
+		    		});
+		    		registry.byId('airportSectionDocsStandBy').hide();
+		    	}, function(error){
+		    		console.log('Error occurred while fetching Airport data ' + error);
+		    		registry.byId('airportSectionDocsStandBy').hide();
+		    	});
+		    },*/
 		    fetchStoreDates = function(storeId){
 		    	registry.byId('storeInfoImpDatesStandBy').show();
 		    	ajaxRequest.get("/service/store/" + storeId + "/dates",{
@@ -699,11 +727,68 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 								        }}, "templatesGrid");
 					templatesGrid.startup();
 				} else dijit.byId('templatesGrid').setStore(gridDataStore);
+		    },
+		    updateAirportAccountingGrid = function(gridId, accountingData){
+		    	var airportAccountingGrid;
+		    	var tempStore = {
+		    			"identifier" : "id",
+		    			"items" : []
+		    	};
+		    	tempStore.items = accountingData;
+		    	var gridDataStore = new itemFileWriteStore({data: tempStore});
+		    	
+		    	var formatUpdate = function(inVal){
+					return '<span><i class="icon-save"></i></span>';
+				};
+				
+				if(!dijit.byId(gridId)){
+					airportAccountingGrid = new EnhancedGrid({
+								store: gridDataStore,
+								query: { id: "*" },
+								structure: [{defaultCell: { width: "20%", type: dojox.grid.cells._Widget, styles: 'padding-left: 2px; text-align: left;', noresize: true, editable: false },
+									cells: [{ name: "<span><i class='icon-save'></i></span>", field: "id", width: "5%", noresize: true, styles: 'text-align: center;', formatter: formatUpdate },
+									        { name: "<b>Month</b>", field: "month", width: "10%", noresize: true, styles: 'text-align: left; padding-left: 10px;'},
+									        { name: "<b>Current Sales</b>", field: "currentSales", width: "40%", noresize: true, editable: true, 
+									        	constraint:{required: false}, widgetProps: { promptMessage: 'Provide Current Sales', 
+									        	missingMessage: 'Please enter only Numbers', invalidMessage: 'Accepts only Numerics'}, 
+									        	widgetClass: NumberTextBox },
+									        { name: "<b>Royalties</b>", field: "royalties", width: "40%", noresize: true, editable: true, 
+										        constraint:{required: false}, widgetProps: { promptMessage: 'Provide Royalties', 
+										        missingMessage: 'Please enter only Numbers', invalidMessage: 'Accepts only Numerics'}, 
+										        widgetClass: NumberTextBox }
+											]}],
+								singleClickEdit: true,
+								editable: true,
+								selectable: true,
+								rowsPerPage: 12,
+								loadingMessage: 'loadingMessage: Loading data from server..',
+								errorMessage: 'Oops we could not retrive the requested data!',
+								noDataMessage: "<span class=\"dojoxGridNoData\"><font color='grey'>Accounting Details not available.</font></span>",
+								onFetchError: function(error,ioargs){console.log('Error ocured: '+error+' ioargs: '+ioargs); return true;},
+								selectionMode: "single"
+								}, gridId);
+					airportAccountingGrid.startup();
+				} else dijit.byId(gridId).setStore(gridDataStore);
 		    };
 		    
 		    return {
 		        init: function() {
 		            startup();
+		        },
+		        initAirportSection: function(gridId, data){
+		        	var data = [{id: 1, month: 'January', currentSales: '0', royalties: '0'},
+		        	            {id: 2, month: 'February', currentSales: '0', royalties: '0'},
+		        	            {id: 3, month: 'March', currentSales: '0', royalties: '0'},
+		        	            {id: 4, month: 'April', currentSales: '0', royalties: '0'},
+		        	            {id: 5, month: 'May', currentSales: '0', royalties: '0'},
+		        	            {id: 6, month: 'June', currentSales: '0', royalties: '0'},
+		        	            {id: 7, month: 'July', currentSales: '0', royalties: '0'},
+		        	            {id: 8, month: 'August', currentSales: '0', royalties: '0'},
+		        	            {id: 9, month: 'September', currentSales: '0', royalties: '0'},
+		        	            {id: 10, month: 'October', currentSales: '0', royalties: '0'},
+		        	            {id: 11, month: 'November', currentSales: '0', royalties: '0'},
+		        	            {id: 12, month: 'December', currentSales: '0', royalties: '0'},];
+		        	updateAirportAccountingGrid(gridId, data);
 		        },
 		        populateStoreData: function(storeId){
 		        	clearGridSelections();
@@ -737,6 +822,30 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 			    		registry.byId('storeInfoTitlePaneStandBy').hide();
 			    	});
 		        },
+		        /*saveAirportSectionStoreInfoData: function(){
+		        	var storeData = {id: 5, store_address: dijit.byId('store-info-mailing-address').get('value'),
+		        				operating_hrs: dijit.byId('store-info-operating-hrs').get('value'),
+		        				store_contact_details: dijit.byId('store-info-phone-numbers').get('value'),
+		        				store_notes: dijit.byId('store-info-notes').get('value'),
+		        				property_info: dijit.byId('store-info-property-mgr-info').get('value'),
+		        				lease_info: dijit.byId('store-mortgage-info').get('value'),
+		        				lease_copy_loc: dijit.byId('store-info-mailing-address').get('value'),
+		        				updated_by: 0
+		        				//,imp_date: new Date()
+		        				};
+		        	registry.byId('storeInfoTitlePaneStandBy').show();
+		        	ajaxRequest.put('/service/store/5', {
+		        		headers: { "Content-Type":"application/json"}, handleAs: 'json', data: dojo.toJson(storeData), 
+		        		timeout: 10000}).then(function(storeUpdateResponse){
+		        		console.log('Store Infor update Response --> ' + storeUpdateResponse.success);
+		        		if(storeUpdateResponse.success){
+		        			fetchStoreData(registry.byId('hiddenStoreId').get('value'));
+		        		}
+		        	}, function(error){
+			    		console.log('Error occurred while Updating store data ' + error);
+			    		registry.byId('storeInfoTitlePaneStandBy').hide();
+			    	});
+		        },*/
 		        addRowInGrid: function(gridId){
 		        	addRow(gridId);
 		        },
