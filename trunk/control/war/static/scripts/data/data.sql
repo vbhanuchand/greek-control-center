@@ -408,3 +408,6 @@ update employee set position='Manager' where id=2;
 select employee0_.id as col_0_0_, role1_.role_tab as col_1_0_, employee0_.fname as col_2_0_, employee0_.lname as col_3_0_, role1_.store_id as col_4_0_ 
 from employee employee0_, employee_role role1_ where employee0_.id(+)=role1_.employee_id and employee0_.position='Manager' and 
 role1_.role_tab<>'store-ownr' order by employee0_.id, role1_.store_id, role1_.role_tab;
+
+desc employee_leaves;
+alter table employee_leaves modify reason varchar(200);

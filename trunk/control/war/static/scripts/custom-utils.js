@@ -93,13 +93,12 @@ function returnToManagerPane(){
 				this.node.style.display = 'block';
 				this.node.style.width = '99%';
 				this.node.style.height = '39%';
-				//domStyle.set(this.node, {display: "", width: "99%", height: "98%"});
-				//domStyle.set(dom.byId('mgrReviewFormDiv'), "display","");
 				dom.byId('mgrReviewFormDiv').style.display = 'block';
 			},
 		onEnd: function(){
-			//registry.byId('mgrYearlyDetailsRegion').resize();
-			//registry.byId('managerDetailsPaneContentPane').resize();
+			dom.byId('mgrDetailsTabContainer').style.display = '';
+			dijit.byId('mgrDetailsTabContainer').selectChild(dijit.byId('addReviewTab'));
+			dijit.byId('mgrDetailsTabContainer').selectChild(dijit.byId('mgrLeavesTab'));
 		}
 	});
 	otherFx.chain([wipeOut, wipeIn]).play();
@@ -1030,131 +1029,198 @@ function deleteItem(src, blobSrc, id){
 	var empLayout = require('controls/EmployeeLayoutController');
 	var accLayout = require('controls/AccountingLayoutController');
 	var invLayout = require('controls/InventoryLayoutController');
-	console.log('Deleting ', src, blobSrc, id);
-	switch(src){
-		case 'date':
-			registry.byId('storeInfoImpDatesStandBy').show();
-			ajaxRequest.get("/service/delete/date/" + id,{
-	    		handleAs: 'json'
-	    	}).then(function(deleteResponse){
-	    		if(deleteResponse.success){
-	    			storeLayout.refreshStoreDates(registry.byId('hiddenStoreId').get('value'));
-	    		}
-	    	}, function(error){
-	    		registry.byId('storeInfoImpDatesStandBy').hide();
-	    	});
-			break;
-		case 'blob':
-			switch(blobSrc){
-				case 'store-lease':
-					registry.byId('storeInfoLeaseDocumentsStandBy').show();
-					ajaxRequest.get("/service/delete/blob/" + id + '/store-lease',{
-			    		handleAs: 'json'
-			    	}).then(function(deleteResponse){
-			    		if(deleteResponse.success){
-			    			storeLayout.fetchStoreLeaseBlobs(registry.byId('hiddenStoreId').get('value'));
-			    		}
-			    	}, function(error){
-			    		registry.byId('storeInfoLeaseDocumentsStandBy').hide();
-			    	});
+	//console.log('Deleting ', src, blobSrc, id);
+	if(window.confirm("Confirm to Delete ?")){
+		switch(src){
+			case 'date':
+				registry.byId('storeInfoImpDatesStandBy').show();
+				ajaxRequest.get("/service/delete/date/" + id,{
+		    		handleAs: 'json'
+		    	}).then(function(deleteResponse){
+		    		if(deleteResponse.success){
+		    			storeLayout.refreshStoreDates(registry.byId('hiddenStoreId').get('value'));
+		    		}
+		    	}, function(error){
+		    		registry.byId('storeInfoImpDatesStandBy').hide();
+		    	});
 				break;
-				case 'mgrContract':
-					registry.byId('mgrContractStandBy').show();
-					ajaxRequest.get("/service/delete/blob/" + id + '/mgrContract',{
-			    		handleAs: 'json'
-			    	}).then(function(deleteResponse){
-			    		if(deleteResponse.success){
-			    			empLayout.fetchManagerContractBlobs(registry.byId('mgrList').get('value'));
-			    		}
-			    	}, function(error){
-			    		registry.byId('mgrContractStandBy').hide();
-			    	});
+			case 'blob':
+				switch(blobSrc){
+					case 'store-lease':
+						registry.byId('storeInfoLeaseDocumentsStandBy').show();
+						ajaxRequest.get("/service/delete/blob/" + id + '/store-lease',{
+				    		handleAs: 'json'
+				    	}).then(function(deleteResponse){
+				    		if(deleteResponse.success){
+				    			storeLayout.fetchStoreLeaseBlobs(registry.byId('hiddenStoreId').get('value'));
+				    		}
+				    	}, function(error){
+				    		registry.byId('storeInfoLeaseDocumentsStandBy').hide();
+				    	});
+					break;
+					case 'mgrContract':
+						registry.byId('mgrContractStandBy').show();
+						ajaxRequest.get("/service/delete/blob/" + id + '/mgrContract',{
+				    		handleAs: 'json'
+				    	}).then(function(deleteResponse){
+				    		if(deleteResponse.success){
+				    			empLayout.fetchManagerContractBlobs(registry.byId('mgrList').get('value'));
+				    		}
+				    	}, function(error){
+				    		registry.byId('mgrContractStandBy').hide();
+				    	});
+					break;
+					case 'accMonthlyDocument':
+						registry.byId('accMonthlyDocumentStandBy').show();
+						ajaxRequest.get("/service/delete/blob/" + id + '/accMonthlyDocument',{
+				    		handleAs: 'json'
+				    	}).then(function(deleteResponse){
+				    		if(deleteResponse.success){
+				    			accLayout.fetchAccountingMonthlyBlobs(registry.byId('hiddenAccountingRecordId').get('value'));
+				    		}
+				    	}, function(error){
+				    		registry.byId('accMonthlyDocumentStandBy').hide();
+				    	});
+					break;
+				}
 				break;
-				case 'accMonthlyDocument':
-					registry.byId('accMonthlyDocumentStandBy').show();
-					ajaxRequest.get("/service/delete/blob/" + id + '/accMonthlyDocument',{
-			    		handleAs: 'json'
-			    	}).then(function(deleteResponse){
-			    		if(deleteResponse.success){
-			    			accLayout.fetchAccountingMonthlyBlobs(registry.byId('hiddenAccountingRecordId').get('value'));
-			    		}
-			    	}, function(error){
-			    		registry.byId('accMonthlyDocumentStandBy').hide();
-			    	});
+			case 'store-tab':
+				var selectedChildId = registry.byId('storeInfoTabContainer').selectedChildWidget.id;
+				var standByNode = '', url = '';
+				switch(selectedChildId){
+					case 'storeAlarms':
+						standByNode = 'storeAlarmCodesGridStandBy';
+						url = "/service/delete/store/" + id + '/sa';
+						break;
+					case 'storeKeys':
+						standByNode = 'storeKeysGridStandBy';
+						url = "/service/delete/store/" + id + '/sk';
+						break;
+					case 'storeMaintenance':
+						standByNode = 'storeMaintenanceGridStandBy';
+						url = "/service/delete/store/" + id + '/sm';
+						break;
+				}
+				registry.byId(standByNode).show();
+				ajaxRequest.get(url,{
+		    		handleAs: 'json'
+		    	}).then(function(deleteResponse){
+		    		if(deleteResponse.success){
+		    			storeLayout.refreshPane();
+		    		}
+		    	}, function(error){
+		    		registry.byId(standByNode).hide();
+		    	});
 				break;
-			}
-			break;
-		case 'store-tab':
-			var selectedChildId = registry.byId('storeInfoTabContainer').selectedChildWidget.id;
-			var standByNode = '', url = '';
-			switch(selectedChildId){
-				case 'storeAlarms':
-					standByNode = 'storeAlarmCodesGridStandBy';
-					url = "/service/delete/store/" + id + '/sa';
-					break;
-				case 'storeKeys':
-					standByNode = 'storeKeysGridStandBy';
-					url = "/service/delete/store/" + id + '/sk';
-					break;
-				case 'storeMaintenance':
-					standByNode = 'storeMaintenanceGridStandBy';
-					url = "/service/delete/store/" + id + '/sm';
-					break;
-			}
-			registry.byId(standByNode).show();
-			ajaxRequest.get(url,{
-	    		handleAs: 'json'
-	    	}).then(function(deleteResponse){
-	    		if(deleteResponse.success){
-	    			storeLayout.refreshPane();
-	    		}
-	    	}, function(error){
-	    		registry.byId(standByNode).hide();
-	    	});
-			break;
-		case 'mgr-leaves':
-			var standByNode = 'mgrLeavesGridStandBy', url = '/service/delete/employee/leaves/' + id;
-			url = "/service/delete/employee/leaves/" + id;
-			registry.byId(standByNode).show();
-			ajaxRequest.get(url,{
-	    		handleAs: 'json'
-	    	}).then(function(deleteResponse){
-	    		if(deleteResponse.success){
-	    			empLayout.fetchMgrLeavesData(registry.byId('mgrList').get('value'));
-	    		}
-	    	}, function(error){
-	    		registry.byId(standByNode).hide();
-	    	});
-			break;
-		case 'invoice-item':
-			var standByNode = 'inventoryInvoiceDetailsGridStandBy', url = '/service/delete/invoice-details/' + id;
-			registry.byId(standByNode).show();
-			ajaxRequest.get(url,{
-	    		handleAs: 'json'
-	    	}).then(function(deleteResponse){
-	    		if(deleteResponse.success){
-	    			invLayout.refreshSelectedInvoiceDetails();
-	    		}
-	    	}, function(error){
-	    		registry.byId(standByNode).hide();
-	    	});
-			break;
-		case 'stock-item':
-			var standByNode = 'inventoryInvoiceDetailsGridStandBy', url = '/service/delete/stock-item/' + id;
-			registry.byId(standByNode).show();
-			ajaxRequest.get(url,{
-	    		handleAs: 'json'
-	    	}).then(function(deleteResponse){
-	    		if(deleteResponse.success){
-	    			invLayout.reset();
-	    		}
-	    	}, function(error){
-	    		registry.byId(standByNode).hide();
-	    	});
-			break;
-		default:
-			break;
-	
+			case 'mgr-leaves':
+				var standByNode = 'mgrLeavesGridStandBy', url = '/service/delete/employee/leaves/' + id;
+				url = "/service/delete/employee/leaves/" + id;
+				registry.byId(standByNode).show();
+				ajaxRequest.get(url,{
+		    		handleAs: 'json'
+		    	}).then(function(deleteResponse){
+		    		if(deleteResponse.success){
+		    			empLayout.fetchMgrLeavesData(registry.byId('mgrList').get('value'));
+		    		}
+		    	}, function(error){
+		    		registry.byId(standByNode).hide();
+		    	});
+				break;
+			case 'invoice-item':
+				var standByNode = 'inventoryInvoiceDetailsGridStandBy', url = '/service/delete/invoice-details/' + id;
+				registry.byId(standByNode).show();
+				ajaxRequest.get(url,{
+		    		handleAs: 'json'
+		    	}).then(function(deleteResponse){
+		    		if(deleteResponse.success){
+		    			invLayout.refreshSelectedInvoiceDetails();
+		    		}
+		    	}, function(error){
+		    		registry.byId(standByNode).hide();
+		    	});
+				break;
+			case 'invoice':
+				var standByNode = 'inventoryInvoicesGridStandBy', url = '/service/delete/invoice/' + id;
+				registry.byId(standByNode).show();
+				ajaxRequest.get(url,{
+		    		handleAs: 'json'
+		    	}).then(function(deleteResponse){
+		    		if(deleteResponse.success){
+		    			invLayout.resetInvoiceDetails();
+		    		}
+		    	}, function(error){
+		    		registry.byId(standByNode).hide();
+		    	});
+				break;
+			case 'stock-item':
+				var standByNode = 'inventoryInvoiceDetailsGridStandBy', url = '/service/delete/stock-item/' + id;
+				registry.byId(standByNode).show();
+				ajaxRequest.get(url,{
+		    		handleAs: 'json'
+		    	}).then(function(deleteResponse){
+		    		if(deleteResponse.success){
+		    			invLayout.reset();
+		    		}
+		    	}, function(error){
+		    		registry.byId(standByNode).hide();
+		    	});
+				break;
+			case 'emp-salary':
+				var standByNode = 'employeeSalaryDetailsGridStandBy', url = '/service/delete/employee/emp-salary/' + id;
+				registry.byId(standByNode).show();
+				ajaxRequest.get(url,{
+		    		handleAs: 'json'
+		    	}).then(function(deleteResponse){
+		    		if(deleteResponse.success){
+		    			empLayout.populateEmployeeDetails();
+		    		}
+		    	}, function(error){
+		    		registry.byId(standByNode).hide();
+		    	});
+				break;
+			case 'emp-discipline':
+				var standByNode = 'employeeDisciplineGridStandBy', url = '/service/delete/employee/emp-discipline/' + id;
+				registry.byId(standByNode).show();
+				ajaxRequest.get(url,{
+		    		handleAs: 'json'
+		    	}).then(function(deleteResponse){
+		    		if(deleteResponse.success){
+		    			empLayout.populateEmployeeDetails();
+		    		}
+		    	}, function(error){
+		    		registry.byId(standByNode).hide();
+		    	});
+				break;
+			case 'emp-good':
+				var standByNode = 'employeeDoingGoodGridStandBy', url = '/service/delete/employee/emp-good/' + id;
+				registry.byId(standByNode).show();
+				ajaxRequest.get(url,{
+		    		handleAs: 'json'
+		    	}).then(function(deleteResponse){
+		    		if(deleteResponse.success){
+		    			empLayout.populateEmployeeDetails();
+		    		}
+		    	}, function(error){
+		    		registry.byId(standByNode).hide();
+		    	});
+				break;
+			case 'emp-missed':
+				var standByNode = 'employeeLeavesGridStandBy', url = '/service/delete/employee/emp-missed/' + id;
+				registry.byId(standByNode).show();
+				ajaxRequest.get(url,{
+		    		handleAs: 'json'
+		    	}).then(function(deleteResponse){
+		    		if(deleteResponse.success){
+		    			empLayout.populateEmployeeDetails();
+		    		}
+		    	}, function(error){
+		    		registry.byId(standByNode).hide();
+		    	});
+				break;
+			default:
+				break;
+		
+		}
 	}
 }
 
@@ -1292,6 +1358,29 @@ function printInvoice(gridId, title){
 	
 }
 
+function printManagerReview(){
+	var registry = require('dijit/registry');
+	var baseArray = require('dojo/_base/array');
+	var dom = require('dojo/dom');
+	var finalHTML = '';
+	finalHTML += '<html lang="en-us">';
+	finalHTML += '<head>';
+	finalHTML += '<link rel="stylesheet" href="resources/styles/styles.css"/>';
+	finalHTML += '</head>';
+	finalHTML += "<body class='dbootstrap' style='width: 100%; height: 100%;color: #000000; background: #ffffff; font-family: \"Times New Roman\", Times, serif; font-size: 12pt;'>";
+	var employeeName = registry.byId('mgrList').store.fetch({query: {id: registry.byId('mgrList').get('value')}, onComplete: function(items, request){
+		if(items.length > 0){
+			finalHTML += '<div align="center"><span style="float: left; padding-left: 10px; padding-right: 10px; border 1px; background-color: #ff0000; color: #ffffff">' + registry.byId('hiddenSelectedYear').get('value') + '</span><span style="padding-left: 2px; padding-right: 2px; border 1px; font-weight: bold">' + items[0].label + '</span></div>';
+			finalHTML += dom.byId('printManagerReviewDiv').innerHTML;
+			finalHTML += dom.byId('mgrUnusedPersonalDaysDetailsDiv').innerHTML;
+			var w = window.open("about:blank");
+			w.document.write(finalHTML);
+			w.document.close();
+			w.print(); 
+		}
+	}});
+	
+}
 
 function refreshCalendarForSelectedWeek(){
 	var laborLayout = require('controls/LaborLayoutController');

@@ -78,6 +78,31 @@ public class DeleteServiceController {
 	}
 	
 	@Transactional
+	@RequestMapping(value = "/service/delete/employee/{table}/{id}", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public SingleModelResponse<BaseModel> deleteManagerLeaves(@PathVariable String table, @PathVariable int id) {
+		String hql = "";
+		switch(table){
+			case "emp-salary":
+				hql = "delete from EmployeeSalary where id=:id";
+				break;
+			case "emp-discipline":
+				hql = "delete from EmployeeDiscipline where id=:id";
+				break;
+			case "emp-good":
+				hql = "delete from EmployeeDiscipline where id=:id";
+				break;
+			case "emp-missed":
+				hql = "delete from EmployeeLeaves where id=:id";
+				break;
+		}
+		
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setParameter("id", id);
+		return new SingleModelResponse<BaseModel>(query.executeUpdate() == 1, null);
+	}
+	
+	@Transactional
 	@RequestMapping(value = "/service/delete/invoice-details/{id}", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public SingleModelResponse<BaseModel> deleteInvoiceItem(@PathVariable int id) {
@@ -85,6 +110,23 @@ public class DeleteServiceController {
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
 		query.setParameter("id", id);
 		return new SingleModelResponse<BaseModel>(query.executeUpdate() == 1, null);
+	}
+	
+	@Transactional
+	@RequestMapping(value = "/service/delete/invoice/{id}", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public SingleModelResponse<BaseModel> deleteInvoice(@PathVariable int id) {
+		boolean returnVal = false;
+		String hql = "delete from StoreInvoice where id=:id";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setParameter("id", id);
+		returnVal = (query.executeUpdate() == 1);
+		
+		String hql1 = "delete from StoreInvoiceDetails where invoiceId=:invoiceId";
+		Query query1 = sessionFactory.getCurrentSession().createQuery(hql1);
+		query1.setParameter("invoiceId", id);
+		returnVal = returnVal && (query1.executeUpdate() >= 0);
+		return new SingleModelResponse<BaseModel>(returnVal, null);
 	}
 	
 	@Transactional

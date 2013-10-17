@@ -224,7 +224,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 		    },
 		    attachGridEvents = function(gridId){
 		    	registry.byId(gridId).on("CellClick", function(evt){
-		    		if(((evt.grid.get('id') != 'mgrLeavesGrid') && (evt.cellIndex == 0)) || ((evt.grid.get('id') == 'mgrLeavesGrid') && (evt.cellIndex == 1))){
+		    		if(((evt.grid.get('id') != 'mgrLeavesGrid') && (evt.cellIndex == 1)) || ((evt.grid.get('id') == 'mgrLeavesGrid') && (evt.cellIndex == 1))){
 		    			var standByWidgetId = evt.grid.get('id') + 'StandBy';
 		    			registry.byId(standByWidgetId).show();
 		    			var grid = evt.grid, serviceURL= evt.grid.getItem(evt.rowIndex)._self, addOrUpdate = evt.grid.getItem(evt.rowIndex).post;
@@ -335,6 +335,18 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 		    createDeleteLink = function(id, rowIndex){
 		    	return '<span style="text-align: center;"><a href="javascript: deleteItem(\'mgr-leaves\', \'\', ' + id + ');">Delete</a></span>';
 		    },
+		    createSalaryDeleteLink = function(id, rowIndex){
+		    	return '<span style="text-align: center;"><a href="javascript: deleteItem(\'emp-salary\', \'\', ' + id + ');">Delete</a></span>';
+		    },
+		    createDisciplineDeleteLink = function(id, rowIndex){
+		    	return '<span style="text-align: center;"><a href="javascript: deleteItem(\'emp-discipline\', \'\', ' + id + ');">Delete</a></span>';
+		    },
+		    createDoingGoodDeleteLink = function(id, rowIndex){
+		    	return '<span style="text-align: center;"><a href="javascript: deleteItem(\'emp-good\', \'\', ' + id + ');">Delete</a></span>';
+		    },
+		    createMissedShiftsDeleteLink = function(id, rowIndex){
+		    	return '<span style="text-align: center;"><a href="javascript: deleteItem(\'emp-missed\', \'\', ' + id + ');">Delete</a></span>';
+		    },
 		    createShowDetailsLink = function(id){
 		    	return '<span style="text-align: center;"><a href="#">View</a></span>';
 		    },
@@ -430,7 +442,8 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 											store: gridDataStore,
 											query: { id: "*" },
 											structure: [{defaultCell: { width: "20%", type: dojox.grid.cells._Widget, styles: 'text-align: left;', noresize: true, editable: false },
-											            cells: [{ name: "<b>Update</b>", field: 'id', width: "8%", noresize: true, formatter: createAddUpdateLink},
+											            cells: [{ name: "<b>Delete</b>", field: 'id', width: "8%", noresize: true, formatter: createSalaryDeleteLink, styles: 'text-align: center;'},
+											            { name: "<b>Update</b>", field: 'id', width: "8%", noresize: true, formatter: createAddUpdateLink, styles: 'text-align: center;'},
 											            { name: "<b>Date Of Increment</b>", field: "incrementDate", width: "20%", noresize: true, editable: true, 
 												        	constraint:{required: true}, widgetProps: {validator: validateDatePattern, 
 												        	promptMessage: 'Provide date in MM/DD/YYYY', missingMessage: 'Please provide date in MM/DD/YYYY', 
@@ -494,8 +507,9 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 											store: gridDataStore,
 											query: { id: "*" },
 											structure: [{defaultCell: { width: "20%", type: dojox.grid.cells._Widget, styles: 'text-align: left;', noresize: true, editable: false },
-											            cells: [{ name: "<b>Update</b>", field: "id", width: "18%", noresize: true, formatter: createAddUpdateLink},
-												{ name: "<b>Date</b>", field: "date", width: "22%", noresize: true, editable: true, 
+											            cells: [{ name: "<b>Delete</b>", field: 'id', width: "9%", noresize: true, formatter: createDisciplineDeleteLink, styles: 'text-align: center;'},
+											    { name: "<b>Update</b>", field: "id", width: "9%", noresize: true, formatter: createAddUpdateLink, styles: 'text-align: center;'},
+												{ name: "<b>Date</b>", field: "date", width: "20%", noresize: true, editable: true, 
 										        	constraint:{required: true}, widgetProps: {validator: validateDatePattern, 
 										        	promptMessage: 'Provide date in MM/DD/YYYY', missingMessage: 'Please provide date in MM/DD/YYYY', 
 										        	invalidMessage: 'Date format should be in MM/DD/YYYY'}, widgetClass: ValidationTextBox },
@@ -543,8 +557,9 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 											store: gridDataStore,
 											query: { id: "*" },
 											structure: [{defaultCell: { width: "20%", type: dojox.grid.cells._Widget, styles: 'text-align: left;', noresize: true, editable: false },
-											            cells: [{ name: "<b>Update</b>", field: "id", width: "18%", noresize: true, formatter: createAddUpdateLink},
-														{ name: "<b>Date</b>", field: "date", width: "22%", noresize: true, editable: true, 
+											            cells: [{ name: "<b>Delete</b>", field: "id", width: "9%", noresize: true, formatter: createDoingGoodDeleteLink, styles: 'text-align: center;'},
+											            { name: "<b>Update</b>", field: "id", width: "9%", noresize: true, formatter: createAddUpdateLink, styles: 'text-align: center;'},
+														{ name: "<b>Date</b>", field: "date", width: "20%", noresize: true, editable: true, 
 												        	constraint:{required: true}, widgetProps: {validator: validateDatePattern, 
 												        	promptMessage: 'Provide date in MM/DD/YYYY', missingMessage: 'Please provide date in MM/DD/YYYY', 
 												        	invalidMessage: 'Date format should be in MM/DD/YYYY'}, widgetClass: ValidationTextBox },
@@ -592,15 +607,16 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 											store: gridDataStore,
 											query: { id: "*" },
 											structure: [{defaultCell: { width: "20%", type: dojox.grid.cells._Widget, styles: 'text-align: left;', noresize: true, editable: false },
-											           cells: [{ name: "Update", field: "id", width: "10%", noresize: true, formatter: createAddUpdateLink},
+											           cells: [{ name: "<b>Delete</b>", field: "id", width: "8%", noresize: true, formatter: createMissedShiftsDeleteLink, styles: 'text-align: center;'},
+											            { name: "Update", field: "id", width: "10%", noresize: true, formatter: createAddUpdateLink, styles: 'text-align: center;'},
 														{ name: "<b>Date</b>", field: "date", width: "10%", noresize: true, editable: true, 
 											        	   constraint:{required: true}, widgetProps: {validator: validateDatePattern, 
 											        		   promptMessage: 'Provide date in MM/DD/YYYY', missingMessage: 'Please provide date in MM/DD/YYYY', 
 											        		   invalidMessage: 'Date format should be in MM/DD/YYYY'}, 
 											        		   widgetClass: ValidationTextBox},
-														{ name: "<b>Reason</b>", field: "reason", width: "39%", noresize: true, editable: true, 
-											        	   			constraint:{required: true}, widgetProps: {maxLength: 100, 
-											        	   				promptMessage: 'Provide Reason in not more than 100 characters', 
+														{ name: "<b>Reason</b>", field: "reason", width: "35%", noresize: true, editable: true, 
+											        	   			constraint:{required: true}, widgetProps: {maxLength: 200, 
+											        	   				promptMessage: 'Provide Reason in not more than 200 characters', 
 											        	   				missingMessage: 'Please provide Reason for Leave' }, widgetClass: ValidationTextBox},
 											        	{ name: "<b>Excused/Not?</b>", field: "excused", width: "35%", noresize: true, editable: true, 
 													        	   			constraint:{required: true}, widgetProps: {maxLength: 100, 
@@ -1135,7 +1151,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 			    	});
 		        },
 		        populateEmployeesSelectWidget: function(storeId){
-		        	var array = [{id: 0, value: 0, label: '&nbsp;<i class="icon-warning-sign"></i>&nbsp;-Name- (pos)&nbsp;<i class="icon-warning-sign"></i>'}];
+		        	var array = [{id: 0, value: 0, label: '<font color= "#CBCB50">&nbsp;<i class="icon-warning-sign"></i>&nbsp;-Name- (pos)&nbsp;<i class="icon-warning-sign"></i></font>'}];
 		        	var storeItem = {};
 		        	var standByWidget = 'calendarEntryTitlePaneStandBy';
 		        	registry.byId(standByWidget).show();
@@ -1147,7 +1163,8 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 			    				storeItem = {};
 			    				storeItem.id = (item.id+'');
 			    				storeItem.value = (item.id+'');
-			    				storeItem.label = (item.active ? '<i class="icon-thumbs-up"></i>' : '<i class="icon-exclamation-sign"></i>') + '&nbsp;' + '&nbsp;' +item.fname + '(' + item.position + ')&nbsp;' + (item.active ? '<i class="icon-thumbs-up"></i>' : '<i class="icon-exclamation-sign"></i>');
+			    				var storeLabel = 
+			    				storeItem.label = (item.active ? '<font color="#29BA05"><i class="icon-thumbs-up"></i>' : '<font color="#DB1C29"><i class="icon-exclamation-sign"></i>') + '&nbsp;' + '&nbsp;' + item.fname + '(' + item.position + ')&nbsp;' + (item.active ? '<i class="icon-thumbs-up"></i>' : '<i class="icon-exclamation-sign"></i>') + '</font>';
 			    				array.push(lang.mixin(storeItem, item));
 			    			});
 			    			var store = new Memory({idProperty: "id", data:array});
@@ -1371,6 +1388,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 			    		onEnd: function(node){
 			    			//registry.byId('mgrYearlyDetailsRegion').resize();
 		    				//registry.byId('managerDetailsPaneContentPane').resize();
+			    			dom.byId('mgrDetailsTabContainer').style.display = 'none';
 			    		}
 			    	});
 			    	otherFx.chain([wipeOut, wipeIn]).play();

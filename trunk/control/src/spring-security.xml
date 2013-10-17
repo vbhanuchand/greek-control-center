@@ -30,16 +30,17 @@
  				authorities-by-username-query="select u.username, ur.role_tab from employee u, employee_role ur where u.id = ur.employee_id and u.username =?"/> 
 		</authentication-provider>
 	</authentication-manager> -->
-	
+	<beans:bean id="ajaxTimeoutRedirectFilter" class="com.services.core.security.AjaxTimeoutRedirectFilter">
+	    <beans:property name="customSessionExpiredErrorCode" value="901"/>
+	</beans:bean>
 	<http auto-config="false" use-expressions="true" entry-point-ref="loginUrlAuthenticationEntryPoint">
 		<intercept-url pattern="/login" access="permitAll" />
 		<intercept-url pattern="/logout" access="permitAll" />
 		<intercept-url pattern="/**" access="isAuthenticated()" />
- 
-		<access-denied-handler error-page="/denied" />
-		<logout invalidate-session="true" logout-success-url="/logout/success" logout-url="/logout" />
- 
+ 		<access-denied-handler error-page="/login" />
+		<logout invalidate-session="true" logout-success-url="/login" logout-url="/logout"/>
 		<custom-filter ref="authenticationFilter" position="FORM_LOGIN_FILTER"/>
+		<custom-filter ref="ajaxTimeoutRedirectFilter" after="EXCEPTION_TRANSLATION_FILTER"/>
 	</http>
 	
 	<beans:bean id="loginUrlAuthenticationEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">

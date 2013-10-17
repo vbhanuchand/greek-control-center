@@ -426,16 +426,16 @@
 						<div style="text-align: left; display: inline-block;"><!-- 
 							--><span style="text-align: left;">&nbsp;&nbsp;<i class="icon-chevron-left"></i><i class="icon-chevron-left"></i>&nbsp;&nbsp;<a href="javascript: returnToManagerPane();">Return</a></span></div><!-- 
 						--><div style="text-align: left; display: inline-block; padding-left: 5px;"><button id="yearButton" data-dojo-type="dijit/form/Button" data-dojo-props="'class':'danger', disabled:true" disabled></button></div><!-- 
-						 --><div style="text-align: right; display: inline-block; float: right; padding-right: 10px;"><button data-dojo-type="dijit/form/Button" data-dojo-props="'class':'primary'">Print</button></div><!-- 
-						  --><div align="center" style="display:block; padding: 2px;">
-							<table style="width: 99%; height: 99%;" class='dateTable' id="mgrYearlyReviewsQuarterTable">
+						 --><div style="text-align: right; display: inline-block; float: right; padding-right: 10px;"><a href="javascript: printManagerReview();">Print Review</a></div><!-- 
+						  --><div align="center" style="display:block; padding: 2px;" id="printManagerReviewDiv">
+							<table style="width: 99%;" class='dateTable' id="mgrYearlyReviewsQuarterTable">
 								<tr><th width="10%">Quarter #</th><th width="45%">Notes</th><th width="10%">Bonus</th><th width="35%">End Year Payout</th></tr>
 							</table>
 						</div>
 					</div>
 					<hr class="spacer">
 					<div id="mgrUnusedPersonalDaysDetailsDiv" align="center" style="display: none; height: 4%; vertical-align: bottom;">
-						<table style="width: 99%; height: 99%;" class='dateTable' id="mgrUnusedPersonalDaysDetailsTable"></table>
+						<table style="width: 99%;" class='dateTable' id="mgrUnusedPersonalDaysDetailsTable"></table>
 					</div>
 				</div>
 				<div id="managerDetailsPane" style="display: block; width: 99%; height: 39%;" data-dojo-type="dijit/layout/ContentPane">
@@ -467,7 +467,7 @@
 					<div id="mgrLeavesTab" data-dojo-type="dijit/layout/ContentPane" class="nihilo" data-dojo-props="title:'Personal/Sick Days', style:'height:99%;width:99%;', selected:true">
 						<div id="mgrLeavesGrid" style="width: 99%; height: 98%;"></div>
 					</div>
-					<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'Add/Edit Review', style:'height:99%;width:99%;', selected:false">
+					<div id="addReviewTab" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'Add/Edit Review', style:'height:99%;width:99%; overflow: auto;', selected:false">
 						<div data-dojo-type="dijit/form/Form" id="quarterlyReviewForm" data-dojo-id="quarterlyReviewForm" encType="multipart/form-data">
 							<div id="mgrReviewFormDiv" align="left" style="font-weight: normal; width: 50%; font-style: normal; padding-left: 5px;">
 								<div style="padding-top: 5px; width: 100%" align="center">
@@ -560,7 +560,7 @@
 					<div id="empDisciplineDetails" data-dojo-type="dijit/layout/ContentPane" class="nihilo" data-dojo-props="title:'Performance', style:'margin-top:1px;height:100%;width:100%;'">
 						<table style="width: 100%;height: 100%" class="bordered">
 							<tr>
-								<th>Disciplinary Details&nbsp;<img align='top' src='resources/images/add-icon.png' onclick='javascript: addEmployeeDisciplineTabRecord(event);'/>&nbsp;</th>
+								<th>Performance Details&nbsp;<img align='top' src='resources/images/add-icon.png' onclick='javascript: addEmployeeDisciplineTabRecord(event);'/>&nbsp;</th>
 								<th>Doing Good Section&nbsp;<img align='top' src='resources/images/add-icon.png' onclick='javascript: addEmployeeDoingGoodTabRecord(event);'/>&nbsp;</th>
 							</tr>
 							<tr style="height: 100%">
