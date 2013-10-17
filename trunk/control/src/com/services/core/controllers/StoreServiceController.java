@@ -230,8 +230,13 @@ public class StoreServiceController {
 			throws IOException {
 		SingleModelResponse<BaseModel> model = new SingleModelResponse<BaseModel>(true, null);
 		Map<String, String> map = new HashMap<String, String>();
-		for(String year: dataService.getStoreAccountYears(storeId))
+		List<String> yearsList = dataService.getStoreAccountYears(storeId);
+		for(String year: yearsList)
 			map.put(year, year);
+		String currentYear = Utilities.getCurrentYear();
+		if(!(yearsList.contains(currentYear))){
+			map.put(currentYear, currentYear);
+		}
 		model.setCustomMessages(map);
 		return model;
 	}
@@ -240,7 +245,12 @@ public class StoreServiceController {
 	@ResponseBody
 	public MultipleModelResponse<StoreAccountWrapper> getStoreAccountsByYear(@PathVariable int storeId, @PathVariable int year)
 			throws IOException {
-		return new MultipleModelResponse<StoreAccountWrapper>(true, dataService.getStoreAccountsByYear(storeId, year));
+		List<StoreAccountWrapper> yearList = dataService.getStoreAccountsByYear(storeId, year);
+		for(StoreAccountWrapper record:yearList){
+			record.set_self("/service/store/" + storeId + "/accounting/year/" + year + "/quarter/" + record.getQuarter());
+			record.setPost(false);
+		}
+		return new MultipleModelResponse<StoreAccountWrapper>(true, yearList);
 	}
 	
 	@RequestMapping(value = "/service/store/{storeId}/accounting/year/{year}/quarter/{quarter}", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
