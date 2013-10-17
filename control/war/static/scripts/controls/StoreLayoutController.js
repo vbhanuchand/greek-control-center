@@ -13,6 +13,7 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 			
 			var storeInfoTable = null, storeAlarmCodesGrid = null, storeKeysGrid = null, storeMaintenanceGrid = null, storeLaborGrid = null, storeHealthInspectionGrid=null, templatesGrid=null,
 			randomGen = new randomNumber(), loginQuery = djConfig.loginRequest || {}, blankArray=[],
+			MONTH_NAMES = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
 			
 			startup = function() {
 				updateStoreAlarmsGrid(blankArray);
@@ -178,6 +179,77 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 		    			}
 		    		}
 		    	}, true);
+		    },
+		    attachGridEventsForAirportSection = function(gridId){
+		    	registry.byId(gridId).on("CellClick", function(evt){
+		    		if(evt.cellIndex == 0){
+		    			var standByWidgetId = evt.grid.get('id') + 'StandBy';
+		    			registry.byId(standByWidgetId).show();
+		    			var grid = evt.grid, serviceURL= evt.grid.getItem(evt.rowIndex)._self, addOrUpdate = evt.grid.getItem(evt.rowIndex).post+'';
+		    			var selectedItems = grid.selection.getSelected(), editedItem = '';
+		    			var rowValid = true;
+		    			baseArray.forEach(evt.grid.layout.cells, function(cell){
+		    				rowValid = rowValid && validateCell(evt.grid.getCell(cell.index).widget);
+			    		});
+		    			var jsonRowObject = {};
+		    			if(rowValid){
+		    				baseArray.forEach(selectedItems, function(selectedItem) {
+					    		jsonRowObject['quarter'] = parseInt(grid.store.getValues(selectedItem, "quarter")[0]);
+					    		jsonRowObject['id'] = ((grid.store.getValues(selectedItem, "id")[0]+'').indexOf('_new_') > 0) ? 0 : parseInt(grid.store.getValues(selectedItem, "id")[0]);
+					    		try{jsonRowObject['totalProfits'] = parseFloat(grid.store.getValues(selectedItem, "totalProfits")[0]).toFixed(2);}catch(e){jsonRowObject['totalProfits'] = 0.00;}
+					    		try{jsonRowObject['totalSales'] = parseFloat(grid.store.getValues(selectedItem, "totalSales")[0]).toFixed(2);}catch(e){jsonRowObject['totalSales'] = 0.00;}
+					    		jsonRowObject['year'] = parseInt(grid.store.getValues(selectedItem, "year")[0]);
+					    		jsonRowObject['storeId'] = 5;
+					    		jsonRowObject['labor'] = 0.00;
+					    		jsonRowObject['foodCost'] = 0.00;
+					    		jsonRowObject['advertisement'] = 0.00;
+					    		jsonRowObject['misc'] = 0.00;
+					    		jsonRowObject['profit'] = 0.00;
+					    		jsonRowObject['totalOpExp'] = 0.00;
+					    		jsonRowObject['active'] = true;
+					    		jsonRowObject['updatedBy'] = 0;
+					    	});
+			    			
+			    			if(addOrUpdate == 'true'){
+				    			ajaxRequest.post(serviceURL, {
+				        		headers: { "Content-Type":"application/json"}, 
+				        		handleAs: 'json', data: json.stringify(jsonRowObject), timeout: 10000 
+				        			}).then(function(storeUpdateResponse){
+				        				if(storeUpdateResponse.success){
+					        				console.log('Update Success ');
+					        				dom.byId('messages').innerHTML = 'Add Successful';
+					        				fetchAirportSectionYearDetails(registry.byId('hiddenSelectedYear').get('value'), gridId);
+					        				//refreshSelectedPane();
+					        				registry.byId(standByWidgetId).hide();
+					        			}
+				        		}, function(error){
+				        			console.log('Error while updating --> ' + error);
+				        			dom.byId('messages').innerHTML = 'Error while Adding --> ' + error;
+				        			registry.byId(standByWidgetId).hide();
+				        		});
+					    	} else {
+					    		ajaxRequest.put(serviceURL, {
+				        		headers: { "Content-Type":"application/json"}, 
+				        		handleAs: 'json', data: json.stringify(jsonRowObject), timeout: 10000 
+				        			}).then(function(storeUpdateResponse){
+				        				if(storeUpdateResponse.success){
+				        					fetchAirportSectionYearDetails(registry.byId('hiddenSelectedYear').get('value'), gridId);
+					        				//console.log('Update Success ');
+					        				dom.byId('messages').innerHTML = 'Update Success';
+					        				//refreshSelectedPane();
+					        				registry.byId(standByWidgetId).hide();
+				        				}
+				        		}, function(error){
+				        			console.log('Error while updating --> ' + error);
+				        			dom.byId('messages').innerHTML = 'Error while updating --> ' + error;
+				        			registry.byId(standByWidgetId).hide();
+				        		});
+					    	}
+		    			} else {
+		    				registry.byId(standByWidgetId).hide();
+		    			}
+		    		}
+		    	});
 		    },
 		    createAddUpdateLink = function(values, rowIndex){
 		    	if(values[1] === '__new__')
@@ -741,18 +813,22 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 					return '<span><i class="icon-save"></i></span>';
 				};
 				
+				var formatMonth = function(monthId){
+					return MONTH_NAMES[monthId];
+				};
+				
 				if(!dijit.byId(gridId)){
 					airportAccountingGrid = new EnhancedGrid({
 								store: gridDataStore,
 								query: { id: "*" },
 								structure: [{defaultCell: { width: "20%", type: dojox.grid.cells._Widget, styles: 'padding-left: 2px; text-align: left;', noresize: true, editable: false },
-									cells: [{ name: "<span><i class='icon-save'></i></span>", field: "id", width: "5%", noresize: true, styles: 'text-align: center;', formatter: formatUpdate },
-									        { name: "<b>Month</b>", field: "month", width: "10%", noresize: true, styles: 'text-align: left; padding-left: 10px;'},
-									        { name: "<b>Current Sales</b>", field: "currentSales", width: "40%", noresize: true, editable: true, 
+									cells: [{ name: "<span><i class='icon-save'></i></span>", field: "id", width: "10%", noresize: true, styles: 'text-align: center;', formatter: formatUpdate },
+									        { name: "<b>Month</b>", field: "quarter", width: "30%", noresize: true, styles: 'text-align: left; padding-left: 10px;', formatter: formatMonth},
+									        { name: "<b>Current Sales</b>", field: "totalSales", width: "30%", noresize: true, editable: true, 
 									        	constraint:{required: false}, widgetProps: { promptMessage: 'Provide Current Sales', 
 									        	missingMessage: 'Please enter only Numbers', invalidMessage: 'Accepts only Numerics'}, 
 									        	widgetClass: NumberTextBox },
-									        { name: "<b>Royalties</b>", field: "royalties", width: "40%", noresize: true, editable: true, 
+									        { name: "<b>Royalties</b>", field: "totalProfits", width: "25%", noresize: true, editable: true, 
 										        constraint:{required: false}, widgetProps: { promptMessage: 'Provide Royalties', 
 										        missingMessage: 'Please enter only Numbers', invalidMessage: 'Accepts only Numerics'}, 
 										        widgetClass: NumberTextBox }
@@ -768,27 +844,96 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 								selectionMode: "single"
 								}, gridId);
 					airportAccountingGrid.startup();
+					attachGridEventsForAirportSection(gridId);
 				} else dijit.byId(gridId).setStore(gridDataStore);
+		    },
+		    fetchAirportSectionYears = function(storeId, gridId){
+		    	registry.byId(gridId + 'StandBy').show();
+		    	ajaxRequest.get("/service/store/" + storeId + "/accounting/years",{
+		    		handleAs: 'json'
+		    	}).then(function(yearsResponse){
+		    		if(yearsResponse.success){
+		    			populateAirportSectionYears('airportSectionYearlyTable', gridId, yearsResponse.customMessages);
+		    			registry.byId(gridId + 'StandBy').hide();
+		    		}
+		    	}, function(error){
+		    		console.log('Error occurred while fetching Airport Accounting data ' + error);
+		    		registry.byId(gridId + 'StandBy').hide();
+		    	});
+		    },
+		    populateAirportSectionYears = function(domNode, gridDomId, yearlyReviewsModel){
+		    	var yearlyList = dom.byId(domNode);
+		    	var selectedYear = registry.byId('hiddenSelectedYear').get('value');
+		    	domConstruct.empty(yearlyList);
+		    	var tableTR;
+		    	var keys = dojoFunctional.keys(yearlyReviewsModel);
+		    	baseArray.forEach(keys, function(yearRecord){
+		    		tableTR = domConstruct.create("tr");
+		    		var xtraStyle = '';
+		    		if(selectedYear == yearRecord)
+		    			xtraStyle = "style='color: #fff'";
+		    		var td = domConstruct.create("td", { innerHTML: "<a " + xtraStyle + " href='javascript: fetchAirportAccountingYearlyDetails(\"" + yearRecord + "\",\"" + gridDomId + "\");'>" + yearRecord + "</a>"}, tableTR);
+		    		domStyle.set(td, 'text-align', 'center');
+		    		if(selectedYear == yearRecord){
+		    			domStyle.set(td, 'background-color', '#a00');
+		    		}
+		    		else {
+		    			domStyle.set(td, 'background-color', '#fff');
+		    		}
+		    		tableTR.appendChild(td);
+		    		yearlyList.appendChild(tableTR);
+		    	});
+		    	
+		    },
+		    fetchAirportSectionYearDetails = function(yearNum, gridId){
+		    	var standByWidget = registry.byId(gridId + 'StandBy');
+		    	standByWidget.show();
+		    	ajaxRequest.get('/service/store/' + registry.byId('hiddenStoreId').get('value') + '/accounting/year/' + yearNum,
+		    			{ handleAs: 'json' }).then(function(detailsResponse){
+		    		if(detailsResponse.success && (detailsResponse.models.length > 0)){
+		    			var responseModels = detailsResponse.models;
+		    			var returnData = [];
+		    			var monthsMap = {};
+		    			baseArray.forEach(responseModels, function(item){
+		    				monthsMap[item.quarter] = item;
+		    			});
+		    			for(var i=1; i<=12; i++){
+		    				if(monthsMap[i]){
+		    					returnData.push(monthsMap[i]);
+		    				}else {
+		    					returnData.push({id: '_new_' + i, storeId: 5, quarter: i, year: yearNum, labor: 0.00, foodCost: 0.00, advertisement: 0.00, misc: 0.00, 
+			    					profit: 0.00, totalSales: 0.00, totalOpExp: 0.00, totalProfits: 0.00, active: true, post: true, updatedBy: 0,
+			    					_self: '/service/store/5/accounting/year/' + yearNum + '/quarter/' + i});
+		    				}
+		    			}
+		    			updateAirportAccountingGrid(gridId, returnData);
+		    		} else {
+		    			var yearlyDetailsData = [];
+		    			for(var i=1; i<=12; i++){
+		    				yearlyDetailsData.push({id: '_new_' + i, storeId: '', quarter: i, year: yearNum, labor: 0.00, foodCost: 0.00, advertisement: 0.00, misc: 0.00, 
+		    					profit: 0.00, totalSales: 0.00, totalOpExp: 0.00, totalProfits: 0.00, active: true, post: true, updatedBy: 0,
+		    					_self: '/service/store/5/accounting/year/' + yearNum + '/quarter/' + i});
+		    			}
+		    			updateAirportAccountingGrid(gridId, yearlyDetailsData);
+		    		}
+		    		standByWidget.hide();
+		    	}, function(error){
+		    			console.log('Error occurred while fetching yearly data for Airport Section ', error);
+		    			standByWidget.hide();
+		        });
 		    };
 		    
 		    return {
 		        init: function() {
 		            startup();
 		        },
+		        
+		        fetchAirportSectionYearDetails: function(year, gridDomId){
+		        	fetchAirportSectionYearDetails(year, gridDomId);
+		        },
 		        initAirportSection: function(gridId, data){
-		        	var data = [{id: 1, month: 'January', currentSales: '0', royalties: '0'},
-		        	            {id: 2, month: 'February', currentSales: '0', royalties: '0'},
-		        	            {id: 3, month: 'March', currentSales: '0', royalties: '0'},
-		        	            {id: 4, month: 'April', currentSales: '0', royalties: '0'},
-		        	            {id: 5, month: 'May', currentSales: '0', royalties: '0'},
-		        	            {id: 6, month: 'June', currentSales: '0', royalties: '0'},
-		        	            {id: 7, month: 'July', currentSales: '0', royalties: '0'},
-		        	            {id: 8, month: 'August', currentSales: '0', royalties: '0'},
-		        	            {id: 9, month: 'September', currentSales: '0', royalties: '0'},
-		        	            {id: 10, month: 'October', currentSales: '0', royalties: '0'},
-		        	            {id: 11, month: 'November', currentSales: '0', royalties: '0'},
-		        	            {id: 12, month: 'December', currentSales: '0', royalties: '0'},];
-		        	updateAirportAccountingGrid(gridId, data);
+		        	fetchAirportSectionYearDetails(registry.byId('hiddenSelectedYear').get('value'), gridId);
+		        	fetchAirportSectionYears(registry.byId('hiddenStoreId').get('value'), gridId);
 		        },
 		        populateStoreData: function(storeId){
 		        	clearGridSelections();
@@ -806,9 +951,7 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 		        				property_info: dijit.byId('store-info-property-mgr-info').get('value'),
 		        				lease_info: dijit.byId('store-mortgage-info').get('value'),
 		        				lease_copy_loc: dijit.byId('store-info-mailing-address').get('value'),
-		        				updated_by: 0
-		        				//,imp_date: new Date()
-		        				};
+		        				updated_by: 0};
 		        	registry.byId('storeInfoTitlePaneStandBy').show();
 		        	ajaxRequest.put('/service/store/' + registry.byId('hiddenStoreId').get('value'), {
 		        		headers: { "Content-Type":"application/json"}, handleAs: 'json', data: dojo.toJson(storeData), 

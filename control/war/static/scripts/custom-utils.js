@@ -30,6 +30,11 @@ function fetchMgrYearlyReview(year){
 	empLayout.fetchReviewsForYear(year);
 }
 
+function fetchAirportAccountingYearlyDetails(year, domId){
+	var storeLayout = require('controls/StoreLayoutController');
+	storeLayout.fetchAirportSectionYearDetails(year, domId);
+}
+
 function fetchAccountingYearlyDetails(year){
 	var accLayout = require('controls/AccountingLayoutController');
 	accLayout.fetchAccDetailsForYear(year);
@@ -1497,7 +1502,9 @@ function toggleAirportSection(){
     var dom = require('dojo/dom');
     var baseArray = require("dojo/_base/array");
     var domConstruct = require('dojo/dom-construct');
-    var contentPane = require("dijit/layout/ContentPane");
+    var ContentPane = require("dijit/layout/ContentPane");
+    var NumberTextBox = require("dijit/form/NumberTextBox");
+    var Standby = require("dojox/widget/Standby");
 	if((registry.byId('hiddenStoreId').get('value') == 5) || (registry.byId('hiddenStoreId').get('value') == '5')){
 		baseArray.forEach(registry.byId('storeInfoTabContainer').getChildren(), function(storeTab){
 			if((storeTab.get('id') == 'storeMaintenance') || (storeTab.get('id') == 'storeHealthInspection') || (storeTab.get('id') == 'storeAlarms') || (storeTab.get('id') == 'storeKeys') || (storeTab.get('id') == 'storeLabor') )
@@ -1509,14 +1516,71 @@ function toggleAirportSection(){
 			
 		});
 		
+		
+		
 		dijit.byId('tabContainer').selectChild(dijit.byId('storeInfo'));
 		var tabContainer = registry.byId('storeInfoTabContainer');
-		var accountingPane = new contentPane({ title:"Accounting", style: 'width: 99%; height: 99%', 'class': 'nihilo' });
+		var accountingPane = new ContentPane({ title:"Accounting", style: 'width: 99%; height: 99%', 'class': 'nihilo' });
 		var gridNode = domConstruct.create("div", { id: "airportAccountingGrid", style: {width: '99%', height: '99%'}});
-		console.log('Grid Node created --> ', gridNode, gridNode.id);
-		accountingPane.domNode.appendChild(gridNode);
-		tabContainer.addChild(accountingPane);
+		
+		//Create the Table and populate for the Airport section
+		var tableNode = domConstruct.create('table', {style: {width: '100%', height: '100%'}});
+		var trNode = domConstruct.create('tr', {style: {width: '100%', height: '100%'}});
+		var tdNode1 = domConstruct.create('td', {style: {width: '70%', height: '100%'}, valign: 'top'});
+		var tdNode2 = domConstruct.create('td', {style: {width: '15%', height: '100%', 'text-align': 'center'}, valign: 'top'});
+		var tdNode3 = domConstruct.create('td', {style: {width: '15%', height: '100%', 'text-align': 'center'}, valign: 'top'});
+		tdNode1.appendChild(gridNode);
+		trNode.appendChild(tdNode1);
+		
+		var totalYearlySales = new NumberTextBox({ name: "totalYearlySales", constraints: {pattern: "0.##"}});
+		var totalRoyalties = new NumberTextBox({ name: "totalRoyalties", constraints: {pattern: "0.##"}});
+		//Table for Yearly Sales starts here
+		var innerTable1 = domConstruct.create('table', {'class': 'dateTable', style: {width: '80%'}});
+		var innerTableTr1 = domConstruct.create('tr');
+		var innerTableTr2 = domConstruct.create('tr');
+		var innerTableTh1 = domConstruct.create('th', {innerHTML: 'Yearly Sales'});
+		var innerTableTd1 = domConstruct.create('td');
+		innerTableTd1.appendChild(totalYearlySales.domNode);
+		innerTableTr1.appendChild(innerTableTh1);
+		innerTableTr2.appendChild(innerTableTd1);
+		innerTable1.appendChild(innerTableTr1);
+		innerTable1.appendChild(innerTableTr2);
+		tdNode2.appendChild(innerTable1);
+		
+		
+		//Table for Yearly Royalties Starts here
+		var innerTable2 = domConstruct.create('table', {'class': 'dateTable', style: {width: '80%'}});
+		var innerTableTr1 = domConstruct.create('tr');
+		var innerTableTr2 = domConstruct.create('tr');
+		var innerTableTh2 = domConstruct.create('th', {innerHTML: 'Yearly Royalties'});
+		var innerTableTd2 = domConstruct.create('td');
+		
+		innerTableTd2.appendChild(totalRoyalties.domNode);
+		innerTableTr1.appendChild(innerTableTh2);
+		innerTableTr2.appendChild(innerTableTd2);
+		innerTable2.appendChild(innerTableTr1);
+		innerTable2.appendChild(innerTableTr2);
+		
+		tdNode2.appendChild(innerTable2);
+		trNode.appendChild(tdNode2);
+		
+		
+		//Populate the End Of Year TD
+		var eoyDiv = domConstruct.create('div', {innerHTML: '<font style="text-align: center; font-weight: bold;"><u>End of Year</u></font> <div align="center" style="padding-top: 5px;">'
+					+ '<table id="airportSectionYearlyTable" style="width: 50%; text-align: center;" class="storeInfoTable" align="center"><tr><td>No Data Available !!!</td></tr></table></div>'});
+		tdNode3.appendChild(eoyDiv);
+		trNode.appendChild(tdNode3);
+		tableNode.appendChild(trNode);
+		accountingPane.domNode.appendChild(tableNode);
+		tabContainer.addChild(accountingPane, 0);
 		tabContainer.selectChild(accountingPane);
+		
+		if(registry.byId(gridNode.id + 'StandBy')){
+			registry.byId(gridNode.id + 'StandBy').destroy();
+		}
+		var standby = new Standby({id: gridNode.id + 'StandBy',target: accountingPane.id, color:'white'});
+		accountingPane.domNode.appendChild(standby.domNode);
+		standby.startup();
 		storeLayout.initAirportSection(gridNode.id, []);
 		
 	} else {

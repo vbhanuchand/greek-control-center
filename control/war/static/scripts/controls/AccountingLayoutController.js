@@ -194,7 +194,6 @@ function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Me
 		registry.byId('accountingUpdateBtn').set('disabled', update);
 		registry.byId('accountingSaveBtn').set('disabled', save);
 	},
-	
 	fetchYearlyAccounts = function(storeId){
     	registry.byId('accountingYearsStandBy').show();
     	ajaxRequest.get("/service/store/" + storeId + "/accounting/years",{
