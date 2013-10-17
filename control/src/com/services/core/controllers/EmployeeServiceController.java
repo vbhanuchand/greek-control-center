@@ -327,6 +327,10 @@ public class EmployeeServiceController {
 		logger.info("Getting Employee Reviews Data For Employee Id --> " + empId);
 		Map<String, String> yearItems = dataService.getEmployeeReviews(empId);
 		SingleModelResponse<BaseModel> returnModel = new SingleModelResponse<BaseModel>(true, null);
+		String currentYear = Utilities.getCurrentYear();
+		if(!(yearItems.containsKey(currentYear))){
+			yearItems.put(currentYear, currentYear);
+		}
 		returnModel.setCustomMessages(yearItems);
 		return returnModel;
 	}

@@ -138,7 +138,10 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 				deleteItem('invoice-item', '', evt.grid.store.getValue(evt.grid.getItem(evt.rowIndex), 'id'));
 			else
 				deleteItem('stock-item', '', evt.grid.store.getValue(evt.grid.getItem(evt.rowIndex), 'id'));
-		}});
+		} else if((evt.grid.get('id') == 'inventoryInvoicesGrid') && (evt.cellIndex == 0)){
+			deleteItem('invoice', '', evt.grid.store.getValue(evt.grid.getItem(evt.rowIndex), 'id'));
+		}
+	});
 	},
 	validateCell = function(cellWidget){
     	var returnValue = false;
@@ -258,13 +261,13 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 										cells: [{ name: "<span><i class='icon-trash'></i></span>", field: "id", width: "3%", noresize: true, styles: 'text-align: center;', formatter: formatDelete },
 										        { name: "<span><i class='icon-save'></i></span>", field: "id", width: "3%", noresize: true, styles: 'text-align: center;', formatter: formatUpdate },
 										        { name: "<b>Code</b>", fields: ["id", "itemId"], width: "7%", noresize: true, styles: 'text-align: center;', formatter: formatCode },
-										        { name: "<b>Stock Item</b>", fields: ["id", "itemId"], width: "16%", noresize: true, formatter: formatItem },
-									            { name: "<b>Par (Units)</b>", fields: ["id", "itemId"], width: "12%", noresize: true, formatter: formatParUnits },
-												{ name: "<b>In Stock</b>", field: "itemStock", width: "11%", noresize: true, editable: true, 
+										        { name: "<b>Stock Item</b>", fields: ["id", "itemId"], width: "18%", noresize: true, formatter: formatItem },
+									            { name: "<b>Par (Packaging)</b>", fields: ["id", "itemId"], width: "14%", noresize: true, formatter: formatParUnits },
+												{ name: "<b>In Stock</b>", field: "itemStock", width: "10%", noresize: true, editable: true, 
 										        	constraint:{required: false}, widgetProps: { promptMessage: 'Provide Stock Count', 
 										        	missingMessage: 'Please enter only Numbers', invalidMessage: 'Accepts only Numerics'}, 
 										        	widgetClass: NumberTextBox },
-												{ name: "<b>Order</b>", field: "itemOrder", width: "8%", noresize: true, editable: true, 
+												{ name: "<b>Order</b>", field: "itemOrder", width: "7%", noresize: true, editable: true, 
 										        	constraint:{required: false}, widgetProps: { promptMessage: 'Provide Order Count', 
 										        	missingMessage: 'Please enter only Numbers', invalidMessage: 'Accepts only Numerics'}, 
 										        	widgetClass: NumberTextBox },
@@ -278,7 +281,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 										        	constraint:{required: false}, widgetProps: { promptMessage: 'Provide GS Charge %', 
 										        	missingMessage: 'Please enter only Numbers', invalidMessage: 'Accepts only Numerics'}, 
 										        	widgetClass: NumberTextBox },
-												{ name: "<b>Total</b>", fields: ['itemOrder', 'itemPricePerUnit', 'itemGSPercent'], width: "9%", noresize: true, formatter: formatTotal }
+												{ name: "<b>Total</b>", fields: ['itemOrder', 'itemPricePerUnit', 'itemGSPercent'], width: "7%", noresize: true, formatter: formatTotal }
 												]}],
 									singleClickEdit: true,
 									editable: true,
@@ -335,16 +338,20 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 		var formatToCurrency = function(inVal){
 			return '$ ' + inVal;
 		};
+		var formatDelete = function(inVal){
+			return '<span><i class="icon-trash"></i></span>';
+		};
 		if(!dijit.byId('inventoryInvoicesGrid')){
 			inventoryInvoicesGrid = new EnhancedGrid({
 									store: gridDataStore,
 									query: { id: "*" },
 									structure: [{defaultCell: { width: "20%", type: dojox.grid.cells._Widget, styles: 'text-align: left;', noresize: true, editable: false },
-									            cells: [{ name: "<b>Date</b>", field: "invoiceDate", width: "20%", noresize: true, styles: 'text-align: center;'},
+									            cells: [{ name: "<span><i class='icon-trash'></i></span>", field: "id", width: "5%", noresize: true, styles: 'text-align: center;', formatter: formatDelete },
+									            { name: "<b>Date</b>", field: "invoiceDate", width: "20%", noresize: true, styles: 'text-align: center;'},
 									            { name: "<b>Invoice</b>", field: "id", width: "19%", noresize: true, formatter: formatGSInvoice, styles: 'text-align: center;'},
 									            { name: "<b>Inventory</b>", field: "id", width: "19%", noresize: true, formatter: formatInventory, styles: 'text-align: center;'},
-												{ name: "<b>GS Charges($)</b>", field: "gsCharges", width: "26%", noresize: true, formatter: formatToCurrency},
-												{ name: "<b>Total</b>", field: "totalCharges", width: "16%", noresize: true, formatter: formatToCurrency}
+												{ name: "<b>GS Charges($)</b>", field: "gsCharges", width: "25%", noresize: true, formatter: formatToCurrency},
+												{ name: "<b>Total</b>", field: "totalCharges", width: "12%", noresize: true, formatter: formatToCurrency}
 												]}],
 									singleClickEdit: false,
 									editable: false,
@@ -363,16 +370,16 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 			var selectedValue = registry.byId('invoiceCategorySelect').get('value');
 			switch(selectedValue){
 				case 'Distributor':
-					registry.byId('inventoryInvoicesGrid').layout.setColumnVisibility(1, false);
-					registry.byId('inventoryInvoicesGrid').layout.setColumnVisibility(2, true);
-					registry.byId('inventoryInvoicesGrid').layout.setColumnVisibility(3, false);
-					registry.byId('inventoryInvoicesGrid').layout.setColumnVisibility(4, false);
-					break;
-				case 'GS Kitchen':
-					registry.byId('inventoryInvoicesGrid').layout.setColumnVisibility(1, true);
 					registry.byId('inventoryInvoicesGrid').layout.setColumnVisibility(2, false);
 					registry.byId('inventoryInvoicesGrid').layout.setColumnVisibility(3, true);
+					registry.byId('inventoryInvoicesGrid').layout.setColumnVisibility(4, false);
+					registry.byId('inventoryInvoicesGrid').layout.setColumnVisibility(5, false);
+					break;
+				case 'GS Kitchen':
+					registry.byId('inventoryInvoicesGrid').layout.setColumnVisibility(2, true);
+					registry.byId('inventoryInvoicesGrid').layout.setColumnVisibility(3, false);
 					registry.byId('inventoryInvoicesGrid').layout.setColumnVisibility(4, true);
+					registry.byId('inventoryInvoicesGrid').layout.setColumnVisibility(5, true);
 					break;
 			}
 		}
@@ -593,6 +600,9 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 					registry.byId("invoiceActionSelect").set('value', 'reset');
 				});
 				
+			},
+			resetInvoiceDetails: function(){
+				resetInvoiceDetails();
 			},
 			reset: function(){
 				resetScreen();
