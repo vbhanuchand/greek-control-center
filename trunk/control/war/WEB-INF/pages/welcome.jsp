@@ -192,8 +192,8 @@
 	        <div data-dojo-type="dijit/PopupMenuBarItem" id="userOptionsPopupMenu" style="float: right;">
 	            <span>Options</span>
 	            <div data-dojo-type="dijit/Menu">
-	                <div data-dojo-type="dijit/MenuItem" data-dojo-props="onClick: callManageUsers">Change Password</div>
-	                <div data-dojo-type="dijit/MenuItem" data-dojo-props="iconClass:'icon-signout', onClick: function(){ console.log('not actually cutting anything, just a test!');}">Sign out</div>
+	                <div data-dojo-type="dijit/MenuItem" data-dojo-props="iconClass:'icon-signout', onClick: function(){changePasswordDialog.show();}">Change Password</div>
+	                <div data-dojo-type="dijit/MenuItem" data-dojo-props="iconClass:'icon-signout', onClick: function(){ window.location.href='/service/logout'; }">Sign out</div>
 	            </div>
 	        </div>
 	    </div>
@@ -1240,6 +1240,39 @@
 	</div>
 </div>
 <!-- Inventory Items Dialog ends here -->
+
+<div class="dijitHidden">
+	<div data-dojo-type="dijit/Dialog" data-dojo-props="title:'Change Password', loadingMessage:'Loading ...'" data-dojo-id="changePasswordDialog" id="changePasswordDialog">
+		<div class="dijitDialogPaneContentArea">
+			<fieldset style="padding: 10px; border: 1px dotted ThreeDDarkShadow;">
+				<legend style="display: block; background: none; margin-left: 10px; padding: 5px; border:1px dotted ThreeDDarkShadow; text-align: left;"><b>Details:</b></legend>
+				<div data-dojo-type="dojox/form/PasswordValidator" name="newPassword">
+				    <label>Enter New Password: <input type="password" pwType="new" /></label><br>
+				    <label>Enter New Password (again): <input type="password" pwType="verify" /></label><br>
+				</div>
+				<div class="dijitDialogPaneActionBar">
+					<button data-dojo-type="dijit/form/Button" data-dojo-props="'class':'primary'" type="submit">Update
+						<script type="dojo/on" data-dojo-event="click" data-dojo-args="e">
+						e.preventDefault(); // prevent the default submit
+						e.stopPropagation();
+						changePasswordDialog.hide();
+					</script>
+					</button>
+				    <button data-dojo-type="dijit/form/Button" data-dojo-props="'class':'inverse'" disabled>Cancel
+				    	<script type="dojo/on" data-dojo-event="click" data-dojo-args="e">
+						e.preventDefault(); // prevent the default submit
+						e.stopPropagation();
+						changePasswordDialog.hide();
+					</script>
+				    </button>
+				</div>
+				<div id="changePasswordDialogStandBy" data-dojo-id="changePasswordDialogStandBy" data-dojo-type="dojox/widget/Standby" 
+					data-dojo-props="target:'changePasswordDialog', color:'white'">
+				</div>
+			</fieldset>
+		</div>
+	</div>
+</div>
 
 <!-- Airport Section Dialog 
 <div class="dijitHidden">
