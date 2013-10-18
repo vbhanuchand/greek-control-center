@@ -1258,7 +1258,7 @@
 						changePasswordDialog.hide();
 					</script>
 					</button>
-				    <button data-dojo-type="dijit/form/Button" data-dojo-props="'class':'inverse'" disabled>Cancel
+				    <button data-dojo-type="dijit/form/Button" data-dojo-props="'class':'inverse'">Cancel
 				    	<script type="dojo/on" data-dojo-event="click" data-dojo-args="e">
 						e.preventDefault(); // prevent the default submit
 						e.stopPropagation();
