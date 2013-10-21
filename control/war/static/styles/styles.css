@@ -887,17 +887,17 @@ body {
 }  */
 
 ::-webkit-scrollbar {
-	height: 16px;
+	height: 10px;
 	overflow: visible;
-	width: 16px;
+	width: 7px;
 }
 ::-webkit-scrollbar-thumb {
 	background-color: rgba(0,0,0,.2);
 	background-clip: padding-box;
 	border: solid transparent;
-	border-width: 1px 1px 1px 6px;
+	border-width: 1px 1px 1px 1px;
 	min-height: 28px;
-	padding: 100px 0 0;
+	padding: 10px 0 0;
 	box-shadow: inset 1px 1px 0 rgba(0,0,0,.1),inset 0 -1px 0 rgba(0,0,0,.07);
 }
 
@@ -910,7 +910,7 @@ body {
 ::-webkit-scrollbar-track {
 	background-clip: padding-box;
 	border: solid transparent;
-	border-width: 0 0 0 4px;
+	border-width: 0 0 0 2px;
 }
 
 
@@ -924,3 +924,5 @@ body {
 	height: 90%;
 	text-align: center;
 }
+
+.dojoxGridScrollbox { overflow-x: hidden; }

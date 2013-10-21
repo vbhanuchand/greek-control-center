@@ -224,7 +224,10 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 		    },
 		    attachGridEvents = function(gridId){
 		    	registry.byId(gridId).on("CellClick", function(evt){
-		    		if(((evt.grid.get('id') != 'mgrLeavesGrid') && (evt.cellIndex == 1)) || ((evt.grid.get('id') == 'mgrLeavesGrid') && (evt.cellIndex == 1))){
+		    		var gridBasedEventCheck1 = ((evt.grid.get('id') == 'mgrLeavesGrid') && (evt.cellIndex == 1));
+		    		var gridBasedEventCheck2 = ((evt.grid.get('id') == 'employeesGrid') && (evt.cellIndex == 0));
+		    		var gridBasedEventCheck3 =  !gridBasedEventCheck1 && !gridBasedEventCheck2 && ((evt.cellIndex == 1) && (evt.grid.get('id') != 'employeesGrid'));
+		    		if(gridBasedEventCheck1 || gridBasedEventCheck2 || gridBasedEventCheck3){
 		    			var standByWidgetId = evt.grid.get('id') + 'StandBy';
 		    			registry.byId(standByWidgetId).show();
 		    			var grid = evt.grid, serviceURL= evt.grid.getItem(evt.rowIndex)._self, addOrUpdate = evt.grid.getItem(evt.rowIndex).post;
@@ -329,8 +332,8 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 		    },
 		    createAddUpdateLink = function(value, rowIndex){
 		    	if(value === '__new__')
-		    		return '<span style="text-align: center;"><a href="#">Add</a></span>';
-		    	else return '<span style="text-align: center;"><a href="#">Save</a></span>';
+		    		return '<span><i class="icon-plus"></i></span>';//'<span style="text-align: center;"><a href="#">Add</a></span>';
+		    	else return '<span><i class="icon-save"></i></span>';
 		    },
 		    createDeleteLink = function(id, rowIndex){
 		    	return '<span style="text-align: center;"><a href="javascript: deleteItem(\'mgr-leaves\', \'\', ' + id + ');">Delete</a></span>';
@@ -362,7 +365,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 											store: gridDataStore,
 											query: { id: "*" },
 											structure: [{defaultCell: { width: "20%", type: dojox.grid.cells._Widget, styles: 'text-align: left;', noresize: true, editable: false },
-											            cells: [{ name: "Save", field: 'id', width: "4%", noresize: true, formatter: createAddUpdateLink, styles: 'text-align: center;'},
+											            cells: [{ name: "<i class='icon-save'></i>", field: 'store', width: "2%", noresize: true, formatter: createAddUpdateLink, styles: 'text-align: center;'},
 											            { name: "First Name", field: "fname", width: "7%", noresize: true, editable: true, 
 											            	constraint:{required: true}, widgetProps: {maxLength: 25, promptMessage: 'First Name within 25 characters', 
 											            	missingMessage: 'Please provide First Name' }, widgetClass: ValidationTextBox},
@@ -384,7 +387,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 													    { name: "Emergency Contact", field: "emergencyContact", width: "13%", noresize: true, editable: true, hidden: false, 
 													        constraint:{required: true}, widgetProps: {maxLength: 30, promptMessage: 'Emergency Contact Details within 30 characters', 
 														    missingMessage: 'Please provide Emergency Contact Details' }, widgetClass: ValidationTextBox},
-														{ name: "Address", field: "address", width: "14%", noresize: true, editable: true, hidden: false, 
+														{ name: "Address", field: "address", width: "15%", noresize: true, editable: true, hidden: false, 
 													            constraint:{required: true}, widgetProps: {maxLength: 40, promptMessage: 'Home Address within 40 characters', 
 														        missingMessage: 'Please provide Home Address' }, widgetClass: ValidationTextBox},
 											            { name: "Username", field: "username", width: "7%", noresize: true, editable: true, hidden: false, 
@@ -404,7 +407,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 										    onFetchError: function(error,ioargs){console.log('Error ocured: '+error+' ioargs: '+ioargs); return true;},
 										    selectionMode: "single",
 										    //rowSelector: '15px',
-											plugins: {
+											/*plugins: {
 														nestedSorting: false,
 										                pagination: {
 															pageSizes: ["5", "10", "50", "100", "All"],
@@ -418,7 +421,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 								                            defaultPageSize: 5
 														},
 							                            exporter: true
-										        }}, "employeesGrid");
+										        }*/}, "employeesGrid");
 					employeesGrid.startup();
 				}	else dijit.byId('employeesGrid').setStore(gridDataStore);
 				/*if((employeesGrid.rowCount > 0) && (employeesGrid.selection.selectedIndex >= 0)){
@@ -426,6 +429,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 				}
 				if(employeesGrid.rowCount > 0)	employeesGrid.selection.setSelected(0, true);*/
 				//try{showMessages(1, registry.byId('messagesTooltip'), 'Data Loaded Successfully !!! ');}catch(e){console.log('Exception ' + e);}
+				//setTimeout(function () { console.log('Resizing'); dijit.byId('employeesGrid').resize(); }, 50);
 		    },
 		    formatCurrency = function(inDatum){
 		    	return isNaN(inDatum) ? '...' : dojo.currency.format(inDatum, this.constraint);

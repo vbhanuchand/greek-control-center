@@ -8,6 +8,9 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,7 +33,6 @@ import com.services.core.view.wrappers.SingleModelResponse;
 import com.services.core.view.wrappers.UploadNotesWrapper;
 
 @Controller
-//@RequestMapping("/service")
 public class EmployeeServiceController {
 
 	@Autowired
@@ -378,6 +380,14 @@ public class EmployeeServiceController {
 		empReview.setEmpId(empId);
 		boolean status = dataService.updateEmployeeReview(empReview);
 		return new SingleModelResponse<EmployeeReviewWrapper>(status, null);
+	}
+	
+	@RequestMapping(value = "/service/employee/profile", method = RequestMethod.POST, produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public SingleModelResponse<EmployeeReviewWrapper> updateEmployeeProfile(@RequestBody EmployeeWrapper emp)
+			throws IOException {
+		ShaPasswordEncoder pe = new ShaPasswordEncoder();
+		return new SingleModelResponse<EmployeeReviewWrapper>(dataService.updateEmployeePassword(SecurityContextHolder.getContext().getAuthentication().getName(), pe.encodePassword(emp.getPassword(), null)), null);
 	}
 	
 }

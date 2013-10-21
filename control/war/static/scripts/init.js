@@ -6,10 +6,10 @@
 });*/
 require(["bootstrap", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/dijit", "dojo/dom-style", "dojo/date", "dojo/date/locale", "dojo/dom-construct", "dojo/_base/fx", "dojo/fx", "dojo/_base/declare", "dojo/dom", "dojo/on", "dijit/form/Select",
          "controls/StoreLayoutController", "controls/EmployeeLayoutController", "controls/LaborLayoutController", "controls/AccountingLayoutController", "controls/InventoryLayoutController", "dijit/form/DateTextBox", "dojo/store/Memory",
-         "dojo/_base/lang", "dojo/request", "dojo/dom-form", "dojo/json", "dojo/query", "dijit/registry", "dojo/_base/array", "dojox/widget/Dialog", "dijit/form/FilteringSelect",
-         "dijit/TooltipDialog", "dijit/popup", 'dojox/form/Uploader', 'dojox/form/uploader/FileList', 'dojox/layout/ScrollPane', "dojox/form/TimeSpinner", "dijit/form/Button", 'dojox/timing/doLater', "dojo/parser", "dojo/aspect", 'dojo/ready'], 
+         "dojo/_base/lang", "dojo/request", "dojo/request/xhr", "dojo/dom-form", "dojo/json", "dojo/query", "dijit/registry", "dojo/_base/array", "dojox/widget/Dialog", "dijit/form/FilteringSelect",
+         "dijit/TooltipDialog", "dijit/popup", 'dojox/form/Uploader', 'dojox/form/uploader/FileList', 'dojox/layout/ScrollPane', "dojox/form/TimeSpinner", "dijit/form/Button", 'dojox/timing/doLater', "dojo/parser", "dojo/aspect", "dojox/lang/aspect", 'dojo/ready'], 
          function(bootstrap, MenuBar, PopupMenu, dijit, domStyle, date, locale, domConstruct, fx, otherFx, declare, dom, on, formSelect, storeLayout, empLayout, laborLayout, accLayout, inventoryLayout, DateTextBox, Memory, lang, 
-        		 ajaxRequest, domForm, json, query, registry, baseArray, dojoxDialog, FilteringSelect, TooltipDialog, popup, uploader, fileList, scrollPane, TimeSpinner, Button, doLater, parser, aspect, ready){
+        		 ajaxRequest, xhrRequest, domForm, json, query, registry, baseArray, dojoxDialog, FilteringSelect, TooltipDialog, popup, uploader, fileList, scrollPane, TimeSpinner, Button, doLater, parser, aspect, xaspect, ready){
 		  ready(function(){
 		   parser.parse();
 		    var LoadingObj = declare(null, {
@@ -658,18 +658,17 @@ require(["bootstrap", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/dijit", 
 			});
 			registry.byId('storeInfoTabContainer').resize();
 			
-			aspect.after(ajaxRequest, "get", function(deferred){
-				deferred.response.then(function(response) {
-				    console.log("status", response.status);
-				    switch(response.status + ''){
-				    	case '901':
-				    		console.log('Refreshing the session window');
-				    		window.location.reload();
-				    		break;
-				    }
-				});
+			localAspect = aspect.after(ajaxRequest, "get", function(deferred){
 				return deferred.then(function(response){
 					return response;
+				  }, function(error){
+					  switch(error.response.status + ''){
+				    	case '901':
+				    		setTimeout(function(){try{xaspect.unadvise(localAspect);}catch(e){}}, 10);
+				    		window.location.href = '/service/logout';
+				    		break;
+					  }
+					  return error;
 				  });
 			});
 	  });

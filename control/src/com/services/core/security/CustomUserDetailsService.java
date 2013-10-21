@@ -3,7 +3,6 @@ package com.services.core.security;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,7 +14,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.services.core.data.mgr.DataManager;
-import com.services.core.data.model.employee.Employee;
 import com.services.core.view.wrappers.EmployeeWrapper;
 import com.services.core.view.wrappers.RoleWrapper;
 
@@ -86,7 +84,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 	 * 
 	 * @param role
 	 *            the numerical role
-	 * @return a collection of {@link GrantedAuthority
+	 * @return a collection of {@link GrantedAuthority
+
 	 */
 	public Collection<? extends GrantedAuthority> getAuthorities(Integer role) {
 		List<GrantedAuthority> authList = getGrantedAuthorities(getRoles(role));
