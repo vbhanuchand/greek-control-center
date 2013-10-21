@@ -411,3 +411,8 @@ role1_.role_tab<>'store-ownr' order by employee0_.id, role1_.store_id, role1_.ro
 
 desc employee_leaves;
 alter table employee_leaves modify reason varchar(200);
+
+select * from employee;
+
+--e35bece6c5e6e0e86ca51d0440e92282a9d6ac8a
+--5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8

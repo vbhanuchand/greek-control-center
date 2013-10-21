@@ -33,6 +33,8 @@ public interface DataManager {
 	Employee getEmployeeById(int id);
 	
 	EmployeeWrapper getEmployeeByUserName(String username);
+	
+	boolean updateEmployeePassword(String username, String newPassword);
 
 	List<EmployeeWrapper> getEmployees();
 	

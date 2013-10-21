@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
 	<classpathentry kind="lib" path="C:/Bhanu/jars/antlr-2.7.7.jar"/>
 	<classpathentry kind="lib" path="C:/Bhanu/jars/aopalliance-1.0.jar"/>
 	<classpathentry kind="lib" path="C:/Bhanu/jars/c3p0-0.9.1.jar"/>
@@ -38,5 +37,6 @@
 	<classpathentry kind="lib" path="C:/Bhanu/jars/spring-tx-3.2.1.RELEASE.jar"/>
 	<classpathentry kind="lib" path="C:/Bhanu/jars/spring-web-3.2.1.RELEASE.jar"/>
 	<classpathentry kind="lib" path="C:/Bhanu/jars/spring-webmvc-3.2.1.RELEASE.jar"/>
+	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER/App Engine"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

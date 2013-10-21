@@ -109,6 +109,12 @@ public class DataManagerImpl implements DataManager{
 		returnEmp.setEmployeeRoles(employeeRoles);
 		return returnEmp;
 	}
+	
+	@Override
+	@Transactional
+	public boolean updateEmployeePassword(String username, String newPassword) {
+		return employeeDAO.updateEmployeePassword(username, newPassword);
+	}
 
 	@Override
 	public List<EmployeeWrapper> getEmployees() {

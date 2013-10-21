@@ -192,8 +192,8 @@
 	        <div data-dojo-type="dijit/PopupMenuBarItem" id="userOptionsPopupMenu" style="float: right;">
 	            <span>Options</span>
 	            <div data-dojo-type="dijit/Menu">
-	                <div data-dojo-type="dijit/MenuItem" data-dojo-props="iconClass:'icon-signout', onClick: function(){changePasswordDialog.show();}">Change Password</div>
-	                <div data-dojo-type="dijit/MenuItem" data-dojo-props="iconClass:'icon-signout', onClick: function(){ window.location.href='/service/logout'; }">Sign out</div>
+	                <div data-dojo-type="dijit/MenuItem" data-dojo-props="iconClass:'icon-lock icon-large', onClick: function(){changePasswordDialog.show();}">Change Password</div>
+	                <div data-dojo-type="dijit/MenuItem" data-dojo-props="iconClass:'icon-signout icon-large', onClick: function(){ window.location.href='/service/logout'; }">Sign out</div>
 	            </div>
 	        </div>
 	    </div>
@@ -258,8 +258,8 @@
 				</div>
 				<div id="calendarEntryTitlePaneStandBy" data-dojo-id="calendarEntryTitlePaneStandBy" data-dojo-type="dojox/widget/Standby" data-dojo-props="target:'calendarEntryTitlePane', color:'white'"></div>
 			</div>
-			<div id="inventoryLegendTitlePane" style="font-size: 90% !important; width: 100%; display: none;" data-dojo-type="dijit/TitlePane" data-dojo-props="title:'Distributor Codes', open:true" >
-				<table class="laborTable" style="width: 100%; height: 100%; border: .1em solid #000;">
+			<div id="inventoryLegendTitlePane" style="font-size: 90% !important; width: 100%; display: none;" data-dojo-type="dijit/TitlePane" data-dojo-props="title:'Distributor Codes Reference', open:true" >
+				<table class="laborTable" style="width: 100%; height: 100%; border: .1em solid #000; font-weight: bold !important;">
 					<tr><th style="width: 50%;">Distributor</th><th style="width: 50%;">Code</th></tr>
 					<tr><td style="width: 50%; padding-left: 3px !important;">NICHOLAS</td><td style="width: 50%; text-align: center !important;">1000</td></tr>
 					<tr><td style="width: 50%; padding-left: 3px !important;">US FOODS</td><td style="width: 50%; text-align: center !important;">2000</td></tr>
@@ -1246,24 +1246,57 @@
 		<div class="dijitDialogPaneContentArea">
 			<fieldset style="padding: 10px; border: 1px dotted ThreeDDarkShadow;">
 				<legend style="display: block; background: none; margin-left: 10px; padding: 5px; border:1px dotted ThreeDDarkShadow; text-align: left;"><b>Details:</b></legend>
-				<div data-dojo-type="dojox/form/PasswordValidator" name="newPassword">
-				    <label>Enter New Password: <input type="password" pwType="new" /></label><br>
-				    <label>Enter New Password (again): <input type="password" pwType="verify" /></label><br>
+				<div data-dojo-type="dojox/form/PasswordValidator" name="newPassword" id="newPassword">
+					<table style="width: 90%;">
+						<tr>
+							<td style="width: 60%;">Enter New Password:</td>
+							<td style="width: 40%;"><input type="password" pwType="new" /></td>
+						</tr>
+						<tr>
+							<td style="width: 60%;">Enter New Password (again): </td>
+							<td style="width: 40%;"><input type="password" pwType="verify" /></td>
+						</tr>
+					</table>
 				</div>
 				<div class="dijitDialogPaneActionBar">
 					<button data-dojo-type="dijit/form/Button" data-dojo-props="'class':'primary'" type="submit">Update
 						<script type="dojo/on" data-dojo-event="click" data-dojo-args="e">
-						e.preventDefault(); // prevent the default submit
-						e.stopPropagation();
-						changePasswordDialog.hide();
-					</script>
+							e.preventDefault(); // prevent the default submit
+							e.stopPropagation();
+							var registry = require('dijit/registry');
+							var ajaxRequest = require("dojo/request");
+							var json = require('dojo/json');
+							var dom = require('dojo/dom');
+							var standByWidgetId = 'changePasswordDialogStandBy';
+							if(!registry.byId('newPassword').isValid()){
+								return false;
+							}
+							registry.byId(standByWidgetId).show();
+							var item = {id: 0, storeId: 0, fname: 'First Name', lname: 'Last Name', username: 'user', position: 'Front', personalPhone: '', 
+										emergencyContact: '', address: '', phone: 'Add Phone', active: true, mgr: 1, updatedBy: 1, password: registry.byId('newPassword').get('value')};
+							ajaxRequest.post("/service/employee/profile", {
+			       				headers: { "Content-Type":"application/json"}, 
+			       				handleAs: 'json', data: json.stringify(item), timeout: 10000 
+			       			}).then(function(response){
+								if(response.success){
+			       					dom.byId('messages').innerHTML = 'Password Changed Successfully';
+									changePasswordDialog.hide();
+			       				}
+								registry.byId(standByWidgetId).hide();
+								addInventoryItemDialog.hide();
+			       			}, function(error){
+			       				console.log('Error while updating --> ' + error);
+			       				dom.byId('messages').innerHTML = 'Error while Modifying Password --> ' + error;
+			       				registry.byId(standByWidgetId).hide();
+			       			});
+						</script>
 					</button>
 				    <button data-dojo-type="dijit/form/Button" data-dojo-props="'class':'inverse'">Cancel
 				    	<script type="dojo/on" data-dojo-event="click" data-dojo-args="e">
-						e.preventDefault(); // prevent the default submit
-						e.stopPropagation();
-						changePasswordDialog.hide();
-					</script>
+							e.preventDefault(); // prevent the default submit
+							e.stopPropagation();
+							changePasswordDialog.hide();
+						</script>
 				    </button>
 				</div>
 				<div id="changePasswordDialogStandBy" data-dojo-id="changePasswordDialogStandBy" data-dojo-type="dojox/widget/Standby" 
@@ -1271,6 +1304,11 @@
 				</div>
 			</fieldset>
 		</div>
+		<script type="dojo/on" data-dojo-event="show" data-dojo-args="e">
+			console.log('onShow() event called !!!');
+			var registry = require('dijit/registry');
+			registry.byId('newPassword').reset();
+		</script>
 	</div>
 </div>
 

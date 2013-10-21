@@ -95,6 +95,25 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 	}
 	
 	@Override
+	public boolean updateEmployeePassword(String username, String password){
+		boolean returnValue = false;
+		try{
+			Query query = sessionFactory.getCurrentSession().createQuery("from Employee e where e.username = :username");
+			query.setParameter("username", username);
+			Employee emp = (Employee)query.list().get(0);
+			Query hqlUpdateQuery = sessionFactory.getCurrentSession().createQuery("update Employee e set e.password = :password where e.id=:id"); 
+			hqlUpdateQuery.setParameter("password", password);
+			hqlUpdateQuery.setParameter("id", emp.getId());
+			int result = hqlUpdateQuery.executeUpdate();
+			returnValue = (result == 1);
+		}catch(Exception e){
+			returnValue = false;
+		}
+		return returnValue;
+	}
+	
+	
+	@Override
 	public boolean updateEmployeeRole(int employeeId, int storeId, boolean addRole, String roleName){
 		boolean returnVal = false;
 		if(addRole){
@@ -130,7 +149,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 		}
 		else{
 			query = sessionFactory.getCurrentSession().createQuery("from Employee e where e.id in (select employeeId from Role where storeId=:storeId and roleTab <> :roleTab) and e.position in :positions" +
-					" order by e.position desc, e.active desc, e.hired_date");
+					" order by e.active desc, e.position desc, e.hired_date");
 			query.setParameterList("positions", new Object[]{"Manager", "Front", "Cook"});
 		}
 		query.setParameter("roleTab", "store-ownr");
@@ -351,7 +370,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 		query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
 		return query.list();
 	}
-
+	
 	@Override
 	public List<Employee> getEmployees() {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(

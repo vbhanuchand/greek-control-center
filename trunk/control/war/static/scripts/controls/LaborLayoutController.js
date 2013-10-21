@@ -145,7 +145,7 @@ define(["dijit/dijit", "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/fx", "do
 		calendar.columnView.set('timeSlotDuration', 60);
 		calendar.columnView.set('horizontalGap', 2);
 		calendar.columnView.set('percentOverlap', 70);
-		calendar.columnView.set('hourSize', 40);
+		calendar.columnView.set('hourSize', 50);
 		
 		calendar.set('store', new Observable(new Memory({data: someData})));
 		

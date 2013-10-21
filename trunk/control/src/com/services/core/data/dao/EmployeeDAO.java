@@ -21,6 +21,8 @@ public interface EmployeeDAO {
 	List<Employee> getEmployeesByStoreId(int storeId, boolean getMrgOnly);
 
 	List getEmployeeByUserName(String username);
+	
+	boolean updateEmployeePassword(String username, String newPassword);
 
 	List<Employee> getEmployees();
 	
