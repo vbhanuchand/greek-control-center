@@ -50,7 +50,7 @@
 	var globalYearWeekForRefresh = '';
 </script>
 
-<!-- --><link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/resources/dojo.css" />
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/resources/dojo.css" />
 <link rel="stylesheet" type="text/css" href="resources/themes/bootstrap/theme/dbootstrap/dijit.css"/> 
 <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dijit/themes/soria/soria.css">
 <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojox/grid/resources/soriaGrid.css" />

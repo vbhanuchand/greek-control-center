@@ -161,11 +161,11 @@ public class DataManagerImpl implements DataManager{
 			
 			if(empObject.containsKey("stores")){
 				if(mapObject.get("active").toString() == "true"){
-					empObject.put("stores", empObject.get("stores") + "," + mapObject.get("storeId").toString());
+					empObject.put("stores", empObject.get("stores") + "," + mapObject.get("storeId").toString() + "&" + mapObject.get("role").toString());
 				}
 			} else{
 				if(mapObject.get("active").toString() == "true"){
-					empObject.put("stores", mapObject.get("storeId").toString());
+					empObject.put("stores", mapObject.get("storeId").toString() + "&" + mapObject.get("role").toString());
 				}
 			}
 			

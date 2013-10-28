@@ -143,16 +143,17 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 	public List<Employee> getEmployeesByStoreId(int storeId, boolean getMgrOnly){
 		Query query;
 		if(getMgrOnly){
-			query = sessionFactory.getCurrentSession().createQuery("from Employee e where e.id in (select employeeId from Role where storeId=:storeId and roleTab <> :roleTab) and e.position=:position" +
+			query = sessionFactory.getCurrentSession().createQuery("from Employee e where e.id in (select employeeId from Role where storeId=:storeId and roleTab <> :roleTab1 and roleTab <> :roleTab2) and e.position=:position" +
 					" order by e.position desc, e.active desc, e.hired_date");
 			query.setParameter("position", "Manager");
 		}
 		else{
-			query = sessionFactory.getCurrentSession().createQuery("from Employee e where e.id in (select employeeId from Role where storeId=:storeId and roleTab <> :roleTab) and e.position in :positions" +
+			query = sessionFactory.getCurrentSession().createQuery("from Employee e where e.id in (select employeeId from Role where storeId=:storeId and roleTab <> :roleTab1 and roleTab <> :roleTab2) and e.position in :positions" +
 					" order by e.active desc, e.position desc, e.hired_date");
 			query.setParameterList("positions", new Object[]{"Manager", "Front", "Cook"});
 		}
-		query.setParameter("roleTab", "store-ownr");
+		query.setParameter("roleTab1", "store-ownr");
+		query.setParameter("roleTab2", "area-mgr");
 		query.setParameter("storeId", storeId);
 		return query.list();
 	}

@@ -59,7 +59,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 				int roleCode = 0;
 				if (roles.contains("store-ownr"))
 					roleCode = 99;
-				else if (roles.contains("store-mgr"))
+				else if ((roles.contains("store-mgr")) || (roles.contains("area-mgr")))
 					roleCode = 98;
 				else
 					roleCode = 97;

@@ -1097,13 +1097,31 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 			    				var employeeStores = employee.stores ? employee.stores.split(',') : [];
 			    				baseArray.forEach(stores, function(store){
 			    					td = domConstruct.create("td", {});
-			    					var cbChecked = false;
+			    					var cbChecked = false, cbDisabled=false, isAreaMgr = false, isStoreMgr = false;
 			    					for(var i=0; i < employeeStores.length; i++){
-			    						if(employeeStores[i] == store)
+			    						var empStoreSplitArr = (employeeStores[i]+'').split('&');
+			    						if((empStoreSplitArr[0] == store) && (empStoreSplitArr[1] == 'store-mgr')){
 			    							cbChecked = true;
+			    							cbDisabled = true;
+			    							isAreaMgr = false;
+			    							isStoreMgr = true;
+			    							break;
+			    						}else if((empStoreSplitArr[0] == store) && (empStoreSplitArr[1] == 'area-mgr')){
+			    							cbChecked = true;
+			    							cbDisabled = false;
+			    							isAreaMgr = true;
+			    							isStoreMgr = false;
+			    							break;
+			    						} else {
+			    							cbChecked = false;
+			    							cbDisabled = false;
+			    							isAreaMgr = false;
+			    							isStoreMgr = false;
+			    						}
 			    					}
 			    					var cb = new dojoCheckBox({
 			    						checked: cbChecked,
+			    						disabled: cbDisabled,
 			    						onChange: function(){
 			    							var urlToPost = '/service/store/' + store + '/modifyRole/'+ employee.empId + '/';
 			    							switch(this.get('value')+''){
@@ -1135,6 +1153,11 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 			    						}
 			    					});
 			    					td.appendChild(cb.domNode);
+			    					var spanInnerHtml = isStoreMgr ? '&nbsp;<font style="font-weight: bolder; font-size:xx-small !important; vertical-align: super; color: #009900">*store</font>' : 
+			    						isAreaMgr ? '&nbsp;<font style="font-weight: bolder; font-size:xx-small !important; vertical-align: super; color: #990000">*area</font>' : 
+			    							'&nbsp;<font style="font-weight: bolder; font-size:xx-small !important; vertical-align: super; color: #dddddd">*none</font>';
+			    					var span = domConstruct.create("span", {innerHTML: spanInnerHtml});
+			    					td.appendChild(span); 
 			    					domStyle.set(td, 'width', '16%');
 							    	domStyle.set(td, 'text-align', 'center');
 							    	tableTR.appendChild(td);
