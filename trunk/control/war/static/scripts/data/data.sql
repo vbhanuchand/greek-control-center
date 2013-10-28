@@ -416,3 +416,19 @@ select * from employee;
 
 --e35bece6c5e6e0e86ca51d0440e92282a9d6ac8a
 --5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8
+
+desc employee_role;
+delete from employee_role where id=10;
+alter table employee_role modify role_tab ENUM('manage-tab','store-tab','emp-tab','inventory-tab','labor-tab','area-mgr','store-mgr','store-ownr') DEFAULT 'store-tab' NOT NULL
+
+select * from employee_role; where store_id=1; where employee_id=2;
+select * from employee;
+insert into employee_role(employee_id, store_id, active, role_tab, updated_by) values(1, 0, 'Y', 'store-ownr', 0);
+
+insert into employee_role(employee_id, store_id, active, role_tab, updated_by) values(2, 1, 'Y', 'store-mgr', 0);
+insert into employee_role(employee_id, store_id, active, role_tab, updated_by) values(3, 2, 'Y', 'store-mgr', 0);
+insert into employee_role(employee_id, store_id, active, role_tab, updated_by) values(4, 3, 'Y', 'store-mgr', 0);
+
+
+delete from employee_role;
+commit;

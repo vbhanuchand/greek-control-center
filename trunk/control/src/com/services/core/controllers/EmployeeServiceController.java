@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,7 +27,6 @@ import com.services.core.view.wrappers.EmployeeReviewWrapper;
 import com.services.core.view.wrappers.EmployeeSalaryWrapper;
 import com.services.core.view.wrappers.EmployeeWrapper;
 import com.services.core.view.wrappers.MultipleModelResponse;
-import com.services.core.view.wrappers.SimpleModel;
 import com.services.core.view.wrappers.SingleModelResponse;
 import com.services.core.view.wrappers.UploadNotesWrapper;
 
@@ -72,7 +70,7 @@ public class EmployeeServiceController {
 	@RequestMapping(value = "/service/store/{storeId}/modifyRole/{empId}/{role}", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public SingleModelResponse<BaseModel> modifyRoles(@PathVariable int storeId, @PathVariable int empId, @PathVariable int role) throws IOException {
-		String roleName = "store-mgr";
+		String roleName = "area-mgr";
 		boolean addRole = false;
 		if(role > 0) addRole = true;
 		return new SingleModelResponse<BaseModel>(dataService.updateEmployeeRole(empId, storeId, addRole, roleName), null);

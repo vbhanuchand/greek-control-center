@@ -232,8 +232,16 @@ function showFileUploadDialog(domNode){
 			standByWidget = 'accMonthlyDocumentStandBy';
 			fileUploadWidget = 'accMonthlyDocumentWidgetsDiv';
 			progressMsg = 'accMonthlyDocumentWidgetsProgressMsgs';
-			if(!(registry.byId('accountingQuartersList').get('value') > 0))
-				return;
+			if(!(registry.byId('accountingQuartersList').get('value') > 0) || !(parseInt(registry.byId('hiddenAccountingRecordId').get('value')) > 0)){
+				if(!(registry.byId('accountingQuartersList').get('value') > 0)){
+					alert('Please Select a Month');
+					return;
+				}
+				if(!parseInt(registry.byId('hiddenAccountingRecordId').get('value') > 0)){
+					alert('Please enter data for the Selected Month first');
+					return;
+				}
+			}
 			break;
 		/*case 'airportSectionDocs':
 			standByWidget = 'airportSectionDocsStandBy';
@@ -696,8 +704,9 @@ function applySecurityRoles(authoritiesData){
 	var role = authoritiesData.roles;
 	var stores = authoritiesData.stores;
 	
-	if(role == 'ROLE_OWNER')
+	if(role == 'ROLE_OWNER'){
 		stores = 'store-1, store-2, store-3, store-4, store-5';
+	}
 	
 	
 	var storeToSelect = 0;
@@ -739,9 +748,12 @@ function applySecurityRoles(authoritiesData){
 			//Remove the View Schedule Column in Store Info --> Labor Summary Grid Ends here
 			
 			//Remove the Manager Tab in the Main Tab Container Starts here
-			registry.byId('tabContainer').removeChild(registry.byId('managerPane'));
-			registry.byId('managerPane').destroy();
+				//Hide the Delete Column in Leaves Grid
+				registry.byId('mgrLeavesGrid').layout.setColumnVisibility(0,false);
+			//registry.byId('tabContainer').removeChild(registry.byId('managerPane'));
+			//registry.byId('managerPane').destroy();
 			//Remove the Manager Tab in the Main Tab Container Ends here
+			
 			//Remove the Update Column in Employees Grid, Salary Particulars Tab in the Employee Tabs, Labor Entry Tab
 			registry.byId('employeesGrid').layout.setColumnVisibility(0,false);
 			
@@ -768,6 +780,7 @@ function applySecurityRoles(authoritiesData){
 			registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(5,false);
 			registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(6,false);
 			registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(7,false);
+			
 			//registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(8,false);
 			//Ends here
 			checkSelectedPane('locationTabletr'+storeToSelect, 'rightAccordion', storeToSelect);
@@ -1342,7 +1355,7 @@ function printInvoice(gridId, title){
 			
 			if(selectedOption != 'Distributor'){
 				finalHTML += '<br/><br/>';
-				finalHTML += '<div align="left" style="width: 95%; height: 10%; position: absolute; bottom: 20px; left: 10px;"><table style="width: 100%; height: 100%;" class="dateTable"><tr style="height: 10px;"><th style="width: 25%;">Manager Signature</th><th style="width: 30%;" class="noBorder"></th><th style="width: 20%;">GS CHARGES</th><th style="width: 20%;">TOTAL</th></tr>';
+				finalHTML += '<div align="left" style="width: 95%; height: 10%; bottom: 10px; left: 10px;"><table style="width: 100%; height: 100%;" class="dateTable"><tr style="height: 10px;"><th style="width: 25%;">Manager Signature</th><th style="width: 30%;" class="noBorder"></th><th style="width: 20%;">GS CHARGES</th><th style="width: 20%;">TOTAL</th></tr>';
 				finalHTML += '<tr><td style="width: 25%;"></td><td style="width: 30%;" class="noBorder"></td><td style="width: 20%;">&nbsp;&nbsp;$' + totalGsPercent + '</td><td style="width: 20%;">&nbsp;&nbsp;$' + totalTotalCost + '</td></tr>';
 				finalHTML += '</table></div>';
 			}
@@ -1370,13 +1383,26 @@ function printManagerReview(){
 	finalHTML += "<body class='dbootstrap' style='width: 100%; height: 100%;color: #000000; background: #ffffff; font-family: \"Times New Roman\", Times, serif; font-size: 12pt;'>";
 	var employeeName = registry.byId('mgrList').store.fetch({query: {id: registry.byId('mgrList').get('value')}, onComplete: function(items, request){
 		if(items.length > 0){
-			finalHTML += '<div align="center"><span style="float: left; padding-left: 10px; padding-right: 10px; border 1px; background-color: #ff0000; color: #ffffff">' + registry.byId('hiddenSelectedYear').get('value') + '</span><span style="padding-left: 2px; padding-right: 2px; border 1px; font-weight: bold">' + items[0].label + '</span></div>';
+			finalHTML += '<div align="center"><span style="float: left; padding-left: 10px; padding-right: 10px; border 1px; background-color: #dd0000; color: #ffffff">' + registry.byId('hiddenSelectedYear').get('value') + '</span><span style="padding-left: 2px; padding-right: 2px; border 1px; font-weight: bold">' + items[0].label + '</span></div>';
 			finalHTML += dom.byId('printManagerReviewDiv').innerHTML;
 			finalHTML += dom.byId('mgrUnusedPersonalDaysDetailsDiv').innerHTML;
-			var w = window.open("about:blank");
-			w.document.write(finalHTML);
-			w.document.close();
-			w.print(); 
+			var leavesGridId = 'mgrLeavesGrid';
+			registry.byId(leavesGridId).store.fetch({
+				onComplete: function(items){
+					finalHTML += '<br/><div align="center"><h3>Personal / Sick Days</h3></div>';
+					var leavesTable = '<table style="width: 100%;" class="printTable"><tr><th style="width: 30%;">Date</th><th style="width: 70%;">Notes</th>';
+					baseArray.forEach(items, function(item, index){
+						leavesTable += '<tr><td style="width: 30%; text-align: center !important;">' + item.date + '</td><td style="width: 70%; text-align: left !important; padding-left: 10px !important; ">' + item.reason + '</td></tr>';
+					});
+					leavesTable += '</table>';
+					finalHTML += leavesTable;
+					var w = window.open("about:blank");
+					w.document.write(finalHTML);
+					w.document.close();
+					w.print(); 
+				}
+			});
+			
 		}
 	}});
 	
