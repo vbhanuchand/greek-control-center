@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -16,6 +17,9 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +40,6 @@ import com.services.core.data.model.store.Store;
 import com.services.core.data.model.store.StoreAccount;
 import com.services.core.data.model.store.StoreAlarm;
 import com.services.core.data.model.store.StoreDate;
-import com.services.core.data.model.store.StoreInvoice;
 import com.services.core.data.model.store.StoreInvoiceDetails;
 import com.services.core.data.model.store.StoreKey;
 import com.services.core.data.model.store.StoreMaintenance;
@@ -139,9 +142,10 @@ public class DataManagerImpl implements DataManager{
 		return employeeWrappers;
 	}
 	
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public Map<String, Map<String, String>> getAllStoreManagers() {
+		
 		List mgrList = employeeDAO.getAllStoreManagers();
 		Iterator iter = mgrList.iterator();
 		Map mapObject;
@@ -182,16 +186,20 @@ public class DataManagerImpl implements DataManager{
         //employeeDAO.deleteEmployee(employee);
     }
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<EmployeeWrapper> getEmployeesByStoreId(int storeId, boolean getMgrOnly) {
 		List<EmployeeWrapper> employeeWrappers = new ArrayList<EmployeeWrapper>();
 		for(Employee emp: employeeDAO.getEmployeesByStoreId(storeId, getMgrOnly)){
-			/*for(Role empRole: emp.getEmployeeRoles()){
-				if(empRole.getStoreId().intValue() == storeId)
-					employeeRoleWrappers.add(new RoleWrapper(empRole.getId(), empRole.getActive(), 
-							empRole.getStoreId(), empRole.getRoleTab(), empRole.getUpdated_by(), empRole.getUpdated_date()));
-			}*/
-			employeeWrappers.add(new EmployeeWrapper(emp.getId(), emp.getUsername(), emp.getFname(), 
+			Collection<GrantedAuthority> authorities = (Collection<GrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+			String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+			String currentUserRolesStr = authorities.toString();
+			if(!(currentUserRolesStr.contains("ROLE_OWNER"))){
+				if(currentUsername.equalsIgnoreCase(emp.getUsername())){
+					employeeWrappers.add(new EmployeeWrapper(emp.getId(), emp.getUsername(), emp.getFname(), 
+							emp.getLname(), emp.getPhone(), emp.getPersonalPhone(), emp.getEmergencyContact(), emp.getAddress(), emp.getPosition(), emp.getManager(),  emp.getActive(), emp.getUpdated_by(), emp.getHired_date()));
+				}
+			} else employeeWrappers.add(new EmployeeWrapper(emp.getId(), emp.getUsername(), emp.getFname(), 
 					emp.getLname(), emp.getPhone(), emp.getPersonalPhone(), emp.getEmergencyContact(), emp.getAddress(), emp.getPosition(), emp.getManager(),  emp.getActive(), emp.getUpdated_by(), emp.getHired_date()));
 		}
 		return employeeWrappers;
