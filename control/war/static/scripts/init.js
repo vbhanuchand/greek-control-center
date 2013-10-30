@@ -449,12 +449,25 @@ require(["bootstrap", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/dijit", 
 				var oldValue = dijit.byId('hiddenItemDate').get('value');
 				var oldWeek = locale.format(oldValue, {selector: 'date', datePattern: 'w', locale: 'en'});
 				var newWeek = locale.format(newValue, {selector: 'date', datePattern: 'w', locale: 'en'});
+				
+				var oldWeekDay = locale.format(oldValue, {selector: 'date', datePattern: 'EEE', locale: 'en'});
+				var newWeekDay = locale.format(newValue, {selector: 'date', datePattern: 'EEE', locale: 'en'});
+				
+				if(oldWeekDay == 'Sun'){
+					oldWeek = oldWeek - 1;
+				}
+				
+				if(newWeekDay == 'Sun'){
+					newWeek = newWeek - 1;
+				}
+				
+				
 				//console.log('oldWeek --> ' + oldWeek + ' newWeek--> ' + newWeek);
 				if(Math.abs(newWeek - oldWeek) > 0){
 					var currentYear = locale.format(newValue, {selector: 'date', datePattern: 'yyyy', locale: 'en'});
 					newWeek++;
 					globalYearWeekForRefresh = currentYear+'-'+newWeek;
-					laborLayout.populateData(registry.byId('hiddenStoreId').get('value'), currentYear+'-'+newWeek);
+					laborLayout.populateData(registry.byId('hiddenStoreId').get('value'), currentYear + '-' + newWeek);
 				}
 				dijit.byId('hiddenItemDate').set('value', newValue);
 			});

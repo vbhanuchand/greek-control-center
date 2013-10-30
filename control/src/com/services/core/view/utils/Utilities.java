@@ -15,6 +15,30 @@ public class Utilities {
 	public static SimpleDateFormat dbDateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 	private static DecimalFormat dataBaseDecimalFormat = new DecimalFormat("##.##");
 
+	// Returns the skeleton string from the "date"'s MONDAY to SUNDAY week
+	//Week is MONDAY to SUNDAY
+	public static String newGetStringforLaborSkeleton(String date){
+		String returnDate="";
+		Calendar cal = Calendar.getInstance();
+		try {
+			cal.setTime(dbDateFormatter.parse(date));
+		} catch (ParseException e) {
+			cal.setTime(new Date());
+		}
+		if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
+			returnDate = laborScheduleFormatter.format(cal.getTime());
+			cal.add(Calendar.DATE, -6);
+			returnDate = laborScheduleFormatter.format(cal.getTime()) + " to " + returnDate;
+		} else {
+			cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+			returnDate = laborScheduleFormatter.format(cal.getTime());
+			cal.add(Calendar.DATE, 6);
+			returnDate = returnDate + " to " + laborScheduleFormatter.format(cal.getTime());
+		}
+		return returnDate;
+	}
+	
+	//Week is SUNDAY to SATURDAY
 	public static String getStringforLaborSkeleton(String date){
 		String returnDate="";
 		Calendar cal = Calendar.getInstance();
@@ -23,17 +47,32 @@ public class Utilities {
 		} catch (ParseException e) {
 			cal.setTime(new Date());
 		}
-		
-		//cal.add(Calendar.DATE, -1);
 		cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
 		returnDate = laborScheduleFormatter.format(cal.getTime());
-		//cal.add(Calendar.DATE, 1);
 		cal.add(Calendar.DATE, 6);
-		cal.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
 		returnDate = returnDate + " to " + laborScheduleFormatter.format(cal.getTime());
 		return returnDate;
 	}
 	
+	//Returns Week Number based on MONDAY TO SUNDAY week
+	public static String newGetWeekNumber(String date){
+		Calendar cal = Calendar.getInstance();
+		try {
+			cal.setTime(dbDateFormatter.parse(date));
+		} catch (ParseException e) {
+			cal.setTime(new Date());
+		}
+		
+		if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
+			return (String.valueOf(cal.get(Calendar.YEAR)) + "-" + String.valueOf(cal.get(Calendar.WEEK_OF_YEAR) - 1));
+		} else {
+			return (String.valueOf(cal.get(Calendar.YEAR)) + "-" + String.valueOf(cal.get(Calendar.WEEK_OF_YEAR)));
+		}
+	}	
+	
+	
+	
+	//Returns Week Number based on SUNDAY TO SATURDAY week
 	public static String getWeekNumber(String date){
 		Calendar cal = Calendar.getInstance();
 		try {
@@ -50,6 +89,29 @@ public class Utilities {
 		return String.valueOf(cal.get(Calendar.YEAR));
 	}
 	
+	//Returns MONDAY to SUNDAY week dates 
+	public static Map<String, Date> newGetStartDateEndDate(String yearWeek){
+		Map<String, Date> returnMap = new HashMap<String, Date>();
+		String[] yearWeekArray= yearWeek.split("-");
+		String date = yearWeekArray[0] + "-01-01";
+		Calendar cal = Calendar.getInstance();
+		try {
+			cal.setTime(dbDateFormatter.parse(date));
+		} catch (ParseException e) {
+			cal.setTime(new Date());
+		}
+		cal.set(Calendar.WEEK_OF_YEAR, Integer.parseInt(yearWeekArray[1]));
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+		Date startDate = cal.getTime();
+		cal.add(Calendar.DAY_OF_WEEK, 6);
+		Date endDate = cal.getTime();
+		
+		returnMap.put("startDate", startDate);
+		returnMap.put("endDate", endDate);
+		return returnMap;
+	}	
+	
+	//Returns SUNDAY to SATURDAY week dates 
 	public static Map<String, Date> getStartDateEndDate(String yearWeek){
 		Map<String, Date> returnMap = new HashMap<String, Date>();
 		String[] yearWeekArray= yearWeek.split("-");
@@ -69,6 +131,26 @@ public class Utilities {
 		returnMap.put("startDate", startDate);
 		returnMap.put("endDate", endDate);
 		return returnMap;
+	}
+	
+	//Returns MONDAY to SUNDAY Formatted data
+	public static String newGetFormattedStartDateEndDate(String yearWeek){
+		String returnString = "";
+		String[] yearWeekArray= yearWeek.split("-");
+		String date = yearWeekArray[0] + "-01-01";
+		Calendar cal = Calendar.getInstance();
+		try {
+			cal.setTime(dbDateFormatter.parse(date));
+		} catch (ParseException e) {
+			cal.setTime(new Date());
+		}
+		cal.set(Calendar.WEEK_OF_YEAR, Integer.parseInt(yearWeekArray[1]));
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+		Date startDate = cal.getTime();
+		cal.add(Calendar.DAY_OF_WEEK, 6);
+		Date endDate = cal.getTime();
+		returnString = laborScheduleFormatter.format(startDate) + " to " + laborScheduleFormatter.format(endDate);
+		return returnString;
 	}
 	
 	public static String getFormattedStartDateEndDate(String yearWeek){

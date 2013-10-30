@@ -325,7 +325,7 @@ public class DataManagerImpl implements DataManager{
 			dbItem.put("date", mapObject.get("date").toString());
 			dbItem.put("position", String.valueOf(mapObject.get("position")));
 			dbItem.put("total", String.valueOf(mapObject.get("total")));
-			dbItem.put("skeleton", Utilities.getStringforLaborSkeleton(mapObject.get("date").toString()));
+			dbItem.put("skeleton", Utilities.newGetStringforLaborSkeleton(mapObject.get("date").toString()));
 			dbList.add(dbItem);
 		}
 		Map<String, Map<String, String>> consolidatedMap = new HashMap<String, Map<String, String>>();
@@ -355,7 +355,7 @@ public class DataManagerImpl implements DataManager{
 			if(!tempMap.containsKey("Front")) tempMap.put("Front", "0.0");
 			if(!tempMap.containsKey("Cook")) tempMap.put("Cook", "0.0");
 			tempMap.put("id", String.valueOf(id++));
-			tempMap.put("week", Utilities.getWeekNumber(tempMap.get("date")));
+			tempMap.put("week", Utilities.newGetWeekNumber(tempMap.get("date")));
 			returnList.add(tempMap);
 		}
 		
@@ -380,7 +380,7 @@ public class DataManagerImpl implements DataManager{
 	@Override
 	@SuppressWarnings("rawtypes")
 	public List<StoreLaborDetailsWrapper> getLaborDetails(int storeId, String yearWeek){
-		Map<String, Date> datesMap = Utilities.getStartDateEndDate(yearWeek);
+		Map<String, Date> datesMap = Utilities.newGetStartDateEndDate(yearWeek);
 		List<StoreLaborDetailsWrapper> storeLaborDetails = new ArrayList<StoreLaborDetailsWrapper>();
 		Calendar cal = Calendar.getInstance();
 		Map rowObject;
