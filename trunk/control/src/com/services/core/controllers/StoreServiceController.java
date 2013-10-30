@@ -3,6 +3,7 @@ package com.services.core.controllers;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.services.core.data.mgr.DataManager;
 import com.services.core.view.utils.Utilities;
 import com.services.core.view.wrappers.BaseModel;
-import com.services.core.view.wrappers.EmployeeReviewWrapper;
 import com.services.core.view.wrappers.ItemWrapper;
 import com.services.core.view.wrappers.MultipleModelResponse;
 import com.services.core.view.wrappers.SingleModelResponse;
@@ -213,13 +213,21 @@ public class StoreServiceController {
 		logger.info("Getting Employees Labor Details For Store Id --> " + storeId + " --> " + yearWeek);
 		MultipleModelResponse<StoreLaborDetailsWrapper> returnModel = new MultipleModelResponse<StoreLaborDetailsWrapper>(true, dataService.getLaborDetails(storeId, yearWeek));
 		Map<String, String> customMessages = new HashMap<String, String>();
-		customMessages.put("skeleton", Utilities.getFormattedStartDateEndDate(yearWeek));
+		customMessages.put("skeleton", Utilities.newGetFormattedStartDateEndDate(yearWeek));
 		returnModel.setCustomMessages(customMessages);
+		
+		Map<String, Map<String, String>> empRoles = new HashMap<String, Map<String, String>>();
+		Map<String, String> innerMap = new HashMap<String, String>();
+		Map<String, Date> datesMap = Utilities.newGetStartDateEndDate(yearWeek);
+		innerMap.put("startDate", Utilities.laborScheduleFormatter.format(datesMap.get("startDate")));
+		innerMap.put("endDate", Utilities.laborScheduleFormatter.format(datesMap.get("endDate")));
+		empRoles.put("datesMap", innerMap);
 		
 		for(StoreLaborDetailsWrapper item: returnModel.getModels()){
 			item.set_self("/service/store/" + storeId + "/employee/"+ item.getEmpId() +"/labor");
 			item.setPost(false);
 		}
+		returnModel.setEmpRoles(empRoles);
 		
 		return returnModel;
 	}

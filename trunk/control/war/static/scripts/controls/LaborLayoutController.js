@@ -10,9 +10,17 @@ define(["dijit/dijit", "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/fx", "do
     	}).then(function(laborDetailsResponse){
     		if(laborDetailsResponse.success && laborDetailsResponse.models.length>0){
     			populateCalendarData(laborDetailsResponse);
-    		}else {
+    		} else {
     			var calendar = registry.byId('labor-calendar');
-    			registry.byId('labor-calendar').set('date', registry.byId('itemStartDateEditor').get('value'));
+    			//registry.byId('labor-calendar').set('date', registry.byId('itemStartDateEditor').get('value'));
+    			var calStart = laborDetailsResponse.empRoles.datesMap.startDate.split('/');
+    			calStart = new Date(calStart[2], calStart[0]-1, calStart[1]);
+    			
+    			var calEnd = laborDetailsResponse.empRoles.datesMap.endDate.split('/');
+    			calEnd = new Date(calEnd[2], calEnd[0]-1, calEnd[1]);
+    			
+    			registry.byId('labor-calendar').set('startDate', calStart);
+    			registry.byId('labor-calendar').set('endDate', calEnd);
     			calendar.set('store', new Observable(new Memory({data: []})));
     			registry.byId('labor-calendar').buttonContainer.innerHTML = 'Data Not Available !!!';
     			//registry.byId('labor-calendar').buttonContainer.style.display = 'none';
@@ -101,7 +109,7 @@ define(["dijit/dijit", "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/fx", "do
 		calEnd =  new Date(calEnd[2], calEnd[0]-1, calEnd[1]);
 		
 		registry.byId('labor-calendar').set('store', new Observable(new Memory({data: calData})));
-		registry.byId('labor-calendar').set('date', calStart);
+		//registry.byId('labor-calendar').set('date', calStart);
 		registry.byId('labor-calendar').set('startDate', calStart);
 		registry.byId('labor-calendar').set('endDate', calEnd);
 		registry.byId('labor-calendar').set('createOnGridClick', false);
@@ -234,8 +242,16 @@ define(["dijit/dijit", "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/fx", "do
         	if(fetchData && !((laborPaneCalledFromStore) && (laborPaneCalledFromStore === true))){
         		var currentYear = locale.format(registry.byId('itemStartDateEditor').get('value'), {selector: 'date', datePattern: 'yyyy', locale: 'en'});
 	        	var currentWeek = locale.format(registry.byId('itemStartDateEditor').get('value'), {selector: 'date', datePattern: 'w', locale: 'en'});
-	        	fetchCalendarData(registry.byId('hiddenStoreId').get('value'), (currentYear + '-' + (Number(currentWeek) + 1)));
-	        	globalYearWeekForRefresh = currentYear + '-' + (Number(currentWeek) + 1);
+	        	var currentDayOfWeek = locale.format(registry.byId('itemStartDateEditor').get('value'), {selector: 'date', datePattern: 'EEE', locale: 'en'});
+	        	console.log('currentDayOfWeek --> ', currentDayOfWeek);
+	        	if(currentDayOfWeek == 'Sun'){
+	        		fetchCalendarData(registry.byId('hiddenStoreId').get('value'), (currentYear + '-' + (Number(currentWeek))));
+	        		globalYearWeekForRefresh = currentYear + '-' + Number(currentWeek);
+	        	}else {
+	        		fetchCalendarData(registry.byId('hiddenStoreId').get('value'), (currentYear + '-' + (Number(currentWeek) + 1)));
+	        		globalYearWeekForRefresh = currentYear + '-' + (Number(currentWeek) + 1);
+	        	}
+	        	
         	}
         	if((laborPaneCalledFromStore) && (laborPaneCalledFromStore === true)){
         		laborPaneCalledFromStore = false;
