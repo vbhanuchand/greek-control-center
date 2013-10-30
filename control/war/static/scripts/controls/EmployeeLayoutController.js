@@ -405,23 +405,8 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 										    errorMessage:   'Oops we could not retrive the requested data!',
 										    noDataMessage:	"<span class=\"dojoxGridNoData\"><font color='grey'>No Data to Display !!!</font></span>",
 										    onFetchError: function(error,ioargs){console.log('Error ocured: '+error+' ioargs: '+ioargs); return true;},
-										    selectionMode: "single",
-										    //rowSelector: '15px',
-											/*plugins: {
-														nestedSorting: false,
-										                pagination: {
-															pageSizes: ["5", "10", "50", "100", "All"],
-															description: true,
-															sizeSwitch: false,
-															pageStepper: true,
-															gotoButton: false,
-															maxPageStep: 5,
-															position: "bottom",
-															defaultPage: 1,
-								                            defaultPageSize: 5
-														},
-							                            exporter: true
-										        }*/}, "employeesGrid");
+										    selectionMode: "single"
+										    }, "employeesGrid");
 					employeesGrid.startup();
 				}	else dijit.byId('employeesGrid').setStore(gridDataStore);
 				/*if((employeesGrid.rowCount > 0) && (employeesGrid.selection.selectedIndex >= 0)){

@@ -1,6 +1,6 @@
 define(["dijit/dijit", "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/fx", "dojo/parser", "dijit/registry", "dojo/_base/lang",
-        "dojox/calendar/Calendar","dojo/request", "dojo/store/Observable", "dojo/store/Memory", "dojo/_base/array", "dojo/date/locale", "controls/EmployeeLayoutController"],
-	function(dijit, date, dom, domStyle, otherFx, parser, registry, lang, Calendar, ajaxRequest, Observable, Memory, arrayUtils, locale, empLayout){
+        "dojox/calendar/Calendar","dojo/request", "dojo/store/Observable", "dojo/store/Memory", "dojo/_base/array", "dojo/date/locale", "controls/EmployeeLayoutController", "dojo/_base/event"],
+	function(dijit, date, dom, domStyle, otherFx, parser, registry, lang, Calendar, ajaxRequest, Observable, Memory, arrayUtils, locale, empLayout, baseEvent){
 	
 	var fetchCalendarData = function(storeId, yearWeek){
 		var standByWidget = 'calendarEntryTitlePaneStandBy';
@@ -168,35 +168,12 @@ define(["dijit/dijit", "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/fx", "do
 		});
 		
 		calendar.set('createOnGridClick', false);
-		/*var createItem = function(view, d, e){
-			var start, end;
-			var colView = calendar.columnView;
-			var cal = calendar.dateModule;
-			if(view == colView){
-				start = calendar.floorDate(d, "minute", 15);
-				end = cal.add(start, "minute", 45); 
-			}else{
-				start = calendar.floorToDay(d);
-				end = cal.add(start, "day", 1);
-			}
-			
-			var item = {
-				id: globalId,
-				summary: "New event " + globalId,
-				begin: start,
-				end: end,
-				calendar: "Calendar1",
-				allDay: false
-			};
-			console.log('Creating item --> ');
-			console.log(item);
-			globalId++;	
-			
-			return item;							
+
+		calendar.columnView._columnHeaderClick = function(e){
+			baseEvent.stop(e);
+			return;
 		};
 		
-		calendar.set("createItemFunc", createItem);
-		*/
 		calendar.on("change", function(e){
 			try{
 				if(e.newValue && !((e.newValue == null) ||  (e.newValue == 'null'))){
