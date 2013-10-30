@@ -401,6 +401,10 @@ public class DataManagerImpl implements DataManager{
 			temp = new StoreLaborDetailsWrapper((Integer)rowObject.get("id"), (Integer)rowObject.get("empId"), (String)rowObject.get("fname"), "", (String)rowObject.get("position"), cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), 
 					frontHr, 5, frontHr, 50, (double)rowObject.get("totalTime"), "Calendar1");
 			temp.setSummary(Utilities.getSummary((String)rowObject.get("fname"), (Integer)rowObject.get("from"), (Integer)rowObject.get("to")));
+			temp.setStartDate(datesMap.get("startDate"));
+			temp.setEndDate(datesMap.get("endDate"));
+			temp.setActualBeginTime((Integer)rowObject.get("from"));
+			temp.setActualEndTime((Integer)rowObject.get("to"));
 			if(((String)rowObject.get("position")).equalsIgnoreCase("Front")){
 				temp.setCalendar("Calendar1");
 				temp.setBeginHH(10 + (frontHr%4));
@@ -420,10 +424,6 @@ public class DataManagerImpl implements DataManager{
 				mgrHr++;
 				storeLaborDetails.add(temp);
 			}
-			temp.setStartDate(datesMap.get("startDate"));
-			temp.setEndDate(datesMap.get("endDate"));
-			temp.setActualBeginTime((Integer)rowObject.get("from"));
-			temp.setActualEndTime((Integer)rowObject.get("to"));
 		}
 		return storeLaborDetails;
 	}
