@@ -292,7 +292,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 									noDataMessage: "<span class=\"dojoxGridNoData\"><font color='grey'>Inventory Details not available. Please Add !!!</font></span>",
 									onFetchError: function(error,ioargs){console.log('Error ocured: '+error+' ioargs: '+ioargs); return true;},
 									selectionMode: "multiple",
-									rowSelector: '0px;',
+									rowSelector: '0px',
 									keepSelection: false,
 									plugins: {indirectSelection: {headerSelector:true, width:"20px", styles:"text-align: center;"}}
 									}, "inventoryInvoiceDetailsGrid");

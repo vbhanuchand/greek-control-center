@@ -36,8 +36,11 @@ require(["bootstrap", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/dijit", 
 			storeLayout.init();
 			empLayout.init();
 			laborLayout.init();
+			console.log('accLayout.init() start');
 			accLayout.init();
+			console.log('accLayout.init() done');
 			inventoryLayout.init();
+			console.log('inventoryLayout.init() end');
 			loadingObj.endLoading();
 			//setTimeout(lang.hitch(loadingObj, "setSelectedLocation"), 500);
 			console.log('Layout Require() Completed');
