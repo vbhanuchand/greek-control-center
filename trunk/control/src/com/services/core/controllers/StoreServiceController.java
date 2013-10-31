@@ -242,6 +242,12 @@ public class StoreServiceController {
 		for(String year: yearsList)
 			map.put(year, year);
 		String currentYear = Utilities.getCurrentYear();
+		//For Adding previous Error (2012)
+		if(!(yearsList.contains(Integer.parseInt(currentYear)-1))){
+			map.put(String.valueOf(Integer.parseInt(currentYear)-1), String.valueOf(Integer.parseInt(currentYear)-1));
+		}
+		
+		//For Adding current Year (2013)
 		if(!(yearsList.contains(currentYear))){
 			map.put(currentYear, currentYear);
 		}

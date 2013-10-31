@@ -956,7 +956,7 @@ public class DataManagerImpl implements DataManager{
 	@Override
 	@Transactional
 	public int insertStoreItem(ItemWrapper item, String category){
-		return storeDAO.insertStoreItem(item.getItemCode(), item.getItemCategory() , item.getItemColor(), item.getItemName(), item.getItemPar(), item.getItemUnits(), item.getStoreId(), item.getUpdatedBy(), category);
+		return storeDAO.insertStoreItem(item.getItemCode(), item.getItemCategory() , item.getItemColor(), item.getItemName(), item.getItemPar(), item.getItemUnits(), item.getItemPPU(), item.getItemGSPercent(), item.getStoreId(), item.getUpdatedBy(), category);
 	}
 	
 }

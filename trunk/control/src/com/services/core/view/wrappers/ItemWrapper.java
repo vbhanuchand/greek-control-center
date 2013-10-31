@@ -22,6 +22,10 @@ public class ItemWrapper extends BaseModel{
 	
 	private String itemUnits;
 	
+	private Double itemPPU;
+	
+	private Double itemGSPercent;
+	
 	private Integer storeId;
 	
 	private Integer updatedBy;
@@ -111,6 +115,22 @@ public class ItemWrapper extends BaseModel{
 
 	public void setItemUnits(String itemUnits) {
 		this.itemUnits = itemUnits;
+	}
+
+	public Double getItemPPU() {
+		return itemPPU;
+	}
+
+	public void setItemPPU(Double itemPPU) {
+		this.itemPPU = itemPPU;
+	}
+
+	public Double getItemGSPercent() {
+		return itemGSPercent;
+	}
+
+	public void setItemGSPercent(Double itemGSPercent) {
+		this.itemGSPercent = itemGSPercent;
 	}
 
 	public Integer getStoreId() {
