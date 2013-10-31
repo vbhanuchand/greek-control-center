@@ -458,7 +458,7 @@ public class StoreDAOImpl implements StoreDAO {
 	}
 	
 	@Override
-	public int insertStoreItem(int itemCode, int itemCategory, String itemColor, String itemName, int itemPar, String itemUnits, int storeId, int updatedBy, String category){
+	public int insertStoreItem(int itemCode, int itemCategory, String itemColor, String itemName, int itemPar, String itemUnits, double itemPPU, double itemGSPercent, int storeId, int updatedBy, String category){
 		/*String hql = "select i from Item i where i.storeId = :istoreId and i.itemType = :itemType and i.category = :icategory and i.itemCode = (select max(ii.itemCode) from Item ii " +
 				"where ii.storeId = :iistoreId and ii.itemType=:iiitemType and ii.itemCode > :minItemCode and ii.itemCode < :maxItemCode and ii.category = :iicategory)";
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
@@ -486,7 +486,7 @@ public class StoreDAOImpl implements StoreDAO {
 		item.setCategory(category);
 		sessionFactory.getCurrentSession().save(item);
 		
-		StoreStock stockItem = new StoreStock(item.getStoreId(), item.getId(), 0, 0, 0.00, 0.00, updatedBy);
+		StoreStock stockItem = new StoreStock(item.getStoreId(), item.getId(), 0, 0, itemPPU, itemGSPercent, updatedBy);
 		stockItem.setCategory(category);
 		sessionFactory.getCurrentSession().save(stockItem);
 		

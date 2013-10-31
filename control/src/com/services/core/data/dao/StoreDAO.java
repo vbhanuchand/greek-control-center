@@ -98,5 +98,5 @@ public interface StoreDAO {
 	
 	List<Item> getStoreDistributors(int storeId, String category);
 	
-	int insertStoreItem(int itemCode, int itemCategory, String itemColor, String itemName, int itemPar, String itemUnits, int storeId, int updatedBy, String category);
+	int insertStoreItem(int itemCode, int itemCategory, String itemColor, String itemName, int itemPar, String itemUnits, double itemPPU, double itemGSPercent, int storeId, int updatedBy, String category);
 }
