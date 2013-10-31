@@ -642,6 +642,14 @@
 														<td style="width: 25%; text-align: center;" id="accountingFdAmtPercent"></td>
 													</tr>
 													<tr style="height: 5%;" valign="top">
+														<td style="width: 35%;">Supplies</td>
+														<td style="width: 40%;" align="center">
+															<input style="width: 90%;" type="text" name="accountingSuppliesAmt" id="accountingSuppliesAmt" value="0" required="true" data-dojo-type="dijit/form/CurrencyTextBox" 
+																data-dojo-props="constraints:{fractional:false}, currency:'USD', invalidMessage:'Invalid Amount.'" />
+														</td>
+														<td style="width: 25%; text-align: center;" id="accountingSuppliesAmtPercent"></td>
+													</tr>
+													<tr style="height: 5%;" valign="top">
 														<td style="width: 35%;">Advertisement</td>
 														<td style="width: 40%;" align="center">
 															<input style="width: 90%;" type="text" name="accountingAdvtAmt" id="accountingAdvtAmt" value="0" required="true" data-dojo-type="dijit/form/CurrencyTextBox" 
@@ -690,13 +698,13 @@
 																data-dojo-props="constraints:{fractional:false}, currency:'USD', invalidMessage:'Invalid Amount.'" />
 														</td>
 													</tr>
-													<tr valign="top">
+													<!-- <tr valign="top">
 														<td style="width: 40%;">Total Profits</td>
 														<td style="width: 40%;" align="center">
 															<input style="width: 95%;" type="text" name="accountingTotalProfits" id="accountingTotalProfits" value="0" required="true" data-dojo-type="dijit/form/CurrencyTextBox" 
 																data-dojo-props="constraints:{fractional:false}, currency:'USD', invalidMessage:'Invalid Amount.'" />
 														</td>
-													</tr>
+													</tr> -->
 													<tr valign="top">
 														<td style="width: 100%;" align="left" colspan="2"><div id="accMonthlyDocument" style="display: block;"><div id="accMonthlyDocumentWidgetsDiv" style="display: none; padding-left: 10px;"><!--
 															--><span id="accMonthlyDocumentWidgets"></span><span id="accMonthlyDocumentWidgetsProgressMsgs"></span><a href="javascript: hideFileUploadDialog('accMonthlyDocument');">Hide</a><!--
@@ -1153,7 +1161,7 @@
 						<tr>
 							<td width="25%"><b>Item Code:</b></td>
 							<td width="75%">
-								<input data-dojo-type="dijit/form/NumberTextBox" data-dojo-props="style: 'width: 100px; font-size: 90%;', required: 'true', trim: 'true', invalidMessage : 'Item is Invalid'" id="inventoryItemCode" name="inventoryItemCode"/>
+								<input data-dojo-type="dijit/form/NumberTextBox" data-dojo-props="style: 'width: 100px; font-size: 90%;', required: 'true', trim: 'true', invalidMessage : 'Item Code is Invalid'" id="inventoryItemCode" name="inventoryItemCode"/>
 							</td>
 						</tr>
 						<tr>
@@ -1165,13 +1173,25 @@
 						<tr>
 							<td width="25%"><b>Item Par:</b></td>
 							<td width="75%">
-								<input data-dojo-type="dijit/form/NumberTextBox" data-dojo-props="style: 'width: 100px; font-size: 90%;', required: 'true', trim: 'true', invalidMessage : 'Item is Invalid'" id="inventoryItemPar" name="inventoryItemPar"/>
+								<input data-dojo-type="dijit/form/NumberTextBox" data-dojo-props="style: 'width: 100px; font-size: 90%;', required: 'true', trim: 'true', invalidMessage : 'Item Par is Invalid'" id="inventoryItemPar" name="inventoryItemPar"/>
 							</td>
 						</tr>
 						<tr>
 							<td width="25%"><b>Packaging:</b></td>
 							<td width="75%">
 								<input data-dojo-type="dijit/form/TextBox" data-dojo-props="style: 'width: 100px; font-size: 90%;', required: 'true', trim: 'true'" id="inventoryItemUnits" name="inventoryItemUnits"/>
+							</td>
+						</tr>
+						 <tr>
+							<td width="25%"><b>Price Per Unit:</b></td>
+							<td width="75%">
+								<input data-dojo-type="dijit/form/CurrencyTextBox" data-dojo-props="style: 'width: 100px; font-size: 90%;', required: 'true', trim: 'true', invalidMessage : 'Price is Invalid', value: 0" id="inventoryItemPPU" name="inventoryItemPPU"/>
+							</td>
+						</tr>
+						<tr>
+							<td width="25%"><b>GS Charge (%):</b></td>
+							<td width="75%">
+								<input data-dojo-type="dijit/form/CurrencyTextBox" data-dojo-props="style: 'width: 100px; font-size: 90%;', required: 'true', trim: 'true', invalidMessage : 'GS Charge is Invalid', value: 0" id="inventoryItemGSCharge" name="inventoryItemGSCharge"/>
 							</td>
 						</tr>
 					</table>
@@ -1199,6 +1219,8 @@
 						itemWrapper['itemName'] = formValues['inventoryItemName'];
 						itemWrapper['itemPar'] = formValues['inventoryItemPar'];
 						itemWrapper['itemUnits'] = formValues['inventoryItemUnits'];
+						itemWrapper['itemPPU'] = formValues['inventoryItemPPU'];
+						itemWrapper['itemGSPercent'] = formValues['inventoryItemGSCharge'];
 						itemWrapper['storeId'] = registry.byId('hiddenStoreId').get('value');
 						var ajaxRequest = require("dojo/request");
 						var json = require('dojo/json');
