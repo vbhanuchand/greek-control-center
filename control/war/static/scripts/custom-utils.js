@@ -1289,6 +1289,13 @@ function printInvoice(gridId, title){
 	var dom = require('dojo/dom');
 	var totalUnitsCost=0, totalGsPercent=0, totalTotalCost=0;
 	
+	var dojoDateLocale = require('dojo/date/locale'); 
+	var selectedInvoiceRows = registry.byId('inventoryInvoicesGrid').selection.getSelected();
+	var selectedInvoiceRow = { 'date': dojoDateLocale.format(new Date(), { selector:"date", datePattern: 'MM/dd/yyyy' }) };
+	if(selectedInvoiceRows.length > 0){
+		try{selectedInvoiceRow['date'] = selectedInvoiceRows[0]['invoiceDate'][0];}catch(e){}
+	}
+	
 	var selectedOption = registry.byId('invoiceCategorySelect').get('value');
 	var storeName = '';
 	switch(registry.byId('hiddenStoreId').get('value')){
@@ -1317,8 +1324,8 @@ function printInvoice(gridId, title){
 	finalHTML += "<body class='dbootstrap' style='width: 100%; height: 100%;color: #000000; background: #ffffff; font-family: \"Times New Roman\", Times, serif; font-size: 12pt;'>";
 	var strTitle = dom.byId(title).innerHTML + '';
     var titleToPrint = strTitle.substr(1, strTitle.length - 2);
-    finalHTML += '<div style="display: block; width: 100%; height: 20px;" align="center"><h4>' + titleToPrint.toUpperCase() + ' ' + ((selectedOption != 'Distributor') ? 'INVOICE' : ' INVENTORY') + ' ( ' + storeName.toUpperCase() + ' )</h4></div>';
-    finalHTML += '<br/><br/>';
+    finalHTML += '<div style="display: block"><div style="display: inline-block; text-decoration: underline;">Date: ' + selectedInvoiceRow['date'] +  '</div><div style="display: inline-block; height: 20px; padding-left: 27%;" align="center"><h4>' + titleToPrint.toUpperCase() + ' ' + ((selectedOption != 'Distributor') ? 'INVOICE' : ' INVENTORY') + ' ( ' + storeName.toUpperCase() + ' )</h4></div></div>';
+    finalHTML += '<br/>';
     
 	var table = '<table style="width: 100%; vertical-align: top;" class="printTable">';
 	var bgColor = '';
@@ -1440,16 +1447,36 @@ function printCalendar(){
 		totalsMap.total = totalsMap.total + item.totalTime;
 	});
 	
-	var laborInfoTableHTML = '<table class="laborTablePrint" valign="top" style="width: 100%; overflow: auto;">' 
+	var storeName = '';
+	switch(registry.byId('hiddenStoreId').get('value')){
+		case '1':
+			storeName='Downtown';
+			break;
+		case '2':
+			storeName='West Valley';
+			break;
+		case '3':
+			storeName='Murray';
+			break;
+		case '4':
+			storeName='South Jordan';
+			break;
+		case '5':
+			storeName='Airport';
+			break;
+	}
+	
+	
+	var laborInfoTableHTML = '<div style="display: block; width: 100%; overflow: visible;"><table class="laborTablePrint" valign="top" style="width: 100%;">' 
 		+ '<tr><td class="laborDateTd" style="font-size: 90% !important;">' + skeleton + '</td>'
 		+ '<td class="laborMgrTd" style="font-size: 90% !important;">Total Manager Hours : ' + totalsMap.totalMgr + '</td>'
 		+ '<td class="laborFrontTd" style="font-size: 90% !important;">Total Front Hours : ' + totalsMap.totalFront + '</td>'
 		+ '<td class="laborCookTd" style="font-size: 90% !important;">Total Cook Hours : ' + totalsMap.totalCook + '</td>'
 		+ '<td class="laborDateTd" style="font-size: 90% !important;">Total Hours (Not Included Manager): ' + (totalsMap.totalFront + totalsMap.totalCook) + '</td>'
-		+ '</tr></table>';
+		+ '</tr></table></div>';
 
 	
-	var htmlForCalendar = laborInfoTableHTML + '<div><table style="width: 100%;"><tr><td style="width:80%" valign="top">' + '<table class="laborTablePrint" style="border: .1em solid #000;">';
+	var htmlForCalendar = laborInfoTableHTML + '<div><table style="width: 100%;"><tr><td style="width:80%" valign="top">' + '<table class="laborTablePrint" style="width: 100%; border: .1em solid #000;">';
 	var thForCalendar = '';
 	var tbodyForCalendar = '';
 	var cssClass = '';
@@ -1584,9 +1611,9 @@ function printCalendar(){
     html += '<link rel="stylesheet" href="resources/styles/styles.css"/>'; 
     html += '</head>';
     
-    html += "<body style='width: 100%; height: 100%; color: #000000; background: #ffffff; font-family: \"Times New Roman\", Times, serif; font-size: 12pt;'>";
-    html += '<div style="height: 5%; display: block;" align="center"><h2>' + ' Current Schedule' + '</h2></div>';
-    html += htmlForCalendar;
+    html += "<body style='width: 100%; height: 100%; color: #000000; background: #ffffff; font-family: \"Times New Roman\", Times, serif; font-size: 10pt;'>";
+    html += '<div style="height: 5%; display: block;" align="center"><h2>' + storeName + '&nbsp;-&nbsp;Current Schedule' + '</h2></div>';
+    html += '<div style="display: block;" align="center">' + htmlForCalendar + '</div>';
 	html += "</body>";
 	html += "</html>";
 	

@@ -665,7 +665,7 @@ table.laborTablePrint {
 	color: inherit;
 	border-width: 1px;
 	border-color: #eee;
-	border-collapse: collapse;
+	border-collapse: seperate;
 	border-spacing: 0px;
 }
 
