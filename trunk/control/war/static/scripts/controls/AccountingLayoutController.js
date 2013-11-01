@@ -1,7 +1,7 @@
-define(["dijit/dijit", "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/dom-construct", "dojo/fx", "dojo/parser", "dijit/registry", "dojo/store/Memory", "dojo/json", "dojo/fx",
+define(["dijit/dijit", 'dojo/query', "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/dom-construct", "dojo/fx", "dojo/parser", "dijit/registry", "dojo/store/Memory", "dojo/json", "dojo/fx",
         "dojo/_base/lang", "dojo/request", "dojo/_base/array", "dojo/date/locale", "dijit/form/Select", "dijit/form/FilteringSelect", "dojo/number", "dojox/lang/functional", "dojo/window"],
-function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Memory, json, otherFx, lang, ajaxRequest, arrayUtils, locale, formSelect, FilteringSelect, DNumber, functional, window){
-	var widgets = ['accountingLbrAmt', 'accountingFdAmt', 'accountingSuppliesAmt', 'accountingAdvtAmt', 'accountingMiscAmt', 'accountingProfitAmt', 'accountingTotalSales', 'accountingTotalOpExp'],
+function(dijit, query, date, dom, domStyle, domConstruct, otherFx, parser, registry, Memory, json, otherFx, lang, ajaxRequest, arrayUtils, locale, formSelect, FilteringSelect, DNumber, functional, window){
+	var widgets = ['accountingLbrAmt', 'accountingFdAmt', 'accountingSuppliesAmt', 'accountingAdvtAmt', 'accountingMiscAmt', 'accountingProfitAmt'/*, 'accountingTotalSales', 'accountingTotalOpExp'*/],
 	percentSuffix = 'Percent', accountingChart = null, accountingMonthlyChart=null,
 	initListening = function(){
 		arrayUtils.forEach(widgets, function(id){
@@ -27,6 +27,7 @@ function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Me
 			var percent = Number(isNaN(Number(value)/Number(total)) ? 0 : Number(value)/Number(total)) * 100;
 			try{dom.byId(id+percentSuffix).innerHTML = DNumber.round(percent, 2, 10) + ' %';}catch(e){}
 		});
+		dijit.byId('accountingTotalSales').set('value', total);
 	},
 	refreshPieChartForQuarter = function(){
 		var data = google.visualization.arrayToDataTable([['Sales', 'Amount'], 
@@ -375,6 +376,13 @@ function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Me
     			
     			dom.byId('totalProfitsAmt').innerHTML = '$' + DNumber.format(dataForGraph.profit, {places: 2, locale: 'en-us'});
     			dom.byId('totalProfitsPercent').innerHTML = DNumber.round((dataForGraph.profit/dataForGraph.totalSales) * 100, 2, 10) + '%' ;
+    		}else {
+    			//Clear all the fields in case of no data
+    			refreshColumnChartForYearlyData([]);
+    			dom.byId('totalYearlySalesAmt').innerHTML = '$ 0';
+    			dom.byId('totalOperatingExpensesAmt').innerHTML = '$ 0';
+    			dom.byId('totalProfitsAmt').innerHTML = '$ 0';
+    			dom.byId('totalProfitsPercent').innerHTML = '';
     		}
     		registry.byId('accountsYearlyDetailsStandBy').hide();
     		document.getElementById('accountingMonthlyChartDiv').style.display='';
@@ -454,6 +462,16 @@ function(dijit, date, dom, domStyle, domConstruct, otherFx, parser, registry, Me
 			fetchBlobsForAccounting(0);
 		},
 		fetchAccDetailsForYear: function(year){
+			arrayUtils.forEach(query("#accountingYearlyTable >tr >td >a"), function(hrefNode){
+				if((year+'') == hrefNode.innerHTML){
+					domStyle.set(hrefNode, "color", '#fff');
+					domStyle.set(hrefNode.parentNode, "background-color", '#AA0000');
+				} else {
+					domStyle.set(hrefNode, "color", '');
+					domStyle.set(hrefNode.parentNode, "background-color", '#fff');
+				}
+			});
+			
 			registry.byId('hiddenSelectedYear').set('value', year);
 			var wipeOut = otherFx.wipeOut({node: dom.byId('accountingDetailsPane'), duration: 1000, delay: 250, 
 	    		onEnd: function(node){
