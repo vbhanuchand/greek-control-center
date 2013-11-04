@@ -1182,13 +1182,13 @@
 								<input data-dojo-type="dijit/form/TextBox" data-dojo-props="style: 'width: 100px; font-size: 90%;', required: 'true', trim: 'true'" id="inventoryItemUnits" name="inventoryItemUnits"/>
 							</td>
 						</tr>
-						 <tr>
+						 <tr id="inventoryItemPPURow">
 							<td width="25%"><b>Price Per Unit:</b></td>
 							<td width="75%">
 								<input data-dojo-type="dijit/form/CurrencyTextBox" data-dojo-props="style: 'width: 100px; font-size: 90%;', required: 'true', trim: 'true', invalidMessage : 'Price is Invalid', value: 0" id="inventoryItemPPU" name="inventoryItemPPU"/>
 							</td>
 						</tr>
-						<tr>
+						<tr id="inventoryItemGSChargeRow">
 							<td width="25%"><b>GS Charge (%):</b></td>
 							<td width="75%">
 								<input data-dojo-type="dijit/form/CurrencyTextBox" data-dojo-props="style: 'width: 100px; font-size: 90%;', required: 'true', trim: 'true', invalidMessage : 'GS Charge is Invalid', value: 0" id="inventoryItemGSCharge" name="inventoryItemGSCharge"/>
