@@ -543,6 +543,8 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 				    		dom.byId('printTitle').innerHTML = 'Print Invoice';
 				    		dom.byId('createTitle').innerHTML = 'Create Invoice';
 				    		dom.byId('inventoryTabTitle').innerHTML = 'Invoices';
+				    		dom.byId('inventoryItemPPURow').style.display='';
+				    		dom.byId('inventoryItemGSChargeRow').style.display='';
 				    		break;
 				    	case 'Distributor':
 				    		registry.byId("hiddenInvoiceCategory").set('value', 'd');
@@ -553,6 +555,8 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 				    		dom.byId('printTitle').innerHTML = 'Print Inventory';
 				    		dom.byId('createTitle').innerHTML = 'Create Inventory';
 				    		dom.byId('inventoryTabTitle').innerHTML = 'Inventories';
+				    		dom.byId('inventoryItemPPURow').style.display='none';
+				    		dom.byId('inventoryItemGSChargeRow').style.display='none';
 				    		break;
 					}
 					resetScreen();
@@ -564,6 +568,8 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/form/Selec
 	    		dom.byId('printTitle').innerHTML = 'Print Inventory';
 	    		dom.byId('createTitle').innerHTML = 'Create Inventory';
 	    		dom.byId('inventoryTabTitle').innerHTML = 'Inventories';
+	    		dom.byId('inventoryItemPPURow').style.display='none';
+	    		dom.byId('inventoryItemGSChargeRow').style.display='none';
 				
 				on(registry.byId("invoiceActionSelect"), "change", function(){
 					var newVal = this.get('value');
