@@ -41,6 +41,12 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 			case "Manager":
 				empRole.setRoleTab("store-mgr");
 				break;
+			case "KA-Manager":
+				empRole.setRoleTab("asst-mgr");
+				break;
+			case "Shift Lead":
+				empRole.setRoleTab("shift-lead");
+				break;
 			default: 
 				empRole.setRoleTab("store-tab");
 				break;
@@ -83,6 +89,12 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 				case "Manager":
 					role.setRoleTab("store-mgr");
 				break;
+				case "KA-Manager":
+					role.setRoleTab("asst-mgr");
+					break;
+				case "Shift Lead":
+					role.setRoleTab("shift-lead");
+					break;
 				default :
 					role.setRoleTab("store-tab");
 				break;
@@ -143,14 +155,15 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 	public List<Employee> getEmployeesByStoreId(int storeId, boolean getMgrOnly){
 		Query query;
 		if(getMgrOnly){
-			query = sessionFactory.getCurrentSession().createQuery("from Employee e where e.id in (select employeeId from Role where storeId=:storeId and roleTab <> :roleTab1 and roleTab <> :roleTab2) and e.position=:position" +
+			query = sessionFactory.getCurrentSession().createQuery("from Employee e where e.id in (select employeeId from Role where storeId=:storeId and roleTab <> :roleTab1 and roleTab <> :roleTab2) and e.position in :positions" +
 					" order by e.position desc, e.active desc, e.hired_date");
-			query.setParameter("position", "Manager");
+			//query.setParameter("position", "Manager");
+			query.setParameterList("positions", new Object[]{"Manager", "KA-Manager"});
 		}
 		else{
 			query = sessionFactory.getCurrentSession().createQuery("from Employee e where e.id in (select employeeId from Role where storeId=:storeId and roleTab <> :roleTab1 and roleTab <> :roleTab2) and e.position in :positions" +
 					" order by e.active desc, e.position desc, e.hired_date");
-			query.setParameterList("positions", new Object[]{"Manager", "Front", "Cook"});
+			query.setParameterList("positions", new Object[]{"Manager", "KA-Manager", "Shift Lead", "Front", "Cook"});
 		}
 		query.setParameter("roleTab1", "store-ownr");
 		query.setParameter("roleTab2", "area-mgr");

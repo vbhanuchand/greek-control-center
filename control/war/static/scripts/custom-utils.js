@@ -93,7 +93,7 @@ function returnToManagerPane(){
 				this.node.style.display = 'block';
 				this.node.style.width = '99%';
 				this.node.style.height = '39%';
-				dom.byId('mgrReviewFormDiv').style.display = 'block';
+				try{dom.byId('mgrReviewFormDiv').style.display = 'block';}catch(e){}
 			},
 		onEnd: function(){
 			dom.byId('mgrDetailsTabContainer').style.display = '';
@@ -700,6 +700,8 @@ function applySecurityRoles(authoritiesData){
 	console.log('Applying Security using ', authoritiesData);
 	var registry = require('dijit/registry');
 	var domConstruct = require('dojo/dom-construct');
+	var domStyle = require('dojo/dom-style');
+	var dom = require('dojo/dom');
 	
 	var role = authoritiesData.roles;
 	var stores = authoritiesData.stores;
@@ -748,10 +750,13 @@ function applySecurityRoles(authoritiesData){
 			//Remove the View Schedule Column in Store Info --> Labor Summary Grid Ends here
 			
 			//Remove the Manager Tab in the Main Tab Container Starts here
+			//Hide the Contract Documents DIV
+			domStyle.set(dom.byId('managerContractDocumentsSection'), 'display', 'none');
 				//Hide the Delete Column in Leaves Grid
 				registry.byId('mgrLeavesGrid').layout.setColumnVisibility(0,false);
-			//registry.byId('tabContainer').removeChild(registry.byId('managerPane'));
-			//registry.byId('managerPane').destroy();
+				registry.byId('mgrLeavesGrid').layout.setColumnVisibility(1,false);
+			registry.byId('mgrDetailsTabContainer').removeChild(registry.byId('addReviewTab'));
+			//registry.byId('addReviewTab').destroy();
 			//Remove the Manager Tab in the Main Tab Container Ends here
 			
 			//Remove the Update Column in Employees Grid, Salary Particulars Tab in the Employee Tabs, Labor Entry Tab
@@ -772,17 +777,20 @@ function applySecurityRoles(authoritiesData){
 			
 			
 			//Adjusting the Inventory Tab Starts here
-			registry.byId('inventoryInvoicesGrid').layout.setColumnVisibility(2,false);
-			registry.byId('inventoryInvoicesGrid').layout.setColumnVisibility(3,false);
+			//registry.byId('inventoryInvoicesGrid').layout.setColumnVisibility(2,false);
+			//registry.byId('inventoryInvoicesGrid').layout.setColumnVisibility(3,false);
 			
 			
-			registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(4,false);
-			registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(5,false);
-			registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(6,false);
-			registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(7,false);
-			
+			//registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(5,false);
+			//registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(6,false);
+			//registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(7,false);
 			//registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(8,false);
+			//registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(9,false);
+			//registry.byId('inventoryInvoiceDetailsGrid').layout.setColumnVisibility(10,false);
 			//Ends here
+			
+			//For removing the option to add new inventory item
+			registry.byId('invoiceActionSelect').removeOption(2);
 			checkSelectedPane('locationTabletr'+storeToSelect, 'rightAccordion', storeToSelect);
 			break;
 		case 'ROLE_EMP':
@@ -1434,14 +1442,18 @@ function printCalendar(){
 	
 	var allCalendarEntries = registry.byId('labor-calendar').store.query(function(object){return object.id > 0;});
 	var mgrEntries = registry.byId('labor-calendar').store.query(function(object){return object.position == 'Manager';});
+	var kaMgrEntries = registry.byId('labor-calendar').store.query(function(object){return object.position == 'KA-Manager';});
+	var shiftLeadEntries = registry.byId('labor-calendar').store.query(function(object){return object.position == 'Shift Lead';});
 	var frontEntries = registry.byId('labor-calendar').store.query(function(object){return object.position == 'Front';});
 	var cookEntries = registry.byId('labor-calendar').store.query(function(object){return object.position == 'Cook';});
 	
-	var totalsMap = {total: 0, totalMgr: 0, totalCook: 0, totalFront: 0};
+	var totalsMap = {total: 0, totalMgr: 0, totalKAMgr: 0, totalShiftLead: 0, totalCook: 0, totalFront: 0};
 	var skeleton = '';
 	baseArray.forEach(allCalendarEntries, function(item, index){
 		skeleton = item.startDate + ' - ' + item.endDate;
 		if(item.position == "Manager") totalsMap.totalMgr = totalsMap.totalMgr + item.totalTime;
+		if(item.position == "KA-Manager") totalsMap.totalKAMgr = totalsMap.totalKAMgr + item.totalTime;
+		if(item.position == "Shift Lead") totalsMap.totalShiftLead = totalsMap.totalShiftLead + item.totalTime;
 		if(item.position == "Front") totalsMap.totalFront = totalsMap.totalFront + item.totalTime;
 		if(item.position == "Cook") totalsMap.totalCook = totalsMap.totalCook + item.totalTime;
 		totalsMap.total = totalsMap.total + item.totalTime;
@@ -1469,10 +1481,12 @@ function printCalendar(){
 	
 	var laborInfoTableHTML = '<div style="display: block; width: 100%; overflow: visible;"><table class="laborTablePrint" valign="top" style="width: 100%;">' 
 		+ '<tr><td class="laborDateTd" style="font-size: 90% !important;">' + skeleton + '</td>'
-		+ '<td class="laborMgrTd" style="font-size: 90% !important;">Total Manager Hours : ' + totalsMap.totalMgr + '</td>'
-		+ '<td class="laborFrontTd" style="font-size: 90% !important;">Total Front Hours : ' + totalsMap.totalFront + '</td>'
-		+ '<td class="laborCookTd" style="font-size: 90% !important;">Total Cook Hours : ' + totalsMap.totalCook + '</td>'
-		+ '<td class="laborDateTd" style="font-size: 90% !important;">Total Hours (Not Included Manager): ' + (totalsMap.totalFront + totalsMap.totalCook) + '</td>'
+		+ '<td class="laborMgrTd" style="font-size: 80% !important;">Total Manager Hours : ' + totalsMap.totalMgr + '</td>'
+		+ '<td class="laborMgrTd" style="font-size: 80% !important;">Total KA-Manager Hours : ' + totalsMap.totalKAMgr + '</td>'
+		+ '<td class="laborShiftLeadTd" style="font-size: 80% !important;">Total Shift Lead Hours : ' + totalsMap.totalShiftLead + '</td>'
+		+ '<td class="laborFrontTd" style="font-size: 80% !important;">Total Front Hours : ' + totalsMap.totalFront + '</td>'
+		+ '<td class="laborCookTd" style="font-size: 80% !important;">Total Cook Hours : ' + totalsMap.totalCook + '</td>'
+		+ '<td class="laborDateTd" style="font-size: 80% !important;">Total Hours (Not Included Manager): ' + (totalsMap.totalFront + totalsMap.totalCook) + '</td>'
 		+ '</tr></table></div>';
 
 	
@@ -1481,11 +1495,19 @@ function printCalendar(){
 	var tbodyForCalendar = '';
 	var cssClass = '';
 	
-	var maxEntriesForMgr = 0, maxEntriesForFront = 0, maxEntriesForCook = 0;
+	var maxEntriesForMgr = 0, maxEntriesForKAMgr = 0, maxEntriesForShiftLead = 0, maxEntriesForFront = 0, maxEntriesForCook = 0;
 	var temp = [];
 	baseArray.forEach(mgrEntries, function(item){
 		temp = registry.byId('labor-calendar').store.query({'position': 'Manager', 'dd': item.dd});
 		if(temp.length > maxEntriesForMgr) maxEntriesForMgr = temp.length;
+	});
+	baseArray.forEach(kaMgrEntries, function(item){
+		temp = registry.byId('labor-calendar').store.query({'position': 'KA-Manager', 'dd': item.dd});
+		if(temp.length > maxEntriesForKAMgr) maxEntriesForKAMgr = temp.length;
+	});
+	baseArray.forEach(shiftLeadEntries, function(item){
+		temp = registry.byId('labor-calendar').store.query({'position': 'Shift Lead', 'dd': item.dd});
+		if(temp.length > maxEntriesForShiftLead) maxEntriesForShiftLead = temp.length;
 	});
 	baseArray.forEach(frontEntries, function(item){
 		temp = registry.byId('labor-calendar').store.query({'position': 'Front', 'dd': item.dd});
@@ -1532,6 +1554,8 @@ function printCalendar(){
 			var storeItem = registry.byId('labor-calendar').store.query({'position': 'Manager', 'dd': iterDate.getDate()});
 			if((storeItem.length > 0) && storeItem[j]){
 				if(storeItem[j].position == 'Manager') cssClass = 'laborMgrTd';
+				else if(storeItem[j].position == 'KA-Manager') cssClass = 'laborMgrTd';
+				else if(storeItem[j].position == 'Shift Lead') cssClass = 'laborShiftLeadTd';
 				else if(storeItem[j].position == 'Front') cssClass = 'laborFrontTd';
 				else if(storeItem[j].position == 'Cook') cssClass = 'laborCookTd';
 				tbodyForCalendar += '<td class="' + cssClass + '">' + storeItem[j].summary + '</td>';
@@ -1545,6 +1569,74 @@ function printCalendar(){
 	if(!anythingAdded) 
 		tbodyForCalendar += '<tr><td colspan="7"></td></tr>';
 	anythingAdded = false;
+	
+	//Build the tbody section by iterating over the dates (For KA-Manager)
+	for(var j=0; j<maxEntriesForKAMgr; j++){
+		anythingAdded = true;
+		var item = allCalendarEntries[0];
+		var startDateStr = item.startDate;
+		var endDateStr = item.endDate;
+		var startDateStrArray = startDateStr.split('/');
+		var endDateStrArray = endDateStr.split('/');
+		var startDate = new Date(startDateStrArray[2], parseInt(startDateStrArray[0])-1, startDateStrArray[1]);
+		var endDate = new Date(endDateStrArray[2], parseInt(endDateStrArray[0])-1, endDateStrArray[1]);
+		var daysDifference = dojoDate.difference(startDate, endDate, "day") + 1;
+		var iterDate = startDate;
+		tbodyForCalendar += '<tr>';
+		for(var i=1; i<=daysDifference; i++){
+			var storeItem = registry.byId('labor-calendar').store.query({'position': 'KA-Manager', 'dd': iterDate.getDate()});
+			if((storeItem.length > 0) && storeItem[j]){
+				if(storeItem[j].position == 'Manager') cssClass = 'laborMgrTd';
+				else if(storeItem[j].position == 'KA-Manager') cssClass = 'laborMgrTd';
+				else if(storeItem[j].position == 'Shift Lead') cssClass = 'laborShiftLeadTd';
+				else if(storeItem[j].position == 'Front') cssClass = 'laborFrontTd';
+				else if(storeItem[j].position == 'Cook') cssClass = 'laborCookTd';
+				tbodyForCalendar += '<td class="' + cssClass + '">' + storeItem[j].summary + '</td>';
+			} else{
+				tbodyForCalendar += '<td></td>';
+			}
+			iterDate = dojoDate.add(startDate, 'day', i);
+		}
+		tbodyForCalendar += '</tr>';
+	}
+	if(!anythingAdded) 
+		tbodyForCalendar += '<tr><td colspan="7"></td></tr>';
+	anythingAdded = false;
+	
+	//Build the tbody section by iterating over the dates (For Shift Lead)
+	for(var j=0; j<maxEntriesForShiftLead; j++){
+		anythingAdded = true;
+		var item = allCalendarEntries[0];
+		var startDateStr = item.startDate;
+		var endDateStr = item.endDate;
+		var startDateStrArray = startDateStr.split('/');
+		var endDateStrArray = endDateStr.split('/');
+		var startDate = new Date(startDateStrArray[2], parseInt(startDateStrArray[0])-1, startDateStrArray[1]);
+		var endDate = new Date(endDateStrArray[2], parseInt(endDateStrArray[0])-1, endDateStrArray[1]);
+		var daysDifference = dojoDate.difference(startDate, endDate, "day") + 1;
+		var iterDate = startDate;
+		tbodyForCalendar += '<tr>';
+		for(var i=1; i<=daysDifference; i++){
+			var storeItem = registry.byId('labor-calendar').store.query({'position': 'Shift Lead', 'dd': iterDate.getDate()});
+			if((storeItem.length > 0) && storeItem[j]){
+				if(storeItem[j].position == 'Manager') cssClass = 'laborMgrTd';
+				else if(storeItem[j].position == 'KA-Manager') cssClass = 'laborMgrTd';
+				else if(storeItem[j].position == 'Shift Lead') cssClass = 'laborShiftLeadTd';
+				else if(storeItem[j].position == 'Front') cssClass = 'laborFrontTd';
+				else if(storeItem[j].position == 'Cook') cssClass = 'laborCookTd';
+				tbodyForCalendar += '<td class="' + cssClass + '">' + storeItem[j].summary + '</td>';
+			} else{
+				tbodyForCalendar += '<td></td>';
+			}
+			iterDate = dojoDate.add(startDate, 'day', i);
+		}
+		tbodyForCalendar += '</tr>';
+	}
+	if(!anythingAdded) 
+		tbodyForCalendar += '<tr><td colspan="7"></td></tr>';
+	anythingAdded = false;
+	
+	
 	//Build the tbody section by iterating over the dates (For Front)
 	for(var j=0; j<maxEntriesForFront; j++){
 		anythingAdded = true;
@@ -1562,6 +1654,8 @@ function printCalendar(){
 			var storeItem = registry.byId('labor-calendar').store.query({'position': 'Front', 'dd': iterDate.getDate()});
 			if((storeItem.length > 0) && storeItem[j]){
 				if(storeItem[j].position == 'Manager') cssClass = 'laborMgrTd';
+				else if(storeItem[j].position == 'KA-Manager') cssClass = 'laborMgrTd';
+				else if(storeItem[j].position == 'Shift Lead') cssClass = 'laborShiftLeadTd';
 				else if(storeItem[j].position == 'Front') cssClass = 'laborFrontTd';
 				else if(storeItem[j].position == 'Cook') cssClass = 'laborCookTd';
 				tbodyForCalendar += '<td class="' + cssClass + '">' + storeItem[j].summary + '</td>';
@@ -1574,6 +1668,7 @@ function printCalendar(){
 	}
 	if(!anythingAdded) 
 		tbodyForCalendar += '<tr><td colspan="7"></td></tr>';
+	
 	//Build the tbody section by iterating over the dates (For Cook)
 	for(var j=0; j<maxEntriesForCook; j++){
 		var item = allCalendarEntries[0];
@@ -1590,6 +1685,8 @@ function printCalendar(){
 			var storeItem = registry.byId('labor-calendar').store.query({'position': 'Cook', 'dd': iterDate.getDate()});
 			if((storeItem.length > 0) && storeItem[j]){
 				if(storeItem[j].position == 'Manager') cssClass = 'laborMgrTd';
+				else if(storeItem[j].position == 'KA-Manager') cssClass = 'laborMgrTd';
+				else if(storeItem[j].position == 'Shift Lead') cssClass = 'laborShiftLeadTd';
 				else if(storeItem[j].position == 'Front') cssClass = 'laborFrontTd';
 				else if(storeItem[j].position == 'Cook') cssClass = 'laborCookTd';
 				tbodyForCalendar += '<td class="' + cssClass + '">' + storeItem[j].summary + '</td>';
@@ -1674,8 +1771,8 @@ function toggleAirportSection(){
 		tdNode1.appendChild(gridNode);
 		trNode.appendChild(tdNode1);
 		
-		var totalYearlySales = new NumberTextBox({ name: "totalYearlySales", constraints: {pattern: "0.##"}});
-		var totalRoyalties = new NumberTextBox({ name: "totalRoyalties", constraints: {pattern: "0.##"}});
+		totalYearlySales = new NumberTextBox({ name: "totalYearlySales"});
+		totalRoyalties = new NumberTextBox({ name: "totalRoyalties"});
 		//Table for Yearly Sales starts here
 		var innerTable1 = domConstruct.create('table', {'class': 'dateTable', style: {width: '80%'}});
 		var innerTableTr1 = domConstruct.create('tr');

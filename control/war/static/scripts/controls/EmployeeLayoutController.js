@@ -377,7 +377,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 											            	promptMessage: 'Provide date in MM/DD/YYYY', missingMessage: 'Please provide date in MM/DD/YYYY', 
 											            	invalidMessage: 'Date format should be in MM/DD/YYYY'}, widgetClass: ValidationTextBox, styles: 'text-align: center;' },
 											            { name: "Position", field: "position", width: "8%", editable: true, noresize: true, 
-											            	type: dojox.grid.cells.Select, options: ['Manager', 'Front','Cook'], styles: 'text-align: center;'},
+											            	type: dojox.grid.cells.Select, options: ['Manager', 'KA-Manager', 'Shift Lead', 'Front','Cook'], styles: 'text-align: center;'},
 											            { name: "Cellphone", field: "phone", width: "9%", noresize: true, editable: true, hidden: false, 
 												            constraint:{required: true}, widgetProps: {maxLength: 20, promptMessage: 'Work Cell within 20 characters', 
 												            missingMessage: 'Please provide Work Cell' }, widgetClass: ValidationTextBox},
@@ -1177,7 +1177,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 					//var fragment,  innerHTMLText;
 					
 					mgrPaneDetailsNode.appendChild(domConstruct.create("li", { innerHTML: '<b>Name: </b> ' + selectedItem.label }));
-					mgrPaneDetailsNode.appendChild(domConstruct.create("li", { innerHTML: '<b>Type: </b> ' + selectedItem.position }));
+					mgrPaneDetailsNode.appendChild(domConstruct.create("li", { innerHTML: '<b>Position: </b> ' + selectedItem.position }));
 					mgrPaneDetailsNode.appendChild(domConstruct.create("li", { innerHTML: '<b>Work Cell: </b> ' + selectedItem.phone }));
 					mgrPaneDetailsNode.appendChild(domConstruct.create("li", { innerHTML: '<b>Personal: </b>' + selectedItem.personalPhone }));
 					mgrPaneDetailsNode.appendChild(domConstruct.create("li", { innerHTML: '<b>Emergency Contact: </b> ' + selectedItem.emergencyContact }));
@@ -1227,35 +1227,37 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 					domConstruct.place(fragment, mgrPaneDetailsNode);*/
 		       },
 		       fetchManagerContractBlobs: function(mgrId){
-			    	registry.byId('mgrContractStandBy').show();
-			    	ajaxRequest.get("/service/blobs/mgrContract/" + mgrId,{
-			    		handleAs: 'json'
-			    	}).then(function(blobsResponse){
-			    		var uploadFilesNode = dom.byId('mgrContractExisting');
-			    		domConstruct.empty(uploadFilesNode);
-			    		var fragment;
-			    		var innerHTMLText = '';
-			    		baseArray.forEach(blobsResponse.models, function(blob){
-			    			fragment = document.createDocumentFragment();
-			    			innerHTMLText = '&nbsp;&nbsp;&nbsp;<img src="resources/images/icon-pdf.png"/> &nbsp;'
-			    				+ '<a target="_new" href="/service/getBlob/' + blob.blobKey + '">' 
-			    				//+ ((blob.fileName.length > 20) ? (blob.fileName.substr(0, 20)+'...') : blob.fileName) 
-			    				+  blob.fileName 
-			    				+ '</a>'
-			    				/*+ '&nbsp;&nbsp;' + '<img src="resources/images/delete-icon.png" onclick="javascript: deleteItem(' + "'blob','mgrContract','" + blob.id + "'" + ');"/>'*/
-			    				+ '&nbsp;&nbsp;' + '<span onclick="javascript: deleteItem(' + "'blob','mgrContract','" + blob.id + "'" + ');"><i class="icon-remove"></i></span>'
-			    				;
-			    				//+ '&nbsp;<a target="_new" href="/service/getBlob/' + blob.blobKey + '">View/Download</a>';
-			    			domConstruct.create("li", {
-		                        innerHTML: innerHTMLText
-		                    }, fragment);
-				    		domConstruct.place(fragment, uploadFilesNode);
-			    		});
-			    		registry.byId('mgrContractStandBy').hide();
-			    	}, function(error){
-			    		console.log('Error occurred while fetching store data ' + error);
-			    		registry.byId('mgrContractStandBy').hide();
-			    	});
+		    	   if(dom.byId('managerContractDocumentsSection').style.display != 'none'){
+				    	registry.byId('mgrContractStandBy').show();
+				    	ajaxRequest.get("/service/blobs/mgrContract/" + mgrId,{
+				    		handleAs: 'json'
+				    	}).then(function(blobsResponse){
+				    		var uploadFilesNode = dom.byId('mgrContractExisting');
+				    		domConstruct.empty(uploadFilesNode);
+				    		var fragment;
+				    		var innerHTMLText = '';
+				    		baseArray.forEach(blobsResponse.models, function(blob){
+				    			fragment = document.createDocumentFragment();
+				    			innerHTMLText = '&nbsp;&nbsp;&nbsp;<img src="resources/images/icon-pdf.png"/> &nbsp;'
+				    				+ '<a target="_new" href="/service/getBlob/' + blob.blobKey + '">' 
+				    				//+ ((blob.fileName.length > 20) ? (blob.fileName.substr(0, 20)+'...') : blob.fileName) 
+				    				+  blob.fileName 
+				    				+ '</a>'
+				    				/*+ '&nbsp;&nbsp;' + '<img src="resources/images/delete-icon.png" onclick="javascript: deleteItem(' + "'blob','mgrContract','" + blob.id + "'" + ');"/>'*/
+				    				+ '&nbsp;&nbsp;' + '<span onclick="javascript: deleteItem(' + "'blob','mgrContract','" + blob.id + "'" + ');"><i class="icon-remove"></i></span>'
+				    				;
+				    				//+ '&nbsp;<a target="_new" href="/service/getBlob/' + blob.blobKey + '">View/Download</a>';
+				    			domConstruct.create("li", {
+			                        innerHTML: innerHTMLText
+			                    }, fragment);
+					    		domConstruct.place(fragment, uploadFilesNode);
+				    		});
+				    		registry.byId('mgrContractStandBy').hide();
+				    	}, function(error){
+				    		console.log('Error occurred while fetching store data ' + error);
+				    		registry.byId('mgrContractStandBy').hide();
+				    	});
+			       }
 			    },
 			    fetchMgrLeavesDetails: function(empId){
 			    	fetchMgrLeavesData(empId);
@@ -1364,7 +1366,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 			    				this.node.style.height = '1%';
 			    				//domStyle.set(this.node, {display: "none", width: "99%", height: "2%"});
 			    				//domStyle.set(dom.byId('mgrReviewFormDiv'), "display","none");
-			    				dom.byId('mgrReviewFormDiv').style.display = 'none';
+			    				try{dom.byId('mgrReviewFormDiv').style.display = 'none';}catch(e){}
 			    			}
 			    	});
 			    	var wipeIn = otherFx.wipeIn({node: dom.byId('mgrYearlyDetailsRegion'), duration: 1000, delay: 250, 

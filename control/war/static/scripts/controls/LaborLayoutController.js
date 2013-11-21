@@ -37,9 +37,11 @@ define(["dijit/dijit", "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/fx", "do
     	});
 	},
 	calculateTotals = function(skeleton, calendarData){
-		totalsMap = {total: 0, totalMgr: 0, totalCook: 0, totalFront: 0};
+		totalsMap = {total: 0, totalMgr: 0, totalKAMgr: 0, totalShiftLead: 0, totalCook: 0, totalFront: 0};
 		arrayUtils.forEach(calendarData, function(item, index){
 			if(item.position == "Manager") totalsMap.totalMgr = totalsMap.totalMgr + item.totalTime;
+			if(item.position == "KA-Manager") totalsMap.totalKAMgr = totalsMap.totalKAMgr + item.totalTime;
+			if(item.position == "Shift Lead") totalsMap.totalShiftLead = totalsMap.totalShiftLead + item.totalTime;
 			if(item.position == "Front") totalsMap.totalFront = totalsMap.totalFront + item.totalTime;
 			if(item.position == "Cook") totalsMap.totalCook = totalsMap.totalCook + item.totalTime;
 			totalsMap.total = totalsMap.total + item.totalTime;
@@ -60,9 +62,11 @@ define(["dijit/dijit", "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/fx", "do
 		var laborInfoTableHTML = '<table class="laborTable" valign="top" style="width: 100%; overflow: auto;">' 
 				+ '<tr><td class="laborDateTd">' + skeleton + '</td>'
 				+ '<td class="laborMgrTd">Total Manager Hours : ' + totalsMap.totalMgr + '</td>'
+				+ '<td class="laborMgrTd">Total KA-Manager Hours : ' + totalsMap.totalKAMgr + '</td>'
+				+ '<td class="laborShiftLeadTd">Total Shift Lead Hours : ' + totalsMap.totalShiftLead + '</td>'
 				+ '<td class="laborFrontTd">Total Front Hours : ' + totalsMap.totalFront + '</td>'
 				+ '<td class="laborCookTd">Total Cook Hours : ' + totalsMap.totalCook + '</td>'
-				+ '<td class="laborDateTd">Total Hours (Not Included Manager): ' + (totalsMap.totalFront + totalsMap.totalCook) + '</td>'
+				+ '<td class="laborDateTd">Total Hours (Not Included Manager): ' + (totalsMap.totalFront + totalsMap.totalCook + totalsMap.totalKAMgr + totalsMap.totalShiftLead) + '</td>'
 				+ '<td style="text-align: center;"><span id="noPrint1" style="font-weight: bold;" align="left"><a href="javascript: refreshCalendarForSelectedWeek();">Refresh</a>&nbsp;&nbsp;<a href="javascript: printCalendar();">Print</a></span></td>'
 				+ '</tr></table>';
 		
@@ -78,6 +82,8 @@ define(["dijit/dijit", "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/fx", "do
 		arrayUtils.forEach(empHrsArray, function(item, index){
 			var cssClass = '';
 			if(item.position == 'Manager') cssClass = 'laborMgrTd';
+			else if(item.position == 'KA-Manager') cssClass = 'laborMgrTd';
+			else if(item.position == 'Shift Lead') cssClass = 'laborShiftLeadTd';
 			else if(item.position == 'Front') cssClass = 'laborFrontTd';
 			else if(item.position == 'Cook') cssClass = 'laborCookTd';
 			employeeDetailsPaneContent = employeeDetailsPaneContent + '<tr><td style="width: 50%;" class="' + cssClass + '">' + item.name + '</td><td style="width: 50%;" class="itemTime">' + item.time + ' hrs' + '</td></tr>';

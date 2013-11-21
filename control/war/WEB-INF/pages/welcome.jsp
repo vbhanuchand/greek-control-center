@@ -446,7 +446,7 @@
 					 --><div id="managerPersonalInfo" style="width: 30%; height: 99%; display: inline-block; vertical-align: top; padding-left: 20px;"><!-- 
 						 --><div style="display: block; text-decoration: underline; font-weight: bold;">Manager Details</div><ul id="mgrPaneInfoUl" style="vertical-align: top; list-style: none; height: 80%;"></ul><!-- 
 					 --></div><!-- 
-					 --><div style="width: 35%; height: 99%; padding: 0px 2px 0px 2px !important; display: inline-block; vertical-align: top;"><!--
+					 --><div style="width: 35%; height: 99%; padding: 0px 2px 0px 2px !important; display: inline-block; vertical-align: top;" id="managerContractDocumentsSection"><!--
 						--><div style="display: block; text-decoration: underline; font-weight: bold; text-align: center;">Contract Documents</div><div id="mgrContract" style="display: block;"><div id="mgrContractWidgetsDiv" style="display: none; padding-left: 10px;"><!--
 							--><span id="mgrContractWidgets"></span><span id="mgrContractWidgetsProgressMsgs"></span><a href="javascript: hideFileUploadDialog('mgrContract');">Hide</a><!--
 						--></div><!--

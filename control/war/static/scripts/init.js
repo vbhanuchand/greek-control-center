@@ -504,27 +504,41 @@ require(["bootstrap", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/dijit", 
 			        				var beginDate = new Date(recordToAdd.date);
 			        				var endDate = new Date(recordToAdd.date);
 			        				switch(strPosition){
-			        				case 'Manager':
-			        					beginDate.setHours(8);beginDate.setMinutes(5);
-			        					endDate.setHours(8);endDate.setMinutes(50);
-			        					recordToAdd.begin = beginDate;
-			        					recordToAdd.end = endDate;
-			        					recordToAdd.calendar='Calendar0';
-			        					break;
-			        				case 'Front':
-			        					beginDate.setHours(10);beginDate.setMinutes(5);
-			        					endDate.setHours(10);endDate.setMinutes(50);
-			        					recordToAdd.begin = beginDate;
-			        					recordToAdd.end = endDate;
-			        					recordToAdd.calendar='Calendar1';
-			        					break;
-			        				case 'Cook':
-			        					beginDate.setHours(14);beginDate.setMinutes(5);
-			        					endDate.setHours(14);endDate.setMinutes(50);
-			        					recordToAdd.begin = beginDate;
-			        					recordToAdd.end = endDate;
-			        					recordToAdd.calendar='Calendar2';
-			        					break;
+				        				case 'Manager':
+				        					beginDate.setHours(8);beginDate.setMinutes(5);
+				        					endDate.setHours(8);endDate.setMinutes(55);
+				        					recordToAdd.begin = beginDate;
+				        					recordToAdd.end = endDate;
+				        					recordToAdd.calendar='Calendar0';
+				        					break;
+				        				case 'KA-Manager':
+				        					beginDate.setHours(8);beginDate.setMinutes(5);
+				        					endDate.setHours(8);endDate.setMinutes(55);
+				        					recordToAdd.begin = beginDate;
+				        					recordToAdd.end = endDate;
+				        					recordToAdd.calendar='Calendar0';
+				        					break;
+				        				case 'Shift Lead':
+				        					beginDate.setHours(10);beginDate.setMinutes(5);
+				        					endDate.setHours(10);endDate.setMinutes(55);
+				        					recordToAdd.begin = beginDate;
+				        					recordToAdd.end = endDate;
+				        					recordToAdd.calendar='Calendar3';
+				        					break;
+				        				case 'Front':
+				        					beginDate.setHours(12);beginDate.setMinutes(5);
+				        					endDate.setHours(12);endDate.setMinutes(55);
+				        					recordToAdd.begin = beginDate;
+				        					recordToAdd.end = endDate;
+				        					recordToAdd.calendar='Calendar1';
+				        					break;
+				        				case 'Cook':
+				        					beginDate.setHours(16);beginDate.setMinutes(5);
+				        					endDate.setHours(16);endDate.setMinutes(55);
+				        					recordToAdd.begin = beginDate;
+				        					recordToAdd.end = endDate;
+				        					recordToAdd.calendar='Calendar2';
+				        					break;
 			        				}
 			        				var editedItem = lang.mixin({}, recordToAdd);
 			        				console.log(editedItem);
@@ -571,21 +585,35 @@ require(["bootstrap", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/dijit", 
 			        				switch(strPosition){
 			        				case 'Manager':
 			        					beginDate.setHours(8);beginDate.setMinutes(5);
-			        					endDate.setHours(8);endDate.setMinutes(50);
+			        					endDate.setHours(8);endDate.setMinutes(55);
 			        					recordToAdd.begin = beginDate;
 			        					recordToAdd.end = endDate;
 			        					recordToAdd.calendar='Calendar0';
 			        					break;
-			        				case 'Front':
+			        				case 'KA-Manager':
+			        					beginDate.setHours(8);beginDate.setMinutes(5);
+			        					endDate.setHours(8);endDate.setMinutes(55);
+			        					recordToAdd.begin = beginDate;
+			        					recordToAdd.end = endDate;
+			        					recordToAdd.calendar='Calendar0';
+			        					break;
+			        				case 'Shift Lead':
 			        					beginDate.setHours(10);beginDate.setMinutes(5);
-			        					endDate.setHours(10);endDate.setMinutes(50);
+			        					endDate.setHours(10);endDate.setMinutes(55);
+			        					recordToAdd.begin = beginDate;
+			        					recordToAdd.end = endDate;
+			        					recordToAdd.calendar='Calendar3';
+			        					break;
+			        				case 'Front':
+			        					beginDate.setHours(12);beginDate.setMinutes(5);
+			        					endDate.setHours(12);endDate.setMinutes(55);
 			        					recordToAdd.begin = beginDate;
 			        					recordToAdd.end = endDate;
 			        					recordToAdd.calendar='Calendar1';
 			        					break;
 			        				case 'Cook':
-			        					beginDate.setHours(14);beginDate.setMinutes(5);
-			        					endDate.setHours(14);endDate.setMinutes(50);
+			        					beginDate.setHours(16);beginDate.setMinutes(5);
+			        					endDate.setHours(16);endDate.setMinutes(55);
 			        					recordToAdd.begin = beginDate;
 			        					recordToAdd.end = endDate;
 			        					recordToAdd.calendar='Calendar2';
