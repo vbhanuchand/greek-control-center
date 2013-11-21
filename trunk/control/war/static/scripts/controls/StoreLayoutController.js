@@ -684,11 +684,13 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 											store: gridDataStore,
 											query: { id: "*" },
 											structure: [{ name: "<b>Schedule</b>", field: "week", editable: false, width: "10%", noresize: true, formatter: showScheduleLink, styles: 'text-align: center;'}, 
-											            { name: "<b>Date</b>", field: "skeletonKey", editable: false, width: "25%", noresize: true, styles: 'text-align: center;'},
-												{ name: "<b>Manager Hours</b>", field: "Manager", editable: false, width: "15%", noresize: true, styles: 'text-align: center;'},
-												{ name: "<b>Total Hrs (Front & Cook)</b>", fields: ["Front", "Cook"], editable: false, width: "18%", noresize: true, styles: 'text-align: center;', formatter: calculateTotalFrontCook},
-												{ name: "<b>Front Hours</b>", field: "Front", editable: false, width: "15%", noresize: true, styles: 'text-align: center;'},
-												{ name: "<b>Cook Hours</b>", field: "Cook", editable: false, width: "17%", noresize: true, styles: 'text-align: center;'}],
+											            { name: "<b>Date</b>", field: "skeletonKey", editable: false, width: "15%", noresize: true, styles: 'text-align: center;'},
+												{ name: "<b>Manager Hours</b>", field: "Manager", editable: false, width: "11%", noresize: true, styles: 'text-align: center;'},
+												{ name: "<b>KA-Manager Hours</b>", field: "KA-Manager", editable: false, width: "12%", noresize: true, styles: 'text-align: center;'},
+												{ name: "<b>Shift Lead Hours</b>", field: "Shift Lead", editable: false, width: "14%", noresize: true, styles: 'text-align: center;'},
+												{ name: "<b>Total Hrs (Front & Cook)</b>", fields: ["Front", "Cook"], editable: false, width: "16%", noresize: true, styles: 'text-align: center;', formatter: calculateTotalFrontCook},
+												{ name: "<b>Front Hours</b>", field: "Front", editable: false, width: "10%", noresize: true, styles: 'text-align: center;'},
+												{ name: "<b>Cook Hours</b>", field: "Cook", editable: false, width: "12%", noresize: true, styles: 'text-align: center;'}],
 											singleClickEdit: true,
 											editable: true,
 											selectable: true,
@@ -801,6 +803,15 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 				} else dijit.byId('templatesGrid').setStore(gridDataStore);
 		    },
 		    updateAirportAccountingGrid = function(gridId, accountingData){
+		    	var totalSales = 0.0, totalRoyaltys = 0.0;
+		    	baseArray.forEach(accountingData, function(entry){
+		    		try{totalSales += parseInt(entry.totalSales);}catch(e){}
+		    		try{totalRoyaltys += parseInt(entry.totalProfits);}catch(e){}
+		    	});
+		    	totalYearlySales.set('value', totalSales);
+		    	totalYearlySales.set('readOnly', true);
+		    	totalRoyalties.set('value', totalRoyaltys);
+		    	totalRoyalties.set('readOnly', true);
 		    	var airportAccountingGrid;
 		    	var tempStore = {
 		    			"identifier" : "id",
@@ -886,6 +897,17 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 		    	
 		    },
 		    fetchAirportSectionYearDetails = function(yearNum, gridId){
+		    	baseArray.forEach(query("#airportSectionYearlyTable >tr >td >a"), function(hrefNode){
+					if((yearNum+'') == hrefNode.innerHTML){
+						domStyle.set(hrefNode, "color", '#fff');
+						domStyle.set(hrefNode.parentNode, "background-color", '#AA0000');
+					} else {
+						domStyle.set(hrefNode, "color", '');
+						domStyle.set(hrefNode.parentNode, "background-color", '#fff');
+					}
+				});
+		    	
+		    	
 		    	var standByWidget = registry.byId(gridId + 'StandBy');
 		    	standByWidget.show();
 		    	ajaxRequest.get('/service/store/' + registry.byId('hiddenStoreId').get('value') + '/accounting/year/' + yearNum,

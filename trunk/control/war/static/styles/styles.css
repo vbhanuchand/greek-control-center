@@ -235,17 +235,14 @@ html, body {
 }
 
 .claro .dojoxCalendarEvent.Calendar0 .bg.bg {
-	/*background: #2095B4;*/
 	background: #0000AA;
 }
 
 .claro .dojoxCalendarEvent.Calendar0.Hovered .bg.bg {
-	/*background: #24A5C8;*/
 	background: #0000FF;
 }
 
 .claro .dojoxCalendarEvent.Calendar0.Selected .bg.bg {
-	/*background: #166B81;*/
 	background: #000044;
 }
 
@@ -290,6 +287,25 @@ html, body {
   background-color: #440000;
 }
 
+.claro .dojoxCalendarEvent.Calendar3 .bg {
+  background-color: #B7521E;
+}
+.claro .dojoxCalendarEvent.Calendar3.Hovered .bg {
+  background-color: #E15109;
+}
+.claro .dojoxCalendarEvent.Calendar3.Selected .bg {
+  background-color: #FD5806;
+}
+
+.claro .dojoxCalendarEvent.dojoxCalendarHorizontal.Calendar3 .bg {
+  background-color: #B7521E;
+}
+.claro .dojoxCalendarEvent.dojoxCalendarHorizontal.Calendar3.Hovered .bg {
+  background-color: #E15109;
+}
+.claro .dojoxCalendarEvent.dojoxCalendarHorizontal.Calendar3.Selected .bg {
+  background-color: #FD5806;
+}
 /*Claro Ends*/
 
 
@@ -608,50 +624,62 @@ table.laborTable td {
 
 table.laborTable td.laborDateTd{
 	font-weight: bolder;
-	font-size: 100%;
+	font-size: 80%;
 	color: #000000;
-	border-width: 0.1em;
+	border-width: 0.2em;
 	border-style: solid;
 	border-color: #000;
 	background-color: #fff;
-	padding-left: 12px;
-	padding-right: 12px;
+	padding-left: 5px;
+	padding-right: 5px;
 }
 
 table.laborTable td.laborMgrTd{
 	font-weight: bold;
-	font-size: 95%;
+	font-size: 80%;
 	color: #FFFFFF;
-	border-width: 0.1em;
+	border-width: 0.2em;
 	border-style: solid;
 	border-color: inherit;
 	background-color: #0000AA;
-	padding-left: 8px;
-	padding-right: 8px;
+	padding-left: 5px;
+	padding-right: 5px;
 }
 
 table.laborTable td.laborFrontTd{
 	font-weight: bold;
-	font-size: 95%;
+	font-size: 80%;
 	color: #FFFFFF;
-	border-width: 0.1em;
+	border-width: 0.2em;
 	border-style: solid;
 	border-color: inherit;
 	background-color: #00AA00;
-	padding-left: 8px;
-	padding-right: 8px;
+	padding-left: 5px;
+	padding-right: 5px;
 }
 
 table.laborTable td.laborCookTd{
 	font-weight: bold;
-	font-size: 95%;
+	font-size: 80%;
 	color: #FFFFFF;
-	border-width: 0.1em;
+	border-width: 0.2em;
 	border-style: solid;
 	border-color: inherit;
 	background-color: #AA0000;
-	padding-left: 8px;
-	padding-right: 8px;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+table.laborTable td.laborShiftLeadTd{
+	font-weight: bold;
+	font-size: 80%;
+	color: #FFFFFF;
+	border-width: 0.2em;
+	border-style: solid;
+	border-color: inherit;
+	background-color: #B7521E;
+	padding-left: 5px;
+	padding-right: 5px;
 }
 
 /* Labor Header (Summary) Table End here*/
@@ -688,9 +716,9 @@ table.laborTablePrint td {
 
 table.laborTablePrint td.laborDateTd{
 	font-weight: bolder;
-	font-size: 100%;
+	font-size: 80%;
 	color: #000000;
-	border-width: 0.1em;
+	border-width: 0.2em;
 	border-style: solid;
 	border-color: #000;
 	background-color: #fff;
@@ -698,19 +726,31 @@ table.laborTablePrint td.laborDateTd{
 
 table.laborTablePrint td.laborMgrTd{
 	font-weight: bold;
-	font-size: 90%;
+	font-size: 80%;
 	color: #FFFFFF;
-	border-width: 0.1em;
+	border-width: 0.2em;
 	border-style: solid;
 	border-color: inherit;
 	background-color: #0000AA;
 }
 
+table.laborTablePrint td.laborShiftLeadTd{
+	font-weight: bold;
+	font-size: 80%;
+	color: #FFFFFF;
+	border-width: 0.2em;
+	border-style: solid;
+	border-color: inherit;
+	background-color: #B7521E;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
 table.laborTablePrint td.laborFrontTd{
 	font-weight: bold;
-	font-size: 90%;
+	font-size: 80%;
 	color: #FFFFFF;
-	border-width: 0.1em;
+	border-width: 0.2em;
 	border-style: solid;
 	border-color: inherit;
 	background-color: #00AA00;
@@ -718,9 +758,9 @@ table.laborTablePrint td.laborFrontTd{
 
 table.laborTablePrint td.laborCookTd{
 	font-weight: bold;
-	font-size: 90%;
+	font-size: 80%;
 	color: #FFFFFF;
-	border-width: 0.1em;
+	border-width: 0.2em;
 	border-style: solid;
 	border-color: inherit;
 	background-color: #AA0000;

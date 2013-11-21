@@ -142,7 +142,7 @@ public class DataManagerImpl implements DataManager{
 		return employeeWrappers;
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes" })
 	@Override
 	public Map<String, Map<String, String>> getAllStoreManagers() {
 		
@@ -352,6 +352,8 @@ public class DataManagerImpl implements DataManager{
 				tempMap.put(subEntry.getKey(), subEntry.getValue());
 			}
 			if(!tempMap.containsKey("Manager")) tempMap.put("Manager", "0.0");
+			if(!tempMap.containsKey("KA-Manager")) tempMap.put("KA-Manager", "0.0");
+			if(!tempMap.containsKey("Shift Lead")) tempMap.put("Shift Lead", "0.0");
 			if(!tempMap.containsKey("Front")) tempMap.put("Front", "0.0");
 			if(!tempMap.containsKey("Cook")) tempMap.put("Cook", "0.0");
 			tempMap.put("id", String.valueOf(id++));
@@ -385,6 +387,8 @@ public class DataManagerImpl implements DataManager{
 		Calendar cal = Calendar.getInstance();
 		Map rowObject;
 		int mgrHr = 0;
+		int asstMgrHr = 0;
+		int shiftLeadHr = 0;
 		int frontHr = 0;
 		int cookHr = 0;
 		StoreLaborDetailsWrapper temp;
@@ -393,13 +397,15 @@ public class DataManagerImpl implements DataManager{
 			rowObject = (Map) empLabor;
 			if(rollingDate.compareTo((Date)rowObject.get("date")) < 0)	{
 				mgrHr = 0;
+				asstMgrHr = 0;
+				shiftLeadHr = 0;
 				frontHr = 0;
 				cookHr = 0;
 				rollingDate = (Date)rowObject.get("date");
 			}
 			cal.setTime((Date)rowObject.get("date"));
 			temp = new StoreLaborDetailsWrapper((Integer)rowObject.get("id"), (Integer)rowObject.get("empId"), (String)rowObject.get("fname"), "", (String)rowObject.get("position"), cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), 
-					frontHr, 5, frontHr, 50, (double)rowObject.get("totalTime"), "Calendar1");
+					frontHr, 5, frontHr, 55, (double)rowObject.get("totalTime"), "Calendar1");
 			temp.setSummary(Utilities.getSummary((String)rowObject.get("fname"), (Integer)rowObject.get("from"), (Integer)rowObject.get("to")));
 			temp.setStartDate(datesMap.get("startDate"));
 			temp.setEndDate(datesMap.get("endDate"));
@@ -407,14 +413,14 @@ public class DataManagerImpl implements DataManager{
 			temp.setActualEndTime((Integer)rowObject.get("to"));
 			if(((String)rowObject.get("position")).equalsIgnoreCase("Front")){
 				temp.setCalendar("Calendar1");
-				temp.setBeginHH(10 + (frontHr%4));
-				temp.setEndHH(10 + (frontHr%4));
+				temp.setBeginHH(12 + (frontHr%4));
+				temp.setEndHH(12 + (frontHr%4));
 				frontHr++;
 				storeLaborDetails.add(temp);
 			}else if(((String)rowObject.get("position")).equalsIgnoreCase("Cook")){
 				temp.setCalendar("Calendar2");
-				temp.setBeginHH(14 + (cookHr%4));
-				temp.setEndHH(14 + (cookHr%4));
+				temp.setBeginHH(16 + (cookHr%4));
+				temp.setEndHH(16 + (cookHr%4));
 				cookHr++;
 				storeLaborDetails.add(temp);
 			}else if(((String)rowObject.get("position")).equalsIgnoreCase("Manager")){
@@ -422,6 +428,18 @@ public class DataManagerImpl implements DataManager{
 				temp.setBeginHH(8 + (mgrHr%2));
 				temp.setEndHH(8 + (mgrHr%2));
 				mgrHr++;
+				storeLaborDetails.add(temp);
+			}else if(((String)rowObject.get("position")).equalsIgnoreCase("KA-Manager")){
+				temp.setCalendar("Calendar0");
+				temp.setBeginHH(8 + (asstMgrHr%2));
+				temp.setEndHH(8 + (asstMgrHr%2));
+				asstMgrHr++;
+				storeLaborDetails.add(temp);
+			}else if(((String)rowObject.get("position")).equalsIgnoreCase("Shift Lead")){
+				temp.setCalendar("Calendar3");
+				temp.setBeginHH(10 + (shiftLeadHr%2));
+				temp.setEndHH(10 + (shiftLeadHr%2));
+				shiftLeadHr++;
 				storeLaborDetails.add(temp);
 			}
 		}

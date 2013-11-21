@@ -440,7 +440,7 @@ select * from employee_role where role_tab='store-mgr' and employee_id=42
 
 
 --29-Oct
-alter table employee_role modify role_tab ENUM('manage-tab','store-tab','emp-tab','inventory-tab','labor-tab','area-mgr','store-mgr','store-ownr') DEFAULT 'store-tab' NOT NULL
+alter table employee_role modify role_tab ENUM('manage-tab','store-tab','emp-tab','inventory-tab','labor-tab','area-mgr','store-mgr', 'asst-mgr', 'shift-lead', 'store-ownr') DEFAULT 'store-tab' NOT NULL
 alter table employee modify address varchar(100);
 
 --To query the labor details for a week
