@@ -478,7 +478,10 @@ require(["bootstrap", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/dijit", 
 			var updateItemButton = new Button({
 	            label: "Update",
 	            onClick: function(){
-	            	if(Number(registry.byId('itemSummaryEditor').get('value')) > 0){
+	            	//Calculate the Time difference 
+	            	var diffMinutes = date.difference(registry.byId('itemStartTimeEditor').get('value'), registry.byId('itemEndTimeEditor').get('value'), 'minute');
+	            	
+	            	if((Number(registry.byId('itemSummaryEditor').get('value')) > 0) && (diffMinutes > 0)){
 	            		var standByWidget = 'calendarEntryTitlePaneStandBy';
 	            		registry.byId(standByWidget).show();
 		            	var editedItem = {};
@@ -550,14 +553,18 @@ require(["bootstrap", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/dijit", 
 			        		dom.byId('messages').innerHTML = 'Error while updating --> ' + error;
 			        		registry.byId(standByWidget).hide();
 			        	});
+		            }else {
+	            		alert('Invalid Start Time and End Time is specified. Please correct');
 	            	}
+	            	
 	            }
 	        }, "updateItemButton");
 			
 			var addItemButton = new Button({
 	            label: "Add",
 	            onClick: function(){
-	            	if(Number(registry.byId('itemSummaryEditor').get('value')) > 0){
+	            	var diffMinutes = date.difference(registry.byId('itemStartTimeEditor').get('value'), registry.byId('itemEndTimeEditor').get('value'), 'minute');
+	            	if((Number(registry.byId('itemSummaryEditor').get('value')) > 0) && (diffMinutes > 0)){
 	            		var standByWidget = 'calendarEntryTitlePaneStandBy';
 	            		registry.byId(standByWidget).show();
 	            		var editedItem = {};
@@ -631,6 +638,8 @@ require(["bootstrap", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/dijit", 
 			        		dom.byId('messages').innerHTML = 'Error while adding --> ' + error;
 			        		registry.byId(standByWidget).hide();
 			        	});
+	            	} else {
+	            		alert('Invalid Start Time and End Time is specified. Please correct');
 	            	}
 	            	
 	            }

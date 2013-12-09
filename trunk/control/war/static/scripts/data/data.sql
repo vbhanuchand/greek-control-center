@@ -445,3 +445,13 @@ alter table employee modify address varchar(100);
 
 --To query the labor details for a week
 select id, employee_id, on_date, time_from_hr_min, time_to_hr_min, total_hrs, position, active, updated_date from employee_labor where store_id=1 and on_date>='2013-10-07' and on_date<='2013-10-13'
+
+
+select * from blobs;
+
+select count(*) as col_0_0_ from blobs blob0_ where blob0_.linked_to_id=1 and blob0_.active='Y' and blob0_.tab='store-lease';
+
+alter table blobs add upload_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+alter table blobs add upload_notes varchar(100) DEFAULT 'Notes';
+
+select * from employee_salary where employee_id=7

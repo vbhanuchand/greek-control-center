@@ -741,6 +741,21 @@ function applySecurityRoles(authoritiesData){
 			checkSelectedPane('locationTabletr'+storeToSelect, 'rightAccordion', storeToSelect);
 			break;
 		case 'ROLE_MGR':
+			//Remove the Alarm Code and Keys Tabs
+			registry.byId('storeInfoTitlePane').set('disabled', true);
+			registry.byId('storeInfoTitlePane').toggle = function(){};
+			registry.byId('storeInfoTitlePane')._onTitleKey = function(){};
+			//Remove the Alarm Code Tab Starts here
+			registry.byId('storeInfoTabContainer').removeChild(registry.byId('storeAlarms'));
+			registry.byId('storeAlarms').destroy();
+			//Remove the Alarm Code Tab Ends here
+			
+			//Remove the Keys Tab Starts here
+			registry.byId('storeInfoTabContainer').removeChild(registry.byId('storeKeys'));
+			registry.byId('storeKeys').destroy();
+			//Remove the Keys Tab Ends here
+			
+			
 			//Remove the Manage Tab Starts here
 			registry.byId('tabContainer').removeChild(registry.byId('managePane'));
 			registry.byId('managePane').destroy();
@@ -752,15 +767,15 @@ function applySecurityRoles(authoritiesData){
 			//Remove the Manager Tab in the Main Tab Container Starts here
 			//Hide the Contract Documents DIV
 			domStyle.set(dom.byId('managerContractDocumentsSection'), 'display', 'none');
-				//Hide the Delete Column in Leaves Grid
-				registry.byId('mgrLeavesGrid').layout.setColumnVisibility(0,false);
-				registry.byId('mgrLeavesGrid').layout.setColumnVisibility(1,false);
+			//Hide the Delete Column in Leaves Grid
+			registry.byId('mgrLeavesGrid').layout.setColumnVisibility(0,false);
+			//registry.byId('mgrLeavesGrid').layout.setColumnVisibility(1,false);
 			registry.byId('mgrDetailsTabContainer').removeChild(registry.byId('addReviewTab'));
 			//registry.byId('addReviewTab').destroy();
 			//Remove the Manager Tab in the Main Tab Container Ends here
 			
 			//Remove the Update Column in Employees Grid, Salary Particulars Tab in the Employee Tabs, Labor Entry Tab
-			registry.byId('employeesGrid').layout.setColumnVisibility(0,false);
+			//registry.byId('employeesGrid').layout.setColumnVisibility(0,false);
 			
 			registry.byId('employeeInfoTabContainer').removeChild(registry.byId('empSalaryDetails'));
 			registry.byId('empSalaryDetails').destroy();
@@ -1295,7 +1310,7 @@ function printInvoice(gridId, title){
 	var registry = require('dijit/registry');
 	var baseArray = require('dojo/_base/array');
 	var dom = require('dojo/dom');
-	var totalUnitsCost=0, totalGsPercent=0, totalTotalCost=0;
+	var totalUnitsCost = 0, totalGsPercent=0, totalTotalCost=0;
 	
 	var dojoDateLocale = require('dojo/date/locale'); 
 	var selectedInvoiceRows = registry.byId('inventoryInvoicesGrid').selection.getSelected();
@@ -1353,11 +1368,11 @@ function printInvoice(gridId, title){
 				if(selectedOption != 'Distributor'){
 					table += '<td> $' + gridStore.getValue(item, 'itemPricePerUnit') + '</td>';
 					table += '<td>' + gridStore.getValue(item, 'itemGSPercent') + '%</td>';
-					var unitsCost = parseInt(gridStore.getValue(item, 'itemPricePerUnit')+'') * parseInt(gridStore.getValue(item, 'itemOrder')+'');
-					var gsPercent = parseInt((unitsCost * parseInt(gridStore.getValue(item, 'itemGSPercent')+''))/100);
+					var unitsCost = parseFloat(parseFloat(gridStore.getValue(item, 'itemPricePerUnit')+'') * parseInt(gridStore.getValue(item, 'itemOrder')+''));
+					var gsPercent = parseFloat((unitsCost * parseFloat(gridStore.getValue(item, 'itemGSPercent')+''))/100);
 					//console.log('unitsCost --> ' + unitsCost + ' gsPercent--> ' + gsPercent + ' ppu--> ' + gridStore.getValue(item, 'itemPricePerUnit') + ' order--> ' + gridStore.getValue(item, 'itemOrder'));
 					var totalCost = unitsCost + gsPercent;
-					table += '<td> $' + totalCost + '</td>';
+					table += '<td> $' + parseFloat(totalCost).toFixed(2) + '</td>';
 					totalUnitsCost += unitsCost;
 					totalGsPercent += gsPercent;
 					totalTotalCost += totalCost;
@@ -1371,7 +1386,7 @@ function printInvoice(gridId, title){
 			if(selectedOption != 'Distributor'){
 				finalHTML += '<br/><br/>';
 				finalHTML += '<div align="left" style="width: 95%; height: 10%; bottom: 10px; left: 10px;"><table style="width: 100%; height: 100%;" class="dateTable"><tr style="height: 10px;"><th style="width: 25%;">Manager Signature</th><th style="width: 30%;" class="noBorder"></th><th style="width: 20%;">GS CHARGES</th><th style="width: 20%;">TOTAL</th></tr>';
-				finalHTML += '<tr><td style="width: 25%;"></td><td style="width: 30%;" class="noBorder"></td><td style="width: 20%;">&nbsp;&nbsp;$' + totalGsPercent + '</td><td style="width: 20%;">&nbsp;&nbsp;$' + totalTotalCost + '</td></tr>';
+				finalHTML += '<tr><td style="width: 25%;"></td><td style="width: 30%;" class="noBorder"></td><td style="width: 20%;">&nbsp;&nbsp;$' + parseFloat(totalGsPercent).toFixed(2) + '</td><td style="width: 20%;">&nbsp;&nbsp;$' + parseFloat(totalTotalCost).toFixed(2) + '</td></tr>';
 				finalHTML += '</table></div>';
 			}
 			finalHTML += "</body>";
