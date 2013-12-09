@@ -177,9 +177,19 @@ public class Utilities {
 		if(to > from){
 			tempValue = (to-from)/100;
 			delta = (to-from)%100;
+			//Delta is always between 0 - 59
+			if(delta > 45){
+				delta = 60;
+			} else if(delta > 30){
+				delta = 45;
+			} else if (delta > 15){
+				delta = 30;
+			} else if(delta > 0){
+				delta = 15;
+			}
 			finalValue = (delta > 0) ? (tempValue + (delta/60)) : tempValue;
 			return Double.parseDouble(dataBaseDecimalFormat.format(finalValue));
-		}else return 0;
+		} else return 0;
 	}
 	
 	public static String getSummary(String fname, Integer fromTime, Integer toTime){

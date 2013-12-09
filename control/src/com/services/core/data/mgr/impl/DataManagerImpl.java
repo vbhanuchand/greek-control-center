@@ -195,7 +195,10 @@ public class DataManagerImpl implements DataManager{
 			String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
 			String currentUserRolesStr = authorities.toString();
 			if(!(currentUserRolesStr.contains("ROLE_OWNER"))){
-				if(currentUsername.equalsIgnoreCase(emp.getUsername())){
+				if(getMgrOnly && currentUsername.equalsIgnoreCase(emp.getUsername())){
+					employeeWrappers.add(new EmployeeWrapper(emp.getId(), emp.getUsername(), emp.getFname(), 
+							emp.getLname(), emp.getPhone(), emp.getPersonalPhone(), emp.getEmergencyContact(), emp.getAddress(), emp.getPosition(), emp.getManager(),  emp.getActive(), emp.getUpdated_by(), emp.getHired_date()));
+				}else {
 					employeeWrappers.add(new EmployeeWrapper(emp.getId(), emp.getUsername(), emp.getFname(), 
 							emp.getLname(), emp.getPhone(), emp.getPersonalPhone(), emp.getEmergencyContact(), emp.getAddress(), emp.getPosition(), emp.getManager(),  emp.getActive(), emp.getUpdated_by(), emp.getHired_date()));
 				}

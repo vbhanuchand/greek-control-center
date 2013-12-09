@@ -61,12 +61,12 @@ define(["dijit/dijit", "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/fx", "do
 		
 		var laborInfoTableHTML = '<table class="laborTable" valign="top" style="width: 100%; overflow: auto;">' 
 				+ '<tr><td class="laborDateTd">' + skeleton + '</td>'
-				+ '<td class="laborMgrTd">Total Manager Hours : ' + totalsMap.totalMgr + '</td>'
-				+ '<td class="laborMgrTd">Total KA-Manager Hours : ' + totalsMap.totalKAMgr + '</td>'
-				+ '<td class="laborShiftLeadTd">Total Shift Lead Hours : ' + totalsMap.totalShiftLead + '</td>'
-				+ '<td class="laborFrontTd">Total Front Hours : ' + totalsMap.totalFront + '</td>'
-				+ '<td class="laborCookTd">Total Cook Hours : ' + totalsMap.totalCook + '</td>'
-				+ '<td class="laborDateTd">Total Hours (Not Included Manager): ' + (totalsMap.totalFront + totalsMap.totalCook + totalsMap.totalKAMgr + totalsMap.totalShiftLead) + '</td>'
+				+ '<td class="laborMgrTd">Total Mgr Hrs : ' + totalsMap.totalMgr + '</td>'
+				+ '<td class="laborMgrTd">Total KA-Mgr Hrs : ' + totalsMap.totalKAMgr + '</td>'
+				+ '<td class="laborShiftLeadTd">Total Shift Lead : ' + totalsMap.totalShiftLead + '</td>'
+				+ '<td class="laborFrontTd">Total Front : ' + totalsMap.totalFront + '</td>'
+				+ '<td class="laborCookTd">Total Cook : ' + totalsMap.totalCook + '</td>'
+				+ '<td class="laborDateTd">Total Hrs (Not Included Mgr): ' + (totalsMap.totalFront + totalsMap.totalCook + totalsMap.totalShiftLead) + '</td>'
 				+ '<td style="text-align: center;"><span id="noPrint1" style="font-weight: bold;" align="left"><a href="javascript: refreshCalendarForSelectedWeek();">Refresh</a>&nbsp;&nbsp;<a href="javascript: printCalendar();">Print</a></span></td>'
 				+ '</tr></table>';
 		
