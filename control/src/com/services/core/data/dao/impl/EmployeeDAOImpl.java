@@ -415,10 +415,18 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public List getEmployeeReviews(int empId){
-		Query query = sessionFactory.getCurrentSession().createQuery("select distinct year as year from EmployeeReview where empId=:empId and active=true order by year desc");
-		query.setParameter("empId", empId);
-		query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
-		return query.list();
+		Query query1 = sessionFactory.getCurrentSession().createQuery("select distinct year as year from EmployeeReview where empId=:empId and active=true order by year desc");
+		Query query2 = sessionFactory.getCurrentSession().createQuery("select distinct extract(year from date) as year from EmployeeLeaves where empId=:empId order by year desc");
+		query1.setParameter("empId", empId);
+		query1.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+		
+		query2.setParameter("empId", empId);
+		query2.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+		
+		List query1Results = query1.list();
+		List query2Results = query2.list();
+		query1Results.addAll(query2Results);
+		return query1Results;
 	}
 	
 	@Override

@@ -184,6 +184,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 		    	ajaxRequest.get("/service/getImage/"+empId,{
 		    		handleAs: 'json'
 		    	}).then(function(imageURLObject){
+		    		
 		    		if(imageURLObject.success){
 		    			dom.byId(photoImgNode).setAttribute('src', imageURLObject.model.imageURL);
 		    			otherFx.wipeIn({node: dom.byId(photoPane),duration: 1000, delay: 250, onBegin: function(node){
@@ -204,6 +205,25 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 		    	ajaxRequest.get("/service/getImage/"+empId,{
 		    		handleAs: 'json'
 		    	}).then(function(imageURLObject){
+		    		dom.byId('messages').innerHTML = '';
+		    		domConstruct.empty(dom.byId('employeePanePasswordReset'));
+		    		var passwordResetNode = domConstruct.create('a', {innerHTML: '<i class="icon-refresh"></i>&nbsp;&nbsp;Reset Password&nbsp;'});
+		    		on(passwordResetNode, 'click', function(){
+		    			if(confirm("Please confirm to reset the employee's Password")){
+			    			registry.byId(standByWidget).show();
+			    			ajaxRequest.get("/service/resetPassword/"+empId,{
+					    		handleAs: 'json'
+					    	}).then(function(response){
+					    		registry.byId(standByWidget).hide();
+					    		dom.byId('messages').innerHTML = 'Password Successfully Reset to default';
+					    	}, function(error){
+					    		registry.byId(standByWidget).hide();
+					    		dom.byId('messages').innerHTML = 'Error Occurred during Password Reset ' + error;
+					    	});
+			    		}
+		    		});
+		    		dom.byId('employeePanePasswordReset').appendChild(passwordResetNode);
+		    		dom.byId('employeePanePasswordReset').style.display = '';
 		    		if(imageURLObject.success){
 		    			dom.byId('employeeImg').setAttribute('src', imageURLObject.model.imageURL);
 		    			otherFx.wipeIn({node: dom.byId('employeePaneInfo'),duration: 1000, delay: 250, onBegin: function(node){
@@ -944,8 +964,8 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 		    	domConstruct.empty(yearlyList);
 		    	var tableTR;
 		    	var keys = functional.keys(yearlyReviewsModel);
-		    	var xtraStyle='';
 		    	baseArray.forEach(keys, function(yearRecord){
+		    		var xtraStyle='';
 		    		if(registry.byId('hiddenSelectedYear').get('value') == yearRecord)
 		    			xtraStyle = "style='color: #fff'";
 		    		tableTR = domConstruct.create("tr");
@@ -1089,9 +1109,9 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 									}
 								}});
 						      empLayout.showPhotoByEmpId(this.get('value'), 'managerPhoto', 'mgrPhotoPane', 'mgrPhotoPaneStandBy');
+						      empLayout.fetchCurrentYearReviews(empId);
 						      empLayout.fetchManagerContractBlobs(this.get('value'));
 						      empLayout.fetchMgrLeavesDetails(empId);
-						      empLayout.fetchCurrentYearReviews(empId);
 						      registry.byId('quartersList').set('disabled', false);
 							} else {
 								domConstruct.empty(dom.byId('mgrPaneInfoUl'));
@@ -1144,7 +1164,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 		        	var storeItem = {};
 		        	var standByWidget = 'calendarEntryTitlePaneStandBy';
 		        	registry.byId(standByWidget).show();
-		        	ajaxRequest.get("/service/store/" + storeId + "/employees",{
+		        	ajaxRequest.get("/service/store/" + storeId + "/employees4Labor",{
 			    		handleAs: 'json'
 			    	}).then(function(response){
 			    		if(response.success){
@@ -1322,7 +1342,7 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 	    			registry.byId('quarterlyNotes').set('value', '');
 					registry.byId('reviewUpdateBtn').set('disabled', true);
 					registry.byId('reviewSaveBtn').set('disabled', true);
-					registry.byId('hiddenSelectedYear').set('value', '2013');
+					//registry.byId('hiddenSelectedYear').set('value', '2013');
 			    },
 			    populateMgrReviewForm: function(quarterId){
 			    	registry.byId('mgrReviewStandBy').show();

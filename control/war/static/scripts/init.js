@@ -7,9 +7,9 @@
 require(["bootstrap", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/dijit", "dojo/dom-style", "dojo/date", "dojo/date/locale", "dojo/dom-construct", "dojo/_base/fx", "dojo/fx", "dojo/_base/declare", "dojo/dom", "dojo/on", "dijit/form/Select",
          "controls/StoreLayoutController", "controls/EmployeeLayoutController", "controls/LaborLayoutController", "controls/AccountingLayoutController", "controls/InventoryLayoutController", "dijit/form/DateTextBox", "dojo/store/Memory",
          "dojo/_base/lang", "dojo/request", "dojo/request/xhr", "dojo/dom-form", "dojo/json", "dojo/query", "dijit/registry", "dojo/_base/array", "dojox/widget/Dialog", "dijit/form/FilteringSelect",
-         "dijit/TooltipDialog", "dijit/popup", 'dojox/form/Uploader', 'dojox/form/uploader/FileList', 'dojox/layout/ScrollPane', "dojox/form/TimeSpinner", "dijit/form/Button", 'dojox/timing/doLater', "dojo/parser", "dojo/aspect", "dojox/lang/aspect", 'dojo/ready'], 
+         "dijit/TooltipDialog", "dijit/popup", 'dojox/form/Uploader', 'dojox/form/uploader/FileList', 'dojox/layout/ScrollPane', "dojox/form/TimeSpinner", "dijit/form/Button", 'dojox/timing/doLater', "dojo/parser", "dojo/aspect", "dojox/lang/aspect", 'widgets/Calendar', 'dojo/ready'], 
          function(bootstrap, MenuBar, PopupMenu, dijit, domStyle, date, locale, domConstruct, fx, otherFx, declare, dom, on, formSelect, storeLayout, empLayout, laborLayout, accLayout, inventoryLayout, DateTextBox, Memory, lang, 
-        		 ajaxRequest, xhrRequest, domForm, json, query, registry, baseArray, dojoxDialog, FilteringSelect, TooltipDialog, popup, uploader, fileList, scrollPane, TimeSpinner, Button, doLater, parser, aspect, xaspect, ready){
+        		 ajaxRequest, xhrRequest, domForm, json, query, registry, baseArray, dojoxDialog, FilteringSelect, TooltipDialog, popup, uploader, fileList, scrollPane, TimeSpinner, Button, doLater, parser, aspect, xaspect, CustomCalendar, ready){
 		  ready(function(){
 		   parser.parse();
 		    var LoadingObj = declare(null, {
@@ -124,6 +124,18 @@ require(["bootstrap", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/dijit", 
 						if(domStyle.get(dom.byId('inventoryLegendTitlePane'), 'display') != 'none')
 							otherFx.wipeOut({node: dom.byId('inventoryLegendTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
 						storeLayout.populateUsersToManage();
+						break;
+					case 'meetingsPane':
+						if(domStyle.get(dom.byId('laborPaneInfo'), 'display') != 'none')
+							otherFx.wipeOut({node: dom.byId('laborPaneInfo'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+						if(domStyle.get(dom.byId('calendarEntryTitlePane'), 'display') != 'none')
+							otherFx.wipeOut({node: dom.byId('calendarEntryTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+						if(domStyle.get(dom.byId('inventoryLegendTitlePane'), 'display') != 'none')
+							otherFx.wipeOut({node: dom.byId('inventoryLegendTitlePane'),duration: 1000, delay: 250, onEnd: function(node){domStyle.set(this.node, {display: "none"});}}).play();
+						//Call Custom Methods here
+						//CustomCalendar.startCalendar();
+						var calendarWidget = registry.byId('meetingsCalendar');
+						calendarWidget.startCalendar();
 						break;
 					case 'accountingPane':
 						if(domStyle.get(dom.byId('laborPaneInfo'), 'display') != 'none')
@@ -468,7 +480,7 @@ require(["bootstrap", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/dijit", 
 				//console.log('oldWeek --> ' + oldWeek + ' newWeek--> ' + newWeek);
 				if(Math.abs(newWeek - oldWeek) > 0){
 					var currentYear = locale.format(newValue, {selector: 'date', datePattern: 'yyyy', locale: 'en'});
-					newWeek++;
+					//newWeek++;
 					globalYearWeekForRefresh = currentYear+'-'+newWeek;
 					laborLayout.populateData(registry.byId('hiddenStoreId').get('value'), currentYear + '-' + newWeek);
 				}
@@ -751,6 +763,8 @@ require(["dojox/form/Uploader", "dojox/embed/Flash", "dojox/form/uploader/plugin
 			require(["dojox/form/uploader/plugins/IFrame"]);
 		}
 });
+
+
 /*var fileUploadIdAppender = 0;
 function addNewUpload(){
 	var node = document.createElement('input'); 

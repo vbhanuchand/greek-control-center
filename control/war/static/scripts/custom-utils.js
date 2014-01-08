@@ -1260,8 +1260,20 @@ function deleteItem(src, blobSrc, id){
 	}
 }
 
-function callManageUsers(){
-	console.log('callManageUsers() called !!!');
+function showCalendar(){
+	console.log('showCalendar() called !!!');
+	/*require(['widgets/Calendar', 'dijit/Dialog', 'dojo/parser'], function(Calendar, DialogBox, parser){
+		var calendarController = new Calendar();
+		var dialogBox = new DialogBox({
+			title: "Meetings Scheduler",
+			content: calendarController,
+			style: "width: 90%; height: 99%;"
+		});
+		//parser.parse(dialogBox);
+		dialogBox.startup();
+		calendarController.startup();
+		dialogBox.show();
+	});*/
 }
 function printInvoiceDetails(divId, title){
 	var dom = require('dojo/dom');

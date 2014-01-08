@@ -60,9 +60,9 @@ public class StoreLaborDetailsWrapper extends BaseModel{
 		this.fname = fname;
 		this.summary = summary;
 		this.position = position;
-		YYYY = yYYY;
-		MM = mM;
-		DD = dD;
+		this.YYYY = yYYY;
+		this.MM = mM;
+		this.DD = dD;
 		this.beginHH = beginHH;
 		this.beginMi = beginMi;
 		this.endHH = endHH;

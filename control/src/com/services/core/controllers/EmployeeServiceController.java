@@ -90,6 +90,20 @@ public class EmployeeServiceController {
 		return new MultipleModelResponse<EmployeeWrapper>(true, employeeWrappers);
 	}
 	
+	@RequestMapping(value = "/service/store/{storeId}/employees4Labor", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public MultipleModelResponse<EmployeeWrapper> getEmployeesByStoreForLaborEntry(@PathVariable int storeId)
+			throws IOException {
+		logger.info("Getting Employees Data For Store --> " + storeId);
+		boolean getMgrOnly = false;
+		List<EmployeeWrapper> employeeWrappers = dataService.getEmployeesByStoreIdForLabor(storeId, getMgrOnly);
+		for(EmployeeWrapper emp: employeeWrappers){
+			emp.set_self("/service/store/" + storeId + "/employees/" + emp.getId());
+			emp.setPost(false);
+		}
+		return new MultipleModelResponse<EmployeeWrapper>(true, employeeWrappers);
+	}
+	
 	@RequestMapping(value = "/service/store/{storeId}/managers", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public MultipleModelResponse<EmployeeWrapper> getManagersByStore(@PathVariable int storeId)

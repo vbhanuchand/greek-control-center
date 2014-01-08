@@ -636,7 +636,7 @@ table {
     }
 /*CSS for Tab Container Labels Ends here*/
 
-.dojoxCalendarColumnView .dojoxCalendarRowHeaderTable td span{
+.claro .dojoxCalendarColumnView .dojoxCalendarRowHeaderTable td span{
 	display: none;
 }
 

@@ -1,0 +1,98 @@
+<div align="center">
+	<div data-dojo-type="dijit/layout/ContentPane" style="width: 18%;"
+		data-dojo-props="splitter:false, region:'trailing'">
+		<div data-dojo-type="dijit/TooltipDialog"
+			data-dojo-attach-point="calendarAddEditEntryDialog"
+			data-dojo-props="title:'Event Details', style:'margin-top:5px; text-align: left;'">
+			<div>
+				<span class="propertyTitle">Summary:</span>
+			</div>
+			<div data-dojo-attach-point="itemSummaryEditor"
+				data-dojo-type="dijit/form/TextBox" style="width: 90%;"
+				data-dojo-props="disabled:true"></div>
+			<div>
+				<span class="propertyTitle">Agenda:</span>
+			</div>
+			<div data-dojo-attach-point="itemAgendaEditor"
+				data-dojo-type="dijit/form/TextBox" style="width: 90%;"
+				data-dojo-props="disabled:true"></div>
+			<div style="margin-top: 10px">
+				<span class="propertyTitle">Start:</span>
+			</div>
+			<div>
+				<div data-dojo-attach-point="itemStartDateEditor"
+					data-dojo-type="dijit/form/DateTextBox"
+					data-dojo-props="disabled:true"
+					style="display: inline-block; width: 120px;"></div><!-- 
+				 -->&nbsp;&nbsp;<!-- 
+				--><div data-dojo-attach-point="itemStartTimeEditor"
+					data-dojo-type="dijit/form/TimeTextBox"
+					data-dojo-props="disabled:true"
+					style="display: inline-block; width: 120px;"></div>
+			</div>
+			<div style="margin-top: 10px">
+				<span class="propertyTitle">End:</span>
+			</div>
+			<div>
+				<div data-dojo-attach-point="itemEndDateEditor"
+					data-dojo-type="dijit/form/DateTextBox"
+					data-dojo-props="disabled:true"
+					style="display: inline-block;; width: 120px;"></div><!-- 
+			 -->&nbsp;&nbsp;<!-- 
+				--><div data-dojo-attach-point="itemEndTimeEditor"
+					data-dojo-type="dijit/form/TimeTextBox"
+					data-dojo-props="disabled:true"
+					style="display: inline-block; width: 120px;"></div>
+			</div>
+
+			<div style="margin-top: 10px">
+				<input type="checkbox" data-dojo-attach-point="itemEmailEditor"
+					data-dojo-type="dijit/form/CheckBox" checked="checked"
+					data-dojo-props="disabled:true" /> <label for="itemEmailEditor">Email
+					Participants</label>
+			</div>
+			
+			<div>
+				<span class="propertyTitle">Email Text:</span>
+			</div>
+			<div data-dojo-attach-point="itemEmailTextEditor"
+				data-dojo-type="dijit/form/TextBox" style="width: 90%;"
+				data-dojo-props="disabled:true"></div>
+			<div style="margin-top: 10px; text-align: right">
+				<span style="text-align: left">
+					<button data-dojo-attach-point="deleteItemButton"
+						class="deleteButton" data-dojo-type="dijit/form/Button"
+						data-dojo-props="disabled:true, 'class':'danger'">Delete</button>
+				</span> <span style="text-align: right">
+					<button data-dojo-attach-point="updateItemButton"
+						data-dojo-type="dijit/form/Button"
+						data-dojo-props="disabled:true, 'class':'primary'">Update</button>
+				</span>
+			</div>
+			<script type="dojo/on" data-dojo-event="show" data-dojo-args="e">
+				var _this = this;
+				var registry = require('dijit/registry');
+				try{setTimeout(function(){registry.byId(_this._descendants[0]['id']).focus();}, 10);}catch(e){console.log('Exception ', e);}
+				/*require(['dijit/focus', 'dojo/dom'], function(focusUtil, dom){console.log('dom id --> ', _this.itemSummaryEditor.id, evt); focusUtil.focus(dom.byId(_this.itemSummaryEditor.id))});*/
+			</script>
+		</div>
+		<div data-dojo-attach-point="dateChooserPoint"></div>
+	</div>
+	<div data-dojo-type="dijit/layout/ContentPane" align="center"
+		data-dojo-props="splitter:false, region:'center'" style="width: 82%;">
+		<div data-dojo-attach-point="calendarPoint" class="soria"
+			style="width: 99%; height: 99%;" align="left">
+			<div data-dojo-type="dijit/Menu"
+				data-dojo-attach-point="calendarContextMenu" style="display: none;">
+				<div data-dojo-type="dijit/MenuItem"
+					data-dojo-attach-point="contextMenuDelete"
+					data-dojo-props="iconClass:'icon-trash'">Delete</div>
+			</div>
+		</div>
+	</div>
+	<!-- <div data-dojo-type="dijit/layout/ContentPane"
+		data-dojo-props='region: "bottom", splitter: true, style: "height:3%; width: 100%; padding-top: 1px;", layoutPriority: 2'>
+		<div data-dojo-attach-point="hint" align="left"
+			style="color: #999; overflow: auto"></div>
+	</div> -->
+</div>

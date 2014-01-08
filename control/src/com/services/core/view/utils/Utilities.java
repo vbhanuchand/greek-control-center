@@ -6,7 +6,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.logging.Logger;
 
 public class Utilities {
 	
@@ -14,6 +16,8 @@ public class Utilities {
 	public static SimpleDateFormat laborScheduleFormatter = new SimpleDateFormat("MM/dd/yyyy");
 	public static SimpleDateFormat dbDateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 	private static DecimalFormat dataBaseDecimalFormat = new DecimalFormat("##.##");
+	
+	private static Logger logger = Logger.getLogger(Utilities.class.getName());
 
 	// Returns the skeleton string from the "date"'s MONDAY to SUNDAY week
 	//Week is MONDAY to SUNDAY
@@ -25,6 +29,7 @@ public class Utilities {
 		} catch (ParseException e) {
 			cal.setTime(new Date());
 		}
+		cal.setMinimalDaysInFirstWeek(7);
 		if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
 			returnDate = laborScheduleFormatter.format(cal.getTime());
 			cal.add(Calendar.DATE, -6);
@@ -57,15 +62,17 @@ public class Utilities {
 	//Returns Week Number based on MONDAY TO SUNDAY week
 	public static String newGetWeekNumber(String date){
 		Calendar cal = Calendar.getInstance();
+		cal.setFirstDayOfWeek(Calendar.MONDAY);
 		try {
 			cal.setTime(dbDateFormatter.parse(date));
 		} catch (ParseException e) {
 			cal.setTime(new Date());
 		}
-		
 		if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
 			return (String.valueOf(cal.get(Calendar.YEAR)) + "-" + String.valueOf(cal.get(Calendar.WEEK_OF_YEAR) - 1));
 		} else {
+			cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+			cal.setMinimalDaysInFirstWeek(7);
 			return (String.valueOf(cal.get(Calendar.YEAR)) + "-" + String.valueOf(cal.get(Calendar.WEEK_OF_YEAR)));
 		}
 	}	
@@ -100,6 +107,7 @@ public class Utilities {
 		} catch (ParseException e) {
 			cal.setTime(new Date());
 		}
+		cal.setMinimalDaysInFirstWeek(7);
 		cal.set(Calendar.WEEK_OF_YEAR, Integer.parseInt(yearWeekArray[1]));
 		cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
 		Date startDate = cal.getTime();
@@ -144,6 +152,7 @@ public class Utilities {
 		} catch (ParseException e) {
 			cal.setTime(new Date());
 		}
+		cal.setMinimalDaysInFirstWeek(7);
 		cal.set(Calendar.WEEK_OF_YEAR, Integer.parseInt(yearWeekArray[1]));
 		cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
 		Date startDate = cal.getTime();
@@ -163,6 +172,7 @@ public class Utilities {
 		} catch (ParseException e) {
 			cal.setTime(new Date());
 		}
+		cal.setMinimalDaysInFirstWeek(7);
 		cal.set(Calendar.WEEK_OF_YEAR, Integer.parseInt(yearWeekArray[1]));
 		cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
 		Date startDate = cal.getTime();
@@ -215,6 +225,55 @@ public class Utilities {
 		}else strETime="12:00 AM";
 		
 		return "<div style='font-size: 90%;'>" + fname + "</div><div style='font-size: 80%;'>" + strFTime + " - " + strETime + "</div>";
+	}
+	
+	public static Date getParsedDate(String date){
+		try {
+			return laborScheduleFormatter.parse(date);
+		} catch (ParseException e) {
+			return new Date();
+		}
+	}
+	
+	public static Calendar getParsedDateForMeeting(String date){
+		try {
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(laborScheduleFormatter.parse(date));
+			return cal;
+		} catch (ParseException e) {
+			return Calendar.getInstance();
+		}
+	}
+	
+	public static String getFormattedZuluString(Calendar inVal){
+		logger.info("In date --> getFormattedZuluString() --> " + inVal);
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+		return formatter.format(inVal.getTime());
+	}
+	
+	public static Calendar getParsedZuluDate(String inVal){
+		logger.info("In date --> getParsedZuluDate() --> " + inVal);
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+		try {
+			Calendar cal=Calendar.getInstance();
+			cal.setTime(format.parse(inVal));
+			return cal;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return Calendar.getInstance();
+		}
+	}
+	public static Calendar getParsedZuluDateDojo(String inVal){
+		logger.info("In date --> getParsedZuluDateDojo() --> " + inVal);
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+		try {
+			Calendar cal=Calendar.getInstance();
+			cal.setTime(format.parse(inVal));
+			return cal;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return Calendar.getInstance();
+		}
 	}
 	
 }
