@@ -138,5 +138,18 @@ public class DeleteServiceController {
 		query.setParameter("id", id);
 		return new SingleModelResponse<BaseModel>(query.executeUpdate() == 1, null);
 	}
+	
+	@Transactional
+	@RequestMapping(value = "/service/resetPassword/{id}", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public SingleModelResponse<BaseModel> resetEmployeePassword(@PathVariable int id) {
+		String hql = "update Employee e set e.password=:password where e.id=:id";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setParameter("id", id);
+		query.setParameter("password", "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8");
+		return new SingleModelResponse<BaseModel>(query.executeUpdate() == 1, null);
+	}
+	
+	
 
 }

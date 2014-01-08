@@ -1,0 +1,87 @@
+<div>
+	<div data-dojo-attach-point="buttonContainer" class="buttonContainer">
+		<div data-dojo-attach-point="toolbar" data-dojo-type="dijit/Toolbar"
+			style="padding: 2px !important">
+			<button data-dojo-attach-point="previousButton"
+				data-dojo-type="dijit/form/Button">◄</button>
+			<button data-dojo-attach-point="nextButton"
+				data-dojo-type="dijit/form/Button">►</button>
+			<span data-dojo-type="dijit/ToolbarSeparator"></span>
+			<button data-dojo-attach-point="todayButton"
+				data-dojo-type="dijit/form/Button">Today</button>
+			<span data-dojo-type="dijit/ToolbarSeparator"></span>
+			<button data-dojo-attach-point="dayButton"
+				data-dojo-type="dijit/form/Button">Day</button>
+			<button data-dojo-attach-point="fourDaysButton"
+				data-dojo-type="dijit/form/Button">4 Days</button>
+			<button data-dojo-attach-point="weekButton"
+				data-dojo-type="dijit/form/Button">Week</button>
+			<button data-dojo-attach-point="monthButton"
+				data-dojo-type="dijit/form/Button">Month</button>
+			<!-- <button data-dojo-attach-point="sixMonthButton"
+				data-dojo-type="dijit/form/Button">6 Months</button> -->
+			<span data-dojo-type="dijit/ToolbarSeparator" style="display: none;"></span>
+			<div data-dojo-type="dijit/form/DropDownButton" style="display: none;"
+				data-dojo-props="'class': 'primary'"
+				data-dojo-attach-point="addCalendarEntryButton">
+				<span>Add New</span>
+				<div data-dojo-type="dijit/TooltipDialog"
+					data-dojo-props="loadingMessage:'Loading ...', style: 'font-size:inherit;'"
+					data-dojo-attach-point="addCalendarEntryDialog">
+					<form data-dojo-type="dijit/form/Form"
+						data-dojo-props="style: 'height: 100%;width: 100%;padding: 2px;font-size:inherit;'"
+						data-dojo-attach-point="addCalendarEntryDialogForm">
+						<div class="dijitDialogPaneContentArea"
+							style="font-size: inherit;">
+							<div>
+								<span class="propertyTitle">Summary:</span>
+							</div>
+							<div data-dojo-attach-point="itemSummaryEditorNew"
+								data-dojo-type="dijit/form/TextBox" style="width: 90%;"></div>
+							<div style="margin-top: 10px">
+								<span class="propertyTitle">Start:</span>
+							</div>
+							<div>
+								<div data-dojo-attach-point="itemStartDateEditorNew"
+									data-dojo-type="dijit/form/DateTextBox"
+									style="display: inline-block; width: 120px;"></div>
+								<!-- 
+								 -->
+								&nbsp;&nbsp;
+								<div data-dojo-attach-point="itemStartTimeEditorNew"
+									data-dojo-type="dijit/form/TimeTextBox"
+									style="display: inline-block; width: 120px;"></div>
+							</div>
+							<div style="margin-top: 10px">
+								<span class="propertyTitle">End:</span>
+							</div>
+							<div>
+								<div data-dojo-attach-point="itemEndDateEditorNew"
+									data-dojo-type="dijit/form/DateTextBox"
+									style="display: inline-block;; width: 120px;"></div>
+								<!-- 
+							 -->
+								&nbsp;&nbsp;
+								<div data-dojo-attach-point="itemEndTimeEditorNew"
+									data-dojo-type="dijit/form/TimeTextBox"
+									style="display: inline-block; width: 120px;"></div>
+							</div>
+						</div>
+						<div class="dijitDialogPaneActionBar">
+							<button data-dojo-type="dijit/form/Button"
+								data-dojo-props="'class':'primary'" type="submit"
+								data-dojo-attach-point="addCalendarEntryDialogFormSubmitButton">Ok
+								(Save)</button>
+							<button data-dojo-type="dijit/form/Button" type="button"
+								data-dojo-props="'class':'inverse'"
+								data-dojo-attach-point="addCalendarEntryDialogFormCancelButton">Close</button>
+						</div>
+					</form>
+				</div>
+			</div>
+			<span data-dojo-type="dijit/ToolbarSeparator"></span>
+		</div>
+	</div>
+	<div data-dojo-attach-point="viewContainer" class="viewContainer"
+		style="top: 35px !important;"></div>
+</div>

@@ -102,24 +102,34 @@ define(["dijit/dijit", "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/fx", "do
 		var calStart = new Date(), calEnd = (calStart.getDate()) + 6;
 		var newItem={};
 		arrayUtils.forEach(calendarData, function(item, index){
-			calStart = item.startDate + ' ';
-			calEnd = item.endDate + ' ';
+			//calStart = item.startDate + ' ';
+			//calEnd = item.endDate + ' ';
 			newItem = {id: item.id, summary: item.summary, begin: new Date(item.yyyy, item.mm, item.dd, item.beginHH, item.beginMi), 
 					end: new Date(item.yyyy, item.mm, item.dd, item.endHH, item.endMi), calendar: item.calendar};
 			calData.push(lang.mixin(newItem, item));
 		});
-		calStart = calStart.split('/');
-		calEnd = calEnd.split('/');
+		//calStart = calStart.split('/');
+		//calEnd = calEnd.split('/');
 		
+		//calStart = new Date(calStart[2], calStart[0]-1, calStart[1]);
+		//calEnd =  new Date(calEnd[2], calEnd[0]-1, calEnd[1]);
+		
+		
+		calStart = laborDetailsResponse.empRoles.datesMap.startDate.split('/');
 		calStart = new Date(calStart[2], calStart[0]-1, calStart[1]);
-		calEnd =  new Date(calEnd[2], calEnd[0]-1, calEnd[1]);
 		
-		registry.byId('labor-calendar').set('store', new Observable(new Memory({data: calData})));
-		//registry.byId('labor-calendar').set('date', calStart);
+		calEnd = laborDetailsResponse.empRoles.datesMap.endDate.split('/');
+		calEnd = new Date(calEnd[2], calEnd[0]-1, calEnd[1]);
+		
 		registry.byId('labor-calendar').set('startDate', calStart);
 		registry.byId('labor-calendar').set('endDate', calEnd);
-		registry.byId('labor-calendar').set('createOnGridClick', false);
 		registry.byId('labor-calendar').set('dateInterval', 'week');
+    	registry.byId('labor-calendar').set('dateIntervalSteps', 1);
+		registry.byId('labor-calendar').set('store', new Observable(new Memory({data: calData})));
+		registry.byId('labor-calendar').set('createOnGridClick', false);
+		//registry.byId('labor-calendar').set('date', calStart);
+		//registry.byId('labor-calendar').set('dateInterval', 'week');
+    	//registry.byId('labor-calendar').set('dateIntervalSteps', 1);
 		calculateTotals(laborDetailsResponse.customMessages.skeleton, calendarData);
 	},
 	makeItemEditable = function(item){
@@ -220,19 +230,21 @@ define(["dijit/dijit", "dojo/date", "dojo/dom", "dojo/dom-style", "dojo/fx", "do
         	calendar.set('createOnGridClick', false);
         	resetInputControls();
         	empLayout.populateEmployeesSelectWidget(registry.byId('hiddenStoreId').get('value'));
+        	registry.byId('labor-calendar').set('dateInterval', 'week');
+        	registry.byId('labor-calendar').set('dateIntervalSteps', 1);
         	registry.byId('itemStartDateEditor').set('value', new Date());
         	//fetchData = fetchData || ((registry.byId('labor-calendar').buttonContainer.innerHTML + '').indexOf('dijit_Toolbar_') > 0);
         	if(fetchData && !((laborPaneCalledFromStore) && (laborPaneCalledFromStore === true))){
         		var currentYear = locale.format(registry.byId('itemStartDateEditor').get('value'), {selector: 'date', datePattern: 'yyyy', locale: 'en'});
 	        	var currentWeek = locale.format(registry.byId('itemStartDateEditor').get('value'), {selector: 'date', datePattern: 'w', locale: 'en'});
 	        	var currentDayOfWeek = locale.format(registry.byId('itemStartDateEditor').get('value'), {selector: 'date', datePattern: 'EEE', locale: 'en'});
-	        	console.log('currentDayOfWeek --> ', currentDayOfWeek);
+	        	//console.log('currentDayOfWeek --> ', currentDayOfWeek);
 	        	if(currentDayOfWeek == 'Sun'){
-	        		fetchCalendarData(registry.byId('hiddenStoreId').get('value'), (currentYear + '-' + (Number(currentWeek))));
-	        		globalYearWeekForRefresh = currentYear + '-' + Number(currentWeek);
+	        		fetchCalendarData(registry.byId('hiddenStoreId').get('value'), (currentYear + '-' + (Number(currentWeek-1))));
+	        		globalYearWeekForRefresh = currentYear + '-' + Number(currentWeek-1);
 	        	}else {
-	        		fetchCalendarData(registry.byId('hiddenStoreId').get('value'), (currentYear + '-' + (Number(currentWeek) + 1)));
-	        		globalYearWeekForRefresh = currentYear + '-' + (Number(currentWeek) + 1);
+	        		fetchCalendarData(registry.byId('hiddenStoreId').get('value'), (currentYear + '-' + (Number(currentWeek))));
+	        		globalYearWeekForRefresh = currentYear + '-' + (Number(currentWeek));
 	        	}
 	        	
         	}

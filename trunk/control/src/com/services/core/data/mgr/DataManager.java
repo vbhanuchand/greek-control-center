@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.services.core.data.model.employee.Employee;
 import com.services.core.data.model.store.Store;
-import com.services.core.data.model.store.StoreAccount;
+import com.services.core.view.utils.QueryParams;
 import com.services.core.view.wrappers.BlobsWrapper;
 import com.services.core.view.wrappers.EmployeeDisciplineWrapper;
 import com.services.core.view.wrappers.EmployeeLaborWrapper;
@@ -14,6 +14,7 @@ import com.services.core.view.wrappers.EmployeeReviewWrapper;
 import com.services.core.view.wrappers.EmployeeSalaryWrapper;
 import com.services.core.view.wrappers.EmployeeWrapper;
 import com.services.core.view.wrappers.ItemWrapper;
+import com.services.core.view.wrappers.MeetingWrapper;
 import com.services.core.view.wrappers.StoreAccountWrapper;
 import com.services.core.view.wrappers.StoreAlarmWrapper;
 import com.services.core.view.wrappers.StoreDateWrapper;
@@ -79,6 +80,8 @@ public interface DataManager {
 	boolean deleteEmployeeLabor(int laborId);
 	
 	List<EmployeeWrapper> getEmployeesByStoreId(int storeId, boolean isMgrOnly);
+	
+	List<EmployeeWrapper> getEmployeesByStoreIdForLabor(int storeId, boolean isMgrOnly);
 
 	void insertStore(Store store);
 	
@@ -170,4 +173,31 @@ public interface DataManager {
 	
 	int insertStoreItem(ItemWrapper item, String category);
 	
+	
+	
+	//Meetings
+	List<MeetingWrapper> getCalendarRecords(QueryParams params);
+
+	int getCalendarRecordsCount(QueryParams params);
+
+	MeetingWrapper getCalendarRecordById(QueryParams params);
+
+	boolean updateCalendarRecord(MeetingWrapper meetingWrapper);
+		
+	MeetingWrapper insertCalendarRecord(MeetingWrapper meetingWrapper);
+		
+	boolean deleteCalendarRecord(QueryParams params);
+	
+	//Participants
+	/*List<MeetingParticipantWrapper> getParticipantRecords(QueryParams params);
+
+	int getParticipantRecordsCount(QueryParams params);
+
+	EmployeeReviewWrapper getParticipantRecordById(QueryParams params);
+
+	boolean updateParticipantRecord(MeetingParticipantWrapper meetingParticipantWrapper);
+		
+	MeetingParticipantWrapper insertParticipantRecord(MeetingParticipantWrapper meetingParticipantWrapper);
+		
+	boolean deleteParticipantRecord(QueryParams params);*/	
 }

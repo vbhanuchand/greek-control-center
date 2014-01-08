@@ -455,3 +455,13 @@ alter table blobs add upload_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
 alter table blobs add upload_notes varchar(100) DEFAULT 'Notes';
 
 select * from employee_salary where employee_id=7
+
+
+(select distinct yyyy as year from employee_review where employee_id=2 and active=true order by yyyy desc)
+UNION
+(select distinct extract(year from on_date) as year from employee_leaves where employee_id = 2)
+
+delete from meeting;
+commit;
+
+select * from meeting; where fromTime > '2014-01-05';

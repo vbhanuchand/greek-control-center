@@ -18,7 +18,6 @@ import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -26,10 +25,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.services.core.data.dao.BlobDAO;
 import com.services.core.data.dao.EmployeeDAO;
+import com.services.core.data.dao.MeetingDAO;
 import com.services.core.data.dao.StoreDAO;
 import com.services.core.data.mgr.DataManager;
 import com.services.core.data.model.Blobs;
 import com.services.core.data.model.Item;
+import com.services.core.data.model.Meeting;
 import com.services.core.data.model.employee.Employee;
 import com.services.core.data.model.employee.EmployeeDiscipline;
 import com.services.core.data.model.employee.EmployeeLabor;
@@ -44,6 +45,7 @@ import com.services.core.data.model.store.StoreInvoiceDetails;
 import com.services.core.data.model.store.StoreKey;
 import com.services.core.data.model.store.StoreMaintenance;
 import com.services.core.data.model.store.StoreStock;
+import com.services.core.view.utils.QueryParams;
 import com.services.core.view.utils.Utilities;
 import com.services.core.view.wrappers.BlobsWrapper;
 import com.services.core.view.wrappers.EmployeeDisciplineWrapper;
@@ -53,6 +55,7 @@ import com.services.core.view.wrappers.EmployeeReviewWrapper;
 import com.services.core.view.wrappers.EmployeeSalaryWrapper;
 import com.services.core.view.wrappers.EmployeeWrapper;
 import com.services.core.view.wrappers.ItemWrapper;
+import com.services.core.view.wrappers.MeetingWrapper;
 import com.services.core.view.wrappers.RoleWrapper;
 import com.services.core.view.wrappers.StoreAccountWrapper;
 import com.services.core.view.wrappers.StoreAlarmWrapper;
@@ -81,6 +84,9 @@ public class DataManagerImpl implements DataManager{
 	
 	@Autowired
 	private BlobDAO blobDAO;
+	
+	@Autowired
+	private MeetingDAO meetingDAO;
 	
 	@Override
 	public void insertEmployee(Employee emp) {
@@ -119,24 +125,32 @@ public class DataManagerImpl implements DataManager{
 		return employeeDAO.updateEmployeePassword(username, newPassword);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<EmployeeWrapper> getEmployees() {
 		List<EmployeeWrapper> employeeWrappers = new ArrayList<EmployeeWrapper>(); 
 		EmployeeWrapper employee;
+		Collection<GrantedAuthority> authorities = (Collection<GrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+		String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+		String currentUserRolesStr = authorities.toString();
 		for(Employee emp: employeeDAO.getEmployees()){
-			employee = new EmployeeWrapper();
-			employee.setId(emp.getId());
-			employee.setFname(emp.getFname());
-			employee.setLname(emp.getLname());
-			employee.setUsername(emp.getUsername());
-			employee.setActive(emp.getActive());
-			employee.setPhone(emp.getPhone());
-			/*for(Store tmpStore: emp.getStore()){
-				employee.getStore().add(new StoreWrapper(tmpStore.getId(), tmpStore.getDisplayName(), tmpStore.getActive(), 
-						tmpStore.getStore_address(), tmpStore.getContact_details(), tmpStore.getStore_notes(), tmpStore.getOperating_hrs(), tmpStore.getLease_copy_loc(), tmpStore.getUpdatedBy(), 
-						tmpStore.getUpdatedDate()));
-			}*/
-			employeeWrappers.add(employee);
+			/*if(!(currentUserRolesStr.contains("ROLE_OWNER")) && (emp.getUsername().equalsIgnoreCase(currentUsername))){
+				logger.info("Skipping the Mgr Entry because the manager cannot modify his own data");
+			} else {*/
+				employee = new EmployeeWrapper();
+				employee.setId(emp.getId());
+				employee.setFname(emp.getFname());
+				employee.setLname(emp.getLname());
+				employee.setUsername(emp.getUsername());
+				employee.setActive(emp.getActive());
+				employee.setPhone(emp.getPhone());
+				/*for(Store tmpStore: emp.getStore()){
+					employee.getStore().add(new StoreWrapper(tmpStore.getId(), tmpStore.getDisplayName(), tmpStore.getActive(), 
+							tmpStore.getStore_address(), tmpStore.getContact_details(), tmpStore.getStore_notes(), tmpStore.getOperating_hrs(), tmpStore.getLease_copy_loc(), tmpStore.getUpdatedBy(), 
+							tmpStore.getUpdatedDate()));
+				}*/
+				employeeWrappers.add(employee);
+			//}
 		}
 		
 		return employeeWrappers;
@@ -198,7 +212,31 @@ public class DataManagerImpl implements DataManager{
 				if(getMgrOnly && currentUsername.equalsIgnoreCase(emp.getUsername())){
 					employeeWrappers.add(new EmployeeWrapper(emp.getId(), emp.getUsername(), emp.getFname(), 
 							emp.getLname(), emp.getPhone(), emp.getPersonalPhone(), emp.getEmergencyContact(), emp.getAddress(), emp.getPosition(), emp.getManager(),  emp.getActive(), emp.getUpdated_by(), emp.getHired_date()));
-				}else {
+				}else if(currentUsername.equalsIgnoreCase(emp.getUsername())){
+					logger.info("Skipping the Manager since he cannot modify his own information");
+				}else{
+					employeeWrappers.add(new EmployeeWrapper(emp.getId(), emp.getUsername(), emp.getFname(), 
+							emp.getLname(), emp.getPhone(), emp.getPersonalPhone(), emp.getEmergencyContact(), emp.getAddress(), emp.getPosition(), emp.getManager(),  emp.getActive(), emp.getUpdated_by(), emp.getHired_date()));
+				}
+			} else employeeWrappers.add(new EmployeeWrapper(emp.getId(), emp.getUsername(), emp.getFname(), 
+					emp.getLname(), emp.getPhone(), emp.getPersonalPhone(), emp.getEmergencyContact(), emp.getAddress(), emp.getPosition(), emp.getManager(),  emp.getActive(), emp.getUpdated_by(), emp.getHired_date()));
+		}
+		return employeeWrappers;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<EmployeeWrapper> getEmployeesByStoreIdForLabor(int storeId, boolean getMgrOnly) {
+		List<EmployeeWrapper> employeeWrappers = new ArrayList<EmployeeWrapper>();
+		for(Employee emp: employeeDAO.getEmployeesByStoreId(storeId, getMgrOnly)){
+			Collection<GrantedAuthority> authorities = (Collection<GrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+			String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+			String currentUserRolesStr = authorities.toString();
+			if(!(currentUserRolesStr.contains("ROLE_OWNER"))){
+				if(getMgrOnly && currentUsername.equalsIgnoreCase(emp.getUsername())){
+					employeeWrappers.add(new EmployeeWrapper(emp.getId(), emp.getUsername(), emp.getFname(), 
+							emp.getLname(), emp.getPhone(), emp.getPersonalPhone(), emp.getEmergencyContact(), emp.getAddress(), emp.getPosition(), emp.getManager(),  emp.getActive(), emp.getUpdated_by(), emp.getHired_date()));
+				} else{
 					employeeWrappers.add(new EmployeeWrapper(emp.getId(), emp.getUsername(), emp.getFname(), 
 							emp.getLname(), emp.getPhone(), emp.getPersonalPhone(), emp.getEmergencyContact(), emp.getAddress(), emp.getPosition(), emp.getManager(),  emp.getActive(), emp.getUpdated_by(), emp.getHired_date()));
 				}
@@ -834,6 +872,7 @@ public class DataManagerImpl implements DataManager{
 				accDetails.getFoodCost(), accDetails.getAdvertisement(), accDetails.getMisc(), accDetails.getProfit(), accDetails.getTotalSales(), accDetails.getTotalOpExp(), accDetails.getTotalProfits(), true, 0);
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@Override
 	public List<StoreInvoiceWrapper> getStoreInvoices(int storeId, String category){
 		List invoiceList = storeDAO.getStoreInvoices(storeId, category);
@@ -978,6 +1017,63 @@ public class DataManagerImpl implements DataManager{
 	@Transactional
 	public int insertStoreItem(ItemWrapper item, String category){
 		return storeDAO.insertStoreItem(item.getItemCode(), item.getItemCategory() , item.getItemColor(), item.getItemName(), item.getItemPar(), item.getItemUnits(), item.getItemPPU(), item.getItemGSPercent(), item.getStoreId(), item.getUpdatedBy(), category);
+	}
+	
+	
+	
+	//Meeting Related Ops
+	@Override
+	public List<MeetingWrapper> getCalendarRecords(QueryParams params){
+		List<MeetingWrapper> calList = new ArrayList<MeetingWrapper>();
+		MeetingWrapper meetingWrapper = null;
+		for(Meeting meeting: meetingDAO.getMeetingRecords(params)){
+			meetingWrapper = new MeetingWrapper(meeting.getId(), meeting.getSummary(), meeting.getAgenda(), meeting.getEmail(), meeting.getEmailText(), 
+					Utilities.getFormattedZuluString(meeting.getFromTime()), Utilities.getFormattedZuluString(meeting.getToTime()), meeting.getUpdatedBy(), meeting.getUpdatedDate().getTime());
+			calList.add(meetingWrapper);
+		}
+		return calList;
+	}
+	
+	@Override
+	public int getCalendarRecordsCount(QueryParams params){
+		return meetingDAO.getMeetingRecordsCount(params);
+	}
+
+	@Override
+	public MeetingWrapper getCalendarRecordById(QueryParams params){
+		Meeting meeting = meetingDAO.getMeetingRecordById(params);
+		MeetingWrapper meetingWrapper = null;
+		if (meeting != null) {
+			meetingWrapper = new MeetingWrapper(meeting.getId(), meeting.getSummary(), meeting.getAgenda(), meeting.getEmail(), meeting.getEmailText(), 
+					Utilities.getFormattedZuluString(meeting.getFromTime()), Utilities.getFormattedZuluString(meeting.getToTime()), meeting.getUpdatedBy(), meeting.getUpdatedDate().getTime());
+		}
+		return meetingWrapper;
+	}
+
+	@Override
+	@Transactional
+	public boolean updateCalendarRecord(MeetingWrapper meetingWrapper){
+		return meetingDAO.updateMeetingRecord(meetingWrapper.getId(), meetingWrapper.getSummary(), meetingWrapper.getAgenda(), meetingWrapper.getEmail(), meetingWrapper.getEmailText(), 
+				Utilities.getParsedZuluDate(meetingWrapper.getFromTime()), Utilities.getParsedZuluDate(meetingWrapper.getToTime()), meetingWrapper.getUpdatedBy());
+	}
+	
+	@Override
+	@Transactional
+	public MeetingWrapper insertCalendarRecord(MeetingWrapper meetingWrapper){
+		Meeting meeting = meetingDAO.insertMeetingRecord(meetingWrapper.getSummary(), meetingWrapper.getAgenda(), meetingWrapper.getEmail(), meetingWrapper.getEmailText(), 
+				Utilities.getParsedZuluDate(meetingWrapper.getFromTime()), Utilities.getParsedZuluDate(meetingWrapper.getToTime()), meetingWrapper.getUpdatedBy());
+		MeetingWrapper meetingWrapper1 = null;
+		if (meeting != null) {
+			meetingWrapper1 = new MeetingWrapper(meeting.getId(), meeting.getSummary(), meeting.getAgenda(), meeting.getEmail(), meeting.getEmailText(), 
+					Utilities.getFormattedZuluString(meeting.getFromTime()), Utilities.getFormattedZuluString(meeting.getToTime()), meeting.getUpdatedBy(), meeting.getUpdatedDate().getTime());
+		}
+		return meetingWrapper1;
+	}
+	
+	@Override
+	@Transactional
+	public boolean deleteCalendarRecord(QueryParams params){
+		return meetingDAO.deleteMeetingRecord(params);
 	}
 	
 }

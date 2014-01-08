@@ -21,7 +21,7 @@ import com.services.core.view.wrappers.RoleWrapper;
 public class CustomUserDetailsService implements UserDetailsService {
 
 	@Autowired
-	DataManager dataMgr;
+	DataManager dataService;
 	List<String> stores;
 
 	public List<String> getStores() {
@@ -41,7 +41,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 			throws UsernameNotFoundException {
 		try {
 
-			EmployeeWrapper user = dataMgr.getEmployeeByUserName(username);
+			EmployeeWrapper user = dataService.getEmployeeByUserName(username);
 			boolean enabled = true;
 			boolean accountNonExpired = true;
 			boolean credentialsNonExpired = true;

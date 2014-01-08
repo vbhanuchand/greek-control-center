@@ -10,7 +10,7 @@
 	<mvc:annotation-driven />
 		<mvc:resources mapping="/resources/**" location="/static/"
 			cache-period="0" />
-		<!--<mvc:resources mapping="/resources/**" location="/static/"/> -->
+		<!--<mvc:resources mapping="/resources/**" location="/static/"/>-->
 	<bean
 		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" />
 	<bean
