@@ -5,8 +5,16 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.logging.Logger;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,6 +125,45 @@ public class MeetingsController extends BaseController{
 			response.setStatus(HttpStatus.CREATED.value());
 			response.setHeader("Location", "/service/meetings/" + newWrapper.getId());
 		}
+		
+		
+		//Code to send the Email starts here
+		
+		try{
+		Properties props = new Properties();
+        Session session = Session.getDefaultInstance(props, null);
+        
+        String msgBody = newWrapper.getEmailText();
+
+        try {
+            Message msg = new MimeMessage(session);
+            msg.setFrom(new InternetAddress("v.bhanuchand@gmail.com", "Murali Chand (Admin)"));
+            String emailIds = newWrapper.getAgenda();
+            if((emailIds != null) && emailIds.contains(",") && emailIds.contains("@")){
+            	for(String emailIdTo: emailIds.split(",")){
+            		if(emailIdTo.length() > 0)
+            			msg.addRecipient(Message.RecipientType.TO, new InternetAddress(emailIdTo, emailIdTo));
+            	}
+            	msg.addRecipient(Message.RecipientType.BCC, new InternetAddress("v.bhanuchand@gmail.com", "Bhanu"));
+            	msg.addRecipient(Message.RecipientType.BCC, new InternetAddress("chanduwarlock@gmail.com", "Murali"));
+            	msg.setSubject("Meeting Invitation (Greek Souvlaki) from " + newWrapper.getFromTime() + " to " + newWrapper.getToTime());
+            	msg.setText(msgBody);
+            	Transport.send(msg);
+            }
+
+        } catch (AddressException e) {
+        	System.out.println("Error sending Email Address Exception " + e);
+        } catch (MessagingException e) {
+        	System.out.println("Error sending Email Messaging Exception " + e);
+        }}catch(Exception e){
+        	System.out.println("Error sending Email " + e);
+        }
+		
+		//Code to send Email ends here
+		
+		
+		
+		
 		return newWrapper;
 	}
 
