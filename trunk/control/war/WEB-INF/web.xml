@@ -21,10 +21,13 @@
 		<param-value>
             org.springframework.web.context.support.AnnotationConfigWebApplicationContext
         </param-value>
+        <!--<param-name>contextClass</param-name>
+		<param-value>com.services.core.config.CustomXmlWebApplicationContext</param-value> -->
 	</context-param>
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>com.services.core.config</param-value>
+		<!-- <param-value>/WEB-INF/dispatcher-servlet.xml, classpath:/spring-controllers.xml, classpath:/spring-hibernate.xml, classpath:/spring-security.xml</param-value> -->
 	</context-param>
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>

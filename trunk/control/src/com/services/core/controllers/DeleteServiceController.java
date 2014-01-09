@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,12 +19,11 @@ import com.services.core.view.wrappers.BaseModel;
 import com.services.core.view.wrappers.SingleModelResponse;
 
 @Controller
+@Lazy
 public class DeleteServiceController {
 
 	@Autowired
 	private SessionFactory sessionFactory;
-
-	private static Logger logger = Logger.getAnonymousLogger();
 
 	@Transactional
 	@RequestMapping(value = "/service/delete/date/{id}", method = RequestMethod.GET, produces = APPLICATION_JSON_VALUE)

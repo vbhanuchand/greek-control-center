@@ -19,7 +19,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.util.ThrowableAnalyzer;
 import org.springframework.security.web.util.ThrowableCauseExtractor;
 import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.context.annotation.Lazy;
 
+@Lazy
 public class AjaxTimeoutRedirectFilter extends GenericFilterBean {
 
 	private static final Log logger = LogFactory

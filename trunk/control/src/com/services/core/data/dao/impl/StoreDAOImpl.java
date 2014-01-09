@@ -10,7 +10,7 @@ import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.Lazy;
 
 import com.services.core.data.dao.StoreDAO;
 import com.services.core.data.model.Blobs;
@@ -25,10 +25,10 @@ import com.services.core.data.model.store.StoreKey;
 import com.services.core.data.model.store.StoreMaintenance;
 import com.services.core.data.model.store.StoreStock;
 import com.services.core.data.model.store.UploadNotes;
-import com.services.core.view.wrappers.UploadNotesWrapper;
 
-@Service
+
 @SuppressWarnings("unchecked")
+@Lazy
 public class StoreDAOImpl implements StoreDAO {
 
 	@Autowired

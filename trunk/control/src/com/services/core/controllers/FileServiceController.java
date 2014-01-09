@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,7 +34,7 @@ import com.services.core.view.wrappers.SimpleModel;
 import com.services.core.view.wrappers.SingleModelResponse;
 
 @Controller
-//@RequestMapping("/service")
+@Lazy
 public class FileServiceController {
 
 	private BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();

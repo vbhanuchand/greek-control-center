@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,7 +38,7 @@ import com.services.core.view.wrappers.StoreWrapper;
 import com.services.core.view.wrappers.UploadNotesWrapper;
 
 @Controller
-//@RequestMapping("/service")
+@Lazy
 public class StoreServiceController {
 
 	@Autowired
