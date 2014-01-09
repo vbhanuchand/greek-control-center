@@ -145,7 +145,7 @@ define(
 		        		Popup.close(_this.calendarAddEditEntryDialog);
 						var itemNull = item == null;
 						var widgetsInPopup = [ _this.itemSummaryEditor, _this.itemStartDateEditor, _this.itemStartTimeEditor, _this.itemEndDateEditor, 
-						                _this.itemEndTimeEditor, _this.itemAgendaEditor, _this.itemEmailEditor, _this.itemEmailTextEditor, _this.deleteItemButton, _this.updateItemButton ];
+						                _this.itemEndTimeEditor, _this.itemAgendaEditor, _this.itemEmailEditor, _this.itemEmailTextEditor, _this.deleteItemButton, _this.closeItemButton, _this.updateItemButton ];
 
 						arr.forEach(widgetsInPopup, function(w) { w.set("disabled", itemNull); w.set("value", null, false); });
 						editedItem = itemNull ? null : lang.mixin({}, item);
@@ -316,7 +316,7 @@ define(
 						var item = {
 							id : id,
 							summary : "New event " + id,
-							agenda: 'Enter Agenda here',
+							agenda: '',
 							email: true,
 							emailText: 'Email Text to send',
 							fromTime : start,
@@ -614,6 +614,11 @@ define(
 								});
 							}
 						}
+					});
+					
+					_this.closeItemButton.on("click", function(value) {
+						_this.calendar.set('selectedItem', null);
+						Popup.close(_this.calendarAddEditEntryDialog);
 					});
 					
 					/*_this.calendar1CB.on("change", function(v) {

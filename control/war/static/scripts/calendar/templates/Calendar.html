@@ -10,12 +10,6 @@
 			<div data-dojo-attach-point="itemSummaryEditor"
 				data-dojo-type="dijit/form/TextBox" style="width: 90%;"
 				data-dojo-props="disabled:true"></div>
-			<div>
-				<span class="propertyTitle">Agenda:</span>
-			</div>
-			<div data-dojo-attach-point="itemAgendaEditor"
-				data-dojo-type="dijit/form/TextBox" style="width: 90%;"
-				data-dojo-props="disabled:true"></div>
 			<div style="margin-top: 10px">
 				<span class="propertyTitle">Start:</span>
 			</div>
@@ -44,7 +38,13 @@
 					data-dojo-props="disabled:true"
 					style="display: inline-block; width: 120px;"></div>
 			</div>
-
+			<div>
+				<span class="propertyTitle">Participants Email id's (separate by comma):</span>
+			</div>
+			<div data-dojo-attach-point="itemAgendaEditor"
+				data-dojo-type="dijit/form/TextBox" style="width: 90%;"
+				data-dojo-props="disabled:true, placeholder: 'Enter Email ids'"></div>
+			
 			<div style="margin-top: 10px">
 				<input type="checkbox" data-dojo-attach-point="itemEmailEditor"
 					data-dojo-type="dijit/form/CheckBox" checked="checked"
@@ -55,18 +55,22 @@
 			<div>
 				<span class="propertyTitle">Email Text:</span>
 			</div>
-			<div data-dojo-attach-point="itemEmailTextEditor"
-				data-dojo-type="dijit/form/TextBox" style="width: 90%;"
-				data-dojo-props="disabled:true"></div>
+			<textarea data-dojo-attach-point="itemEmailTextEditor" rows="3" cols="6"
+				data-dojo-type="dijit/form/SimpleTextarea" style="width: 90%;"
+				data-dojo-props="disabled:true">This text will be included in the Email to Participants</textarea>
 			<div style="margin-top: 10px; text-align: right">
 				<span style="text-align: left">
 					<button data-dojo-attach-point="deleteItemButton"
-						class="deleteButton" data-dojo-type="dijit/form/Button"
+						data-dojo-type="dijit/form/Button"
 						data-dojo-props="disabled:true, 'class':'danger'">Delete</button>
-				</span> <span style="text-align: right">
+				</span><span style="text-align: right">
 					<button data-dojo-attach-point="updateItemButton"
 						data-dojo-type="dijit/form/Button"
 						data-dojo-props="disabled:true, 'class':'primary'">Update</button>
+					&nbsp;<button data-dojo-attach-point="closeItemButton"
+							data-dojo-type="dijit/form/Button"
+							data-dojo-props="disabled:true, 'class':'inverse'">Close</button>
+					
 				</span>
 			</div>
 			<script type="dojo/on" data-dojo-event="show" data-dojo-args="e">
