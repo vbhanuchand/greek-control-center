@@ -12,12 +12,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.Lazy;
 
 import com.services.core.data.mgr.DataManager;
 import com.services.core.view.wrappers.EmployeeWrapper;
 import com.services.core.view.wrappers.RoleWrapper;
 
 @Service("customUserDetailsService")
+@Lazy
 public class CustomUserDetailsService implements UserDetailsService {
 
 	@Autowired

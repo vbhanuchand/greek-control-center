@@ -4,14 +4,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.services.core.data.dao.EmployeeDAO;
 import com.services.core.data.model.Role;
@@ -23,7 +21,7 @@ import com.services.core.data.model.employee.EmployeeReview;
 import com.services.core.data.model.employee.EmployeeSalary;
 import com.services.core.view.utils.Utilities;
 
-@Service
+
 @SuppressWarnings("unchecked")
 public class EmployeeDAOImpl implements EmployeeDAO {
 	

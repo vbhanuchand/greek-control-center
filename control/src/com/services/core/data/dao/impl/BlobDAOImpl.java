@@ -5,13 +5,14 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.Lazy;
 
 import com.services.core.data.dao.BlobDAO;
 import com.services.core.data.model.Blobs;
 
-@Service
+
 @SuppressWarnings("unchecked")
+@Lazy
 public class BlobDAOImpl implements BlobDAO{
 
 	@Autowired

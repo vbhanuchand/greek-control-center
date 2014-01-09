@@ -41,4 +41,8 @@
         <include path="/**.eot" />
     </static-files>
 
+<inbound-services>
+  <service>warmup</service>
+</inbound-services>
+
 </appengine-web-app>

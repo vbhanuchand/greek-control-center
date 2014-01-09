@@ -6,13 +6,16 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 
 import com.services.core.data.dao.MeetingDAO;
 import com.services.core.data.model.Meeting;
 import com.services.core.view.utils.QueryParams;
 import com.services.core.view.utils.Utilities;
 
+
 @SuppressWarnings("unchecked")
+@Lazy
 public class MeetingDAOImpl implements MeetingDAO{
 	
 	@Autowired

@@ -9,8 +9,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.Lazy;
 
 @Service
+@Lazy
 public class SecurityLoginFailureHandler extends
 		SimpleUrlAuthenticationFailureHandler {
 

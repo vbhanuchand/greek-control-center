@@ -18,6 +18,7 @@ import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -38,6 +39,7 @@ import com.services.core.view.wrappers.MeetingWrapper;
 
 @Controller
 @RequestMapping("/service/meetings")
+@Lazy
 public class MeetingsController extends BaseController{
 
 	private static final String ACCEPT_JSON = "Accept=application/json";

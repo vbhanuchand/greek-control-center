@@ -17,9 +17,9 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,9 +69,9 @@ import com.services.core.view.wrappers.StoreStockWrapper;
 import com.services.core.view.wrappers.StoreWrapper;
 import com.services.core.view.wrappers.UploadNotesWrapper;
 
-@Service
 @Transactional(readOnly = true, propagation=Propagation.REQUIRED)
 @SuppressWarnings("unused")
+@Lazy
 public class DataManagerImpl implements DataManager{
 
 	private static Logger logger = Logger.getLogger(DataManagerImpl.class.getName());
