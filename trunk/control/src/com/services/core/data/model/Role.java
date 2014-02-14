@@ -20,7 +20,7 @@ import org.hibernate.annotations.Type;
 import com.services.core.data.model.employee.Employee;
 
 @Entity
-@Table(name = "employee_role")
+@Table(name = "employee_role1")
 public class Role implements Serializable {
 
 	private static final long serialVersionUID = 5920652462712015025L;
