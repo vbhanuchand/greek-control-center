@@ -790,6 +790,10 @@ function applySecurityRoles(authoritiesData){
 			registry.byId('accountingPane').destroy();
 			//Remove the Accounting Tab Ends here
 			
+			//Remove the Accounting Tab Starts here
+			registry.byId('tabContainer').removeChild(registry.byId('meetingsPane'));
+			registry.byId('meetingsPane').destroy();
+			//Remove the Accounting Tab Ends here
 			
 			//Adjusting the Inventory Tab Starts here
 			//registry.byId('inventoryInvoicesGrid').layout.setColumnVisibility(2,false);

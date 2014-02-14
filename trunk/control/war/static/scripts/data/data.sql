@@ -1,13 +1,17 @@
 insert into store(active, displayName, store_address, operating_hrs, lease_copy_loc, updated_by, updated_date)
-values ('Y', 'Downtown', 'Downtown SLC, 404 East 300 South, (801) 322-2062', 'Monday - Saturday -- 11 a.m. - 10 p.m. Sunday 12 p.m. - 8 p.m.', './downtown.pdf', 1, null);
+values ('Y', 'Downtown', 'Downtown SLC, 404 East 300 South salt lake city, ut', 'Monday - Saturday -- 11 a.m. - 10 p.m. Sunday 12 p.m. - 8 p.m.', './downtown.pdf', 1, null);
 insert into store(active, displayName, store_address, operating_hrs, lease_copy_loc, updated_by, updated_date)
 values ('Y', 'West Valley', 'West Valley, 2192 West 3500 South (801) 973-4976', 'Monday - Saturday 11 a.m. - 10 p.m. Sunday 12 p.m. - 8 p.m.', './westValley.pdf', 1, null);
 insert into store(active, displayName, store_address, operating_hrs, lease_copy_loc, updated_by, updated_date)
-values ('Y', 'Murray', 'Murray, 5692 South 900 East (801) 266-3336', 'Monday - Saturday 11 a.m. - 10 p.m. Sunday 12 p.m. - 8 p.m.', './murray.pdf', 1, null);
+values ('Y', 'Murray', 'Murray, 5692 South 900 East', 'Monday - Saturday 11 a.m. - 10 p.m. Sunday 12 p.m. - 8 p.m.', './murray.pdf', 1, null);
 insert into store(active, displayName, store_address, operating_hrs, lease_copy_loc, updated_by, updated_date)
 values ('Y', 'South Jordan', 'South Jordan, 1067 West South Jordan Parkway (801) 849-0653', 'Monday - Saturday 11 a.m. - 10 p.m. Closed Sunday', './southJordan.pdf', 1, null);
 insert into store(active, displayName, store_address, operating_hrs, lease_copy_loc, updated_by, updated_date)
-values ('Y', 'Salt Lake', 'Salt Lake Airport SLC Airport, Terminal 2 Food Court (801) 575-2793', 'Everyday 6 a.m. - 10 p.m', './saltLake.pdf', 1, null);
+values ('Y', 'Salt Lake City', 'Salt Lake Airport SLC Airport, Terminal 2 Food Court (801) 575-2793', 'Everyday 6 a.m. - 10 p.m', './saltLake.pdf', 1, null);
+
+
+
+
 update employee set mgr_id=1;
 select * from employee_labor;
 desc employee_salary; 
@@ -465,3 +469,14 @@ delete from meeting;
 commit;
 
 select * from meeting; where fromTime > '2014-01-05';
+
+
+
+select * from employee;
+delete from employee where id not in (1);
+commit;
+
+select * from employee_role where employee_id not in (1);
+delete from employee_role where active='N';
+delete from employee_role where employee_id not in (1);
+

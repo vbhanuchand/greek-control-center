@@ -244,7 +244,14 @@ define(
 					
 					_this.contextMenuDelete.on("click", function() {
 						arr.forEach(_this.calendar.selectedItems, function(item) {
-							_this.calendar.store.remove(item.id);
+							var clonedItem = lang.clone(item);
+							if(clonedItem.hasOwnProperty('newlyCreated') && (clonedItem.newlyCreated === true)){
+								_this.calendar.store.remove(clonedItem.id);
+							} else {
+								_this.calendarMasterStore.remove(clonedItem.id).then(function(){
+									_this.calendar.store.remove(clonedItem.id);
+								});
+							}
 						});
 					});
 		        	
@@ -315,7 +322,7 @@ define(
 						
 						var item = {
 							id : id,
-							summary : "New event " + id,
+							summary : "New Meeting ",
 							agenda: '',
 							email: true,
 							emailText: 'Email Text to send',
@@ -546,6 +553,12 @@ define(
 							clonedItem.fromTime = editedItem.fromTime;
 							clonedItem.toTime = editedItem.toTime;
 							clonedItem.newlyCreated = editedItem.newlyCreated;
+							
+							clonedItem.localDateFrom = _this.itemStartDateEditor.get('displayedValue');
+							clonedItem.localDateTo = _this.itemEndDateEditor.get('displayedValue');
+							clonedItem.localTimeFrom = _this.itemStartTimeEditor.get('displayedValue');
+							clonedItem.localTimeTo = _this.itemEndTimeEditor.get('displayedValue');
+							
 							if(clonedItem.hasOwnProperty('newlyCreated') && (clonedItem.newlyCreated === true)){
 								delete clonedItem.id;
 								_this.calendarMasterStore.add(clonedItem).then(function(updatedItem){

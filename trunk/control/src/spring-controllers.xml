@@ -9,10 +9,10 @@
     http://www.springframework.org/schema/tx 
     http://www.springframework.org/schema/tx/spring-tx.xsd">
 	
-	<bean id="storeServiceController" class="com.services.core.controllers.StoreServiceController"/>
-	<bean id="fileServiceController" class="com.services.core.controllers.FileServiceController"/>
-	<bean id="employeeServiceController" class="com.services.core.controllers.EmployeeServiceController"/>
-	<bean id="deleteServiceController" class="com.services.core.controllers.DeleteServiceController"/>
-	<bean id="meetingServiceController" class="com.services.core.controllers.MeetingsController"/>
+	<bean class="com.services.core.controllers.StoreServiceController" lazy-init="true"/>
+	<bean class="com.services.core.controllers.FileServiceController" lazy-init="true"/>
+	<bean class="com.services.core.controllers.EmployeeServiceController" lazy-init="true"/>
+	<bean class="com.services.core.controllers.DeleteServiceController" lazy-init="true"/>
+	<bean class="com.services.core.controllers.MeetingsController" lazy-init="true"/>
 	
 </beans>

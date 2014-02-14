@@ -13,19 +13,19 @@
 
 	<!-- <context:component-scan base-package="com.services.core.data.dao" /> -->
 	
-	<bean id="blobDAO" class="com.services.core.data.dao.impl.BlobDAOImpl"/>
-	<bean id="storeDAO" class="com.services.core.data.dao.impl.EmployeeDAOImpl"/>
-	<bean id="employeeDAO" class="com.services.core.data.dao.impl.StoreDAOImpl"/>
-	<bean id="meetingDAO" class="com.services.core.data.dao.impl.MeetingDAOImpl"/>
+	<bean id="blobDAO" class="com.services.core.data.dao.impl.BlobDAOImpl" lazy-init="true"/>
+	<bean id="storeDAO" class="com.services.core.data.dao.impl.EmployeeDAOImpl" lazy-init="true"/>
+	<bean id="employeeDAO" class="com.services.core.data.dao.impl.StoreDAOImpl" lazy-init="true"/>
+	<bean id="meetingDAO" class="com.services.core.data.dao.impl.MeetingDAOImpl" lazy-init="true"/>
 	
 	<!-- <context:component-scan base-package="com.services.core.data.mgr" /> -->
-	<bean id="dataService" class="com.services.core.data.mgr.impl.DataManagerImpl"/>
+	<bean id="dataService" class="com.services.core.data.mgr.impl.DataManagerImpl" lazy-init="true"/>
 	
 	
 	<!-- <context:component-scan base-package="com.services.core.security" /> -->
-	<bean id="customUserDetailsService" class="com.services.core.security.CustomUserDetailsService"/>
-	<bean id="securtiyLoginFailureHandler" class="com.services.core.security.SecurityLoginFailureHandler"/>
-	<bean id="securtiyLoginSuccessHandler" class="com.services.core.security.SecurityLoginSuccessHandler"/>
+	<bean id="customUserDetailsService" class="com.services.core.security.CustomUserDetailsService" lazy-init="true"/>
+	<bean id="securtiyLoginFailureHandler" class="com.services.core.security.SecurityLoginFailureHandler" lazy-init="true"/>
+	<bean id="securtiyLoginSuccessHandler" class="com.services.core.security.SecurityLoginSuccessHandler" lazy-init="true"/>
 	
 	
 	<!-- class="org.apache.commons.dbcp.BasicDataSource" <bean id="dataSource" 
@@ -45,15 +45,25 @@
 		<property name="username" value="root" />
 		<property name="password" value="" /> 
 	</bean>-->
+	
+	<!--<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName"
+			value="com.google.appengine.api.rdbms.AppEngineDriver" />
+		<property name="url"
+			value="jdbc:google:rdbms://gscontrolcenter:gscontrolcenterdb/gscontrolcenterdbschema" />
+		<property name="username" value="root" />
+		<property name="password" value="" /> 
+	</bean>-->
 
 
-	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource"> 
+	<!----><bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" lazy-init="true"> 
 		<property name="driverClassName" value="com.google.appengine.api.rdbms.AppEngineDriver" 
 		/> <property name="url" value="jdbc:mysql://localhost:3306/controlcenter" 
 		/> <property name="username" value="root" /> <property name="password" value="password" 
 		/> </bean>
 	<bean id="sessionFactory"
-		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean" lazy-init="true">
 		<property name="dataSource" ref="dataSource"></property>
 		<property name="configLocation">
             <value>classpath:hibernate.cfg.xml</value>
@@ -65,9 +75,11 @@
 		<property name="hibernateProperties">
 			<props>
 				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
-				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.show_sql">false</prop>
+				<prop key="hibernate.hbm2ddl.auto">none</prop>
 			</props>
 		</property>
+		
 		<!-- <property name="packagesToScan" value="com.services.core.data.model" /> -->
 		<!-- <property name="hibernate.query.substitutions">
 			<props>
@@ -79,7 +91,7 @@
 
 	<bean id="transactionManager"
 		class="org.springframework.orm.hibernate4.HibernateTransactionManager"
-		p:sessionFactory-ref="sessionFactory">
+		p:sessionFactory-ref="sessionFactory" lazy-init="true">
 	</bean>
 
 </beans>

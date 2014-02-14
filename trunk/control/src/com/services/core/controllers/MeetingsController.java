@@ -35,6 +35,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import com.services.core.data.mgr.DataManager;
 import com.services.core.view.utils.QueryParams;
+import com.services.core.view.utils.Utilities;
 import com.services.core.view.wrappers.MeetingWrapper;
 
 @Controller
@@ -135,21 +136,31 @@ public class MeetingsController extends BaseController{
 		Properties props = new Properties();
         Session session = Session.getDefaultInstance(props, null);
         
-        String msgBody = newWrapper.getEmailText();
+        String msgBody = "<html><body><div>Hi, <br/><br/> You've been invited for the Meeting by Greek Souvlaki Owner scheduled on <b>" 
+        				+ Utilities.getLocalDateFormattedForEmail(meeting.getLocalDateFrom()) + " " + meeting.getLocalTimeFrom() 
+        				+ "</b></div><br/> <b><u>Further Meeting details below:</u></b> " 
+        				+ "<div><span> Meeting Starts at: </span><span><b>" + Utilities.getLocalDateFormattedForEmail(meeting.getLocalDateFrom()) + " " + meeting.getLocalTimeFrom() + "</b></span></div>"
+        				+ "<div><span> Meeting Ends at: </span><span><b>" + Utilities.getLocalDateFormattedForEmail(meeting.getLocalDateTo()) + " " + meeting.getLocalTimeTo() + "</b></span></div>"
+        				+ "<br/><div><b> Meeting Text: " + "</b></div><p>"
+        				+ newWrapper.getEmailText() 
+        				+ "</p><br/><div>Best Regards,</div><div>Greek Souvlaki Team</div>"
+        				+ "</html>";
 
         try {
-            Message msg = new MimeMessage(session);
-            msg.setFrom(new InternetAddress("v.bhanuchand@gmail.com", "Murali Chand (Admin)"));
+        	MimeMessage msg = new MimeMessage(session);
+            //msg.setFrom(new InternetAddress("v.bhanuchand@gmail.com", "Murali Chand (Admin)"));
+            msg.setFrom(new InternetAddress("chrispaulos@greeksouvlaki.com", "Chris Paulos"));
             String emailIds = newWrapper.getAgenda();
-            if((emailIds != null) && emailIds.contains(",") && emailIds.contains("@")){
+            if((emailIds != null) && (emailIds.contains(",") && emailIds.contains("@") || emailIds.contains("@"))){
             	for(String emailIdTo: emailIds.split(",")){
             		if(emailIdTo.length() > 0)
             			msg.addRecipient(Message.RecipientType.TO, new InternetAddress(emailIdTo, emailIdTo));
             	}
+            	msg.addRecipient(Message.RecipientType.CC, new InternetAddress("chrispaulos@greeksouvlaki.com", "Chris Paulos"));
             	msg.addRecipient(Message.RecipientType.BCC, new InternetAddress("v.bhanuchand@gmail.com", "Bhanu"));
-            	msg.addRecipient(Message.RecipientType.BCC, new InternetAddress("chanduwarlock@gmail.com", "Murali"));
-            	msg.setSubject("Meeting Invitation (Greek Souvlaki) from " + newWrapper.getFromTime() + " to " + newWrapper.getToTime());
-            	msg.setText(msgBody);
+            	msg.addRecipient(Message.RecipientType.BCC, new InternetAddress("mvipparla@gmail.com", "Murali"));
+            	msg.setSubject(" (Greek Souvlaki) Meeting Scheduled from " + Utilities.getLocalDateFormattedForEmail(meeting.getLocalDateFrom()) + " " + meeting.getLocalTimeFrom() + " to " + Utilities.getLocalDateFormattedForEmail(meeting.getLocalDateTo()) + " " + meeting.getLocalTimeTo());
+            	msg.setContent(msgBody, "text/html; charset=utf-8");
             	Transport.send(msg);
             }
 
