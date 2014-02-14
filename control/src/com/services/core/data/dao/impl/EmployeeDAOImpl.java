@@ -130,7 +130,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 			Role empRole = new Role(employeeId, storeId, 0);
 			empRole.setActive(true);
 			empRole.setRoleTab(roleName);
-			sessionFactory.getCurrentSession().saveOrUpdate(empRole);
+			sessionFactory.getCurrentSession().save(empRole);
 			returnVal = empRole.getId() > 0;
 		} else {
 			Query rolesQuery = sessionFactory.getCurrentSession().createQuery("from Role where employeeId=:employeeId and storeId = :storeId and roleTab = :roleTab and active = :active");
@@ -138,13 +138,17 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 			rolesQuery.setParameter("active", true);
 			rolesQuery.setParameter("employeeId", employeeId);
 			rolesQuery.setParameter("storeId", storeId);
-			List<Role> existingRoles = rolesQuery.list(); 
-			if(existingRoles.size() > 0){
+			List<Role> existingRoles = rolesQuery.list();
+			for(Role role1: existingRoles){
+				sessionFactory.getCurrentSession().delete(role1);
+				returnVal = true;
+			}
+			/*if(existingRoles.size() > 0){
 				Role firstRole = existingRoles.get(0);
 				firstRole.setActive(false);
 				sessionFactory.getCurrentSession().update(firstRole);
 				returnVal = true;
-			}
+			}*/
 		}
 		return returnVal;
 	}
@@ -377,7 +381,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 	@Override
 	public List getEmployeeByUserName(String username) {
 		Query query = sessionFactory.getCurrentSession().createQuery("select e.id as empId, e.password as password, r.roleTab as role, r.storeId as storeId from Employee e, Role r " +
-				"where e.id = r.employeeId and username = :username order by e.id, r.storeId, r.roleTab");
+				"where e.id = r.employeeId and username = :username and r.active=true order by e.id, r.storeId, r.roleTab");
 		query.setParameter("username", username);
 		query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
 		return query.list();

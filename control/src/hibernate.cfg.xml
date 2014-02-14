@@ -5,7 +5,6 @@
 <hibernate-configuration>
     <session-factory>
         <mapping class="com.services.core.data.model.Blobs"></mapping>
-        <mapping class="com.services.core.data.model.Inventory"></mapping>
         <mapping class="com.services.core.data.model.Item"></mapping>
         <mapping class="com.services.core.data.model.Meeting"></mapping>
         <mapping class="com.services.core.data.model.MeetingParticipant"></mapping>

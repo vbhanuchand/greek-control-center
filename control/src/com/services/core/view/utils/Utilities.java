@@ -6,8 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.logging.Logger;
 
 public class Utilities {
@@ -246,13 +246,13 @@ public class Utilities {
 	}
 	
 	public static String getFormattedZuluString(Calendar inVal){
-		logger.info("In date --> getFormattedZuluString() --> " + inVal);
+		//logger.info("In date --> getFormattedZuluString() --> " + inVal);
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 		return formatter.format(inVal.getTime());
 	}
 	
 	public static Calendar getParsedZuluDate(String inVal){
-		logger.info("In date --> getParsedZuluDate() --> " + inVal);
+		//logger.info("In date --> getParsedZuluDate() --> " + inVal);
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 		try {
 			Calendar cal=Calendar.getInstance();
@@ -264,7 +264,7 @@ public class Utilities {
 		}
 	}
 	public static Calendar getParsedZuluDateDojo(String inVal){
-		logger.info("In date --> getParsedZuluDateDojo() --> " + inVal);
+		//logger.info("In date --> getParsedZuluDateDojo() --> " + inVal);
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 		try {
 			Calendar cal=Calendar.getInstance();
@@ -275,5 +275,23 @@ public class Utilities {
 			return Calendar.getInstance();
 		}
 	}
+	
+	public static String getDateFormattedForEmail(String inVal){
+		Calendar cal = getParsedZuluDate(inVal);
+		//TimeZone tz = TimeZone.getTimeZone("America/Los_Angeles");
+		//cal.setTimeZone(tz);
+		return new SimpleDateFormat("MM/dd/yyyy hh:mm a").format(cal.getTime()) + " (" + cal.getTimeZone().getID() + ")"; //getDisplayName(false, TimeZone.LONG, Locale.getDefault(Locale.Category.DISPLAY));
+	}
+	
+	public static String getLocalDateFormattedForEmail(String inVal){
+		Calendar cal = Calendar.getInstance();
+		try {
+			cal.setTime(laborScheduleFormatter.parse(inVal));
+		} catch (ParseException e) {
+			cal.setTime(new Date());
+		}
+		return new SimpleDateFormat("dd MMM, yyyy").format(cal.getTime());
+	}
+	
 	
 }

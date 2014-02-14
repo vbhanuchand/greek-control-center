@@ -998,10 +998,11 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 		    	try{
 		    		var gridStore = dijit.byId(gridId).store;
 		    		var randomNumber = getRandomId();
+		    		var strCurrentDate = locale.format(new Date(), {'datePattern': 'MM/dd/yyyy', 'formatLength': 'short', 'selector': 'date'});
 		    		switch(gridId){
 				    	case 'employeesGrid': 
 				    		recordToAdd = {id: randomNumber, storeId: registry.byId('hiddenStoreId').get('value'), fname: 'First Name', lname: 'Last Name', 
-				    			hiredDate: '12/05/2013', username: 'user'+randomNumber, position: 'Front', phone: 'Add Phone', active: true, mgr: 1,
+				    			hiredDate: strCurrentDate, username: 'user'+randomNumber, position: 'Front', phone: 'Add Phone', active: true, mgr: 1,
 				    			updatedBy: 1, updated_date: '', store: '__new__', _self: '/service/store/'+registry.byId('hiddenStoreId').get('value')+'/employees/0', post: true};
 				    		break;
 				    	case 'employeeSalaryDetailsGrid': 
@@ -1018,15 +1019,15 @@ define([ "dojo/_base/declare", "dijit/dijit", "dojo/dom-form", "dijit/registry",
 				    			 _self: '/service/employee/'+empId+'/discipline', post: true, notes: 'Add Notes', notesType: 'good', active: true, updatedBy: 1, updatedDate: '', store: '__new__'};
 				    		break;
 				    	case 'employeeLeavesGrid':
-				    		recordToAdd = {id: randomNumber, storeId: registry.byId('hiddenStoreId').get('value'), empId: empId, date: '12/12/2013', active: true,
+				    		recordToAdd = {id: randomNumber, storeId: registry.byId('hiddenStoreId').get('value'), empId: empId, date: strCurrentDate, active: true,
 				    			 _self: '/service/employee/'+empId+'/leaves', post: true, reason: 'Reason in not More than 100 Characters', excused: '', activeHrs: 0, updatedBy: 1, updatedDate: '', store: '__new__'};
 				    		break;
 				    	case 'mgrLeavesGrid':
-				    		recordToAdd = {id: randomNumber, storeId: registry.byId('hiddenStoreId').get('value'), empId: empId, date: '12/12/2013', active: true,
+				    		recordToAdd = {id: randomNumber, storeId: registry.byId('hiddenStoreId').get('value'), empId: empId, date: strCurrentDate, active: true,
 				    			 _self: '/service/employee/'+empId+'/leaves', post: true, reason: 'Notes in not More than 100 Characters', excused: false, activeHrs: 0, updatedBy: 1, updatedDate: '', store: '__new__'};
 				    		break;
 				    	case 'empLaborDetailsGrid':
-				    		recordToAdd = {id: randomNumber, storeId: registry.byId('hiddenStoreId').get('value'), empId: empId, date: '12/12/2013', position: getSelectedEmployeePosition(), active: true,
+				    		recordToAdd = {id: randomNumber, storeId: registry.byId('hiddenStoreId').get('value'), empId: empId, date: strCurrentDate, position: getSelectedEmployeePosition(), active: true,
 				    			 _self: '/service/store/' + registry.byId('hiddenStoreId').get('value') + '/employee/'+empId+'/labor', post: true, timeFrom: '09:00', timeTo: '17:00', updatedBy: 1, store: '__new__'};
 				    		break;
 				    }

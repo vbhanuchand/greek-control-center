@@ -30,6 +30,12 @@ public class MeetingWrapper extends BaseModel {
 	private boolean newlyCreated = false;
 
 	private boolean allDay = false;
+	
+	private String localDateFrom;
+	private String localDateTo;
+	private String localTimeFrom;
+	private String localTimeTo;
+	
 
 	// These 3 fields are required in UI only --> Will not be stored in DB
 
@@ -146,6 +152,38 @@ public class MeetingWrapper extends BaseModel {
 	
 	public MeetingWrapper() {
 		super();
+	}
+	
+	public String getLocalDateFrom() {
+		return localDateFrom;
+	}
+
+	public void setLocalDateFrom(String localDateFrom) {
+		this.localDateFrom = localDateFrom;
+	}
+
+	public String getLocalDateTo() {
+		return localDateTo;
+	}
+
+	public void setLocalDateTo(String localDateTo) {
+		this.localDateTo = localDateTo;
+	}
+
+	public String getLocalTimeFrom() {
+		return localTimeFrom;
+	}
+
+	public void setLocalTimeFrom(String localTimeFrom) {
+		this.localTimeFrom = localTimeFrom;
+	}
+
+	public String getLocalTimeTo() {
+		return localTimeTo;
+	}
+
+	public void setLocalTimeTo(String localTimeTo) {
+		this.localTimeTo = localTimeTo;
 	}
 
 	@Override

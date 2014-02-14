@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -31,6 +32,7 @@ import com.services.core.view.wrappers.SingleModelResponse;
 import com.services.core.view.wrappers.UploadNotesWrapper;
 
 @Controller
+@Lazy
 public class EmployeeServiceController {
 
 	@Autowired
@@ -94,7 +96,7 @@ public class EmployeeServiceController {
 	@ResponseBody
 	public MultipleModelResponse<EmployeeWrapper> getEmployeesByStoreForLaborEntry(@PathVariable int storeId)
 			throws IOException {
-		logger.info("Getting Employees Data For Store --> " + storeId);
+		logger.info("Getting Employees Labor Data For Store --> " + storeId);
 		boolean getMgrOnly = false;
 		List<EmployeeWrapper> employeeWrappers = dataService.getEmployeesByStoreIdForLabor(storeId, getMgrOnly);
 		for(EmployeeWrapper emp: employeeWrappers){
@@ -175,7 +177,7 @@ public class EmployeeServiceController {
 	@ResponseBody
 	public MultipleModelResponse<EmployeeDisciplineWrapper> getEmployeeDiscipline(@PathVariable int empId)
 			throws IOException {
-		logger.info("Getting Employees Salary Data For Employee Id --> " + empId);
+		logger.info("Getting Employees Discipline Data For Employee Id --> " + empId);
 		List<EmployeeDisciplineWrapper> empDiscWrappers = dataService.getEmployeeDiscipline(empId);
 		for(EmployeeDisciplineWrapper emp: empDiscWrappers){
 			emp.set_self("/service/employee/" + empId + "/discipline");
@@ -206,7 +208,7 @@ public class EmployeeServiceController {
 	@ResponseBody
 	public MultipleModelResponse<EmployeeLeavesWrapper> getEmployeeLeaves(@PathVariable int empId)
 			throws IOException {
-		logger.info("Getting Employees Salary Data For Employee Id --> " + empId);
+		logger.info("Getting Employees Leaves Data For Employee Id --> " + empId);
 		List<EmployeeLeavesWrapper> empLeaveWrappers = dataService.getEmployeeLeaves(empId);
 		for(EmployeeLeavesWrapper emp: empLeaveWrappers){
 			emp.set_self("/service/employee/" + empId + "/leaves");
@@ -219,7 +221,7 @@ public class EmployeeServiceController {
 	@ResponseBody
 	public MultipleModelResponse<EmployeeLeavesWrapper> getEmployeeLeaves(@PathVariable int empId, @PathVariable int year)
 			throws IOException {
-		logger.info("Getting Employees Salary Data For Employee Id --> " + empId + " --> Year --> " + year);
+		logger.info("Getting Employees Leaves Data For Employee Id Year --> " + empId + " --> Year --> " + year);
 		List<EmployeeLeavesWrapper> empLeaveWrappers = dataService.getEmployeeLeaves(empId, year);
 		for(EmployeeLeavesWrapper emp: empLeaveWrappers){
 			emp.set_self("/service/employee/" + empId + "/leaves");
@@ -263,7 +265,7 @@ public class EmployeeServiceController {
 		String tab = "employee-docs";
 		uploadNotesDetails.setLinkedId(empId);
 		uploadNotesDetails.setPurpose(tab);
-		int id = dataService.insertHealthInspectionDetails(uploadNotesDetails);
+		dataService.insertHealthInspectionDetails(uploadNotesDetails);
 		return new SingleModelResponse<UploadNotesWrapper>(true, null);
 	}
 	
@@ -353,7 +355,7 @@ public class EmployeeServiceController {
 	@ResponseBody
 	public MultipleModelResponse<EmployeeReviewWrapper> getEmployeeReviewByQuarter(@PathVariable int empId, @PathVariable int year, @PathVariable int quarter)
 			throws IOException {
-		logger.info("Getting Employee Reviews Data For Employee Id --> " + empId);
+		logger.info("Getting Employee Reviews Data For Employee Id Quarter --> " + empId);
 		List<EmployeeReviewWrapper> empReviewWrapperList = dataService.getEmployeeReviewsByQuarter(empId, year, quarter);
 		for(EmployeeReviewWrapper empReviewWrapper: empReviewWrapperList){
 			empReviewWrapper.set_self("/service/employee/" + empId + "/reviews");

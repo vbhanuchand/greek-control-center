@@ -482,6 +482,7 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 		    		var gridStore = dijit.byId(gridId).store;
 		    		var randomNumber = getRandomId();
 		    		console.log('Random Number used is ' + getRandomId());
+		    		var strCurrentDate = locale.format(new Date(), {'datePattern': 'MM/dd/yyyy', 'formatLength': 'short', 'selector': 'date'});
 		    		switch(gridId){
 				    	case 'storeAlarmCodesGrid': 
 				    		recordToAdd = {id: randomNumber, storeId: registry.byId('hiddenStoreId').get('value'), name: 'Add Name', userNumber: '0',
@@ -494,7 +495,7 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 				    			_self: '/service/store/'+registry.byId('hiddenStoreId').get('value')+'/keys', post: true, store: '__new__'};
 				    		break;
 				    	case 'storeMaintenanceGrid':
-				    		recordToAdd = {id: randomNumber, storeId: registry.byId('hiddenStoreId').get('value'), date: '12/12/2013', notes: 'Add Notes', 
+				    		recordToAdd = {id: randomNumber, storeId: registry.byId('hiddenStoreId').get('value'), date: strCurrentDate, notes: 'Add Notes', 
 				    			problem: 'Add Problem', company: 'Add Company', phone: 'Add Phone', active: true, updatedBy: 1, updatedDate: '', 
 				    			_self: '/service/store/'+registry.byId('hiddenStoreId').get('value')+'/maintenance', post: true, store: '__new__'};
 				    		break;
