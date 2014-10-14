@@ -184,7 +184,7 @@
 
 	<div data-dojo-type="dijit/layout/BorderContainer" class="application" data-dojo-props="design:'headline', gutters:true, liveSplitters: false" style="padding: 0px;">
 		<div id="header" data-dojo-type="dijit/MenuBar" data-dojo-props="region:'top', 'class':'primary inverse'">
-	        <span class='brand'>Greek Souvlaki Control Centre</span>
+	        <span class='brand'>Greek Souvlaki Management Manual sm</span>
 	        <div data-dojo-type="dijit/PopupMenuBarItem" id="adminPopupMenu">
 	            <span>Administrator</span>
 	            <div data-dojo-type="dijit/Menu">
@@ -216,6 +216,9 @@
 					</li>
 					<li class="" id="locationTabletr5">
 						<a href="javascript: checkSelectedPane('locationTabletr5', 'rightAccordion', 5);"><i class="icon-chevron-right"></i> Airport</a>
+					</li>
+					<li class="" id="locationTabletr6">
+						<a href="javascript: checkSelectedPane('locationTabletr6', 'rightAccordion', 6);"><i class="icon-chevron-right"></i> Lehi</a>
 					</li>
 				</ul>
 			</div>

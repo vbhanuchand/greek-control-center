@@ -46,7 +46,8 @@
 		<property name="password" value="" /> 
 	</bean>-->
 	
-	<!--<bean id="dataSource"
+	<!--
+	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName"
 			value="com.google.appengine.api.rdbms.AppEngineDriver" />
@@ -54,14 +55,15 @@
 			value="jdbc:google:rdbms://gscontrolcenter:gscontrolcenterdb/gscontrolcenterdbschema" />
 		<property name="username" value="root" />
 		<property name="password" value="" /> 
-	</bean>-->
+	</bean> -->
 
 
-	<!----><bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" lazy-init="true"> 
+	<!-- -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" lazy-init="true"> 
 		<property name="driverClassName" value="com.google.appengine.api.rdbms.AppEngineDriver" 
 		/> <property name="url" value="jdbc:mysql://localhost:3306/controlcenter" 
 		/> <property name="username" value="root" /> <property name="password" value="password" 
-		/> </bean>
+		/> </bean> 
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean" lazy-init="true">
 		<property name="dataSource" ref="dataSource"></property>

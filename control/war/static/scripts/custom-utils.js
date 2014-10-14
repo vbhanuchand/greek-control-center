@@ -707,7 +707,7 @@ function applySecurityRoles(authoritiesData){
 	var stores = authoritiesData.stores;
 	
 	if(role == 'ROLE_OWNER'){
-		stores = 'store-1, store-2, store-3, store-4, store-5';
+		stores = 'store-1, store-2, store-3, store-4, store-5, store-6';
 	}
 	
 	
@@ -735,6 +735,11 @@ function applySecurityRoles(authoritiesData){
 		domConstruct.destroy("locationTabletr5");
 	else 
 		storeToSelect = storeToSelect > 0 ? storeToSelect : 5;
+	
+	if(stores.indexOf('store-6') < 0)
+		domConstruct.destroy("locationTabletr6");
+	else 
+		storeToSelect = storeToSelect > 0 ? storeToSelect : 6;
 	
 	switch(role){
 		case 'ROLE_OWNER':

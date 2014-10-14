@@ -51,6 +51,7 @@ define(
 		        'baseClass': 'widgets.Calendar',
 		        calendar: null,
 		        dateChooser: null,
+		        attachedCustomEvents: [],
 		        
 		        /* Define the Stores here !!! */
 		        calendarMasterStore: new JsonRestStore({
@@ -231,7 +232,7 @@ define(
 		        	var startOfWeek = _this.calendar.floorToWeek(new _this.calendar.dateClassObj());
 		        	_this.calendar.set("date", startOfWeek);
 		        	
-		        	_this.calendar.on("itemContextMenu", function(e) {
+		        	var handle = _this.calendar.on("itemContextMenu", function(e) {
 						dojoEvent.stop(e.triggerEvent);
 						_this.calendarContextMenu._openMyself({
 							target : e.renderer.domNode,
@@ -241,8 +242,9 @@ define(
 							}
 						});
 					});
+		        	_this.attachedCustomEvents.push(handle);
 					
-					_this.contextMenuDelete.on("click", function() {
+					handle = _this.contextMenuDelete.on("click", function() {
 						arr.forEach(_this.calendar.selectedItems, function(item) {
 							var clonedItem = lang.clone(item);
 							if(clonedItem.hasOwnProperty('newlyCreated') && (clonedItem.newlyCreated === true)){
@@ -254,28 +256,30 @@ define(
 							}
 						});
 					});
-		        	
+					_this.attachedCustomEvents.push(handle);
 		        	
 					//Open the Popup when the selection is changed
-					_this.calendar.on("change", function(e) {
+					handle = _this.calendar.on("change", function(e) {
 						selectionChanged(e, e.newValue);
 					});
+					_this.attachedCustomEvents.push(handle);
 					
-					_this.calendar.on("itemEditEnd", function(e) {
+					handle = _this.calendar.on("itemEditEnd", function(e) {
 						//console.log('Editing Ended ');
 						selectionChanged(e, e.item);
 					});
-					
+					_this.attachedCustomEvents.push(handle);
 					
 					// Synchronize date picker.
 					_this.dateChooser.set("value", startOfWeek);
-					_this.dateChooser.on("change", function(e) {
+					handle = _this.dateChooser.on("change", function(e) {
 						var d = _this.dateChooser.get("value");
 						_this.calendar.set("date", d);
 					});
+					_this.attachedCustomEvents.push(handle);
 					
 					// Configure the Calendar to fetch data from the step when the Date Interval is changed
-					_this.calendar.on("timeIntervalChange", function(e) {
+					handle = _this.calendar.on("timeIntervalChange", function(e) {
 						_this.dateChooser.set("currentFocus", e.startTime, false);							
 						_this.dateChooser.set("minDate", e.startTime);
 						_this.dateChooser.set("maxDate", e.endTime);
@@ -301,6 +305,7 @@ define(
 						
 						
 					});
+					_this.attachedCustomEvents.push(handle);
 		        	
 		        	//Calendar Initialization is completed here
 		        	
@@ -534,7 +539,7 @@ define(
 						return date;
 					};
 					
-					_this.updateItemButton.on("click", function(value) {
+					handle = _this.updateItemButton.on("click", function(value) {
 						if (editedItem != null) {
 							delete editedItem.allDay;
 							editedItem.summary = _this.itemSummaryEditor.get("value");
@@ -615,8 +620,9 @@ define(
 							
 						}
 					});
+					_this.attachedCustomEvents.push(handle);
 					
-					_this.deleteItemButton.on("click", function(value) {
+					handle = _this.deleteItemButton.on("click", function(value) {
 						if(editedItem != null) {
 							var clonedItem = lang.clone(editedItem);
 							if(clonedItem.hasOwnProperty('newlyCreated') && (clonedItem.newlyCreated === true)){
@@ -628,11 +634,13 @@ define(
 							}
 						}
 					});
+					_this.attachedCustomEvents.push(handle);
 					
-					_this.closeItemButton.on("click", function(value) {
+					handle = _this.closeItemButton.on("click", function(value) {
 						_this.calendar.set('selectedItem', null);
 						Popup.close(_this.calendarAddEditEntryDialog);
 					});
+					_this.attachedCustomEvents.push(handle);
 					
 					/*_this.calendar1CB.on("change", function(v) {
 						calendarVisibility[0] = v;
@@ -645,6 +653,10 @@ define(
 					});*/
 		        },
 		        startCalendar: function(){
+		        	var _this = this;
+		        	arr.forEach(_this.attachedCustomEvents, function(handle){
+		        		handle.remove();
+		        	});
 		        	this.customizeCalendar();
 		        }
 			});

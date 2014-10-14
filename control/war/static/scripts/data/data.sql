@@ -8,7 +8,9 @@ insert into store(active, displayName, store_address, operating_hrs, lease_copy_
 values ('Y', 'South Jordan', 'South Jordan, 1067 West South Jordan Parkway (801) 849-0653', 'Monday - Saturday 11 a.m. - 10 p.m. Closed Sunday', './southJordan.pdf', 1, null);
 insert into store(active, displayName, store_address, operating_hrs, lease_copy_loc, updated_by, updated_date)
 values ('Y', 'Salt Lake City', 'Salt Lake Airport SLC Airport, Terminal 2 Food Court (801) 575-2793', 'Everyday 6 a.m. - 10 p.m', './saltLake.pdf', 1, null);
-
+insert into store(active, displayName, store_address, operating_hrs, lease_copy_loc, updated_by, updated_date)
+values ('Y', 'Lehi', 'Lehi', 'Everyday 11 a.m. - 10 p.m', './saltLake.pdf', 1, null);
+commit;
 
 
 
@@ -480,3 +482,84 @@ select * from employee_role where employee_id not in (1);
 delete from employee_role where active='N';
 delete from employee_role where employee_id not in (1);
 
+
+
+select * from items1;
+
+select stock0_.id as col_0_0_, stock0_.store_id as col_1_0_, stock0_.category as col_2_0_, stock0_.item_id as col_3_0_, stock0_.item_stock as col_4_0_, 
+stock0_.item_order as col_5_0_, stock0_.item_ppu as col_6_0_, stock0_.item_gs_charge as col_7_0_, stock0_.updated_by as col_8_0_, 
+stock0_.updated_date as col_9_0_, item1_.name as col_10_0_, item1_.par as col_11_0_, item1_.units as col_12_0_, itemdistri3_.name as col_13_0_, 
+itemdistri3_.code as col_14_0_, itemtype2_.name as col_15_0_, itemtype2_.color as col_16_0_ 
+from stock stock0_ cross join items1 item1_ cross join item_types itemtype2_ cross join distributors itemdistri3_ 
+where stock0_.store_id=1 and stock0_.item_id=item1_.id and item1_.distributor=itemdistri3_.id and item1_.type=itemtype2_.id order by stock0_.id limit 10
+
+select * from stock s, items1 i, item_types it, distributors d
+where s.store_id=1 and s.item_id = i.id and i.distributor = d.id
+;
+
+select * from stock;
+select * from items1;
+select * from item_types;
+select * from distributors;
+
+delete from items1;
+delete from stock;
+commit;
+
+select max(item0_.code) as col_0_0_ from items1 item0_ where item0_.store_id=1 and item0_.distributor=2;
+select * from distributors;
+
+select invoice0_.id as col_0_0_, invoice0_.invoice_date as col_1_0_, sum(invoicedet1_.item_ppu*invoicedet1_.item_order) as col_2_0_, sum(invoicedet1_.item_gs_charge*invoicedet1_.item_order*invoicedet1_.item_ppu/100) as col_3_0_ from store_invoice invoice0_ cross join store_invoice_details invoicedet1_ where invoice0_.id=invoicedet1_.invoice_id and invoice0_.store_id=1 and invoice0_.category='g' group by invoice0_.id , invoice0_.invoice_date order by invoice0_.id desc limit 25
+
+select * from store_invoice order by updated_date desc;
+select invoice_id, count(invoice_id) from store_invoice_details
+group by invoice_id;
+;
+select invoicedet0_.id as col_0_0_, invoicedet0_.invoice_id as col_1_0_, invoicedet0_.item_id as col_2_0_, invoicedet0_.item_stock as col_3_0_, invoicedet0_.item_order as col_4_0_, invoicedet0_.item_ppu as col_5_0_, invoicedet0_.item_gs_charge as col_6_0_, 
+invoicedet0_.updated_by as col_7_0_, invoicedet0_.updated_date as col_8_0_, item1_.name as col_9_0_, item1_.par as col_10_0_, item1_.units as col_11_0_, 
+item1_.code as col_12_0_, itemdistri3_.name as col_13_0_, itemdistri3_.code as col_14_0_, itemtype2_.name as col_15_0_, itemtype2_.color as col_16_0_ 
+from store_invoice_details invoicedet0_ cross join items1 item1_ cross join item_types itemtype2_ cross join distributors itemdistri3_ where 
+invoicedet0_.item_id=item1_.id and item1_.distributor=itemdistri3_.id and item1_.type=itemtype2_.id and invoicedet0_.invoice_id=10
+order by item1_.code limit 25;
+
+
+
+select * from bus.TBUS_BANKDETAILS where BICBRANCHCODE like '%UOVBSGSGXXX%' ;
+select * from bus.TBUS_BANKDETAILS where BICBRANCHCODE like '%FAEASGSGXXX%' ;
+
+SELECT c.BICBRANCHCODE  FROM (SELECT c.BICBRANCHCODE , ROWNUM as rnum 
+FROM (SELECT DISTINCT s1.BICBRANCHCODE  FROM (SELECT TRIM(bd.BICBRANCHCODE) AS BICBRANCHCODE  FROM bus.TBUS_BANKDETAILS bd  
+WHERE  TRIM(UPPER(bd.BANKNAME)) like '%FAEA%'   ORDER BY bd.BICBRANCHCODE) s1) c) c WHERE c.rnum BETWEEN 0 AND 100;
+
+SELECT c.BICBRANCHCODE  FROM (SELECT c.BICBRANCHCODE , ROWNUM as rnum 
+FROM (SELECT DISTINCT s1.BICBRANCHCODE  FROM (SELECT TRIM(BICBRANCHCODE) AS BICBRANCHCODE  FROM bus.TBUS_BANKDETAILS  
+WHERE TRIM(UPPER(BICBRANCHCODE)) LIKE '%FAEA%'  ORDER BY BICBRANCHCODE) s1) c) c WHERE c.rnum BETWEEN 0 AND 100;
+
+
+insert into "BUS"."TBUS_BANKDETAILS" ("BICCODE", "BANKBRANCHCODE", "BANKCOUNTRYCODE", "BANKNAME", "BANKBRANCHINFO", "BANKCITY", "BANKSUBTYPECODE", "BANKVAS", "BANKBRANCHQUAL", "BANKPHYSICALADDR1", "BANKPHYSICALADDR2", "BANKPHYSICALADDR3", "BANKPHYSICALADDR4", "BANKLOCATION1", "BANKLOCATION2", "BANKLOCATION3", "BANKPOBNUMBER", "BANKPOBLOCATION1", "BANKPOBLOCATION2", "BANKPOBLOCATION3", "BICBRANCHCODE") 
+values('BKCMUS44', 'XXX', 'US', 'TEST', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'BKCMUS44XXX');
+
+insert into "BUS"."TBUS_BANKDETAILS" ("BICCODE", "BANKBRANCHCODE", "BANKCOUNTRYCODE", "BANKNAME", "BANKBRANCHINFO", "BANKCITY", "BANKSUBTYPECODE", "BANKVAS", "BANKBRANCHQUAL", "BANKPHYSICALADDR1", "BANKPHYSICALADDR2", "BANKPHYSICALADDR3", "BANKPHYSICALADDR4", "BANKLOCATION1", "BANKLOCATION2", "BANKLOCATION3", "BANKPOBNUMBER", "BANKPOBLOCATION1", "BANKPOBLOCATION2", "BANKPOBLOCATION3", "BICBRANCHCODE") 
+values('UOVBSGSG', 'XXX', 'US', 'TEST', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'UOVBSGSGXXX');
+
+insert into "BUS"."TBUS_BANKDETAILS" ("BICCODE", "BANKBRANCHCODE", "BANKCOUNTRYCODE", "BANKNAME", "BANKBRANCHINFO", "BANKCITY", "BANKSUBTYPECODE", "BANKVAS", "BANKBRANCHQUAL", "BANKPHYSICALADDR1", "BANKPHYSICALADDR2", "BANKPHYSICALADDR3", "BANKPHYSICALADDR4", "BANKLOCATION1", "BANKLOCATION2", "BANKLOCATION3", "BANKPOBNUMBER", "BANKPOBLOCATION1", "BANKPOBLOCATION2", "BANKPOBLOCATION3", "BICBRANCHCODE") 
+values('FAEASGSG', 'XXX', 'US', 'TEST', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'FAEASGSGXXX');
+
+desc TBUS_BANKDETAILS;
+
+select *  from "BUS"."TBUS_BANKDETAILS" where BICBRANCHCODE = 'CITIDEFFXXX'
+
+
+commit
+
+
+
+
+
+
+select * from TBUS_CASE_AUDIT_INFO where case_reference_no in ('SG-TROC140519TOTT70029');
+
+create table org_counts(objid nvarchar(8), stext nvarchar(100), count_type nvarchar(5), count float, scenarioId nvarchar(100))
+
+select s1.objid, s1.trcount, s1.drcount, s1.dfcount, s1.dvcount, s1.sescount, s1.sescount + s1.socount as ses_so_count, 
+s1.iccount, s1.ibcount, s1.asccount, s1.msccount, s1.llebcount, 123456 as scenarioId from (select DR.objid, TR.count as trcount, DR.count as drcount, DF.count as dfcount, DR.count - DF.count as dvcount, SA.count as sescount, CF.count as socount, IC.count as iccount, IB.count as ibcount, ASCC.count as asccount, MSC.count as msccount, LLEB.count as llebcount from (select objid, stext, count from org_counts o1 where o1.count_type='ASC' and scenarioId = 123456) ASCC, (select objid, stext, count from org_counts o1 where o1.count_type='MSC' and scenarioId = 123456) MSC, (select objid, stext, count from org_counts o1 where o1.count_type='LLEB' and scenarioId = 123456) LLEB, (select objid, stext, count from org_counts o1 where o1.count_type='DR' and scenarioId = 123456) DR, (select objid, stext, count from org_counts o1 where o1.count_type='DF' and scenarioId = 123456) DF, (select objid, stext, count from org_counts o1 where o1.count_type='TR' and scenarioId = 123456) TR, (select objid, stext, count from org_counts o1 where o1.count_type='CF' and scenarioId = 123456) CF, (select objid, stext, count from org_counts o1 where o1.count_type='SA' and scenarioId = 123456) SA, (select objid, stext, count from org_counts o1 where o1.count_type='IC' and scenarioId = 123456) IC, (select objid, stext, count from org_counts o1 where o1.count_type='IB' and scenarioId = 123456) IB where ASCC.objid = SA.objid and MSC.objid = ASCC.objid and LLEB.objid = MSC.objid and SA.objid = IB.objid and SA.objid = IC.objid and SA.objid = CF.objid and CF.objid = DR.objid and DR.objid = DF.objid and DF.objid=TR.objid) s1

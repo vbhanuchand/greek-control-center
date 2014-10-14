@@ -47,7 +47,6 @@ public class StoreServiceController {
 	private static Logger logger = Logger.getAnonymousLogger();
 	
 	
-	//@RequestMapping(value = "/start", method = RequestMethod.GET)
 	@RequestMapping(value = "/start", method = RequestMethod.GET)
 	public String startPage() {
 		  return "welcome";

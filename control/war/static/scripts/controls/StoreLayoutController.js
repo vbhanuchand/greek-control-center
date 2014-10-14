@@ -1079,32 +1079,39 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 				    		td = domConstruct.create("th", { 
 				    			innerHTML: "Downtown"
 				    			});
-					    	domStyle.set(td, 'width', '16%');
+					    	domStyle.set(td, 'width', '13%');
 				    		tableTR.appendChild(td);
 		    				
 				    		td = domConstruct.create("th", { 
 				    			innerHTML: "West Valley"
 				    			});
-					    	domStyle.set(td, 'width', '16%');
+					    	domStyle.set(td, 'width', '13%');
 				    		tableTR.appendChild(td);
 		    				
 				    		td = domConstruct.create("th", { 
 				    			innerHTML: "Murray"
 				    			});
-					    	domStyle.set(td, 'width', '16%');
+					    	domStyle.set(td, 'width', '13%');
 				    		tableTR.appendChild(td);
 		    				
 				    		td = domConstruct.create("th", { 
 				    			innerHTML: "South Jordan"
 				    			});
-					    	domStyle.set(td, 'width', '16%');
+					    	domStyle.set(td, 'width', '13%');
 				    		tableTR.appendChild(td);
 				    		
 				    		td = domConstruct.create("th", { 
 				    			innerHTML: "Airport"
 				    			});
-					    	domStyle.set(td, 'width', '16%');
+					    	domStyle.set(td, 'width', '13%');
 				    		tableTR.appendChild(td);
+				    		
+				    		td = domConstruct.create("th", { 
+				    			innerHTML: "Lehi"
+				    			});
+					    	domStyle.set(td, 'width', '13%');
+				    		tableTR.appendChild(td);
+				    		
 				    		employeeList.appendChild(tableTR);
 				    		
 			    			baseArray.forEach(dojoFunctional.values(mgrResponse.empRoles), function(employee){
@@ -1116,7 +1123,7 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 						    	domStyle.set(td, 'text-align', 'left');
 						    	domStyle.set(td, 'padding-left', '10px');
 						    	tableTR.appendChild(td);
-			    				var stores = [1,2,3,4,5];
+			    				var stores = [1,2,3,4,5,6];
 			    				var employeeStores = employee.stores ? employee.stores.split(',') : [];
 			    				baseArray.forEach(stores, function(store){
 			    					td = domConstruct.create("td", {});
@@ -1181,7 +1188,7 @@ define([ "dijit/dijit", "dijit/registry", "dojo/query", "dojo/dom", "dojo/dom-st
 			    							'&nbsp;<font style="font-weight: bolder; font-size:xx-small !important; vertical-align: super; color: #dddddd">*none</font>';
 			    					var span = domConstruct.create("span", {innerHTML: spanInnerHtml});
 			    					td.appendChild(span); 
-			    					domStyle.set(td, 'width', '16%');
+			    					domStyle.set(td, 'width', '13%');
 							    	domStyle.set(td, 'text-align', 'center');
 							    	tableTR.appendChild(td);
 			    				});
