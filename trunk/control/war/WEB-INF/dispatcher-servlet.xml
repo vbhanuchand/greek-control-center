@@ -13,9 +13,9 @@
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<mvc:annotation-driven />
 	<context:component-scan base-package="com.services.core.controllers" /> 
-	<!--<mvc:resources mapping="/resources/**" location="/static/"
-		cache-period="0" />-->
-	<mvc:resources mapping="/resources/**" location="/static/"/><!---->
+	<!----><mvc:resources mapping="/resources/**" location="/static/"
+		cache-period="0" />
+	<!--<mvc:resources mapping="/resources/**" location="/static/"/>-->
 	<bean
 		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" />
 	<bean

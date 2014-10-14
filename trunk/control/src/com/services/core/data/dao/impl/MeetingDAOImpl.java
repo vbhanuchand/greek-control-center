@@ -28,7 +28,6 @@ public class MeetingDAOImpl implements MeetingDAO{
 		System.out.println("Getting Records for --> " + Utilities.getParsedDateForMeeting(params.getSubstitutions().get("startDate")) + " --> " + Utilities.getParsedDateForMeeting(params.getSubstitutions().get("endDate")));
 		query.setParameter("startDate", Utilities.getParsedZuluDateDojo(params.getSubstitutions().get("startDate")));
 		query.setParameter("endDate", Utilities.getParsedZuluDateDojo(params.getSubstitutions().get("endDate")));
-		//query.setCacheable(true);
 		return Integer.parseInt(String.valueOf(((Long) query.uniqueResult())));
 	}
 	
